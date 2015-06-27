@@ -1,0 +1,30 @@
+package com.boateng.abankus.employee.interfaces;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.boateng.abankus.domain.Employee;
+import com.boateng.abankus.domain.Role;
+import com.boateng.abankus.domain.User;
+import com.boateng.abankus.domain.UserRole;
+
+
+public interface AuthenticationService {
+
+	User AuthenticateUser(String username,String passwd);
+	
+	List<Role> findRoleByUser(String username);
+
+	User findUserByUserName(String username);
+
+	List<Role> getAllRoles();
+
+	boolean doEmailExist(String email);
+	
+	boolean doUserNameExist(String username);
+
+	boolean isEmployeeIdExist(String employeeId);
+	
+	Employee findEmployeeByUserName(String username);
+}
