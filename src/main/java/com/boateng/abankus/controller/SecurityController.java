@@ -1,4 +1,4 @@
-package com.boateng.abankus.security;
+package com.boateng.abankus.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -48,15 +48,13 @@ public class SecurityController {
 		return  "redirect:/abankus/dashboard";
 	}
 	
-	@RequestMapping(value = "/security/logout", method = {RequestMethod.POST,RequestMethod.GET})
+	@RequestMapping(value = "/security/logout", method = {RequestMethod.GET,RequestMethod.POST})
 	public String logout(HttpServletRequest request, Model model) {
 
-		HttpSession session = request.getSession();
+		HttpSession session = request.getSession(false);
 		if(!session.isNew() || session.getId() != null){
 			session.invalidate();
 		}
-
-		
 		return "home";
 	}
 	@RequestMapping(value = "/security/authenticate",method = RequestMethod.POST)

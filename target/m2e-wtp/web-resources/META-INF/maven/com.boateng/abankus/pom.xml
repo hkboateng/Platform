@@ -188,19 +188,20 @@
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
 		</dependency>
-		<!-- Apache Flume -->
+		<!-- Apache Flume 
 		<dependency>
 			<groupId>org.apache.flume</groupId>
 			<artifactId>flume-ng-core</artifactId>
 			<version>1.6.0</version>
 		</dependency>
-		<!-- Cassandra All -->
+		-->
+		<!-- Cassandra All 
 		<dependency>
 			<groupId>org.apache.cassandra</groupId>
 			<artifactId>cassandra-all</artifactId>
 			<version>2.1.6</version>
 		</dependency>
-
+		-->
 		<!-- Test -->
 		<dependency>
 			<groupId>junit</groupId>

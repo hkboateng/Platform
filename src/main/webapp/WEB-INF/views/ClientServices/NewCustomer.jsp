@@ -14,6 +14,7 @@
 <title>Abankus Corporation - Sales Connection</title>
 <link href="<c:url value="/resources/css/bootstrap.css" />" rel="stylesheet"/>
 <link href="<c:url value="/resources/css/platform.css" />" rel="stylesheet"/>
+<link href="<c:url value="/resources/css/datepicker.css" />" rel="stylesheet"/>
 <script src="<c:url value="/resources/js/application.js" />" type="text/javascript"></script>
 </head>
 <body>
@@ -46,7 +47,7 @@
 <!-- Page Header ends -->
 <div class="container">
 <div class="row">
-<div class="col-sm-3 col-md-2 sidebar">
+<div class="col-sm-3 col-md-2 sidebar" ng-controller="DatepickerDemoCtrl">
 
           <ul class="nav nav-sidebar">
             <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
@@ -69,21 +70,8 @@
           </ul>
         </div>
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h1>Add New Employee</h1>
+          <h1>Client Services - Prospective Customer</h1>
 			<hr>
-			<div class="row">
-				<ul class="progressbar-list-3">
-					<li class="active">
-						Customer Personal Information
-					</li>
-					<li class="normal">
-						Department/Employment
-					</li>
-					<li class="normal">
-						Security and Login
-					</li>
-				</ul>
-			</div>
           <div class="row">
           <div class="col-md-7">
           <div class="errors">
@@ -94,23 +82,11 @@
           </ul>
           </div>
 
-			<sf:form method="post" modelAttribute="employee" action="addCustomer" app-init="customerType=individual" class="form" name="myForm">
+			<sf:form method="post" modelAttribute="customer" action="/abankus/customers/addCustomer" app-init="customerType=individual" class="form" name="myForm">
 			<input type="hidden" name="trigger" value="personal">
 			<input type="hidden" name="punt" value="employeeDepartmentInfo">
 			<input type="hidden" name="currentpage" value="employeePersonal">
 			<input type="hidden" name="customerType" id="custIndividual" value="${customerType }"/>
-			<div class="form-group">
-			
-			<p> <b>Choose type of Customer:</b></p>
-				<label for="custIndividual"  class="checkbox-inline"> 
-				<input type="radio" name="customerType" id="custIndividual" value="individual"onclick="clickFnc();" checked="checked"/>Individual 
-				</label>
-				<label for="custOrganization"  class="checkbox-inline"> 
-				<input type="radio" name="customerType" id="custOrganization" value="organization" onclick="clickFnc();"/>	Organization
-				 </label>		
-				 <input type="hidden" name="customer" id="customerType" value=""/>	
-			</div>
-			<hr />
 			<div>
 				<c:choose>
 					<c:when test="${customerType eq 'individual' }">
@@ -120,7 +96,19 @@
 						
 						<label for="lastname">
 						Last Name:</label>
-						<input type="text" name="lastname" id="lastname" placeholder="Last Name" class="form-control"/>		
+						<input type="text" name="lastname" id="lastname" placeholder="Last Name" class="form-control"/>	
+					<ul class="inline-list-2">
+					<li>
+						<label for="state" >Gender:</label>
+						<script>genderList();</script>				
+					</li>
+					<li>
+				<label for="phoneNumber">Phone Number:</label>	
+<input class="form-control "  id="datepicker" name="dateOfBirth" type="text" value="12-02-2012">
+				
+				<span class="add-on"><i class="icon-th"></i></span>
+					</li>
+					</ul>							
 						<hr/>				
 					</c:when>
 					<c:when test="${customerType eq 'company'}">
@@ -134,7 +122,7 @@
 						<label for="lastname">
 						Last Name:</label>
 						<input type="text" name="lastname" id="lastname" placeholder="Last Name" class="form-control"/>
-										
+											
 					</c:when>
 				</c:choose>
 
@@ -174,6 +162,7 @@
 			&nbsp;&nbsp;&nbsp;
 			<a href="#"> Cancel </a>
 			</p>
+		
 			</sf:form>
           </div>
                     </div>
@@ -181,15 +170,20 @@
 </div>
 </div>
 </body>
-<script>
-function clickFnc(){
-	var test = document.myForm.customerType.value;
-	
-	document.getElementById("customerType").value = test;
-}
-</script>
-<script src="<c:url value="/resources/js/jquery.js" />" type="text/javascript"></script>
+
+
+<script src="<c:url value='/resources/js/jquery.js' />" type="text/javascript"></script>
 
 <script src="<c:url value="/resources/js/bootstrap.js" />" type="text/javascript"></script>
+<script src="<c:url value="/resources/js/bootstrap-datepicker.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/application.js" />" type="text/javascript"></script>
+<script>
+$(document).ready(function(){
+	$('#datepicker').datepicker({
+	    format: 'mm/dd/yyyy',
+	    startDate: '-3d'
+	});
+});
+
+</script>
 </html>

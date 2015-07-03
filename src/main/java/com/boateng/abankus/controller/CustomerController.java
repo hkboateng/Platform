@@ -3,7 +3,6 @@ package com.boateng.abankus.controller;
 import java.text.ParseException;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -15,9 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.boateng.abankus.customer.processor.CustomerServiceProcessor;
 import com.boateng.abankus.domain.Customer;
-import com.boateng.abankus.employee.interfaces.AuthenticationService;
 import com.boateng.abankus.employee.interfaces.CustomerService;
-import com.boateng.abankus.employee.interfaces.Customers;
 
 @Controller
 @RequestMapping("/customers")
@@ -38,9 +35,9 @@ public class CustomerController {
 	
 	@PreAuthorize("isFullyAuthenticated")
 	@RequestMapping(value="/create", method=RequestMethod.GET)
-	public String index(){
+	public String index(HttpServletRequest request){
 		
-		return "Customers/NewCustomer";
+		return "ClientServices/NewCustomer";
 	}
 	
 	@PreAuthorize("isFullyAuthenticated")
@@ -48,7 +45,7 @@ public class CustomerController {
 	public ModelAndView addIndividualCustomer(){
 		ModelAndView model = new ModelAndView();
 		model.addObject(CUSTOMER_TYPE,CUSTOMER_INDIVIDUAL);
-		model.setViewName("Customers/NewCustomer");
+		model.setViewName("ClientServices/NewCustomer");
 		return model;
 	}
 	
@@ -58,13 +55,11 @@ public class CustomerController {
 	public ModelAndView addCompanyCustomer(){
 		ModelAndView model = new ModelAndView();
 		model.addObject(CUSTOMER_TYPE,CUSTOMERS_COMPANY);
-		model.setViewName("Customers/NewCustomer");
+		model.setViewName("ClientServices/NewCustomer");
 		return model;
 	}
 	@RequestMapping(value="/addCustomer", method=RequestMethod.POST)
 	public void addCustomer( Customer customers,HttpServletRequest request){
-		System.out.println("Hello World!!");
-		
 		try {
 			customerServiceProcessor.processNewCustomer(request);
 		} catch (ParseException e) {

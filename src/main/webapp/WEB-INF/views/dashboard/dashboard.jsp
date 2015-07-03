@@ -53,8 +53,54 @@
 <div class="container-fluid">
 <div class="row">
 <div class="col-sm-3 col-md-2 sidebar">
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingThree">
+      <h4 class="panel-title">
+        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#clientServices" aria-expanded="false" aria-controls="clientServices">
+          <span class="glyphicon glyphicon-user moveR_10" aria-hidden="true"></span>Client Services
+        </a>
+      </h4>
+    </div>
+    <div id="clientServices" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+      <div class="panel-body">
+        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+      </div>
+    </div>
+  </div>
+<div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingThree">
+      <h4 class="panel-title">
+        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+          <span class="glyphicon glyphicon-tasks moveR_10" aria-hidden="true"></span>Client Services
+        </a>
+      </h4>
+    </div>
+    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+		<ul class="list-group">
+		  <li class="list-group-item"><a href="<c:url value='/customers/create' />">New Prospect Customer</a></li>
+		  <li class="list-group-item">Dapibus ac facilisis in</li>
+		  <li class="list-group-item">Morbi leo risus</li>
+		  <li class="list-group-item">Porta ac consectetur ac</li>
+		  <li class="list-group-item">Vestibulum at eros</li>
+		</ul>
+    </div>
+  </div>
+  <div data-tools="accordion">
+    <a href="#panel1" class="accordion-title"> Client Services</a>
+    <div id="panel1" class="accordion-panel">
+		<ul class="list-group">
+		  <li class="list-group-item"><a href="<c:url value='/customers/create/individual' />">New Prospect Customer - Individual</a></li>
+		  <li class="list-group-item"><a href="<c:url value='/customers/create/company' />">New Prospect Customer - Customer</a></li>
+		  <li class="list-group-item">Dapibus ac facilisis in</li>
+		  <li class="list-group-item">Morbi leo risus</li>
+		  <li class="list-group-item">Porta ac consectetur ac</li>
+		  <li class="list-group-item">Vestibulum at eros</li>
+		</ul>
+	</div>
+</div>
+<li><a href="logout"><span class="glyphicon glyphicon-user moveR_10" aria-hidden="true"></span>Logout</a></li>
 
-        </div>
+</div>
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 
           <h1>Dashboard</h1>
@@ -68,4 +114,5 @@
 </body>
 <script src="<c:url value="/resources/js/jquery.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/bootstrap.js" />" type="text/javascript"></script>
+<script src="<c:url value="/resources/js/kube.js" />" type="text/javascript"></script>
 </html>

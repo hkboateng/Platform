@@ -113,8 +113,8 @@ public class CustomerServiceProcessor {
 		String dataOfBirth = request.getParameter(CustomerFields.DATE_OF_BIRTH_LABEL);
 		SimpleDateFormat formatter = new SimpleDateFormat("MMMM/dd/yyyy");
 		
-		Date dateOfBirth = formatter.parse(dataOfBirth);
-		Gender sex = Gender.valueOf(gender);
+		//Date dateOfBirth = formatter.parse(dataOfBirth);
+		//Gender sex = Gender.valueOf(gender);
 		/**
 		SimpleDateFormat formatter = new SimpleDateFormat("MMMM/dd/yyyy");
 		StringBuilder str = new StringBuilder();

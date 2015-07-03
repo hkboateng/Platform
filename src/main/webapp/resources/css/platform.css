@@ -168,7 +168,7 @@ ul.progressbar-list-3 .normal{
 }
 /****/
 .navbar-blue{
-	background-color:#007FFF;
+	background-color:blue;
 	color:black !important;
 	border-bottom:blue;
 }
@@ -178,4 +178,73 @@ ul.progressbar-list-3 .normal{
 }
 .moveR_10{
 	margin-right:10px;
+}
+
+/* =Accordion
+-----------------------------------------------------------------------------*/
+.accordion-title {
+  position: relative;
+  display: block;
+  margin: 0;
+  margin-bottom: 2px;
+  padding: 12px 50px 12px 18px;
+  color: #000;
+  text-decoration: none;
+  font-weight: normal;
+  font-size: 1.2em;
+  line-height: 1.4em;
+  background: #f7f8f8;
+  cursor: pointer;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.accordion-title.accordion-title-opened {
+  margin-bottom: 0;
+  font-weight: normal;
+  background: #f0f1f2;
+}
+.accordion-title a,
+.accordion-title:hover {
+  color: #000;
+  text-decoration: none;
+}
+.accordion-panel {
+  margin-bottom: 15px;
+}
+.accordion-toggle {
+  position: absolute;
+  top: 50%;
+  margin-top: -8px;
+  right: 20px;
+  padding: 0;
+  font-size: 0;
+  line-height: 1;
+}
+.accordion-toggle-closed {
+  background: #000;
+  width: 1px;
+  height: 15px;
+  margin-left: 1px;
+}
+.accordion-toggle-closed:before {
+  position: absolute;
+  top: 7px;
+  left: -7px;
+  content: "";
+  width: 15px;
+  height: 1px;
+  background: #000;
+}
+.accordion-toggle-opened:before {
+  position: absolute;
+  top: 7px;
+  left: -8px;
+  content: "";
+  width: 15px;
+  height: 1px;
+  background: #000;
 }

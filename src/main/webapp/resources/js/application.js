@@ -16,3 +16,14 @@ function createRegionList(){
 		
 		document.write(str);
 }
+
+function genderList(){
+	var str = "";
+	str += "<select name='gender' class='form-control'>";
+	str += "<option value=''> Select </option>";
+	str += "<option value='male'> Male </option>";
+	str += "<option value='female'> Female </option>";	
+	str += "</select>";
+	
+	document.write(str);	
+}

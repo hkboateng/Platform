@@ -24,7 +24,7 @@ public class SecurityEmployeeUtils {
 	}
 
 
-	public void employeeInSession(HttpServletRequest request){
+	public void addEmployeeInSession(HttpServletRequest request){
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		session = request.getSession();
 		userCollection = new UserCollection(auth);

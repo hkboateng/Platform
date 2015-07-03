@@ -65,12 +65,10 @@
                 <beans:prop key="hibernate.show_sql">true</beans:prop>  
                 <beans:prop key="hibernate.hbm2ddl.auto">update</beans:prop>   
                 <beans:prop key="hibernate.jdbc.batch_size">10</beans:prop>  
-                <!-- enable second level cache and query cache hibernate.jdbc.batch_size
+                <!-- enable second level cache and query cache hibernate.jdbc.batch_size  --> 
                 <beans:prop key="hibernate.cache.use_second_level_cache">true</beans:prop>  
-                <beans:prop key="hibernate.cache.use_query_cache">true</beans:prop>  
-                <beans:prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</beans:prop>
-                <beans:prop key="net.sf.ehcache.configurationResourceName">ehcache.xml</beans:prop> 
-                -->          
+                <beans:prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory</beans:prop>
+                       
             </beans:props>
         </beans:property>
     </beans:bean>

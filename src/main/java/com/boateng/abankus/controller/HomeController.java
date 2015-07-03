@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.boateng.abankus.users.UserCollection;
 
@@ -61,15 +62,21 @@ public class HomeController {
 	@RequestMapping(value = "/abankus/dashboard", method = RequestMethod.GET)
 	public String dashbaord(Locale locale, Model model,HttpServletRequest request) {
 		
-		logger.info("Welcome home! The client locale is {}.",request.getUserPrincipal().getName());
+		logger.info("Welcome home! {}.",request.getUserPrincipal().getName());
 
-		Date date = new Date();
-		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
-		
-		String formattedDate = dateFormat.format(date);
 
 		
 		return "dashboard/dashboard";
 	}
-	
+	@RequestMapping(value = "/abankus/logout", method =  {RequestMethod.GET,RequestMethod.POST})
+	public String logout(RedirectAttributes redirectAttributess,HttpServletRequest request) {
+		HttpSession session = request.getSession(false);
+		logger.info("Logging out");
+		if(session != null){
+			session.invalidate();
+		}
+		
+		redirectAttributess.addFlashAttribute("info", "You have logout successfully.");
+		return "redirect:/login";
+	}	
 }
