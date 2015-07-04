@@ -10,7 +10,7 @@ package com.boateng.abankus.domain;
 public enum CustomersEnum {
 
 	INDIVIDUAL("individual"),
-	COMPANY("customer");
+	COMPANY("company");
 	
 	private String customer;
 

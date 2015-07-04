@@ -22,7 +22,7 @@
 				<div class="tools-alert tools-message-red"> ${errors } </div>
 				</c:if>
 					<c:if test="${info !=null }">
-						<div class="alert alert-success" role="alert">
+						<div class="tools-alert tools-alert-green">
 							<span class="glyphicon glyphicon-info-sign"></span>${info }
 						</div>
 					</c:if>

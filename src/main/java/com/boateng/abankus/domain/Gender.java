@@ -7,11 +7,11 @@ public enum Gender {
 	
 	FEMALE ("female");
 	
-	private final  String gender;	
+	private  String gender;	
 	
 	
 	Gender (String gender){
-		this.gender = gender;
+		this.setGender(gender);
 	}
 	
 	public String getGender(Gender gender){
@@ -20,5 +20,9 @@ public enum Gender {
 	
 	public String getGender(){
 		return this.name();
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
 	}
 }

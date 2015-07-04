@@ -31,8 +31,11 @@ public class SecurityUtils {
 		return Long.parseLong(numbers);	
 	}
 	public static synchronized String generateCustomerId(){
-		String numbers = RandomStringUtils.randomAlphanumeric(8);
-		return numbers;	
+		StringBuilder sbr = new StringBuilder();
+		String characters = RandomStringUtils.randomAlphabetic(2);
+		String numbers = RandomStringUtils.randomNumeric(8);
+		sbr.append(characters).append(numbers);
+		return sbr.toString();	
 	}
 	protected static void processSignIn(String username, String password){
 

@@ -18,13 +18,9 @@ public class Phone implements Serializable {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int phoneId;
 
-	private String areacode;
+	private String phoneNumber;
 
 	private String countrycode;
-
-	private String exchange;
-
-	private String middle;
 
 	private String phoneType;
 
@@ -44,36 +40,19 @@ public class Phone implements Serializable {
 		this.phoneId = phoneId;
 	}
 
-	public String getAreacode() {
-		return this.areacode;
-	}
-
-	public void setAreacode(String areacode) {
-		this.areacode = areacode;
-	}
-
+	
+	/**
+	 * @return the countrycode
+	 */
 	public String getCountrycode() {
-		return this.countrycode;
+		return countrycode;
 	}
 
+	/**
+	 * @param countrycode the countrycode to set
+	 */
 	public void setCountrycode(String countrycode) {
 		this.countrycode = countrycode;
-	}
-
-	public String getExchange() {
-		return this.exchange;
-	}
-
-	public void setExchange(String exchange) {
-		this.exchange = exchange;
-	}
-
-	public String getMiddle() {
-		return this.middle;
-	}
-
-	public void setMiddle(String middle) {
-		this.middle = middle;
 	}
 
 	public String getPhoneType() {
@@ -90,6 +69,14 @@ public class Phone implements Serializable {
 
 	public void setCustomer(Customer customer) {
 		this.customer = customer;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
 
 }

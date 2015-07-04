@@ -3,6 +3,8 @@ package com.boateng.abankus.domain;
 import java.io.Serializable;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 
 import com.boateng.abankus.employee.interfaces.Customers;
 import com.boateng.abankus.utils.SecurityUtils;
@@ -23,19 +25,22 @@ public class Customer implements Serializable,Customers {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int customerId;
 
-	@Column(name="company_name")
-	private String companyName;
+	private String company_name;
 
-	private String companyNumber;
-
+	@NotNull
+	private String customerNumber;
+	@NotNull
 	private String customerType;
-
+	@NotNull
 	private String firstname;
-
+	@NotNull
 	private String lastname;
-
+	@Null
 	private String middlename;
 
+	private String contactPerson;
+	
+	private String gender;
 	//bi-directional many-to-one association to Address
 	@OneToMany(mappedBy="customer")
 	private List<Address> addresses;
@@ -56,10 +61,11 @@ public class Customer implements Serializable,Customers {
 	 * @param companyName
 	 * @param companyNumber
 	 */
-	public Customer(String companyName, String companyType) {
-		this.companyName = companyName;
+	public Customer(String firstname,String lastname, String companyType) {
+		this.firstname = firstname;
+		this.lastname = lastname;
 		this.customerType = companyType;
-		this.companyNumber = SecurityUtils.generateCustomerId();
+		this.customerNumber = SecurityUtils.generateCustomerId();
 	}
 
 
@@ -71,20 +77,12 @@ public class Customer implements Serializable,Customers {
 		this.customerId = customerId;
 	}
 
-	public String getCompanyName() {
-		return this.companyName;
-	}
-
-	public void setCompanyName(String companyName) {
-		this.companyName = companyName;
-	}
-
 	public String getCompanyNumber() {
-		return this.companyNumber;
+		return this.customerNumber;
 	}
 
-	public void setCompanyNumber(String companyNumber) {
-		this.companyNumber = companyNumber;
+	public void setCompanyNumber(String customerNumber) {
+		this.customerNumber = customerNumber;
 	}
 
 	public String getCustomerType() {
@@ -201,6 +199,36 @@ public class Customer implements Serializable,Customers {
 	public Long getIndividualCustomerId() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+
+	public String getContactPerson() {
+		return contactPerson;
+	}
+
+
+	public void setContactPerson(String contactPerson) {
+		this.contactPerson = contactPerson;
+	}
+
+
+	public String getGender() {
+		return gender;
+	}
+
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+
+	public String getCompany_name() {
+		return company_name;
+	}
+
+
+	public void setCompany_name(String company_name) {
+		this.company_name = company_name;
 	}
 
 }

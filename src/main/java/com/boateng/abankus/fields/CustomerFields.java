@@ -10,6 +10,10 @@ public class CustomerFields {
 	public static final String DAY_LABEL = "day";
 	public static final String MONTH_LABEL = "month";
 	public static final String YEAR_LABEL = "year";
-	public  static final String COMPANY_NAME = "company_name";
-	public  static final String CUSTOMER_TYPE = "customerType";
+	public static final String COMPANY_NAME = "company_name";
+	public static final String CUSTOMER_TYPE = "customerType";
+	public static final String CUSTOMER_INDIVIDUAL = "individual";
+	public static final String CUSTOMER_COMPANY = "company";
+	public static final String CONTACT_PERSON_NO = "No";
+	public static final String CONTACT_PERSON_YES = "Yes";
 }

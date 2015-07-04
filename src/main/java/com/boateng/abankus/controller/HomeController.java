@@ -69,13 +69,12 @@ public class HomeController {
 		return "dashboard/dashboard";
 	}
 	@RequestMapping(value = "/abankus/logout", method =  {RequestMethod.GET,RequestMethod.POST})
-	public String logout(RedirectAttributes redirectAttributess,HttpServletRequest request) {
+	public String logout(RedirectAttributes redirectAttributess,HttpServletRequest request,Model model) {
 		HttpSession session = request.getSession(false);
 		logger.info("Logging out");
 		if(session != null){
 			session.invalidate();
 		}
-		
 		redirectAttributess.addFlashAttribute("info", "You have logout successfully.");
 		return "redirect:/login";
 	}	

@@ -104,12 +104,11 @@
 					</li>
 					<li>
 				<label for="phoneNumber">Phone Number:</label>	
-<input class="form-control "  id="datepicker" name="dateOfBirth" type="text" value="12-02-2012">
+				<input class="form-control "  id="dateOfBirth" name="dateOfBirth" type="text" placeholder="Month/day/Year">
 				
 				<span class="add-on"><i class="icon-th"></i></span>
 					</li>
-					</ul>							
-						<hr/>				
+					</ul>						
 					</c:when>
 					<c:when test="${customerType eq 'company'}">
 						
@@ -122,7 +121,8 @@
 						<label for="lastname">
 						Last Name:</label>
 						<input type="text" name="lastname" id="lastname" placeholder="Last Name" class="form-control"/>
-											
+						<label for="state" >Gender:</label>
+						<script>genderList();</script>						
 					</c:when>
 				</c:choose>
 
@@ -145,16 +145,30 @@
 						<input type="text" class="form-control" id="zip" name="zipcode" size="6" maxlength="5">				
 					</li>
 					</ul>	
-				  <label for="emailAddress">Email Address:</label>
-				    <input type="text" id="emailAddress" name="emailAddress" class="form-control" placeholder="Email Address">
-				  <label for="phoneNumber">Phone Number:</label>
-				  <ul id="phoneNumberBox">
-				   
-				  	<li id="areacode"><input type="text" class="form-control" id="areacode" name="areacode" maxlength="3" ></li>
-				  	<li id="middlenumber"> <input type="text" class="form-control" id="middlenumber" name="middlenumber" maxlength="3"></li>
-				  	<li id="exchange"> <input type="text" class="form-control" id="exchange" name="exchange"maxlength="4" ></li>
-				  </ul>
+				  	<label for="emailAddress">Email Address:</label>
+				   	<input type="text" id="emailAddress" name="emailAddress" class="form-control" placeholder="Email Address">						
+					
 
+				  <ul class="inline-list-2">
+				  	<li>
+				  	<label for="phoneNumber">Phone Number:</label>  <span></span>	
+						<input type="text" class="form-control" id="phoneNumber" name="phoneNumber" size="20" >	
+						
+				  	</li>
+				  	<li>
+				  	<label class="radio-inline">
+						<input type="radio" name="phoneType" id="homePhone" value="homePhone" checked/> Home Phone
+						</label>
+					<label class="radio-inline">
+				  		<input type="radio" name="phoneType" id="cellPhone" value="cellPhone"/> Cell (Mobile) Phone			
+				  		</label>  	
+				  	</li>
+				  </ul>
+				  
+
+				  
+				  
+				  
 				  								
 			</div>
 			<p>
@@ -175,14 +189,12 @@
 <script src="<c:url value='/resources/js/jquery.js' />" type="text/javascript"></script>
 
 <script src="<c:url value="/resources/js/bootstrap.js" />" type="text/javascript"></script>
-<script src="<c:url value="/resources/js/bootstrap-datepicker.js" />" type="text/javascript"></script>
+<script src="<c:url value="/resources/js/jquery-masked.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/application.js" />" type="text/javascript"></script>
 <script>
 $(document).ready(function(){
-	$('#datepicker').datepicker({
-	    format: 'mm/dd/yyyy',
-	    startDate: '-3d'
-	});
+	$('#phoneNumber').mask('000-000-0000');
+	$('#dateOfBirth').mask('00/00/0000');
 });
 
 </script>

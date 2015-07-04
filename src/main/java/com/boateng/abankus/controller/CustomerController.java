@@ -58,13 +58,16 @@ public class CustomerController {
 		model.setViewName("ClientServices/NewCustomer");
 		return model;
 	}
+	
 	@RequestMapping(value="/addCustomer", method=RequestMethod.POST)
-	public void addCustomer( Customer customers,HttpServletRequest request){
+	public String addCustomer( Customer customers,HttpServletRequest request){
 		try {
 			customerServiceProcessor.processNewCustomer(request);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		return "";
 	}
 }

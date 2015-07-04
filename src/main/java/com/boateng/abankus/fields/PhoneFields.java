@@ -18,4 +18,6 @@ public class PhoneFields {
 	public static final String PHONE_TYPE_LABEL = "phoneType";
 	
 	public static final String EXCHANGE_LABEL = "exchange";
+
+	public static final String PHONE_NUMBER_LABEL = "phoneNumber";
 }

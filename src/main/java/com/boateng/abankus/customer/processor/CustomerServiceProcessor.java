@@ -25,6 +25,10 @@ import com.boateng.abankus.fields.PhoneFields;
 public class CustomerServiceProcessor {
 
 
+	/**
+	 * 
+	 */
+	
 	@Autowired(required=true)
 	@Qualifier(value="customerServiceImpl")
 	private CustomerService customerServiceImpl;
@@ -39,17 +43,14 @@ public class CustomerServiceProcessor {
 		return email;
 	}
 	
-	public Phone addCustomerPhone(String countrycode, String areacode,String middlenumber,String exchange,String extension, String phoneType){
+	public Phone addCustomerPhone(String countrycode, String phoneNumber, String phoneType){
 		Phone phone = new Phone();
 		phone.setCountrycode(countrycode);
 		if(countrycode == null || countrycode.isEmpty()){
 			phone.setCountrycode(PhoneFields.DEFAULT_COUNTRY_CODE);
 		}
-		
-		phone.setAreacode(areacode);
-		phone.setMiddle(middlenumber);
-		phone.setExchange(exchange);
-		//phone.setExtension(extension);
+
+		phone.setPhoneNumber(phoneNumber);
 		if(phone.getPhoneType() == null || phone.getPhoneType().isEmpty()){
 			phone.setPhoneType(PhoneFields.HOME_PHONE);
 		}
@@ -60,6 +61,7 @@ public class CustomerServiceProcessor {
 		Address address = new Address(address1,addressType,city,state,zipcode);
 		
 		address.setAddress2(address2);
+		address.setAddressType("primary");
 		/**
 		address.setCountry(country);
 		
@@ -70,11 +72,17 @@ public class CustomerServiceProcessor {
 		return address;
 	}
 	
-	public Customer addIndividualCustomer(String firstname,String middlename,String lastname,String companyName, String customerType){
-		Customer customer = new Customer(companyName,customerType);
-		customer.setFirstname(firstname);
+	public Customer addIndividualCustomer(String firstname,String middlename,String lastname,String companyName, String customerType, String gender){
+		Customer customer = new Customer(firstname,lastname,customerType);
+		customer.setCompany_name(companyName);
 		customer.setMiddlename(middlename);
-		customer.setLastname(lastname);
+		customer.setGender(gender);
+		if(customerType.equalsIgnoreCase(CustomerFields.CUSTOMER_INDIVIDUAL)){
+			customer.setContactPerson(CustomerFields.CONTACT_PERSON_NO);
+		}
+		if(customerType.equalsIgnoreCase(CustomerFields.CUSTOMER_COMPANY) && (firstname != null && lastname != null)){
+			customer.setContactPerson(CustomerFields.CONTACT_PERSON_YES);
+		}		
 		return customer;
 	}
 	
@@ -90,10 +98,7 @@ public class CustomerServiceProcessor {
 		String emailType = request.getParameter(EmailFields.EMAIL_TYPE_LABEL);
 		
 		String countrycode = request.getParameter(PhoneFields.COUNTRY_CODE_LABEL);
-		String areacode = request.getParameter(PhoneFields.AREA_CODE_LABEL);
-		String middlenumber = request.getParameter(PhoneFields.MIDDLE_NUMBER_LABEL);
-		String exchange = request.getParameter(PhoneFields.EXCHANGE_LABEL);
-		String extension = request.getParameter(PhoneFields.EXTENSION_LABEL);
+		String phoneNumber = request.getParameter(PhoneFields.PHONE_NUMBER_LABEL);
 		String phoneType = request.getParameter(PhoneFields.PHONE_TYPE_LABEL);
 		
 		String address1 = request.getParameter(AddressFields.ADDRESS1_LABEL);
@@ -111,28 +116,21 @@ public class CustomerServiceProcessor {
 		String customerType = request.getParameter(CustomerFields.CUSTOMER_TYPE);
 		String gender = request.getParameter(CustomerFields.GENDER_LABEL);
 		String dataOfBirth = request.getParameter(CustomerFields.DATE_OF_BIRTH_LABEL);
-		SimpleDateFormat formatter = new SimpleDateFormat("MMMM/dd/yyyy");
-		
-		//Date dateOfBirth = formatter.parse(dataOfBirth);
+
+
 		//Gender sex = Gender.valueOf(gender);
-		/**
-		SimpleDateFormat formatter = new SimpleDateFormat("MMMM/dd/yyyy");
-		StringBuilder str = new StringBuilder();
-		str.append(month).append("/").append(day).append("/").append(year);
-		
-		Date dateOfBirth = formatter.parse(str.toString());
-		**/
+
 		/** Creating new Email Object***/
 		Email email = addEmail(emailAddress,emailType);
 		
 		/** Creating new Phone Object**/
-		Phone phone = addCustomerPhone(countrycode, areacode,middlenumber,exchange,extension,phoneType);
+		Phone phone = addCustomerPhone(countrycode, phoneNumber,phoneType);
 		
 		/**Creating new Address Object**/
 		Address address = addCustomerAddress(address1,address2,city,state,zipcode,country,addressType);
 		
 		/** Creating Customer Object**/
-		Customer customers = addIndividualCustomer(firstname,middlename,lastname,companyname,customerType);
+		Customer customers = addIndividualCustomer(firstname,middlename,lastname,companyname,customerType,gender);
 
 		customers =  customerServiceImpl.addNewCustomer(customers,email,phone,address);
 
