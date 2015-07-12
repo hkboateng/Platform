@@ -1,1 +1,2 @@
-# Platform - Is a Sales application 
+# Platform - Sales application 
+
