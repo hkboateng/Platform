@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.boateng.abankus.domain.Employee;
 import com.boateng.abankus.domain.User;
 import com.boateng.abankus.employee.interfaces.AuthenticationService;
 import com.boateng.abankus.users.UserCollection;
@@ -35,16 +36,19 @@ public class SecurityController {
 	 */
 	@RequestMapping(value = "/security/login", method = RequestMethod.GET)
 	public String index(HttpServletRequest request, Model model) {
-		logger.info("Welcome home! The client locale is");
+		logger.info("Welcome home! The client locale is gsfdg");
 
 		
 		return "index";
 	}
 	@RequestMapping(value = "/security/login", method = RequestMethod.POST)
-	public String index(Model model) {
-		logger.info("Welcome home! The client locale is");
+	public String index(RedirectAttributes redirectAttributess,HttpServletRequest request,Model model) {
+		String username = request.getParameter("username");
+		String password = request.getParameter("password");
+		logger.info("Loggin into Platform app ");
 
-		
+		Employee employee =authenticationServiceImpl.findEmployeeByUserName(username);
+		model.addAttribute("employee", employee);
 		return  "redirect:/abankus/dashboard";
 	}
 	
