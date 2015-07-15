@@ -62,7 +62,7 @@ public class Employee implements Serializable {
 	@NotNull
 	private String zipcode;
 
-	private Long employeeId;
+	private String  employeeId;
 
 	public Employee() {
 	}
@@ -71,7 +71,7 @@ public class Employee implements Serializable {
 	/**
 	 * @return the employeeId
 	 */
-	public Long getEmployeeId() {
+	public String getEmployeeId() {
 		return employeeId;
 	}
 
@@ -79,7 +79,7 @@ public class Employee implements Serializable {
 	/**
 	 * @param employeeId the employeeId to set
 	 */
-	public void setEmployeeId(Long employeeId) {
+	public void setEmployeeId(String employeeId) {
 		this.employeeId = employeeId;
 	}
 

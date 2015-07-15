@@ -33,7 +33,7 @@ public class User implements Serializable{
 
 	private String username;
 	
-	private Long employeeId;
+	private String employeeId;
 	
 	private boolean enabled;
 	
@@ -108,10 +108,10 @@ public class User implements Serializable{
 	public void setEmailAddress(String emailAddress) {
 		this.emailAddress = emailAddress;
 	}
-	public Long getEmployeeId() {
+	public String getEmployeeId() {
 		return employeeId;
 	}
-	public void setEmployeeId(Long employeeId) {
+	public void setEmployeeId(String employeeId) {
 		this.employeeId = employeeId;
 	}
 

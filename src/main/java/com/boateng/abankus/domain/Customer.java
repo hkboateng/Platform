@@ -3,10 +3,7 @@ package com.boateng.abankus.domain;
 import java.io.Serializable;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
 
-import com.boateng.abankus.employee.interfaces.Customers;
 import com.boateng.abankus.utils.SecurityUtils;
 
 import java.util.List;
@@ -18,7 +15,7 @@ import java.util.List;
  */
 @Entity
 @NamedQuery(name="Customer.findAll", query="SELECT c FROM Customer c")
-public class Customer implements Serializable,Customers {
+public class Customer implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -27,36 +24,26 @@ public class Customer implements Serializable,Customers {
 
 	private String company_name;
 
-	@NotNull
-	private String customerNumber;
-	@NotNull
+	private String contactPerson;
+
 	private String customerType;
-	@NotNull
+
 	private String firstname;
-	@NotNull
+
+	private String gender;
+
 	private String lastname;
-	@Null
+
 	private String middlename;
 
-	private String contactPerson;
+	//bi-directional many-to-one association to Customeraccount
+	@OneToMany(mappedBy="customer")
+	private List<CustomerAccount> customerAccounts;
+
+	private String customerNumber;
 	
-	private String gender;
-	//bi-directional many-to-one association to Address
-	@OneToMany(mappedBy="customer")
-	private List<Address> addresses;
-
-	//bi-directional many-to-one association to Email
-	@OneToMany(mappedBy="customer")
-	private List<Email> emails;
-
-	//bi-directional many-to-one association to Phone
-	@OneToMany(mappedBy="customer")
-	private List<Phone> phones;
-
 	public Customer() {
 	}
-
-
 	/**
 	 * @param companyName
 	 * @param companyNumber
@@ -65,7 +52,7 @@ public class Customer implements Serializable,Customers {
 		this.firstname = firstname;
 		this.lastname = lastname;
 		this.customerType = companyType;
-		this.customerNumber = SecurityUtils.generateCustomerId();
+		
 	}
 
 
@@ -77,12 +64,13 @@ public class Customer implements Serializable,Customers {
 		this.customerId = customerId;
 	}
 
-	public String getCompanyNumber() {
-		return this.customerNumber;
+
+	public String getContactPerson() {
+		return this.contactPerson;
 	}
 
-	public void setCompanyNumber(String customerNumber) {
-		this.customerNumber = customerNumber;
+	public void setContactPerson(String contactPerson) {
+		this.contactPerson = contactPerson;
 	}
 
 	public String getCustomerType() {
@@ -101,6 +89,14 @@ public class Customer implements Serializable,Customers {
 		this.firstname = firstname;
 	}
 
+	public String getGender() {
+		return this.gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
 	public String getLastname() {
 		return this.lastname;
 	}
@@ -117,110 +113,33 @@ public class Customer implements Serializable,Customers {
 		this.middlename = middlename;
 	}
 
-	public List<Address> getAddresses() {
-		return this.addresses;
+	public List<CustomerAccount> getCustomeraccounts() {
+		return this.customerAccounts;
 	}
 
-	public void setAddresses(List<Address> addresses) {
-		this.addresses = addresses;
+	public void setCustomeraccounts(List<CustomerAccount> customerAccounts) {
+		this.customerAccounts = customerAccounts;
 	}
 
-	public Address addAddress(Address address) {
-		getAddresses().add(address);
-		address.setCustomer(this);
+	public CustomerAccount addCustomeraccount(CustomerAccount customerAccount) {
+		getCustomeraccounts().add(customerAccount);
+		customerAccount.setCustomer(this);
 
-		return address;
+		return customerAccount;
 	}
 
-	public Address removeAddress(Address address) {
-		getAddresses().remove(address);
-		address.setCustomer(null);
+	public CustomerAccount removeCustomeraccount(CustomerAccount customerAccount) {
+		getCustomeraccounts().remove(customerAccount);
+		customerAccount.setCustomer(null);
 
-		return address;
+		return customerAccount;
 	}
-
-	public List<Email> getEmails() {
-		return this.emails;
-	}
-
-	public void setEmails(List<Email> emails) {
-		this.emails = emails;
-	}
-
-	public Email addEmail(Email email) {
-		getEmails().add(email);
-		email.setCustomer(this);
-
-		return email;
-	}
-
-	public Email removeEmail(Email email) {
-		getEmails().remove(email);
-		email.setCustomer(null);
-
-		return email;
-	}
-
-	public List<Phone> getPhones() {
-		return this.phones;
-	}
-
-	public void setPhones(List<Phone> phones) {
-		this.phones = phones;
-	}
-
-	public Phone addPhone(Phone phone) {
-		getPhones().add(phone);
-		phone.setCustomer(this);
-
-		return phone;
-	}
-
-	public Phone removePhone(Phone phone) {
-		getPhones().remove(phone);
-		phone.setCustomer(null);
-
-		return phone;
-	}
-
-	@Override
 	public String getCustomerNumber() {
-		// TODO Auto-generated method stub
-		return null;
+		return customerNumber;
 	}
-
-	@Override
 	public void setCustomerNumber(String customerNumber) {
-		// TODO Auto-generated method stub
-		
+		this.customerNumber = customerNumber;
 	}
-
-	@Override
-	public Long getIndividualCustomerId() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	public String getContactPerson() {
-		return contactPerson;
-	}
-
-
-	public void setContactPerson(String contactPerson) {
-		this.contactPerson = contactPerson;
-	}
-
-
-	public String getGender() {
-		return gender;
-	}
-
-
-	public void setGender(String gender) {
-		this.gender = gender;
-	}
-
 
 	public String getCompany_name() {
 		return company_name;
@@ -230,5 +149,4 @@ public class Customer implements Serializable,Customers {
 	public void setCompany_name(String company_name) {
 		this.company_name = company_name;
 	}
-
 }

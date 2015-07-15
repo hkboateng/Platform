@@ -28,7 +28,7 @@ public class LoginUser extends User{
 	
 	private String username;
 	
-	private Long  employeeId;
+	private String  employeeId;
 	
 	private boolean enabled;
 	
@@ -83,7 +83,7 @@ public class LoginUser extends User{
 	/**
 	 * @return the employeeId
 	 */
-	public Long getEmployeeId() {
+	public String getEmployeeId() {
 		return employeeId;
 	}
 
@@ -91,7 +91,7 @@ public class LoginUser extends User{
 	/**
 	 * @param employeeId the employeeId to set
 	 */
-	public void setEmployeeId(Long employeeId) {
+	public void setEmployeeId(String employeeId) {
 		this.employeeId = employeeId;
 	}
 
