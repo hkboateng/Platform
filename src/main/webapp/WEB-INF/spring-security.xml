@@ -16,7 +16,6 @@
         <session-management>
        	 <concurrency-control max-sessions="1"/>
         </session-management>
-        	
 			<headers>
 				<xss-protection/>
 				<cache-control/>
