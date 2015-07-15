@@ -3,8 +3,11 @@ package com.boateng.abankus.customer.processor;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -13,13 +16,18 @@ import org.springframework.stereotype.Service;
 import com.boateng.abankus.domain.Address;
 import com.boateng.abankus.domain.Customer;
 import com.boateng.abankus.domain.Email;
+import com.boateng.abankus.domain.Employee;
 import com.boateng.abankus.domain.Gender;
 import com.boateng.abankus.domain.Phone;
+import com.boateng.abankus.employee.interfaces.AuthenticationService;
 import com.boateng.abankus.employee.interfaces.CustomerService;
+import com.boateng.abankus.employee.interfaces.EmployeeService;
 import com.boateng.abankus.fields.AddressFields;
 import com.boateng.abankus.fields.CustomerFields;
 import com.boateng.abankus.fields.EmailFields;
 import com.boateng.abankus.fields.PhoneFields;
+import com.boateng.abankus.service.processor.EmployeeServiceProcessor;
+import com.boateng.abankus.utils.SecurityUtils;
 
 @Service
 public class CustomerServiceProcessor {
@@ -32,7 +40,16 @@ public class CustomerServiceProcessor {
 	@Autowired(required=true)
 	@Qualifier(value="customerServiceImpl")
 	private CustomerService customerServiceImpl;
+
+	@Autowired(required=true)
+	@Qualifier(value="employeeSvcImpl")
+	private EmployeeService employeeSvcImpl;
+
+	@Autowired(required=true)
+	@Qualifier(value="authenticationServiceImpl")
+	private AuthenticationService authenticationServiceImpl;
 	
+	ExecutorService executorService = Executors.newFixedThreadPool(10);
 	
 	public Email addEmail(String emailAddress,String emailType){
 		Email email = new Email(emailAddress);
@@ -62,18 +79,17 @@ public class CustomerServiceProcessor {
 		
 		address.setAddress2(address2);
 		address.setAddressType("primary");
-		/**
-		address.setCountry(country);
-		
-		if(country== null || country.isEmpty()){
-			address.setCountry(AddressFields.DEFAULT_COUNTRY);
-		}
-		**/
+
 		return address;
 	}
 	
 	public Customer addIndividualCustomer(String firstname,String middlename,String lastname,String companyName, String customerType, String gender){
 		Customer customer = new Customer(firstname,lastname,customerType);
+		String customerNo = SecurityUtils.generateCustomerId();
+		if(customerServiceImpl.findCustomerByCustomerNumber(customerNo) == null){
+			customerNo = SecurityUtils.generateCustomerId();
+		}
+		customer.setCustomerNumber(customerNo);
 		customer.setCompany_name(companyName);
 		customer.setMiddlename(middlename);
 		customer.setGender(gender);
@@ -85,6 +101,7 @@ public class CustomerServiceProcessor {
 		}		
 		return customer;
 	}
+	
 	
 	/**
 	 * This method is used to create all the objects necessary to save
@@ -131,10 +148,19 @@ public class CustomerServiceProcessor {
 		
 		/** Creating Customer Object**/
 		Customer customers = addIndividualCustomer(firstname,middlename,lastname,companyname,customerType,gender);
-
-		customers =  customerServiceImpl.addNewCustomer(customers,email,phone,address);
-
+		
+		processNewCustomer(customers,email,phone,address,request);
+		
+		
 	}
 
+	public void processNewCustomer(Customer customers, Email email, Phone phone, Address address,HttpServletRequest request){
+		String username = request.getUserPrincipal().getName();
+		Employee employee =authenticationServiceImpl.findEmployeeByUserName(username);
+
+		Customer customer =  customerServiceImpl.addNewCustomer(customers,email,phone,address);
+		//EmployeeServiceProcessor process = new EmployeeServiceProcessor();
+		employeeSvcImpl.addEmployeeSalesAccount(employee, customer);
+	}
 	
 }

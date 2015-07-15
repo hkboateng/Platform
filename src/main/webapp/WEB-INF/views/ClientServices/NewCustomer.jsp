@@ -97,18 +97,18 @@
 						<label for="lastname">
 						Last Name:</label>
 						<input type="text" name="lastname" id="lastname" placeholder="Last Name" class="form-control"/>	
-					<ul class="inline-list-2">
-					<li>
+					<div class="row">
+					<div class="col-sm-12 col-md-6">
 						<label for="state" >Gender:</label>
 						<script>genderList();</script>				
-					</li>
-					<li>
-				<label for="phoneNumber">Phone Number:</label>	
-				<input class="form-control "  id="dateOfBirth" name="dateOfBirth" type="text" placeholder="Month/day/Year">
-				
-				<span class="add-on"><i class="icon-th"></i></span>
-					</li>
-					</ul>						
+					</div>
+					<div class="col-sm-12 col-md-6">
+						<label for="phoneNumber">Phone Number:</label>	
+						<input class="form-control "  id="dateOfBirth" name="dateOfBirth" type="text" placeholder="Month/day/Year">
+					</div>					
+					</div>
+
+											
 					</c:when>
 					<c:when test="${customerType eq 'company'}">
 						
@@ -121,8 +121,11 @@
 						<label for="lastname">
 						Last Name:</label>
 						<input type="text" name="lastname" id="lastname" placeholder="Last Name" class="form-control"/>
-						<label for="state" >Gender:</label>
-						<script>genderList();</script>						
+						<div class="col-sm-12 col-md-6">
+							<label for="state" >Gender:</label>
+							<script>genderList();</script>							
+						</div>
+					
 					</c:when>
 				</c:choose>
 
@@ -131,20 +134,20 @@
 				<input type="text" name="address1" id="address1" placeholder="Postal Address"  class="form-control"/>
 				<label for="address2"> Address 2:</label>
 				<input type="text" name="address2" placeholder="Optional" class="form-control" id="address2"/>
-					<ul class="cus-inline-list-3">
-					<li>
+					<div class="row">
+					<div class="col-sm-12 col-md-4">
 						<label for="city" >City:</label>
 						<input type="text" class="form-control" id="city" name="city">					
-					</li>
-					<li>
+					</div>
+					<div class="col-sm-12 col-md-4">
 						<label for="state" >State:</label>
 						<script>createRegionList();</script>				
-					</li>
-					<li>
+					</div>
+					<div class="col-sm-12 col-md-4">
 						<label for="zip" >Zip Code:</label>
 						<input type="text" class="form-control" id="zip" name="zipcode" size="6" maxlength="5">				
-					</li>
-					</ul>	
+					</div>
+					</div>	
 				  	<label for="emailAddress">Email Address:</label>
 				   	<input type="text" id="emailAddress" name="emailAddress" class="form-control" placeholder="Email Address">						
 					

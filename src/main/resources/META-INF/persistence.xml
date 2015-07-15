@@ -10,5 +10,6 @@
 		<class>com.boateng.abankus.domain.Phone</class>
 		<class>com.boateng.abankus.domain.Customer</class>
 		<class>com.boateng.abankus.domain.User</class>
+		<class>com.boateng.abankus.domain.CustomerAccount</class>
 	</persistence-unit>
 </persistence>

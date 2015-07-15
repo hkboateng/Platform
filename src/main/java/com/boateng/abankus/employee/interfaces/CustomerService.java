@@ -9,4 +9,10 @@ public interface CustomerService {
 
 	Customer addNewCustomer(Customer customers, Email email, Phone phone, Address address);
 
+	/**
+	 * @param customerNo
+	 * @return
+	 */
+	Customer findCustomerByCustomerNumber(String customerNo);
+
 }

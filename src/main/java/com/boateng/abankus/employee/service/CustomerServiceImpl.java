@@ -64,9 +64,10 @@ public class CustomerServiceImpl implements CustomerService {
 	
 	@Transactional	
 	@SuppressWarnings("unchecked")
-	public Customers findCustomerByCustomerNumber(String customerNo){
+	@Override
+	public Customer findCustomerByCustomerNumber(String customerNo){
 		Session session = getSessionFactory().getCurrentSession();
-		List<Customers> list = session.createQuery("from IndividualCustomer where customerNumber =?")
+		List<Customer> list = session.createQuery("from Customer where customerNumber =?")
 				.setParameter(0, customerNo)
 				.setCacheable(true)
 				.list();

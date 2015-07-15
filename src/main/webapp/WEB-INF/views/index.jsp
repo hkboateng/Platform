@@ -26,12 +26,12 @@
 							<span class="glyphicon glyphicon-info-sign"></span>${info }
 						</div>
 					</c:if>
-					<c:url value="/abankus/authenticate" var="loginUrl" />
+					
 					<form action="<c:url value='/login' />" method='POST' class="forms">
 						<c:if test="${param.error != null}">
 							<p>Invalid username and password.</p>
 						</c:if>
-						<c:if test="${param.logout != null}">
+						<c:if test="${param.info != null}">
 							<p>You have been logged out.</p>
 						</c:if>
 						<label> Username:

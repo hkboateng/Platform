@@ -11,13 +11,13 @@ import org.apache.commons.lang3.RandomStringUtils;
  */
 public class EmployeeUtils {
 
-	public static synchronized Long generateEmployeeId(){
+	public static synchronized String generateEmployeeId(){
 		String numbers = RandomStringUtils.randomNumeric(10);
-		return Long.parseLong(numbers);	
+		return numbers;	
 	}
 	
-	public static Long generateAccountNumber(){
+	public static synchronized String generateAccountNumber(){
 			String numbers = RandomStringUtils.randomNumeric(10);
-			return Long.parseLong(numbers);	
+			return numbers;	
 	}
 }

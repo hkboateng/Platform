@@ -34,7 +34,7 @@ public class UserCollection{
 	
 	private String username;
 	
-	private Long  employeeId;
+	private String  employeeId;
 	
 	private boolean enabled;
 	
@@ -68,7 +68,7 @@ public class UserCollection{
 	 * @param enabled
 	 * @param employee
 	 */
-	public UserCollection(String username, String password,	Collection<? extends GrantedAuthority> authorities,	String emailAddress, Long employeeId,	boolean enabled, Employee employee) {
+	public UserCollection(String username, String password,	Collection<? extends GrantedAuthority> authorities,	String emailAddress, String employeeId,	boolean enabled, Employee employee) {
 		
 		this.emailAddress = emailAddress;
 		this.username = username;
@@ -143,14 +143,14 @@ public class UserCollection{
 	/**
 	 * @return the employeeId
 	 */
-	public Long getEmployeeId() {
+	public String getEmployeeId() {
 		return employeeId;
 	}
 
 	/**
 	 * @param employeeId the employeeId to set
 	 */
-	public void setEmployeeId(Long employeeId) {
+	public void setEmployeeId(String employeeId) {
 		this.employeeId = employeeId;
 	}
 

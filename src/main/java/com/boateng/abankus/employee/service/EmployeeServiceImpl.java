@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.boateng.abankus.domain.Customer;
+import com.boateng.abankus.domain.CustomerAccount;
 import com.boateng.abankus.domain.Employee;
 import com.boateng.abankus.domain.User;
 import com.boateng.abankus.domain.UserRole;
@@ -69,7 +71,6 @@ public class EmployeeServiceImpl implements EmployeeService{
 			session.flush();	
 			session.clear();
 		}
-		//UserRole userRole = EmployeeProcessor.getInstance().buildUserRole(user.getUsername(), role);
 		
 		session.flush();
 		
@@ -80,4 +81,21 @@ public class EmployeeServiceImpl implements EmployeeService{
 		}
 	}
 
+	@Transactional
+	@Override	
+	public CustomerAccount addEmployeeSalesAccount(Employee employee,Customer customer){
+		CustomerAccount customerAccount = new CustomerAccount();
+		
+		String accountNo  = EmployeeUtils.generateAccountNumber();
+		customerAccount.setAccountNumber(accountNo);
+		customerAccount.setCustomer(customer);
+		customerAccount.setEmployee(employee);
+		customerAccount.setStatus("Active");
+		
+		Session session = getSessionFactory().getCurrentSession();
+		
+		session.save(customerAccount);
+		
+		return customerAccount;
+	}
 }
