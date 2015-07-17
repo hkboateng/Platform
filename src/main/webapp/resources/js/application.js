@@ -27,3 +27,10 @@ function genderList(){
 	
 	document.write(str);	
 }
+var platformApp = angular.module('platformApp', []);
+
+platformApp.controller('ProductController', function ($scope) {
+
+  $scope.name = "hubert";
+
+});

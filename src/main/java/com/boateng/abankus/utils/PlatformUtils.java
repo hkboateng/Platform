@@ -18,11 +18,12 @@ public class PlatformUtils {
 	public static String getProductNumber(){
 
 		StringBuilder sbr = new StringBuilder();
-		String characters = RandomStringUtils.randomAlphabetic(2);
+		String characters = RandomStringUtils.randomAlphabetic(2).toUpperCase();
 		String numbers = RandomStringUtils.randomNumeric(8);
 		sbr.append(characters)
-			.append(numbers)
-			.append("-");
+			.append("-")
+			.append(numbers);
+			
 		return sbr.toString();	
 	}
 

@@ -5,6 +5,9 @@ import java.io.Serializable;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotEmpty;
 
 
 /**
@@ -26,12 +29,13 @@ public class Product implements Serializable {
 	private String description;
 
 	@NotNull
+	@Size(min=2, max=8)
 	private String productCode;
 
-	@NotNull
+
 	private String productName;
 	
-	@Null
+
 	private String productNumber;
 
 	public Product() {

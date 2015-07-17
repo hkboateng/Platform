@@ -9,15 +9,17 @@ import org.hibernate.LockMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.boateng.abankus.domain.Product;
+import com.boateng.abankus.employee.interfaces.ProductService;
 
 
 /**
  * @author hkboateng
  *
  */
-public class ProductServiceImpl {
+public class ProductServiceImpl implements ProductService{
 
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -38,10 +40,12 @@ public class ProductServiceImpl {
 		this.sessionFactory = sessionFactory;
 	}
 	
+	@Transactional
+	@Override
 	public Product saveProduct(Product product){
 		
 		Session session = sessionFactory.getCurrentSession();
-		session.persist("product", product);
+		session.save("product", product);
 		session.flush();
 		return null;
 	}

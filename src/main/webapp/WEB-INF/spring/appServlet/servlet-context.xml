@@ -102,6 +102,7 @@
 	
 	<beans:bean id="customerServiceProccessor" class="com.boateng.abankus.customer.processor.CustomerServiceProcessor"/>
 	
+	<beans:bean id="productServiceProcessor" class="com.boateng.abankus.processors.ProductServiceProcessor" />
 	<beans:bean id="customerServiceImpl" class="com.boateng.abankus.employee.service.CustomerServiceImpl">
 		<beans:property name="sessionFactory" ref="sessionFactory" />
 		</beans:bean>
