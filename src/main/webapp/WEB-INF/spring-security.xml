@@ -23,7 +23,7 @@
     </http>
 
 	<!-- Security Beans -->
- 	<beans:bean id="userCollection" class="com.boateng.abankus.users.UserCollection"/>
+
 	
 	<beans:bean id="securityEmployeeUtils" class="com.boateng.abankus.security.utils.SecurityEmployeeUtils"/>
 	<!-- End Security Beans -->

@@ -3,11 +3,15 @@
  */
 package com.boateng.abankus.service.impl;
 
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
+import org.hibernate.CacheMode;
 import org.hibernate.LockMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.engine.query.spi.sql.NativeSQLQueryReturn;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,7 +53,8 @@ public class ProductServiceImpl implements ProductService{
 		session.flush();
 		return null;
 	}
-	
+	@Transactional
+	@Override	
 	public Product updateProduct(int productId){
 		Session session = sessionFactory.getCurrentSession();
 		Product product = (Product) session.load(Product.class, productId);
@@ -57,7 +62,8 @@ public class ProductServiceImpl implements ProductService{
 		
 		return product;
 	}
-	
+	@Transactional
+	@Override	
 	public boolean isProductNumberUnique(String productNumber){
 		Session session = sessionFactory.getCurrentSession();
 		List query = session.createQuery("From Product where productNumber =?")
@@ -67,5 +73,20 @@ public class ProductServiceImpl implements ProductService{
 			return true;
 		}
 		return false;
+	}
+	@Transactional
+	@Override	
+	@SuppressWarnings("unchecked")
+	public Set<Product> getAllProducts(){
+		Session session = sessionFactory.getCurrentSession();
+		Set<Product> listProducts = new LinkedHashSet<Product>();	
+		List<Product> list  = session.createQuery(" from Product")
+											.setCacheMode(CacheMode.NORMAL)
+											.list();
+		for(Product l: list){
+			listProducts.add(l);
+		}
+			
+		return listProducts;
 	}
 }

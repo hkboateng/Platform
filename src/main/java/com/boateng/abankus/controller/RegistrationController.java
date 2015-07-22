@@ -120,4 +120,5 @@ public class RegistrationController {
 		logger.info("Viewing Adding New Customers page....");
 		return model;
 	}
+
 }

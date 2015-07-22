@@ -1,6 +1,9 @@
 package com.boateng.abankus.employee.service;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
+import org.hibernate.CacheMode;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -97,5 +100,17 @@ public class EmployeeServiceImpl implements EmployeeService{
 		session.save(customerAccount);
 		
 		return customerAccount;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional
+	@Override
+	public List<Employee> getAllEmployee(){
+		Session session = getSessionFactory().getCurrentSession();
+		List<Employee> listEmployee = 	session.createQuery("From Employee")
+						.setCacheMode(CacheMode.NORMAL)
+						.list();
+		
+		return listEmployee;
 	}
 }

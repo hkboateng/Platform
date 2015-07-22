@@ -1,5 +1,7 @@
 package com.boateng.abankus.employee.interfaces;
 
+import java.util.List;
+
 import com.boateng.abankus.domain.Customer;
 import com.boateng.abankus.domain.CustomerAccount;
 import com.boateng.abankus.domain.Employee;
@@ -16,6 +18,11 @@ public interface EmployeeService {
 	 * @return
 	 */
 	CustomerAccount addEmployeeSalesAccount(Employee employee, Customer customer);
+
+	/**
+	 * @return
+	 */
+	List<Employee> getAllEmployee();
 
 
 	

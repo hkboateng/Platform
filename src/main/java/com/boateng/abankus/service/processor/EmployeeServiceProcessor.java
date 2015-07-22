@@ -1,5 +1,6 @@
 package com.boateng.abankus.service.processor;
 
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -18,7 +19,10 @@ public class EmployeeServiceProcessor implements Runnable{
 	@Autowired(required=true)
 	@Qualifier(value="authenticationServiceImpl")
 	private AuthenticationService authenticationServiceImpl;	
-	
+
+	@Autowired(required=true)
+	@Qualifier(value="employeeServiceImpl")
+	private EmployeeService employeeServiceImpl;
 	ExecutorService executorService = Executors.newFixedThreadPool(10);
 	
 	public  Employee findEmployee(HttpServletRequest request){
@@ -41,4 +45,9 @@ public class EmployeeServiceProcessor implements Runnable{
 		
 	}
 	
+	public List<Employee> getAllEmployee(){
+		List<Employee> listEmployee = employeeServiceImpl.getAllEmployee();
+		
+		return listEmployee;
+	}
 }

@@ -3,6 +3,8 @@
  */
 package com.boateng.abankus.controller;
 
+import java.util.Set;
+
 import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
@@ -56,11 +58,13 @@ public class ProductController {
 		return "redirect:Product/createProduct";
 	}
 	
-	@RequestMapping(value = "/createProduct", method = RequestMethod.GET)
-	public String getProductList(Model model){
+	@RequestMapping(value = "/listProduct", method = RequestMethod.GET)
+	public String listProductList(Model model){
+		Set<Product> list = productServiceProcessor.getAllProducts();
 		
+		model.addAttribute("productList", list);
 				
-		return "Product/listProduct";
+		return "Product/listProducts";
 	}
 	
 }

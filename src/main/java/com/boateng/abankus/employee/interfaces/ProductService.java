@@ -3,6 +3,8 @@
  */
 package com.boateng.abankus.employee.interfaces;
 
+import java.util.Set;
+
 import com.boateng.abankus.domain.Product;
 
 /**
@@ -17,4 +19,21 @@ public interface ProductService {
 	 * @return
 	 */
 	Product saveProduct(Product product);
+
+	/**
+	 * @param productId
+	 * @return
+	 */
+	Product updateProduct(int productId);
+
+	/**
+	 * @param productNumber
+	 * @return
+	 */
+	boolean isProductNumberUnique(String productNumber);
+
+	/**
+	 * @return
+	 */
+	Set<Product> getAllProducts();
 }

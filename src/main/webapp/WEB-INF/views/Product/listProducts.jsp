@@ -70,7 +70,7 @@
           <h1>Products/ Service List</h1>
 			<hr>
           <div class="row">
-          <div class="col-md-7">
+          <div class="col-md-12">
 			<%-- Error or Information --%>
 			<div class="info_header">
 				<c:if test="${info != null }">
@@ -88,24 +88,26 @@
 			</div>
 			 
 			<div class="col-xs-12 col-sm-12 col-md-8">
-				<table>
-					<thead>
+				<table class="table table-bordered table-hover">
+					<thead class="bg-primary">
 						<tr>
+						<th> No.</th>
 							<th>Product Name</th>
 							<th>Product Code</th>
 							<th>Description</th>
+							<th>Edit</th>
 						</tr>
 					</thead>
 					<tbody>
-						<c:if test="${ProductList != null} ">
-							<c:forEach var="" items="${ProductList} varStatus="ProductList">
+							<c:forEach items="${productList}" var="list" varStatus="theCount">
 							<tr>
-								<td>${productList.productName} </td>
-								<td>${productList.productCode }</td>
-								<td>${productList.description }</td>
+								<td>${theCount.count }</td>
+								<td>${list.productName} </td>
+								<td>${list.productCode }</td>
+								<td>${list.description }</td>
+								<td><a href="">Edit ${list.productCode}</a></td>
 							<tr>
 							</c:forEach>
-						</c:if>
 					</tbody>
 				</table>
 			</div>

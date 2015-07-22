@@ -3,6 +3,8 @@
  */
 package com.boateng.abankus.processors;
 
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -33,5 +35,12 @@ public class ProductServiceProcessor {
 	
 	public void updateProductInfo(Product newProduct, String product){
 		
+	}
+	
+	public Set<Product> getAllProducts(){
+		
+		Set<Product> productList = productServiceImpl.getAllProducts();
+		
+		return productList;
 	}
 }

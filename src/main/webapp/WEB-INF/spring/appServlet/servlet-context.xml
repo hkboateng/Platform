@@ -101,6 +101,8 @@
 	<beans:bean id="employeeSvcImpl" class="com.boateng.abankus.employee.service.EmployeeServiceImpl"/>
 	
 	<beans:bean id="customerServiceProccessor" class="com.boateng.abankus.customer.processor.CustomerServiceProcessor"/>
+
+	<beans:bean id="employeeServiceProccessor" class="com.boateng.abankus.service.processor.EmployeeServiceProcessor"/>
 	
 	<beans:bean id="productServiceProcessor" class="com.boateng.abankus.processors.ProductServiceProcessor" />
 	<beans:bean id="customerServiceImpl" class="com.boateng.abankus.employee.service.CustomerServiceImpl">
