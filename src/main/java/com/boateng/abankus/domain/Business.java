@@ -5,4 +5,8 @@
 
 public interface Business {
 
+  public String getCompanyName();
+
+  public String companyMotto();
+  
 }
