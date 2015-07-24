@@ -4,4 +4,9 @@ package com.boateng.abankus.domain.Client;
 
 public interface Client{
 
+     boolean isCustomerInGoodStanding();
+     
+     void setCustomerInGoodStanding();
+     
+     
 }
