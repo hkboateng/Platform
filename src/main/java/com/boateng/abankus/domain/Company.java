@@ -272,17 +272,17 @@ public class Company implements Serializable {
 		return getCompany_name();
 	}
 	
-	private String comapnyCurrency;
+	private String companyCurrency;
 	
 	public void setCompanyCurrency(String currency){
 		if(currency == null){
-			comapnyCurrency = "$";
+			companyCurrency = "$";
 		}else{
-		comapnyCurrency = currency;
+		companyCurrency = currency;
 		}
 	}
 	/** Returns the type of currency that the Company or Business will be using for this application.**/
 	public String getCompanyCurrency(){
-		return comapnyCurrency;
+		return companyCurrency;
 	}
 }
