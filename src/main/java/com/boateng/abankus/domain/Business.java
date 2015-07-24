@@ -1,3 +1,4 @@
+package com.boateng.abankus.domain.Business;
 /**
 * Interface for the Company using the Platform.
 *
