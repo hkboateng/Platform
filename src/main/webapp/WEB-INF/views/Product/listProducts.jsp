@@ -33,7 +33,7 @@
           <ul class="nav navbar-nav navbar-right">
             <li><a href="#">Dashboard</a></li>
             <li><a href="#">Settings</a></li>
-            <li><a href="#">About Us</a></li>
+            <li><a href="<c:url value='/abankus/logout' />">Logout</a></li>
             <li><a href="#">Help and Contact Us</a></li>
           </ul>
 

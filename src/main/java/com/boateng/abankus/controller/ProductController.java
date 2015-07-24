@@ -18,8 +18,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.boateng.abankus.domain.Product;
 import com.boateng.abankus.employee.interfaces.ProductService;
-import com.boateng.abankus.employee.service.EmployeeServiceImpl;
 import com.boateng.abankus.processors.ProductServiceProcessor;
+import com.boateng.abankus.service.impl.EmployeeServiceImpl;
 import com.boateng.abankus.service.impl.ProductServiceImpl;
 import com.boateng.abankus.utils.PlatformUtils;
 

@@ -160,7 +160,7 @@ body {
 /* =Links
 -----------------------------------------------------------------------------*/
 a {
-  color: #134da5;
+  color: #fff;
 }
 a:focus,
 a:hover {
@@ -1257,9 +1257,11 @@ input.input-smaller {
 /* NavBar */
 .navbar {
   font-size: 105%;
-  margin-bottom: 1.65em;
-  padding-left:1em;
-  background-color:blue;
+
+  padding:0.5em;
+  background-color:#2575ed;
+  line-height:2em;
+  color:#fff;
 }
 .navbar:after {
   content: "";

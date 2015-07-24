@@ -12,6 +12,27 @@
 <body>
 
 <!-- Page Header -->
+<%-- Include page header --%>
+<div class="navigation-toggle navigation-toggle-black" data-tools="navigation-toggle" data-target="#sidemenu">
+    <span>Menu</span>
+</div>
+<nav  id="sidemenu" class="navbar">
+<header id="sidemenuContainer" class="group">
+	<nav class="navbar navbar-left">
+    <ul>
+    	<li>Platform</li>   
+    </ul>
+    </nav>
+	<nav class="navbar navbar-right">
+    <ul>
+    	<li><a href="#">About Us</a></li>   
+    	<li><a href="#">Contact Us</a></li> 
+    </ul>
+    </nav>    
+
+
+</header>
+</nav>
 
 <!-- Page Header ends -->
 <div class="container">

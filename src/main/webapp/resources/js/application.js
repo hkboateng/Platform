@@ -27,21 +27,7 @@ function genderList(){
 	
 	document.write(str);	
 }
-var platformApp = angular.module('platformApp', []);
 
-platformApp.controller('ProductController', function ($scope) {
-
-  $scope.name = "hubert";
-
-});
-
-var platformEmpoyee= angular.module('platformEmpoyee', []);
-
-platformEmpoyee.controller('ProductController', function ($scope) {
-
-  $scope.name = "hubert";
-
-});
 /*jQuery time*/
 $(document).ready(function(){
 	$("#accordian h3").click(function(){

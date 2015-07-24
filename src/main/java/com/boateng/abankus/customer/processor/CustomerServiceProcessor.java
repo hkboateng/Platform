@@ -1,13 +1,10 @@
 package com.boateng.abankus.customer.processor;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -17,7 +14,6 @@ import com.boateng.abankus.domain.Address;
 import com.boateng.abankus.domain.Customer;
 import com.boateng.abankus.domain.Email;
 import com.boateng.abankus.domain.Employee;
-import com.boateng.abankus.domain.Gender;
 import com.boateng.abankus.domain.Phone;
 import com.boateng.abankus.employee.interfaces.AuthenticationService;
 import com.boateng.abankus.employee.interfaces.CustomerService;
@@ -26,7 +22,6 @@ import com.boateng.abankus.fields.AddressFields;
 import com.boateng.abankus.fields.CustomerFields;
 import com.boateng.abankus.fields.EmailFields;
 import com.boateng.abankus.fields.PhoneFields;
-import com.boateng.abankus.service.processor.EmployeeServiceProcessor;
 import com.boateng.abankus.utils.SecurityUtils;
 
 @Service

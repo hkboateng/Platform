@@ -82,7 +82,7 @@
           </ul>
           </div>
 
-			<sf:form method="post" modelAttribute="customer" action="/abankus/customers/addCustomer" app-init="customerType=individual" class="form" name="myForm">
+			<sf:form method="post" modelAttribute="customer" action="/abankus/customers/addCustomer"  name="newCustomerForm" class="form" >
 			<input type="hidden" name="trigger" value="personal">
 			<input type="hidden" name="punt" value="employeeDepartmentInfo">
 			<input type="hidden" name="currentpage" value="employeePersonal">
@@ -121,19 +121,25 @@
 						<label for="lastname">
 						Last Name:</label>
 						<input type="text" name="lastname" id="lastname" placeholder="Last Name" class="form-control"/>
+						<div class="row">
 						<div class="col-sm-12 col-md-6">
 							<label for="state" >Gender:</label>
 							<script>genderList();</script>							
 						</div>
-					
+						</div>
 					</c:when>
 				</c:choose>
 
-				
+				<div class="row">
+				<div class="col-sm-12 col-md-12">
 				<label for="address1">Address 1:</label>
 				<input type="text" name="address1" id="address1" placeholder="Postal Address"  class="form-control"/>
+				</div>
+				<div class="col-sm-12 col-md-12">
 				<label for="address2"> Address 2:</label>
-				<input type="text" name="address2" placeholder="Optional" class="form-control" id="address2"/>
+				<input type="text" name="address2" placeholder="Optional" class="form-control" id="address2"/>				
+				</div>
+				</div>
 					<div class="row">
 					<div class="col-sm-12 col-md-4">
 						<label for="city" >City:</label>
@@ -148,32 +154,26 @@
 						<input type="text" class="form-control" id="zip" name="zipcode" size="6" maxlength="5">				
 					</div>
 					</div>	
-				  	<label for="emailAddress">Email Address:</label>
-				   	<input type="text" id="emailAddress" name="emailAddress" class="form-control" placeholder="Email Address">						
+				  	<label for="emailAddress">Email Address:</label><span id="email-error" class="help-text-inline"></span>
+				   	<input type="text" id="emailAddress" name="emailAddress" class="form-control" placeholder="Email Address" onblur="javascript:validateEmail(document.newCustomerForm.emailAddress);return false;">						
 					
-
-				  <ul class="inline-list-2">
-				  	<li>
+				  <div class="row">
+				  <div class="col-xs-6 col-sm-6">
 				  	<label for="phoneNumber">Phone Number:</label>  <span></span>	
-						<input type="text" class="form-control" id="phoneNumber" name="phoneNumber" size="20" >	
-						
-				  	</li>
-				  	<li>
-				  	<label class="radio-inline">
+						<input type="text" class="form-control" id="phoneNumber" name="phoneNumber" size="20" >				  
+				  </div>
+				  <div class="col-xs-6 col-sm-6">
+				  	<label>
 						<input type="radio" name="phoneType" id="homePhone" value="homePhone" checked/> Home Phone
-						</label>
-					<label class="radio-inline">
+					</label>		
+					<label >
 				  		<input type="radio" name="phoneType" id="cellPhone" value="cellPhone"/> Cell (Mobile) Phone			
-				  		</label>  	
-				  	</li>
-				  </ul>
-				  
+				  	</label> 						  
+				  </div>
 
-				  
-				  
-				  
-				  								
+				  </div>							
 			</div>
+			<hr>
 			<p>
 			<button class="btn btn-primary"> Save Employee </button>
 			&nbsp;&nbsp;&nbsp;
@@ -199,6 +199,16 @@ $(document).ready(function(){
 	$('#phoneNumber').mask('000-000-0000');
 	$('#dateOfBirth').mask('00/00/0000');
 });
-
+function validateEmail(email) 
+{
+	var r = email.value;
+	
+    var re = /\S+@\S+\.\S+/;
+    if(!re.test(email)){
+    	document.getElementById("email-error").innerHTML="Please enter a valid email!!";
+    	$("#emailAddress").addClass("error ");
+    	document.getElementById("emailAddress").focus();
+    }
+}
 </script>
 </html>

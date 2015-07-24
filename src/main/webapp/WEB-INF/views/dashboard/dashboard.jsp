@@ -9,10 +9,15 @@
 <title>Abankus Corporation - Sales Connection</title>
 <link href="<c:url value="/resources/css/bootstrap.css" />" rel="stylesheet"/>
 <link href="<c:url value="/resources/css/platform.css" />" rel="stylesheet"/>
+<link href="<c:url value="/resources/css/fonts-awesome/font-awesome.css" />" rel="stylesheet"/>
+<script src="<c:url value="/resources/js/jquery.js" />" type="text/javascript"></script>
+
+<script src="<c:url value="/resources/js/bootstrap.js" />" type="text/javascript"></script>
+<script src="<c:url value="/resources/js/application.js" />" type="text/javascript"></script>
 </head>
 <body>
 <!-- Page Header -->
-<nav class="navbar navbar-blue navbar-fixed-top">
+<nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -27,7 +32,6 @@
         
           <ul class="nav navbar-nav navbar-right">
           <li><a href="">Home</a></li>
-          <li><a href="">Dashboard</a>
 		  <sec:authorize access="isAuthenticated()"> 
  			<li>
 			    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-expanded="false">
@@ -53,52 +57,70 @@
 <div class="container-fluid">
 <div class="row">
 <div class="col-sm-3 col-md-2 sidebar">
-  <div class="panel panel-default">
-    <div class="panel-heading" role="tab" id="headingThree">
-      <h4 class="panel-title">
-        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#clientServices" aria-expanded="false" aria-controls="clientServices">
-          <span class="glyphicon glyphicon-user moveR_10" aria-hidden="true"></span>Client Services
-        </a>
-      </h4>
-    </div>
-    <div id="clientServices" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-      <div class="panel-body">
-        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-      </div>
-    </div>
-  </div>
-<div class="panel panel-default">
-    <div class="panel-heading" role="tab" id="headingThree">
-      <h4 class="panel-title">
-        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-          <span class="glyphicon glyphicon-tasks moveR_10" aria-hidden="true"></span>Client Services
-        </a>
-      </h4>
-    </div>
-    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-		<ul class="list-group">
-		  <li class="list-group-item"><a href="<c:url value='/customers/create' />">New Prospect Customer</a></li>
-		  <li class="list-group-item">Dapibus ac facilisis in</li>
-		  <li class="list-group-item">Morbi leo risus</li>
-		  <li class="list-group-item">Porta ac consectetur ac</li>
-		  <li class="list-group-item">Vestibulum at eros</li>
-		</ul>
-    </div>
-  </div>
-  <div data-tools="accordion">
-    <a href="#panel1" class="accordion-title"> Client Services</a>
-    <div id="panel1" class="accordion-panel">
-		<ul class="list-group">
-		  <li class="list-group-item"><a href="<c:url value='/customers/create/individual' />">New Prospect Customer - Individual</a></li>
-		  <li class="list-group-item"><a href="<c:url value='/customers/create/company' />">New Prospect Customer - Customer</a></li>
-		  <li class="list-group-item"><a href="#">Customer Search</a></li>
-		  <li class="list-group-item">Morbi leo risus</li>
-		  <li class="list-group-item">Porta ac consectetur ac</li>
-		  <li class="list-group-item">Vestibulum at eros</li>
-		</ul>
-	</div>
-</div>
-<li><a href="logout"><span class="glyphicon glyphicon-user moveR_10" aria-hidden="true"></span>Logout</a></li>
+			    <div id="accordian">
+				<ul>
+					<li>
+						<h3><span class="fa fa-tachometer fa-2x"></span>Dashboard</h3>
+						<ul>
+							<li><a href="<c:url value='/customers/create/individual' />">New Prospect Customer - Individual</a></li>
+							<li><a href="<c:url value='/customers/create/company' />">New Prospect Customer - Customer</a></li>
+							<li><a href="#">Graphs</a></li>
+							<li><a href="#">Settings</a></li>
+						</ul>
+					</li>
+					<!-- we will keep this LI open by default -->
+					<li class="active">
+						<h3><span class="icon-tasks"></span>Bill and Payments</h3>
+						<ul>
+							<li><a href="#">Today's tasks</a></li>
+							<li><a href="#">Urgent</a></li>
+							<li><a href="#">Overdues</a></li>
+							<li><a href="#">Recurring</a></li>
+							<li><a href="#">Settings</a></li>
+						</ul>
+					</li>
+					<li>
+						<h3><span class="icon-calendar"></span>Employee Service</h3>
+						<ul>
+							<li><a href="#">Add Employee</a></li>
+							<li><a href="#">Search</a></li>
+							<li><a href="#">List Employee</a></li>
+							<li><a href="#">Update Employee Details</a></li>
+						</ul>
+					</li>
+					<li>
+						<h3><span class="fa fa-sign-out"></span>Products and Services</h3>
+						<ul>
+							<li><a href="#">Add Product/Services</a></li>
+							<li><a href="#">Search</a></li>
+							<li><a href="#">Update Products/Services</a></li>
+							<li><a href="#">List Products/Services</a></li>
+						</ul>
+					</li>
+					<li>
+						<h3><span class="fa fa-sign-out"></span>Client Service</h3>
+						<ul>
+							<li><a href="#">Add Product/Services</a></li>
+							<li><a href="#">Search</a></li>
+							<li><a href="#">Update Products/Services</a></li>
+							<li><a href="#">List Products/Services</a></li>
+						</ul>
+					</li>	
+					<li>
+						<h3><span class="fa fa-sign-out"></span>Reports and Documents</h3>
+						<ul>
+							<li><a href="#">Add Product/Services</a></li>
+							<li><a href="#">Search</a></li>
+							<li><a href="#">Update Products/Services</a></li>
+							<li><a href="#">List Products/Services</a></li>
+						</ul>
+					</li>									
+					<li>
+						<h3><a class="text-primary" href="<c:url value='logout'/>"><span class="fa fa-sign-out fa-lg"></span> Sign Out</a></h3>
+				
+					</li>
+				</ul>
+			</div>
 
 </div>
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
@@ -112,7 +134,4 @@
 </div>
 </div>
 </body>
-<script src="<c:url value="/resources/js/jquery.js" />" type="text/javascript"></script>
-<script src="<c:url value="/resources/js/bootstrap.js" />" type="text/javascript"></script>
-<script src="<c:url value="/resources/js/kube.js" />" type="text/javascript"></script>
 </html>

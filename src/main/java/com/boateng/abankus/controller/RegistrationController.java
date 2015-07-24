@@ -24,12 +24,9 @@ import com.boateng.abankus.domain.Customer;
 import com.boateng.abankus.domain.Employee;
 import com.boateng.abankus.domain.Role;
 import com.boateng.abankus.domain.User;
-import com.boateng.abankus.domain.UserRole;
 import com.boateng.abankus.employee.interfaces.AuthenticationService;
 import com.boateng.abankus.employee.interfaces.EmployeeService;
-import com.boateng.abankus.employee.service.EmployeeServiceImpl;
-import com.boateng.abankus.employees.utils.EmployeeProcessor;
-import com.boateng.abankus.utils.SecurityUtils;
+import com.boateng.abankus.processors.EmployeeServiceProcessor;
 
 @Controller
 @RequestMapping("/registration")
@@ -100,7 +97,7 @@ public class RegistrationController {
 		Employee employee = (Employee) session.getAttribute("employee");
 		
 		if(employee !=null){
-			User user = EmployeeProcessor.getInstance().saveEmployeeLogin(login,employee);
+			User user = EmployeeServiceProcessor.getInstance().saveEmployeeLogin(login,employee);
 			employee = employeeSvcImpl.saveEmployee(employee,user,roleId);
 				if(employee == null){
 					return "Employee/AddNewEmployee";

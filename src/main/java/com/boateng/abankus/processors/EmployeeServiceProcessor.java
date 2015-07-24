@@ -1,4 +1,7 @@
-package com.boateng.abankus.employees.utils;
+/**
+ * hkboateng
+ */
+package com.boateng.abankus.processors;
 
 import java.util.List;
 
@@ -6,22 +9,22 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
 
 import com.boateng.abankus.domain.Employee;
 import com.boateng.abankus.domain.User;
 import com.boateng.abankus.domain.UserRole;
 import com.boateng.abankus.employee.interfaces.EmployeeService;
+import com.boateng.abankus.employees.utils.EmployeeValidation;
 import com.boateng.abankus.exception.AbankusException;
 import com.boateng.abankus.utils.SecurityUtils;
 
-@Component
-public class EmployeeProcessor extends AbankusAbstract {
-
-
+/**
+ * @author hkboateng
+ *
+ */
+public class EmployeeServiceProcessor {
 	@Autowired
 	@Qualifier(value="employeeSvcImpl")
 	private EmployeeService employeeSvcImpl;
@@ -32,13 +35,13 @@ public class EmployeeProcessor extends AbankusAbstract {
 	public void setEmployeeSvcImpl(EmployeeService employeeSvcImpl) {
 		this.employeeSvcImpl = employeeSvcImpl;
 	}
-	public static EmployeeProcessor getInstance(){
+	public static EmployeeServiceProcessor getInstance(){
 		return employeeService;
 	}
 	
 	HttpSession session = null;
-	private static final EmployeeProcessor employeeService = new EmployeeProcessor();
-	private EmployeeProcessor(){}
+	private static final EmployeeServiceProcessor employeeService = new EmployeeServiceProcessor();
+	private EmployeeServiceProcessor(){}
 	/**
 	 * This method is used to validate New Employee
 	 * Registration data.
@@ -46,7 +49,7 @@ public class EmployeeProcessor extends AbankusAbstract {
 	 * @param request
 	 * @param response
 	 * @throws AbankusException 
-	 */
+	 
 	public void  processEmployeeRegistration(HttpServletRequest request,HttpServletResponse response){
 		List<String> validEmployee = EmployeeValidation.getInstance().validPersonalInformation(request);
 		if(validEmployee.size() > 0){
@@ -59,7 +62,7 @@ public class EmployeeProcessor extends AbankusAbstract {
 
 	}
 	
-
+*/
 
 	public Employee createEmployeeObject(HttpServletRequest request){
 		String firstname = request.getParameter("firstname").trim();

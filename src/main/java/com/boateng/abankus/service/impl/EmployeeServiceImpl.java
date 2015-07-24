@@ -1,4 +1,4 @@
-package com.boateng.abankus.employee.service;
+package com.boateng.abankus.service.impl;
 
 import java.util.List;
 
@@ -19,9 +19,7 @@ import com.boateng.abankus.domain.User;
 import com.boateng.abankus.domain.UserRole;
 import com.boateng.abankus.employee.interfaces.AuthenticationService;
 import com.boateng.abankus.employee.interfaces.EmployeeService;
-import com.boateng.abankus.employees.utils.EmployeeProcessor;
 import com.boateng.abankus.employees.utils.EmployeeUtils;
-import com.boateng.abankus.utils.SecurityUtils;
 
 @Component
 public class EmployeeServiceImpl implements EmployeeService{
@@ -34,7 +32,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 	@Qualifier(value="authenticationServiceImpl")
 	private AuthenticationService authenticationServiceImpl;
 	
-	 private static final EmployeeServiceImpl emp = new EmployeeServiceImpl();
+	
 	
 	 public void setSessionFactory(SessionFactory sessionFactory) {
 	        this.sessionFactory = sessionFactory;
@@ -62,7 +60,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 			e.setEmployeeId(EmployeeUtils.generateEmployeeId());
 		}
 		Session session = getSessionFactory().getCurrentSession();
-		//session.beginTransaction();
+
 		session.persist(e);
 		session.persist("User", user);
 		

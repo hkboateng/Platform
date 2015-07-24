@@ -1,4 +1,4 @@
-package com.boateng.abankus.employee.service;
+package com.boateng.abankus.service.impl;
 
 import java.io.Serializable;
 import java.util.List;

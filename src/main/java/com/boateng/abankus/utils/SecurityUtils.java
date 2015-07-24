@@ -15,7 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.boateng.abankus.domain.Role;
-import com.boateng.abankus.employee.service.AuthenticationServiceImpl;
+import com.boateng.abankus.service.impl.AuthenticationServiceImpl;
 
 public class SecurityUtils {
 	

@@ -98,18 +98,18 @@
     
     <beans:bean id="productController" class="com.boateng.abankus.controller.ProductController" />
     
-	<beans:bean id="employeeSvcImpl" class="com.boateng.abankus.employee.service.EmployeeServiceImpl"/>
+	<beans:bean id="employeeSvcImpl" class="com.boateng.abankus.service.impl.EmployeeServiceImpl"/>
 	
 	<beans:bean id="customerServiceProccessor" class="com.boateng.abankus.customer.processor.CustomerServiceProcessor"/>
 
-	<beans:bean id="employeeServiceProccessor" class="com.boateng.abankus.service.processor.EmployeeServiceProcessor"/>
+	<beans:bean id="employeeServiceProccessor" class="com.boateng.abankus.processors.EmployeeServiceProcessor"/>
 	
 	<beans:bean id="productServiceProcessor" class="com.boateng.abankus.processors.ProductServiceProcessor" />
-	<beans:bean id="customerServiceImpl" class="com.boateng.abankus.employee.service.CustomerServiceImpl">
+	<beans:bean id="customerServiceImpl" class="com.boateng.abankus.service.impl.CustomerServiceImpl">
 		<beans:property name="sessionFactory" ref="sessionFactory" />
 		</beans:bean>
 	
-	<beans:bean id="authenticationServiceImpl" class="com.boateng.abankus.employee.service.AuthenticationServiceImpl">
+	<beans:bean id="authenticationServiceImpl" class="com.boateng.abankus.service.impl.AuthenticationServiceImpl">
 		<beans:property name="sessionFactory" ref="sessionFactory" />
 	</beans:bean>
 

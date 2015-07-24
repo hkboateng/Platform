@@ -1,6 +1,8 @@
-
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
+ <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
+ <%
+ 	String errs = (String) request.getAttribute("errorss");
+ %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,8 +10,8 @@
 <title>Abankus Corporation - Sales Connection</title>
 <link href="<c:url value="/resources/css/bootstrap.css" />" rel="stylesheet"/>
 <link href="<c:url value="/resources/css/platform.css" />" rel="stylesheet"/>
-<link href="<c:url value="/resources/css/fonts-awesome/font-awesome.css" />" rel="stylesheet"/>
-<script src="<c:url value="/resources/js/jquery.js" />" type="text/javascript"></script>
+<link href="<c:url value="/resources/css/datepicker.css" />" rel="stylesheet"/>
+	<script src="<c:url value='/resources/js/jquery.js' />" type="text/javascript"></script>
 
 <script src="<c:url value="/resources/js/bootstrap.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/application.js" />" type="text/javascript"></script>
@@ -17,10 +19,9 @@
 <body>
 <%-- Include page header --%>
 <jsp:include page="../header.jsp"/>
-
-<div class="container">
+<div class="container" >
 	<div class="row">
-			<div  class="col-sm-3 col-md-3 sidebar">
+				<div  class="col-sm-3 col-md-3 sidebar">
 			    <div id="accordian">
 				<ul>
 					<li>
@@ -73,44 +74,15 @@
 				</ul>
 			</div>
 	    </div>
-		<div class="col-sm-9 col-sm-offset-3 col-md-9 col-md-offset-3 main">
-			<div class="row">
-			<%-- Filter List --%>
-				<div>
-				
-				</div>
-				<div id="listOfEmployee">
-					<table class="table">
-						<thead>
-							<tr>
-								<th></th>
-								<th>Full Name</th>
-								<th>Address</th>
-								<th>Contact Information</th>
-								<th>View Profile</th>
-							</tr>
-						</thead>
-						<tbody>
-							<c:forEach var="empList" items="${employeeList}" varStatus="TheCount">
-								<tr>
-									<td>${TheCount.count}</td>
-									<td>${empList.firstname} ${empList.middlename} ${empList.lastname}</td>
-									<td>
-										${empList.address1 }&nbsp;${empList.address1 }
-										<p>${empList.city }${empList.state }${empList.zipcode }</p>
-									</td>
-									<td>${empList.cellphone } ${empList.email}</td>
-									<td><a href="" class="btn btn-primary">Select <span class="btn btn-primary"></span></a></td>
-								</tr>
-							</c:forEach>
-						</tbody>
-					</table>
-				</div>
-			</div>
+		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+		<h1>Product List</h1>
+		<div>
+			<c:forEach items="${productList}" var="product">
+			
+			</c:forEach>
 		</div>
-	</div>
-</div>
-<!-- prefix free to deal with vendor prefixes -->
-</body>
+		</div>
 
-</html>
+</div>
+</div>
+</body>

@@ -10,9 +10,9 @@
     	<intercept-url pattern="/security/**" access="isAnonymous()"/>
     	<intercept-url pattern="/abankus/**" access="isFullyAuthenticated()"/>
     	<intercept-url pattern="/customers/**" access="isFullyAuthenticated()"/>
-    	<form-login login-page='/security/login' default-target-url='/abankus/dashboard'
+    	<form-login login-page='/security/login' default-target-url='/platform/dashboard'
             always-use-default-target='true' />
-        <logout  delete-cookies="JSESSIONID" logout-url="/abankus/logout"  logout-success-url="/login?logout_successful=18"/>
+        <logout  delete-cookies="JSESSIONID" logout-url="/security/logout"  logout-success-url="/login?logout_successful=18"/>
         <session-management>
        	 <concurrency-control max-sessions="1"/>
         </session-management>

@@ -49,33 +49,10 @@ public class HomeController {
 	@RequestMapping(value ="/", method = RequestMethod.GET)
 	public String index(Locale locale, Model model) {
 		logger.info("Welcome home! The client locale is {}.", locale);
-		
-		Date date = new Date();
-		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
-		
-		String formattedDate = dateFormat.format(date);
-		
-		model.addAttribute("serverTime", formattedDate );
+
 		
 		return "index";
 	}
-	@RequestMapping(value = "/abankus/dashboard", method = RequestMethod.GET)
-	public String dashbaord(Locale locale, Model model,HttpServletRequest request) {
-		
-		logger.info("Welcome home! {}.",request.getUserPrincipal().getName());
 
 
-		
-		return "dashboard/dashboard";
-	}
-	@RequestMapping(value = "/abankus/logout", method =  {RequestMethod.GET,RequestMethod.POST})
-	public String logout(RedirectAttributes redirectAttributess,HttpServletRequest request,Model model) {
-		HttpSession session = request.getSession(false);
-		logger.info("Logging out");
-		if(session != null){
-			session.invalidate();
-		}
-		redirectAttributess.addFlashAttribute("info", "You have logout successfully.");
-		return "redirect:/login";
-	}	
 }
