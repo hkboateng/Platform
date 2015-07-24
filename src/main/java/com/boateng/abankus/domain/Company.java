@@ -22,7 +22,7 @@ public class Company implements Serializable {
 	@Id
 	private int id;
 	
-	private Long compnayId;
+	private Long companyId;
 	
 	private String company_name;
 	
@@ -268,5 +268,21 @@ public class Company implements Serializable {
 	
 	
 	//private String
+	public String getCompanyName(){
+		return getCompany_name();
+	}
 	
+	private String comapnyCurrency;
+	
+	public void setCompanyCurrency(String currency){
+		if(currency == null){
+			comapnyCurrency = "$";
+		}else{
+		comapnyCurrency = currency;
+		}
+	}
+	/** Returns the type of currency that the Company or Business will be using for this application.**/
+	public String getCompanyCurrency(){
+		return comapnyCurrency;
+	}
 }
