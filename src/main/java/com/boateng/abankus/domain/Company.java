@@ -73,15 +73,15 @@ public class Company implements Serializable {
 	/**
 	 * @return the compnayId
 	 */
-	public Long getCompnayId() {
-		return compnayId;
+	public Long getCompanyId() {
+		return companyId;
 	}
 
 	/**
 	 * @param compnayId the compnayId to set
 	 */
-	public void setCompnayId(Long compnayId) {
-		this.compnayId = compnayId;
+	public void setCompanyId(Long companyId) {
+		this.companyId = companyId;
 	}
 
 	/**
