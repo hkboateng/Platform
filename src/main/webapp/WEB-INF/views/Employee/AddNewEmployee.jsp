@@ -152,7 +152,18 @@
 			<label for="passwd"> Password: </label>
 			<input type="password" name="password" class="form-control" id="password"/>	
 			<label for="confirm_passwd">Confirm Password: </label>	
-			<input type="password" name="cpassword" class="form-control" id="cpassword"/>		
+			<input type="password" class="form-control" id="cpassword" name="cpassword" onblur="javascript:validatePassword();" onchange="javascript:validatePassword();">	
+			<div id="pwdValid"></div>	
+			<div>Select Employee Role:</div>
+			<ul>
+				<c:if test="${roleList.size() > 0}">
+					<c:forEach var="role" items="${roleList }" varStatus="gdg" >
+						<li>
+						<input type="checkbox" name="role" value="${role.role }">${role.role }
+						</li>
+					</c:forEach>
+				</c:if>
+			</ul>				
 			<label for="department">
 				Employee Role:
 			</label>

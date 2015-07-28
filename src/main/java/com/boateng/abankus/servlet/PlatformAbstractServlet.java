@@ -1,0 +1,46 @@
+/**
+ * hkboateng
+ */
+package com.boateng.abankus.servlet;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+
+import com.boateng.abankus.domain.Employee;
+import com.boateng.abankus.domain.User;
+import com.boateng.abankus.employee.interfaces.AuthenticationService;
+
+/**
+ * @author hkboateng
+ *
+ */
+public abstract class PlatformAbstractServlet {
+	private static final Logger logger = LoggerFactory.getLogger(PlatformAbstractServlet.class);
+	
+	@Autowired(required=true)
+	@Qualifier(value="authenticationServiceImpl")
+	private AuthenticationService authenticationServiceImpl;	
+	
+	public void loadUserIntoSession(HttpServletRequest request){
+		HttpSession session = request.getSession(false);
+		String username = request.getUserPrincipal().getName();
+		
+		//Loading User into Session
+		User user = authenticationServiceImpl.findUserByUserName(username);
+		session.setAttribute("user",user);
+	}
+	
+	public void loadEmployeeIntoSessionByUsername(HttpServletRequest request){
+		HttpSession session = request.getSession(false);
+		String username = request.getUserPrincipal().getName();
+		
+		//Loading User into Session
+		Employee employee = authenticationServiceImpl.findEmployeeByUserName(username);
+		session.setAttribute("employee",employee);		
+	}
+}

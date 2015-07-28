@@ -14,7 +14,7 @@
           <ul class="nav navbar-nav navbar-right">
             <li><a href="#">Dashboard</a></li>
             <li><a href="#"><span  class="fa fa-cog fa-lg"></span>Settings</a></li>
-            <li><a href="#">About Us</a></li>
+            <li><a href="#">Welcome ${employee.firstname}&nbsp;${employee.lastname} !About Us</a></li>
             <li><a href="#">Help and Contact Us</a></li>
           </ul>
 

@@ -21,13 +21,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.boateng.abankus.domain.Employee;
 import com.boateng.abankus.domain.User;
 import com.boateng.abankus.employee.interfaces.AuthenticationService;
+import com.boateng.abankus.servlet.PlatformAbstractServlet;
 import com.boateng.abankus.users.UserCollection;
 
 /**
  * Handles requests for the application home page.
  */
 @Controller
-public class SecurityController {
+public class SecurityController extends PlatformAbstractServlet {
 	@Autowired(required=true)
 	@Qualifier(value="authenticationServiceImpl")
 	private AuthenticationService authenticationServiceImpl;	
@@ -40,7 +41,10 @@ public class SecurityController {
 	@RequestMapping(value = "/security/login", method = RequestMethod.GET)
 	public String index(HttpServletRequest request, Model model) {
 		logger.info("Welcome home! The client locale is gsfdg");
-
+		HttpSession session = request.getSession(false);
+		if(session != null){
+			session.invalidate();
+		}
 		
 		return "index";
 	}
@@ -59,7 +63,7 @@ public class SecurityController {
 	public String logout(HttpServletRequest request, Model model) {
 
 		HttpSession session = request.getSession(false);
-		if(!session.isNew() || session.getId() != null){
+		if(!session.isNew() ){
 			session.invalidate();
 		}
 		return "home";
@@ -83,11 +87,11 @@ public class SecurityController {
 	
 	@RequestMapping(value = "/platform/dashboard", method = RequestMethod.GET)
 	public String dashbaord(Locale locale, Model model,HttpServletRequest request) {
-		
-		logger.info("Welcome home! {}.",request.getUserPrincipal().getName());
-
-
-		
+		String username = request.getUserPrincipal().getName();
+		logger.info("User: {} has logged in successfully.",username);
+		loadUserIntoSession(request);
+		loadEmployeeIntoSessionByUsername(request);
+		logger.info("User data has being saved into the current session.");
 		return "dashboard/dashboard";
 	}
 	
@@ -95,7 +99,8 @@ public class SecurityController {
 	public String logout(RedirectAttributes redirectAttributess,HttpServletRequest request,Model model) {
 		HttpSession session = request.getSession(false);
 		logger.info("Logging out");
-		if(session != null){
+		if(session != null ){
+			session.removeAttribute("user");
 			session.invalidate();
 		}
 		String Id = UUID.randomUUID().toString();

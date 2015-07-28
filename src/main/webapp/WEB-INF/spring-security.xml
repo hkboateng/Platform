@@ -9,12 +9,12 @@
 	    <http auto-config="true">
     	<intercept-url pattern="/security/**" access="isAnonymous()"/>
     	<intercept-url pattern="/abankus/**" access="isFullyAuthenticated()"/>
-    	<intercept-url pattern="/customers/**" access="isFullyAuthenticated()"/>
     	<form-login login-page='/security/login' default-target-url='/platform/dashboard'
             always-use-default-target='true' />
-        <logout  delete-cookies="JSESSIONID" logout-url="/security/logout"  logout-success-url="/login?logout_successful=18"/>
+        <logout invalidate-session="true" delete-cookies="JSESSIONID" logout-url="/platform/logout"  logout-success-url="/login?logout_successful=18"/>
+
         <session-management>
-       	 <concurrency-control max-sessions="1"/>
+       	 <concurrency-control max-sessions="1" expired-url="/security/login?max-time=2"/>
         </session-management>
 			<headers>
 				<xss-protection/>

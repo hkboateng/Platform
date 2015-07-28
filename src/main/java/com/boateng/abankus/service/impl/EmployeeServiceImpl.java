@@ -40,13 +40,8 @@ public class EmployeeServiceImpl implements EmployeeService{
 	 public SessionFactory getSessionFactory() {
 		 return sessionFactory;
 		 }
-	 /*
-	 public static EmployeeServiceImpl getInstance(){
-		 return emp;
-	 }
-	
-	 * 
-	 */
+
+
 
 	@Transactional
 	@Override
@@ -110,5 +105,16 @@ public class EmployeeServiceImpl implements EmployeeService{
 						.list();
 		
 		return listEmployee;
+	}
+	
+	public Employee getEmployeeById(int employeeId){
+		if(employeeId < 1){
+			log.warn("Employee Id is Null.");
+			return null;
+		}
+		Session session = getSessionFactory().getCurrentSession();
+		Employee employee  = (Employee) session.load(Employee.class, employeeId);
+		log.info("");
+		return employee;
 	}
 }

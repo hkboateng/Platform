@@ -2,12 +2,9 @@ package com.boateng.abankus.employee.interfaces;
 
 import java.util.List;
 
-import org.springframework.stereotype.Service;
-
 import com.boateng.abankus.domain.Employee;
 import com.boateng.abankus.domain.Role;
 import com.boateng.abankus.domain.User;
-import com.boateng.abankus.domain.UserRole;
 
 
 public interface AuthenticationService {

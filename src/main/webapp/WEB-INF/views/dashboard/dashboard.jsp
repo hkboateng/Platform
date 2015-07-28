@@ -36,13 +36,13 @@
  			<li>
 			    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-expanded="false">
 			      <span class="glyphicon glyphicon-user moveR_5" aria-hidden="true">
-			      	</span><sec:authentication property="principal.username" />
+			      	</span>Welcome ${employee.firstname}&nbsp;${employee.lastname} !
 			      <span class="caret"></span>
 			    </a>
 			    <ul class="dropdown-menu" role="menu">
 		            <li><a href="#">Update Profile</a></li>
 		            <li class="divider"><a href="#"></a></li>
-		            <li><a href="logout">Logout</a></li>         	
+		            <li><a href="<c:url value='/platforms/logout'/>">Logout</a></li>         	
 			    </ul>
           	</li>		  
 		  </sec:authorize>
