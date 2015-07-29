@@ -9,6 +9,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,7 +58,8 @@ public class EmployeeServiceImpl implements EmployeeService{
 		Session session = getSessionFactory().getCurrentSession();
 
 		session.persist(e);
-		session.persist("User", user);
+		user.setEmployeeId(e.getEmployeeId());
+		session.save(user);
 		
 		/** Saving Employee UserRole **/
 
@@ -98,6 +100,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 	@SuppressWarnings("unchecked")
 	@Transactional
 	@Override
+	@Cacheable(value="allEmployee")
 	public List<Employee> getAllEmployee(){
 		Session session = getSessionFactory().getCurrentSession();
 		List<Employee> listEmployee = 	session.createQuery("From Employee")
@@ -107,6 +110,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 		return listEmployee;
 	}
 	
+	@Cacheable(value="employee" ,key="#employeeId")
 	public Employee getEmployeeById(int employeeId){
 		if(employeeId < 1){
 			log.warn("Employee Id is Null.");

@@ -32,7 +32,7 @@ public class Product implements Serializable {
 	@Size(min=2, max=8)
 	private String productCode;
 
-
+	@NotNull
 	private String productName;
 	
 
@@ -40,6 +40,19 @@ public class Product implements Serializable {
 
 	public Product() {
 	}
+
+	
+	/**
+	 * @param description
+	 * @param productCode
+	 * @param productName
+	 */
+	public Product(String description, String productCode, String productName) {
+		this.description = description;
+		this.productCode = productCode;
+		this.productName = productName;
+	}
+
 
 	public Integer getProductId() {
 		return this.productId;

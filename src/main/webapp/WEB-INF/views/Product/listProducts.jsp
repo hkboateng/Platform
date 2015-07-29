@@ -87,7 +87,7 @@
 				</c:if>
 			</div>
 			 
-			<div class="col-xs-12 col-sm-12 col-md-8">
+			<div class="col-xs-12 col-sm-12 col-md-12">
 				<table class="table table-bordered table-hover">
 					<thead class="bg-primary">
 						<tr>
@@ -95,7 +95,7 @@
 							<th>Product Name</th>
 							<th>Product Code</th>
 							<th>Description</th>
-							<th>Edit</th>
+							<th>Product Details</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -105,7 +105,7 @@
 								<td>${list.productName} </td>
 								<td>${list.productCode }</td>
 								<td>${list.description }</td>
-								<td><a href="">Edit ${list.productCode}</a></td>
+								<td><a class="btn btn-success" href="${list.productId}">Select </a></td>
 							<tr>
 							</c:forEach>
 					</tbody>

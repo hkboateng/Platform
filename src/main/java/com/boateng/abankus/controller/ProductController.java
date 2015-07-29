@@ -55,7 +55,7 @@ public class ProductController {
 		log.info("Product: "+product.getProductName()+" has being saved successfully.");
 		
 		model.addAttribute("info","Product "+product.getProductName()+" has being saved successfully.");
-		return "redirect:Product/createProduct";
+		return "redirect:listProduct";
 	}
 	
 	@RequestMapping(value = "/listProduct", method = RequestMethod.GET)

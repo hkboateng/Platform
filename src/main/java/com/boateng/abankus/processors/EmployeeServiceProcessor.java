@@ -41,28 +41,9 @@ public class EmployeeServiceProcessor {
 	
 	HttpSession session = null;
 	private static final EmployeeServiceProcessor employeeService = new EmployeeServiceProcessor();
-	private EmployeeServiceProcessor(){}
-	/**
-	 * This method is used to validate New Employee
-	 * Registration data.
-	 * 
-	 * @param request
-	 * @param response
-	 * @throws AbankusException 
-	 
-	public void  processEmployeeRegistration(HttpServletRequest request,HttpServletResponse response){
-		List<String> validEmployee = EmployeeValidation.getInstance().validPersonalInformation(request);
-		if(validEmployee.size() > 0){
-			session = request.getSession();
-			session.setAttribute("errors", validEmployee);
-			 nextPage(request,response,false,true);
-			 return;
-		}
-		Employee employee = createEmployeeObject(request);
-
-	}
 	
-*/
+	private EmployeeServiceProcessor(){}
+
 
 	public Employee createEmployeeObject(HttpServletRequest request){
 		String firstname = request.getParameter("firstname").trim();

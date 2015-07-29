@@ -140,7 +140,11 @@
 				</select>		
 			</li>
 			</ul>		
-
+			<p>
+			<button class="btn btn-primary"> Save Employee </button>
+			&nbsp;&nbsp;&nbsp;
+			<a href="#"> Cancel </a>
+			</p>
 			</sf:form>
           </div>
           <div class="col-md-5">

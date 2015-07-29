@@ -21,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.boateng.abankus.domain.Employee;
 import com.boateng.abankus.domain.User;
 import com.boateng.abankus.employee.interfaces.AuthenticationService;
+import com.boateng.abankus.exception.PlatformException;
 import com.boateng.abankus.servlet.PlatformAbstractServlet;
 import com.boateng.abankus.users.UserCollection;
 
@@ -89,8 +90,13 @@ public class SecurityController extends PlatformAbstractServlet {
 	public String dashbaord(Locale locale, Model model,HttpServletRequest request) {
 		String username = request.getUserPrincipal().getName();
 		logger.info("User: {} has logged in successfully.",username);
-		loadUserIntoSession(request);
-		loadEmployeeIntoSessionByUsername(request);
+		try {
+			loadUserIntoSession(request);
+			loadEmployeeIntoSessionByUsername(request);
+		} catch (PlatformException e) {
+			e.printStackTrace();
+		}
+		
 		logger.info("User data has being saved into the current session.");
 		return "dashboard/dashboard";
 	}
