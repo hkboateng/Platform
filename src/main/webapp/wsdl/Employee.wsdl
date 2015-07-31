@@ -1,0 +1,1710 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://domain.abankus.boateng.com" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://domain.abankus.boateng.com" xmlns:intf="http://domain.abankus.boateng.com" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)-->
+ <wsdl:types>
+  <schema elementFormDefault="qualified" targetNamespace="http://domain.abankus.boateng.com" xmlns="http://www.w3.org/2001/XMLSchema">
+   <element name="getId">
+    <complexType/>
+   </element>
+   <element name="getIdResponse">
+    <complexType>
+     <sequence>
+      <element name="getIdReturn" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getState">
+    <complexType/>
+   </element>
+   <element name="getStateResponse">
+    <complexType>
+     <sequence>
+      <element name="getStateReturn" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="setState">
+    <complexType>
+     <sequence>
+      <element name="state" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="setStateResponse">
+    <complexType/>
+   </element>
+   <element name="getEmail">
+    <complexType/>
+   </element>
+   <element name="getEmailResponse">
+    <complexType>
+     <sequence>
+      <element name="getEmailReturn" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="setId">
+    <complexType>
+     <sequence>
+      <element name="id" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="setIdResponse">
+    <complexType/>
+   </element>
+   <element name="setEmail">
+    <complexType>
+     <sequence>
+      <element name="email" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="setEmailResponse">
+    <complexType/>
+   </element>
+   <element name="setEmployeeId">
+    <complexType>
+     <sequence>
+      <element name="employeeId" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="setEmployeeIdResponse">
+    <complexType/>
+   </element>
+   <element name="getEmployeeId">
+    <complexType/>
+   </element>
+   <element name="getEmployeeIdResponse">
+    <complexType>
+     <sequence>
+      <element name="getEmployeeIdReturn" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getAddress1">
+    <complexType/>
+   </element>
+   <element name="getAddress1Response">
+    <complexType>
+     <sequence>
+      <element name="getAddress1Return" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="setAddress1">
+    <complexType>
+     <sequence>
+      <element name="address1" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="setAddress1Response">
+    <complexType/>
+   </element>
+   <element name="getAddress2">
+    <complexType/>
+   </element>
+   <element name="getAddress2Response">
+    <complexType>
+     <sequence>
+      <element name="getAddress2Return" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getDateOfBirth">
+    <complexType/>
+   </element>
+   <element name="getDateOfBirthResponse">
+    <complexType>
+     <sequence>
+      <element name="getDateOfBirthReturn" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getLastname">
+    <complexType/>
+   </element>
+   <element name="getLastnameResponse">
+    <complexType>
+     <sequence>
+      <element name="getLastnameReturn" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="setZipcode">
+    <complexType>
+     <sequence>
+      <element name="zipcode" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="setZipcodeResponse">
+    <complexType/>
+   </element>
+   <element name="getCellphone">
+    <complexType/>
+   </element>
+   <element name="getCellphoneResponse">
+    <complexType>
+     <sequence>
+      <element name="getCellphoneReturn" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="setCity">
+    <complexType>
+     <sequence>
+      <element name="city" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="setCityResponse">
+    <complexType/>
+   </element>
+   <element name="setHomephone">
+    <complexType>
+     <sequence>
+      <element name="homephone" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="setHomephoneResponse">
+    <complexType/>
+   </element>
+   <element name="setLastname">
+    <complexType>
+     <sequence>
+      <element name="lastname" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="setLastnameResponse">
+    <complexType/>
+   </element>
+   <element name="setGender">
+    <complexType>
+     <sequence>
+      <element name="gender" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="setGenderResponse">
+    <complexType/>
+   </element>
+   <element name="setMiddlename">
+    <complexType>
+     <sequence>
+      <element name="middlename" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="setMiddlenameResponse">
+    <complexType/>
+   </element>
+   <element name="setFirstname">
+    <complexType>
+     <sequence>
+      <element name="firstname" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="setFirstnameResponse">
+    <complexType/>
+   </element>
+   <element name="getHomephone">
+    <complexType/>
+   </element>
+   <element name="getHomephoneResponse">
+    <complexType>
+     <sequence>
+      <element name="getHomephoneReturn" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getCity">
+    <complexType/>
+   </element>
+   <element name="getCityResponse">
+    <complexType>
+     <sequence>
+      <element name="getCityReturn" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getGender">
+    <complexType/>
+   </element>
+   <element name="getGenderResponse">
+    <complexType>
+     <sequence>
+      <element name="getGenderReturn" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="setAddress2">
+    <complexType>
+     <sequence>
+      <element name="address2" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="setAddress2Response">
+    <complexType/>
+   </element>
+   <element name="getMiddlename">
+    <complexType/>
+   </element>
+   <element name="getMiddlenameResponse">
+    <complexType>
+     <sequence>
+      <element name="getMiddlenameReturn" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getZipcode">
+    <complexType/>
+   </element>
+   <element name="getZipcodeResponse">
+    <complexType>
+     <sequence>
+      <element name="getZipcodeReturn" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getFirstname">
+    <complexType/>
+   </element>
+   <element name="getFirstnameResponse">
+    <complexType>
+     <sequence>
+      <element name="getFirstnameReturn" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="setCellphone">
+    <complexType>
+     <sequence>
+      <element name="cellphone" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="setCellphoneResponse">
+    <complexType/>
+   </element>
+   <element name="setDateOfBirth">
+    <complexType>
+     <sequence>
+      <element name="dateOfBirth" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="setDateOfBirthResponse">
+    <complexType/>
+   </element>
+  </schema>
+ </wsdl:types>
+
+   <wsdl:message name="getEmployeeIdRequest">
+
+      <wsdl:part element="impl:getEmployeeId" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="setAddress2Request">
+
+      <wsdl:part element="impl:setAddress2" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="setAddress1Response">
+
+      <wsdl:part element="impl:setAddress1Response" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="getCityResponse">
+
+      <wsdl:part element="impl:getCityResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="getFirstnameRequest">
+
+      <wsdl:part element="impl:getFirstname" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="getZipcodeResponse">
+
+      <wsdl:part element="impl:getZipcodeResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="setIdRequest">
+
+      <wsdl:part element="impl:setId" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="setFirstnameRequest">
+
+      <wsdl:part element="impl:setFirstname" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="getDateOfBirthResponse">
+
+      <wsdl:part element="impl:getDateOfBirthResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="setEmailResponse">
+
+      <wsdl:part element="impl:setEmailResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="getCellphoneRequest">
+
+      <wsdl:part element="impl:getCellphone" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="setHomephoneResponse">
+
+      <wsdl:part element="impl:setHomephoneResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="setMiddlenameRequest">
+
+      <wsdl:part element="impl:setMiddlename" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="setEmailRequest">
+
+      <wsdl:part element="impl:setEmail" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="getIdRequest">
+
+      <wsdl:part element="impl:getId" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="setCellphoneRequest">
+
+      <wsdl:part element="impl:setCellphone" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="getIdResponse">
+
+      <wsdl:part element="impl:getIdResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="getAddress1Response">
+
+      <wsdl:part element="impl:getAddress1Response" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="getDateOfBirthRequest">
+
+      <wsdl:part element="impl:getDateOfBirth" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="getAddress1Request">
+
+      <wsdl:part element="impl:getAddress1" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="setEmployeeIdRequest">
+
+      <wsdl:part element="impl:setEmployeeId" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="getAddress2Request">
+
+      <wsdl:part element="impl:getAddress2" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="setLastnameResponse">
+
+      <wsdl:part element="impl:setLastnameResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="setIdResponse">
+
+      <wsdl:part element="impl:setIdResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="getCellphoneResponse">
+
+      <wsdl:part element="impl:getCellphoneResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="getGenderResponse">
+
+      <wsdl:part element="impl:getGenderResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="getEmailResponse">
+
+      <wsdl:part element="impl:getEmailResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="setLastnameRequest">
+
+      <wsdl:part element="impl:setLastname" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="setAddress2Response">
+
+      <wsdl:part element="impl:setAddress2Response" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="setCityRequest">
+
+      <wsdl:part element="impl:setCity" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="getFirstnameResponse">
+
+      <wsdl:part element="impl:getFirstnameResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="setCityResponse">
+
+      <wsdl:part element="impl:setCityResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="getStateRequest">
+
+      <wsdl:part element="impl:getState" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="setStateResponse">
+
+      <wsdl:part element="impl:setStateResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="getLastnameResponse">
+
+      <wsdl:part element="impl:getLastnameResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="setEmployeeIdResponse">
+
+      <wsdl:part element="impl:setEmployeeIdResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="setDateOfBirthResponse">
+
+      <wsdl:part element="impl:setDateOfBirthResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="setHomephoneRequest">
+
+      <wsdl:part element="impl:setHomephone" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="setZipcodeRequest">
+
+      <wsdl:part element="impl:setZipcode" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="getGenderRequest">
+
+      <wsdl:part element="impl:getGender" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="getZipcodeRequest">
+
+      <wsdl:part element="impl:getZipcode" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="getMiddlenameRequest">
+
+      <wsdl:part element="impl:getMiddlename" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="getHomephoneResponse">
+
+      <wsdl:part element="impl:getHomephoneResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="getCityRequest">
+
+      <wsdl:part element="impl:getCity" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="setAddress1Request">
+
+      <wsdl:part element="impl:setAddress1" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="setGenderResponse">
+
+      <wsdl:part element="impl:setGenderResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="setFirstnameResponse">
+
+      <wsdl:part element="impl:setFirstnameResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="setGenderRequest">
+
+      <wsdl:part element="impl:setGender" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="getHomephoneRequest">
+
+      <wsdl:part element="impl:getHomephone" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="getLastnameRequest">
+
+      <wsdl:part element="impl:getLastname" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="getEmployeeIdResponse">
+
+      <wsdl:part element="impl:getEmployeeIdResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="getStateResponse">
+
+      <wsdl:part element="impl:getStateResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="setStateRequest">
+
+      <wsdl:part element="impl:setState" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="getEmailRequest">
+
+      <wsdl:part element="impl:getEmail" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="setZipcodeResponse">
+
+      <wsdl:part element="impl:setZipcodeResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="getMiddlenameResponse">
+
+      <wsdl:part element="impl:getMiddlenameResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="getAddress2Response">
+
+      <wsdl:part element="impl:getAddress2Response" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="setCellphoneResponse">
+
+      <wsdl:part element="impl:setCellphoneResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="setDateOfBirthRequest">
+
+      <wsdl:part element="impl:setDateOfBirth" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="setMiddlenameResponse">
+
+      <wsdl:part element="impl:setMiddlenameResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:portType name="Employee">
+
+      <wsdl:operation name="getId">
+
+         <wsdl:input message="impl:getIdRequest" name="getIdRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:getIdResponse" name="getIdResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getState">
+
+         <wsdl:input message="impl:getStateRequest" name="getStateRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:getStateResponse" name="getStateResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setState">
+
+         <wsdl:input message="impl:setStateRequest" name="setStateRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:setStateResponse" name="setStateResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getEmail">
+
+         <wsdl:input message="impl:getEmailRequest" name="getEmailRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:getEmailResponse" name="getEmailResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setId">
+
+         <wsdl:input message="impl:setIdRequest" name="setIdRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:setIdResponse" name="setIdResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setEmail">
+
+         <wsdl:input message="impl:setEmailRequest" name="setEmailRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:setEmailResponse" name="setEmailResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setEmployeeId">
+
+         <wsdl:input message="impl:setEmployeeIdRequest" name="setEmployeeIdRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:setEmployeeIdResponse" name="setEmployeeIdResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getEmployeeId">
+
+         <wsdl:input message="impl:getEmployeeIdRequest" name="getEmployeeIdRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:getEmployeeIdResponse" name="getEmployeeIdResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAddress1">
+
+         <wsdl:input message="impl:getAddress1Request" name="getAddress1Request">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:getAddress1Response" name="getAddress1Response">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setAddress1">
+
+         <wsdl:input message="impl:setAddress1Request" name="setAddress1Request">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:setAddress1Response" name="setAddress1Response">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAddress2">
+
+         <wsdl:input message="impl:getAddress2Request" name="getAddress2Request">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:getAddress2Response" name="getAddress2Response">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getDateOfBirth">
+
+         <wsdl:input message="impl:getDateOfBirthRequest" name="getDateOfBirthRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:getDateOfBirthResponse" name="getDateOfBirthResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getLastname">
+
+         <wsdl:input message="impl:getLastnameRequest" name="getLastnameRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:getLastnameResponse" name="getLastnameResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setZipcode">
+
+         <wsdl:input message="impl:setZipcodeRequest" name="setZipcodeRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:setZipcodeResponse" name="setZipcodeResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getCellphone">
+
+         <wsdl:input message="impl:getCellphoneRequest" name="getCellphoneRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:getCellphoneResponse" name="getCellphoneResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setCity">
+
+         <wsdl:input message="impl:setCityRequest" name="setCityRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:setCityResponse" name="setCityResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setHomephone">
+
+         <wsdl:input message="impl:setHomephoneRequest" name="setHomephoneRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:setHomephoneResponse" name="setHomephoneResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setLastname">
+
+         <wsdl:input message="impl:setLastnameRequest" name="setLastnameRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:setLastnameResponse" name="setLastnameResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setGender">
+
+         <wsdl:input message="impl:setGenderRequest" name="setGenderRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:setGenderResponse" name="setGenderResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setMiddlename">
+
+         <wsdl:input message="impl:setMiddlenameRequest" name="setMiddlenameRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:setMiddlenameResponse" name="setMiddlenameResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setFirstname">
+
+         <wsdl:input message="impl:setFirstnameRequest" name="setFirstnameRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:setFirstnameResponse" name="setFirstnameResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getHomephone">
+
+         <wsdl:input message="impl:getHomephoneRequest" name="getHomephoneRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:getHomephoneResponse" name="getHomephoneResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getCity">
+
+         <wsdl:input message="impl:getCityRequest" name="getCityRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:getCityResponse" name="getCityResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getGender">
+
+         <wsdl:input message="impl:getGenderRequest" name="getGenderRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:getGenderResponse" name="getGenderResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setAddress2">
+
+         <wsdl:input message="impl:setAddress2Request" name="setAddress2Request">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:setAddress2Response" name="setAddress2Response">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getMiddlename">
+
+         <wsdl:input message="impl:getMiddlenameRequest" name="getMiddlenameRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:getMiddlenameResponse" name="getMiddlenameResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getZipcode">
+
+         <wsdl:input message="impl:getZipcodeRequest" name="getZipcodeRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:getZipcodeResponse" name="getZipcodeResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getFirstname">
+
+         <wsdl:input message="impl:getFirstnameRequest" name="getFirstnameRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:getFirstnameResponse" name="getFirstnameResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setCellphone">
+
+         <wsdl:input message="impl:setCellphoneRequest" name="setCellphoneRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:setCellphoneResponse" name="setCellphoneResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setDateOfBirth">
+
+         <wsdl:input message="impl:setDateOfBirthRequest" name="setDateOfBirthRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:setDateOfBirthResponse" name="setDateOfBirthResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="EmployeeSoapBinding" type="impl:Employee">
+
+      <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="getId">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getIdRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getIdResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getState">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getStateRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getStateResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setState">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="setStateRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="setStateResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getEmail">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getEmailRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getEmailResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setId">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="setIdRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="setIdResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setEmail">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="setEmailRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="setEmailResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setEmployeeId">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="setEmployeeIdRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="setEmployeeIdResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getEmployeeId">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getEmployeeIdRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getEmployeeIdResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAddress1">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getAddress1Request">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getAddress1Response">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setAddress1">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="setAddress1Request">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="setAddress1Response">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAddress2">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getAddress2Request">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getAddress2Response">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getDateOfBirth">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getDateOfBirthRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getDateOfBirthResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getLastname">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getLastnameRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getLastnameResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setZipcode">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="setZipcodeRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="setZipcodeResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getCellphone">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getCellphoneRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getCellphoneResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setCity">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="setCityRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="setCityResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setHomephone">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="setHomephoneRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="setHomephoneResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setLastname">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="setLastnameRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="setLastnameResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setGender">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="setGenderRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="setGenderResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setMiddlename">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="setMiddlenameRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="setMiddlenameResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setFirstname">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="setFirstnameRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="setFirstnameResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getHomephone">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getHomephoneRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getHomephoneResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getCity">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getCityRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getCityResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getGender">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getGenderRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getGenderResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setAddress2">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="setAddress2Request">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="setAddress2Response">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getMiddlename">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getMiddlenameRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getMiddlenameResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getZipcode">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getZipcodeRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getZipcodeResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getFirstname">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getFirstnameRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getFirstnameResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setCellphone">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="setCellphoneRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="setCellphoneResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setDateOfBirth">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="setDateOfBirthRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="setDateOfBirthResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="EmployeeService">
+
+      <wsdl:port binding="impl:EmployeeSoapBinding" name="Employee">
+
+         <wsdlsoap:address location="http://localhost:8404/abankus/services/Employee"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>

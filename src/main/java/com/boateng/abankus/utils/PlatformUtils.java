@@ -28,5 +28,12 @@ public class PlatformUtils {
 	}
 	
 
+	public static String getClientOrderId(){
+		StringBuilder sbr = new StringBuilder();
+		String characters = RandomStringUtils.randomAlphanumeric(6).toUpperCase();
+		String numbers = RandomStringUtils.randomNumeric(6).toUpperCase();		
+		sbr.append(characters).append("-").append(numbers);
+		return sbr.toString();
+	}
 
 }

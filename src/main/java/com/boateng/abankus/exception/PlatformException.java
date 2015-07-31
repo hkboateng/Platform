@@ -3,12 +3,16 @@
  */
 package com.boateng.abankus.exception;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  * @author hkboateng
  *
  */
 public class PlatformException extends Exception {
 
+	public static final Log log = LogFactory.getLog(PlatformException.class);
 	/**
 	 * 
 	 */
@@ -46,7 +50,7 @@ public class PlatformException extends Exception {
 	 */
 	public PlatformException(String message) {
 		super(message);
-		// TODO Auto-generated constructor stub
+		log.warn(message);
 	}
 
 	/**
@@ -54,7 +58,7 @@ public class PlatformException extends Exception {
 	 */
 	public PlatformException(Throwable cause) {
 		super(cause);
-		// TODO Auto-generated constructor stub
+		log.warn(cause);
 	}
 
 	

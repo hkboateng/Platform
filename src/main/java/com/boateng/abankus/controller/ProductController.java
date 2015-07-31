@@ -14,14 +14,10 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.boateng.abankus.domain.Product;
-import com.boateng.abankus.employee.interfaces.ProductService;
 import com.boateng.abankus.processors.ProductServiceProcessor;
-import com.boateng.abankus.service.impl.EmployeeServiceImpl;
-import com.boateng.abankus.service.impl.ProductServiceImpl;
-import com.boateng.abankus.utils.PlatformUtils;
 
 /**
  * @author hkboateng
@@ -67,4 +63,35 @@ public class ProductController {
 		return "Product/listProducts";
 	}
 	
+	@RequestMapping(value="/editProduct", method=RequestMethod.GET)
+	public String editProduct(@RequestParam int productId){
+		
+		return "Product/editProduct";
+	}
+
+	@RequestMapping(value="/updateProduct", method=RequestMethod.POST)
+	public String updateProduct(@Valid Product product,BindingResult bindingResult,Model model){
+		if(bindingResult.hasErrors()){
+			model.addAttribute("error", bindingResult.getFieldErrors());
+			return "Product/createProduct"; 
+		}		
+		
+		model.addAttribute("info", null);
+		return "Product/listProducts";
+	}
+	
+	public void removeProduct(@RequestParam int productId, Model model){
+		
+	}
+	
+	@RequestMapping(value="/createProductDetails", method=RequestMethod.GET)
+	public void createProductDetail(){
+		
+	}
+	
+	@RequestMapping(value="/saveProductDetail" , method=RequestMethod.POST)
+	public String saveProductDetail(){
+		
+		return null;
+	}
 }

@@ -18,33 +18,9 @@
 <script src="<c:url value="/resources/js/application.js" />" type="text/javascript"></script>
 </head>
 <body>
+<%-- Include page header --%>
+<jsp:include page="../header.jsp"/>
 
-<!-- Page Header -->
-<nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">Abankus Connection</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-        
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Dashboard</a></li>
-            <li><a href="#">Settings</a></li>
-            <li><a href="#">About Us</a></li>
-            <li><a href="#">Help and Contact Us</a></li>
-          </ul>
-
-        </div>
-      </div>
-    </nav>
-
-<!-- Page Header ends -->
 <div class="container">
 <div class="row">
 <div class="col-sm-3 col-md-2 sidebar" ng-controller="DatepickerDemoCtrl">
@@ -70,6 +46,7 @@
           </ul>
         </div>
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+		
           <h1>Client Services - Prospective Customer</h1>
 			<hr>
           <div class="row">

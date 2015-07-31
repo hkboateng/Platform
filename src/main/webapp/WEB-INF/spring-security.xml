@@ -10,7 +10,7 @@
     	<intercept-url pattern="/security/**" access="isAnonymous()"/>
     	<intercept-url pattern="/abankus/**" access="isFullyAuthenticated()"/>
     	<form-login login-page='/security/login' default-target-url='/platform/dashboard'
-            always-use-default-target='true' />
+            always-use-default-target='true' authentication-failure-url='/?error=access_denied' />
         <logout invalidate-session="true" delete-cookies="JSESSIONID" logout-url="/platform/logout"  logout-success-url="/login?logout_successful=18"/>
 
         <session-management>
@@ -19,7 +19,9 @@
 			<headers>
 				<xss-protection/>
 				<cache-control/>
+				
 			</headers>
+			<csrf/>
     </http>
 
 	<!-- Security Beans -->

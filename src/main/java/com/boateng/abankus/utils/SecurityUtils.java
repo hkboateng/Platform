@@ -1,8 +1,6 @@
 package com.boateng.abankus.utils;
 
-import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 
@@ -37,9 +35,7 @@ public class SecurityUtils {
 		sbr.append(characters).append(numbers);
 		return sbr.toString();	
 	}
-	protected static void processSignIn(String username, String password){
 
-	}
 	
 	private static BCryptPasswordEncoder passwdencode(){
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(10);

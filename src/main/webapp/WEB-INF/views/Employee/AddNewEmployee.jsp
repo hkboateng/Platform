@@ -15,31 +15,9 @@
 <script src="<c:url value="/resources/js/application.js" />" type="text/javascript"></script>
 </head>
 <body  ng-app="">
-<!-- Page Header -->
-<nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">Abankus Connection</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Dashboard</a></li>
-            <li><a href="#"><span  class="fa fa-cog fa-lg"></span>Settings</a></li>
-            <li><a href="#">About Us</a></li>
-            <li><a href="#">Help and Contact Us</a></li>
-          </ul>
+<%-- Include page header --%>
+<jsp:include page="../header.jsp"/>
 
-        </div>
-      </div>
-    </nav>
-
-<!-- Page Header ends -->
 <div class="container">
 <div class="row">
 <div class="col-sm-3 col-md-2 sidebar">
@@ -70,13 +48,14 @@
 
           <div class="row">
           <div class="col-md-7">
-          <div class="errors">
-          <ul>
-          <c:if test="${not empty errors}">
-          <li class="alert alert-warning">${errors }</li>
-          </c:if>
-          </ul>
-          </div>
+          <div class="alert alert-danger alert-dismissible fade in" role="alert">
+     	  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+	          <ul>
+		          <c:if test="${not empty errors}">
+		          	<li class="alert alert-warning">${errors }</li>
+		          </c:if>
+	          </ul>
+    	  </div>
 			<h3>Personal Information</h3><hr/>
 			<sf:form method="post" modelAttribute="employee" action="addEmployee"  name="newEmployee" class="form">
 			<input type="hidden" name="trigger" value="personal">

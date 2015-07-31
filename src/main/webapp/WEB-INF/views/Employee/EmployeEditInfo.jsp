@@ -10,90 +10,11 @@
 <script src="<c:url value="/resources/js/angular.js" />" type="text/javascript"></script>
 </head>
 <body  ng-app="">
-
-<!-- Page Header -->
-<nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">Abankus Connection</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-        
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Dashboard</a></li>
-            <li><a href="#">Settings</a></li>
-            <li><a href="#">About Us</a></li>
-            <li><a href="#">Help and Contact Us</a></li>
-          </ul>
-          <form class="navbar-form navbar-right">
-            <input type="text" class="form-control" placeholder="Search...">
-          </form>
-        </div>
-      </div>
-    </nav>
-
-<!-- Page Header ends -->
+<%-- Include page header --%>
+<jsp:include page="../header.jsp"/>
 <div class="container">
 <div class="row">
-			<div  class="col-sm-3 col-md-3 sidebar">
-			    <div id="accordian">
-				<ul>
-					<li>
-						<h3><span class="fa fa-tachometer fa-2x"></span>Dashboard</h3>
-						<ul>
-							<li><a href="#">Reports</a></li>
-							<li><a href="#">Search</a></li>
-							<li><a href="#">Graphs</a></li>
-							<li><a href="#">Settings</a></li>
-						</ul>
-					</li>
-					<!-- we will keep this LI open by default -->
-					<li class="active">
-						<h3><span class="icon-tasks"></span>Tasks</h3>
-						<ul>
-							<li><a href="#">Today's tasks</a></li>
-							<li><a href="#">Urgent</a></li>
-							<li><a href="#">Overdues</a></li>
-							<li><a href="#">Recurring</a></li>
-							<li><a href="#">Settings</a></li>
-						</ul>
-					</li>
-					<li>
-						<h3><span class="icon-calendar"></span>Calendar</h3>
-						<ul>
-							<li><a href="#">Current Month</a></li>
-							<li><a href="#">Current Week</a></li>
-							<li><a href="#">Previous Month</a></li>
-							<li><a href="#">Previous Week</a></li>
-							<li><a href="#">Next Month</a></li>
-							<li><a href="#">Next Week</a></li>
-							<li><a href="#">Team Calendar</a></li>
-							<li><a href="#">Private Calendar</a></li>
-							<li><a href="#">Settings</a></li>
-						</ul>
-					</li>
-					<li>
-						<h3><span class="fa fa-sign-out"></span>Favourites</h3>
-						<ul>
-							<li><a href="#">Global favs</a></li>
-							<li><a href="#">My favs</a></li>
-							<li><a href="#">Team favs</a></li>
-							<li><a href="#">Settings</a></li>
-						</ul>
-					</li>
-					<li>
-						<h3><span class="fa fa-sign-out fa-lg"></span> Sign Out</h3>
-				
-					</li>
-				</ul>
-			</div>
-	    </div>
+<jsp:include page="../sidebar.jsp"/>
 		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
           <h1>Add New Employee</h1>
 			<hr>

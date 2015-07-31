@@ -36,7 +36,7 @@ public class EmployeeController {
 		return "Employee/EmployeeList";
 	}
 	
-	@RequestMapping(value="/edit", method=RequestMethod.GET,params="editProfile")
+	@RequestMapping(value="/edit", method=RequestMethod.GET)
 	public String editEmployeeProfile(@RequestParam int employeeId,Model model){
 		Employee employee = employeeServiceImpl.getEmployeeById(employeeId);
 		model.addAttribute("employeeInstance", employee);

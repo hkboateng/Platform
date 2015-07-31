@@ -1,4 +1,4 @@
-package com.boateng.abankus.domain.Client;
+package com.boateng.abankus.domain;
 
 /** Client is an Interface for all Customers of the Business/Company ***/
 
