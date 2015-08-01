@@ -1,6 +1,10 @@
 package com.boateng.abankus.customer.processor;
 
 import java.text.ParseException;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -158,4 +162,14 @@ public class CustomerServiceProcessor {
 		employeeSvcImpl.addEmployeeSalesAccount(employee, customer);
 	}
 	
+	public Set<Customer> getAllCustomers(){
+		Set<Customer> customers = null;
+		List<Customer> customerList = customerServiceImpl.getAllCustomers();
+		if(customerList == null || customerList.isEmpty() ){
+			return null;
+		}
+		customers = new LinkedHashSet<Customer>(customerList);
+
+		return customers;
+	}
 }

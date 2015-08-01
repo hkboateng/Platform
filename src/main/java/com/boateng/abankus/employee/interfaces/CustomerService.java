@@ -1,5 +1,7 @@
 package com.boateng.abankus.employee.interfaces;
 
+import java.util.List;
+
 import com.boateng.abankus.domain.Address;
 import com.boateng.abankus.domain.Customer;
 import com.boateng.abankus.domain.Email;
@@ -14,5 +16,11 @@ public interface CustomerService {
 	 * @return
 	 */
 	Customer findCustomerByCustomerNumber(String customerNo);
+
+	/**
+	 * @return 
+	 * 
+	 */
+	List<Customer> getAllCustomers();
 
 }

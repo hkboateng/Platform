@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -78,5 +79,21 @@ public class CustomerServiceImpl implements CustomerService {
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.boateng.abankus.employee.interfaces.CustomerService#getAllCustomers()
+	 */
 	
+	@Transactional	
+	@Override
+	public List<Customer> getAllCustomers() {
+		 Session session = getSessionFactory().getCurrentSession();
+		 
+		@SuppressWarnings("unchecked")
+		List<Customer> query = session.createQuery("from Customer")
+				.setCacheable(true)
+				.list();
+		
+		return query;
+
+	}
 }
