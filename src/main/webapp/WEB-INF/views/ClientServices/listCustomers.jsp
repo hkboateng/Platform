@@ -21,7 +21,7 @@
 <body>
 <%-- Include page header --%>
 <jsp:include page="../header.jsp"/>
-
+<%-- End of Include page header --%>
 <div class="container">
 <div class="row">
 <div class="col-sm-3 col-md-2 sidebar" ng-controller="DatepickerDemoCtrl">
@@ -59,10 +59,13 @@
 			          </ul>
 		          </div>
 		          <div class="">
+		          <div class="panel panel-info">
+				  <!-- Default panel contents -->
+				  <div class="panel-heading">Panel heading</div>
 					<table class="table table-striped">
 						<thead>
 							<tr>
-								<th></th>
+								<th>#</th>
 								<th>Full Name</th>
 								<th>Address</th>
 								<th>Contact Information</th>
@@ -76,11 +79,12 @@
 		          			<td>${customer.firstname }</td>
 		          			<td>${customer.lastname}</td>
 		          			<td>${customer.company_name }</td>
-		          			<td><a href="<c:url value="viewProfile"/>">Select</a></td>
+		          			<td><a href="<c:url value="viewProfile?customerId=${customer.customerId }"/>">Select</a></td>
 		          		</tr>
 		          	</c:forEach>
 		          		</tbody>
 		          		</table>
+		          		</div>
 		          </div>
 	          <input type="hidden" value="${customer.customerId }" name="customerId"/>
 	          <input type="hidden" value="${customer.customerNumber }" name="customerName"/>

@@ -77,9 +77,27 @@
 		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 		<h1>Product List</h1>
 		<div>
-			<c:forEach items="${productList}" var="product">
-			
-			</c:forEach>
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th> No.</th>
+						<th> Product Code</th>
+						<th> Product Name </th>
+						<th>Product Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<c:forEach items="${productList}" var="product" varStatus="counter">
+						<tr>
+							<td>${counter.count}</td>
+							<td>${product.productCode }</td>
+							<td>${product.productName }</td>
+							<td>${product.description }</td>
+						</tr>
+					</c:forEach>	
+				</tbody>		
+			</table>
+
 		</div>
 		</div>
 

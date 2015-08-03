@@ -11,8 +11,8 @@
 <link href="<c:url value="/resources/css/platform.css" />" rel="stylesheet"/>
 <link href="<c:url value="/resources/css/fonts-awesome/font-awesome.css" />" rel="stylesheet"/>
 <script src="<c:url value="/resources/js/jquery.js" />" type="text/javascript"></script>
+
 <script src="<c:url value="/resources/js/bootstrap.js" />" type="text/javascript"></script>
-<script src="<c:url value="/resources/js/visualization/d3.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/application.js" />" type="text/javascript"></script>
 </head>
 <body>

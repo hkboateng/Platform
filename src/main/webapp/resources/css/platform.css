@@ -10,10 +10,11 @@
   height: 60px;
   background-color: #6974d1;
 }
+.line1{
+	border:1px solid #000;
+}
 #sidemenu{
 	  margin-bottom: 2.65em;
-	  
-
 }
 #sidemenuContainer{
 	  width:1200px;	
@@ -368,4 +369,24 @@ ul.progressbar-list-3 .normal{
   font-size: 80%;
   margin-left: 5px;
   max-height: 0.5em;
+}
+.bold{
+	font-weight:bold;
+}
+.nav-line{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 0;
+    border-top: 1px solid #eee;
+	border-bottom:2px solid #000;
+}
+.navigation-linear{
+	display:block;
+}
+.navigation-linear > li{
+	display: inline-block;
+	margin-right:10px;
+}
+#customerDetailBlock{
+	margin-bottom:20px;
 }

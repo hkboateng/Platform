@@ -81,7 +81,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 
 	@Transactional
 	@Override	
-	public CustomerAccount addEmployeeSalesAccount(Employee employee,Customer customer){
+	public CustomerAccount addEmployeeSalesAccount(Employee employee,Customer customer,String industry,String notes){
 		CustomerAccount customerAccount = new CustomerAccount();
 		
 		String accountNo  = EmployeeUtils.generateAccountNumber();
@@ -89,7 +89,8 @@ public class EmployeeServiceImpl implements EmployeeService{
 		customerAccount.setCustomer(customer);
 		customerAccount.setEmployee(employee);
 		customerAccount.setStatus("Active");
-		
+		customerAccount.setIndustry(industry);
+		customerAccount.setNotes(notes);
 		Session session = getSessionFactory().getCurrentSession();
 		
 		session.save(customerAccount);

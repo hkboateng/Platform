@@ -3,6 +3,7 @@ package com.boateng.abankus.service.impl;
 import java.io.Serializable;
 import java.util.List;
 
+import org.hibernate.CacheMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.boateng.abankus.domain.Address;
 import com.boateng.abankus.domain.Customer;
+import com.boateng.abankus.domain.CustomerAccount;
 import com.boateng.abankus.domain.Email;
 import com.boateng.abankus.domain.Phone;
 import com.boateng.abankus.employee.interfaces.Customers;
@@ -95,5 +97,43 @@ public class CustomerServiceImpl implements CustomerService {
 		
 		return query;
 
+	}
+
+	/* (non-Javadoc)
+	 * @see com.boateng.abankus.employee.interfaces.CustomerService#findCustomerByCustomerId(long)
+	 */
+	@Override
+	@Transactional	
+	public Customer findCustomerByCustomerId(int id) {
+		 Session session = getSessionFactory().getCurrentSession();
+		 Customer customer = (Customer) session.get(Customer.class, id);
+		return customer;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.boateng.abankus.employee.interfaces.CustomerService#findCustomerAccountByCustomerNumber(java.lang.String)
+	 */
+	
+	@Transactional
+	@Override
+	public CustomerAccount findCustomerAccountByCustomerNumber(String customerNo) {
+		Session session = getSessionFactory().getCurrentSession();
+		CustomerAccount customerAccount = (CustomerAccount) session.createQuery("From CustomerAccount where customerNumber=?")
+						.setParameter(0, customerNo)
+						.setCacheMode(CacheMode.NORMAL)
+						.uniqueResult();
+		return customerAccount;
+	}
+	
+	@Transactional
+	@Override
+	public List<Address> findAddressByCustomerId(int Id){
+		Session session = getSessionFactory().getCurrentSession();
+		@SuppressWarnings("unchecked")
+		List<Address> address =  session.createQuery("From Address where customerId=?")
+										.setParameter(0, Id)
+										.list();
+		
+		return address;
 	}
 }

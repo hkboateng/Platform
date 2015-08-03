@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import com.boateng.abankus.domain.Address;
 import com.boateng.abankus.domain.Customer;
+import com.boateng.abankus.domain.CustomerAccount;
 import com.boateng.abankus.domain.Email;
 import com.boateng.abankus.domain.Employee;
 import com.boateng.abankus.domain.Phone;
@@ -159,7 +160,9 @@ public class CustomerServiceProcessor {
 
 		Customer customer =  customerServiceImpl.addNewCustomer(customers,email,phone,address);
 		//EmployeeServiceProcessor process = new EmployeeServiceProcessor();
-		employeeSvcImpl.addEmployeeSalesAccount(employee, customer);
+		String industry = request.getParameter("industry");
+		String notes = request.getParameter("notes");
+		employeeSvcImpl.addEmployeeSalesAccount(employee, customer,industry,notes);
 	}
 	
 	public Set<Customer> getAllCustomers(){
@@ -171,5 +174,21 @@ public class CustomerServiceProcessor {
 		customers = new LinkedHashSet<Customer>(customerList);
 
 		return customers;
+	}
+	
+	public Customer findCustomerByCustomerId(int Id){
+		Customer customer = customerServiceImpl.findCustomerByCustomerId(Id);
+		
+		return customer;
+	}
+	
+	public CustomerAccount findCustomerAccountByCustomerNumber(String customerNo){
+		CustomerAccount customerAccount = customerServiceImpl.findCustomerAccountByCustomerNumber(customerNo);
+		return customerAccount;
+	}
+	
+	public List<Address> findAddressByCustomerId(int Id){
+		List<Address> address = customerServiceImpl.findAddressByCustomerId(Id);
+		return address;
 	}
 }

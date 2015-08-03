@@ -17,30 +17,9 @@
 <body ng-app="platformApp">
 
 <!-- Page Header -->
-<nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">Abankus Connection</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-        
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Dashboard</a></li>
-            <li><a href="#">Settings</a></li>
-            <li><a href="<c:url value='/abankus/logout' />">Logout</a></li>
-            <li><a href="#">Help and Contact Us</a></li>
-          </ul>
-
-        </div>
-      </div>
-    </nav>
-
+<%-- Include page header --%>
+<jsp:include page="../header.jsp"/>
+<%-- End of Include page header --%>
 <!-- Page Header ends -->
 <div class="container"  ng-controller="ProductController">
 	<div class="row">
@@ -95,7 +74,7 @@
 							<th>Product Name</th>
 							<th>Product Code</th>
 							<th>Description</th>
-							<th>Product Details</th>
+							<th>View Product</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -105,7 +84,7 @@
 								<td>${list.productName} </td>
 								<td>${list.productCode }</td>
 								<td>${list.description }</td>
-								<td><a class="btn btn-success" href="${list.productId}">Select </a></td>
+								<td><a class="btn btn-success" href="<c:url value="viewProducts/${list.productId}"/>">Select </a></td>
 							<tr>
 							</c:forEach>
 					</tbody>

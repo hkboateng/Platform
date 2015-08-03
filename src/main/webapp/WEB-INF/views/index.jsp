@@ -47,11 +47,13 @@
 							<span class="glyphicon glyphicon-info-sign"></span>${info }
 						</div>
 					</c:if>
-					
-					<form action="<c:url value='/login' />" method='POST' class="forms">
 						<c:if test="${param.error != null}">
-							<p>Invalid username and password.</p>
-						</c:if>
+							<div class="tools-alert tools-alert-red">
+								<p>Invalid username and password.</p>
+							</div>
+						</c:if>					
+					<form action="<c:url value='/login' />" method='POST' class="forms">
+
 						<c:if test="${param.info != null}">
 							<p>You have been logged out.</p>
 						</c:if>

@@ -11,10 +11,15 @@
           <a class="navbar-brand" href="#">Abankus Connection</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
+
           <ul class="nav navbar-nav navbar-right">
             <li>
+            	<a href="/abankus/platform/dashboard"><i class="fa fa-home fa-lg moveR_10"></i>DashBoard</a>
+            </li>
+            
+            <li>
 	            <a id="drop4" href="#" class=" dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-		          <i class="fa fa-user fa-md moveR_5"></i>${employee.firstname}&nbsp;${employee.lastname}
+		          <i class="fa fa-user fa-md moveR_10"></i>${employee.firstname}&nbsp;${employee.lastname}
 		          <span class="caret"></span>
 		        </a>
 	            <ul id="menu1" class="dropdown-menu" aria-labelledby="drop4">
@@ -23,6 +28,7 @@
 		          <li><a href="#"><i class="fa fa-sign-out fa-lg moveR_5"></i>Logout</a></li>
 		        </ul>
             </li>
+
           </ul>
 
         </div>

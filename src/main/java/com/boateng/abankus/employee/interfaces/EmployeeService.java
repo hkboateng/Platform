@@ -12,12 +12,6 @@ public interface EmployeeService {
 
 	Employee saveEmployee(Employee e,User u, String[] roleId);
 
-	/**
-	 * @param employee
-	 * @param customer
-	 * @return
-	 */
-	CustomerAccount addEmployeeSalesAccount(Employee employee, Customer customer);
 
 	/**
 	 * @return
@@ -25,5 +19,14 @@ public interface EmployeeService {
 	List<Employee> getAllEmployee();
 
 	Employee getEmployeeById(int employeeId);
+
+	/**
+	 * @param employee
+	 * @param customer
+	 * @param industry
+	 * @param notes
+	 * @return
+	 */
+	CustomerAccount addEmployeeSalesAccount(Employee employee,Customer customer, String industry, String notes);
 	
 }

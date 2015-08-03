@@ -40,3 +40,9 @@ $(document).ready(function(){
 		}
 	})
 })
+
+function searchCustomerByAccountNumber(accountNumber){
+	$(document).ready(function(){
+		
+	});
+}

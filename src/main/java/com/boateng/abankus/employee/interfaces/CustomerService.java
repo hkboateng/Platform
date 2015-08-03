@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.boateng.abankus.domain.Address;
 import com.boateng.abankus.domain.Customer;
+import com.boateng.abankus.domain.CustomerAccount;
 import com.boateng.abankus.domain.Email;
 import com.boateng.abankus.domain.Phone;
 
@@ -22,5 +23,22 @@ public interface CustomerService {
 	 * 
 	 */
 	List<Customer> getAllCustomers();
+
+	/**
+	 * @param id
+	 */
+	Customer findCustomerByCustomerId(int id);
+
+	/**
+	 * @param customerNo
+	 * @return
+	 */
+	CustomerAccount findCustomerAccountByCustomerNumber(String customerNo);
+
+	/**
+	 * @param Id
+	 * @return
+	 */
+	List<Address> findAddressByCustomerId(int Id);
 
 }

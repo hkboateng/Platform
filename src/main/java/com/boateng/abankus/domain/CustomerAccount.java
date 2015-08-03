@@ -1,7 +1,10 @@
 package com.boateng.abankus.domain;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
 import java.sql.Timestamp;
 
 
@@ -19,17 +22,25 @@ public class CustomerAccount implements Serializable {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int customerAccount;
 
+	@NotNull
 	private String accountNumber;
 
 	private Timestamp dateCreate;
 
 	//bi-directional many-to-one association to Customer
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name="employeeId", referencedColumnName="employeeId")	
 	private Employee employee;
 
+	@NotNull
 	private String status;
 
+	private String notes;
+	
+	@NotNull
+	private String industry;
+	
 	//bi-directional many-to-one association to Customer
 	@ManyToOne
 	@JoinColumn(name="customerNumber", referencedColumnName="customerNumber")
@@ -92,6 +103,34 @@ public class CustomerAccount implements Serializable {
 	 */
 	public void setEmployee(Employee employee) {
 		this.employee = employee;
+	}
+
+	/**
+	 * @return the notes
+	 */
+	public String getNotes() {
+		return notes;
+	}
+
+	/**
+	 * @param notes the notes to set
+	 */
+	public void setNotes(String notes) {
+		this.notes = notes;
+	}
+
+	/**
+	 * @return the industry
+	 */
+	public String getIndustry() {
+		return industry;
+	}
+
+	/**
+	 * @param industry the industry to set
+	 */
+	public void setIndustry(String industry) {
+		this.industry = industry;
 	}
 
 }
