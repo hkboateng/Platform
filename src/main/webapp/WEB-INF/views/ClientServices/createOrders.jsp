@@ -8,9 +8,11 @@
 <title>Abankus Corporation - Sales Connection</title>
 <link href="<c:url value="/resources/css/bootstrap.css" />" rel="stylesheet"/>
 <link href="<c:url value="/resources/css/platform.css" />" rel="stylesheet"/>
-<script src="<c:url value="/resources/js/angular.js" />" type="text/javascript"></script>
+<script src="<c:url value="/resources/js/jquery.js" />" type="text/javascript"></script>
+<script src="<c:url value="/resources/js/bootstrap.js" />" type="text/javascript"></script>
+<script src="<c:url value="/resources/js/application.js" />" type="text/javascript"></script>
 </head>
-<body  ng-app="">
+<body>
 <%-- Include page header --%>
 <jsp:include page="../header.jsp"/>
 <div class="container">
@@ -19,16 +21,15 @@
 		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
           <h1>Add New Employee</h1>
 			<hr>
-
-			<form class="form-inline" action="" method="">
 				<div class="form-group">
+					<span>Account Number:</span>
 					<label for="customerAccount" class="sr-only">Customer Account Number:</label>
-					<input type="text" name="customerAccount" id="customerAccount" class="custom-text" placeholder="Enter Account Number"/>
-							
+					<input type="text" name="accountNumber" id="accountNumber" class="custom-text" placeholder="Enter Account Number"/>
+					<button  id="btnSarchCustomer" class="btn btn-success" title="Search for Customer using Customer AccountNumber" ><i class="fa fa-search"></i></button>								
 				</div>
-				<button type="submit" class="btn btn-success" title="Search for Customer using Customer AccountNumber" ><i class="fa fa-search"></i></button>		
-			</form>
+				<div id="pending"></div>
 			<hr>
+			
 			<form>
 			
 			</form>
@@ -36,35 +37,6 @@
 </div>
 </div>
 </body>
-<script>
-var pwd = document.getElementById("password").value;
-var cpwd = document.getElementById("cpassword").value;
 
-function validatePassword(){
 
-	var message = document.getElementById("pwdValid");
-	var msg = "";
-	if(cpwd === pwd){
-		return;
-		
-	}
-	if(cpwd !== pwd){
-		msg +="<span class='alert alert-danger'>Both passwords do not match...Try again</span>";
-	}
-	message.innerHTML = msg;
-	
-}
-
-function submitForm(document){
-	var form = document.form;
-	if(cpwd !== pwd){
-		return;
-	}else{
-		form.submit();
-	}
-}
-</script>
-<script src="<c:url value="/resources/js/jquery.js" />" type="text/javascript"></script>
-<script src="<c:url value="/resources/js/bootstrap.js" />" type="text/javascript"></script>
-<script src="<c:url value="/resources/js/application.js" />" type="text/javascript"></script>
 </html>

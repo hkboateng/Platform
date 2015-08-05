@@ -72,11 +72,13 @@
     </beans:bean>
 
 	<!-- RabbitMQ -->
-	<rabbit:connection-factory    id="connectionFactory" 
+	<rabbit:connection-factory    id="connectionFactory"
+			cache-mode="CONNECTION"
 			host="localhost"
 			port="5627"
 			username="guest"
-			password="guest"/>
+			password="guest"
+			connection-cache-size="25"/>
 	<rabbit:template id="rabbitTemplate" connection-factory="connectionFactory" />
 	
 	<beans:bean id="retryTemplate" class="org.springframework.retry.support.RetryTemplate">
@@ -88,8 +90,18 @@
 			</beans:bean>
 		</beans:property>
 	</beans:bean>
-
+	
+	<rabbit:queue name="platform.save.customer"/>
+	
+    <rabbit:direct-exchange name="abankus.platform">
+    	<rabbit:bindings>
+    		<rabbit:binding queue="platform.save.customer" key="platform.data.save.customer"/>
+    	</rabbit:bindings>
+    </rabbit:direct-exchange>
     
+	<rabbit:listener-container connection-factory="connectionFactory">
+	    <rabbit:listener queues="platform.save.customer" ref="com.boateng.abankus.controller.HomeController" method="handle"/>
+	</rabbit:listener-container>    
     <!-- Controller and Entity Beans -->
     <beans:bean id="homeController" class="com.boateng.abankus.controller.HomeController"/>
     

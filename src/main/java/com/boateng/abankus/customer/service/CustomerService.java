@@ -1,56 +1,44 @@
 package com.boateng.abankus.customer.service;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-
+import com.boateng.abankus.domain.Address;
 import com.boateng.abankus.domain.Customer;
-import com.boateng.abankus.domain.Employee;
-import com.boateng.abankus.employee.interfaces.AuthenticationService;
+import com.boateng.abankus.domain.CustomerAccount;
+import com.boateng.abankus.domain.Email;
+import com.boateng.abankus.domain.Phone;
 
-/**
- * This class is created when an Employee logs into the application. The Object is stored
- * in a session.
- * Basic information about the Employee is created here, stored in Session and used every where in the 
- * application.
- * @author hkboateng
- *
- */
-public class CustomerService {
+public interface CustomerService {
 
-	@Autowired(required=true)
-	@Qualifier(value="authenticationServiceImpl")
-	private AuthenticationService authenticationServiceImpl;
-	
-	private String firstname;
-	
-	private String lastname;
-	public CustomerService(){
-		
-	}
-	
-	public CustomerService(String username){
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		loadUserInformation(currentUserNameInSession(authentication));
-		
-	}
-	
-	private String currentUserNameInSession(Authentication auth){
-		if(auth == null){
-			return null;
-		}
-		if(!auth.isAuthenticated()){
-			return null;
-		}
-		String username = auth.getName();
-		return username;
-	}
-	
-	private void loadUserInformation(String username){
-		authenticationServiceImpl.findUserByUserName(username);
-	}
+	Customer addNewCustomer(Customer customers, Email email, Phone phone, Address address);
+
+	/**
+	 * @param customerNo
+	 * @return
+	 */
+	Customer findCustomerByCustomerNumber(String customerNo);
+
+	/**
+	 * @return 
+	 * 
+	 */
+	List<Customer> getAllCustomers();
+
+	/**
+	 * @param id
+	 */
+	Customer findCustomerByCustomerId(int id);
+
+	/**
+	 * @param customerNo
+	 * @return
+	 */
+	CustomerAccount findCustomerAccountByCustomerNumber(String customerNo);
+
+	/**
+	 * @param Id
+	 * @return
+	 */
+	List<Address> findAddressByCustomerId(int Id);
+
 }

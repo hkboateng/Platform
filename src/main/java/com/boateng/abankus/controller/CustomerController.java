@@ -21,10 +21,10 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.boateng.abankus.customer.processor.CustomerServiceProcessor;
+import com.boateng.abankus.customer.service.CustomerService;
 import com.boateng.abankus.domain.Address;
 import com.boateng.abankus.domain.Customer;
 import com.boateng.abankus.domain.CustomerAccount;
-import com.boateng.abankus.employee.interfaces.CustomerService;
 
 @Controller
 @RequestMapping("/customers")

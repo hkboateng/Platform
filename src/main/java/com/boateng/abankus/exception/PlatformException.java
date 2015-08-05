@@ -25,6 +25,9 @@ public class PlatformException extends Exception {
 		// TODO Auto-generated constructor stub
 	}
 
+	public void logger(String message, Throwable t){
+		log.warn(message, t);
+	}
 	/**
 	 * @param message
 	 * @param cause

@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.boateng.abankus.domain.Employee;
 import com.boateng.abankus.domain.Role;
 import com.boateng.abankus.domain.User;
-import com.boateng.abankus.employee.interfaces.AuthenticationService;
+import com.boateng.abankus.services.AuthenticationService;
 import com.boateng.abankus.utils.SecurityUtils;
 
 @Component

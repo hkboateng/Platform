@@ -20,34 +20,13 @@
 
 <div class="container">
 <div class="row">
-<div class="col-sm-3 col-md-2 sidebar">
 
-          <ul class="nav nav-sidebar">
-            <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
-            <li><a href="#">Reports</a></li>
-            <li><a href="#">Analytics</a></li>
-            <li><a href="#">Export</a></li>
-          </ul>
-          <ul class="nav nav-sidebar">
-            <li><a href="">Nav item</a></li>
-            <li><a href="">Nav item again</a></li>
-            <li><a href="">One more nav</a></li>
-            <li><a href="">Another nav item</a></li>
-            <li><a href="">More navigation</a></li>
-          </ul>
-          <ul class="nav nav-sidebar">
-            <li><a href="">Nav item again</a></li>
-            <li><a href="">One more nav</a></li>
-            <li><a href="">Another nav item</a></li>
-            <li> <b>Last Login:</b>12:30pm</li>
-          </ul>
-        </div>
-<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+<div class="col-sm-12 col-md-12 col-lg-12 center-block">
           <h1>Add New Employee</h1>
 			<hr>
 
           <div class="row">
-          <div class="col-md-7">
+          <div class="col-md-8">
           <div class="alert alert-danger alert-dismissible fade in" role="alert">
      	  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
 	          <ul>
@@ -56,69 +35,66 @@
 		          </c:if>
 	          </ul>
     	  </div>
-			<h3>Personal Information</h3><hr/>
 			<sf:form method="post" modelAttribute="employee" action="addEmployee"  name="newEmployee" class="form">
 			<input type="hidden" name="trigger" value="personal">
 			<input type="hidden" name="punt" value="employeeDepartmentInfo">
 			<input type="hidden" name="currentpage" value="employeePersonal">
-			<ul class="inline-list-2">
-			<li>
+			<div class="col-xs-6 col-sm-6 col-md-6">
+
 				<label for="firstname" > First Name:</label>
 				<input type="text" class="form-control" id="firstname" name="firstname">			
-			</li>
-			<li>
+			</div>
+			<div class="col-xs-6 col-sm-6 col-md-6">
 				<label for="lastname" > Last Name:</label>
 				<input type="text" class="form-control" id="lastname" name="lastname">				
-			</li>
-			</ul>
 
+			</div>
+				<div class="col-xs-12 col-sm-12 col-md-12">
 				<label for="address1" >Address:</label>
-				<input type="text" class="form-control" id="address1" name="address1"><br>		
-				<label for="address2" >Address 2 (Optional):</label>
-				<input type="text" class="form-control" id="address2" name="address2">				
-		
-			<ul class="inline-list-2">
-			<li>
+				<input type="text" class="form-control" id="address1" name="address1">		
+				</div>
+				<div class="col-xs-12 col-sm-12 col-md-12">
+					<label for="address2" >Address 2 (Optional):</label>
+					<input type="text" class="form-control" id="address2" name="address2">				
+				</div>
+			<div class="col-xs-6 col-sm-6 col-md-6">
+
 				<label for="email" >Email Address:</label>
-				<input type="text" class="form-control" id="email" ng-model="username" name="email">		
-		
-			</li>
-			<li>
+				<input type="text" class="form-control" id="email" ng-model="username" name="email">	
+				</div>	
+			<div class="col-xs-6 col-sm-6 col-md-6">
 				<label for="phone" >Phone Number:</label>
 				<input type="text" class="form-control" id="phone" name="cellphone">				
-			</li>
-			</ul>		
-			<ul class="inline-list-3">
-			<li>
+			</div>	
+			<div class="col-xs-4 col-sm-4 col-md-4">
+
 				<label for="city" >City:</label>
-				<input type="text" class="form-control" id="city" name="city">					
-			</li>
-			<li>
+				<input type="text" class="form-control" id="city" name="city">	
+				</div>				
+			<div class="col-xs-4 col-sm-4 col-md-4">
 				<label for="state" >State:</label>
-				<input type="text" class="form-control" id="state" name="state">				
-			</li>
-			<li>
+				<input type="text" class="form-control" id="state" name="state">	
+				</div>			
+			<div class="col-xs-4 col-sm-4 col-md-4">
 				<label for="zip" >Zip Code:</label>
 				<input type="text" class="form-control" id="zip" name="zipcode" size="6" maxlength="5">				
-			</li>
-			</ul>
-			<ul class="inline-list-2">
-			<li>
+			</div>
+			<div class="col-xs-6 col-sm-6 col-md-6">
 			  <label for="dateOfBirth" >Date of Birth:<span> </span></label>
 			  <div class="form-group">
 			  	<input type="text" name="dateOfBirth" id="day" placeholder=" dd" size="3" maxlength="2">
 				<input type="text" name="month" id="month" placeholder=" mm" size="3" maxlength="2">
 				<input type="text" name="year" id="year" placeholder=" yyyy" size="3" maxlength="4">	
-				</div>
-			</li>
-			<li>
+				</div>	
+				</div>	
+			<div class="col-xs-6 col-sm-6 col-md-6">
 				<label for="gender" >Gender:</label>
 				<select name="gender" class="form-control">
 				<option value="male"> Male </option>
 				<option value="female"> Female </option>
-				</select>		
-			</li>
-			</ul>		
+				</select>					
+			</div>
+	
 			<p>
 			<button class="btn btn-primary"> Save Employee </button>
 			&nbsp;&nbsp;&nbsp;
@@ -126,6 +102,7 @@
 			</p>
 			</sf:form>
           </div>
+          <%--
           <div class="col-md-5">
  			<h3> Job Credentials</h3>	<hr/>	
 			<label for="username">
@@ -156,13 +133,9 @@
 				<option value="14"> Help Desk </option>
 			</select>							         	
           </div>
+           --%>
                     </div>
-            <hr> 					
-			<p>
-			<button class="btn btn-primary"> Save Employee </button>
-			&nbsp;&nbsp;&nbsp;
-			<a href="#"> Cancel </a>
-			</p>
+            <hr> 	
 </div>        
 </div>
 </div>

@@ -25,9 +25,9 @@ import com.boateng.abankus.domain.Customer;
 import com.boateng.abankus.domain.Employee;
 import com.boateng.abankus.domain.Role;
 import com.boateng.abankus.domain.User;
-import com.boateng.abankus.employee.interfaces.AuthenticationService;
-import com.boateng.abankus.employee.interfaces.EmployeeService;
 import com.boateng.abankus.processors.EmployeeServiceProcessor;
+import com.boateng.abankus.services.AuthenticationService;
+import com.boateng.abankus.services.EmployeeService;
 
 @Controller
 @RequestMapping("/registration")

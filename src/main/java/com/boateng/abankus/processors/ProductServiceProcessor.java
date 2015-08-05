@@ -10,8 +10,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.boateng.abankus.domain.Product;
-import com.boateng.abankus.employee.interfaces.ProductService;
 import com.boateng.abankus.service.impl.ProductServiceImpl;
+import com.boateng.abankus.services.ProductService;
 import com.boateng.abankus.utils.PlatformUtils;
 
 /**

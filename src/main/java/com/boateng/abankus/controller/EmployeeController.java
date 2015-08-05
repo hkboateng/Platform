@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.boateng.abankus.domain.Employee;
-import com.boateng.abankus.employee.interfaces.AuthenticationService;
-import com.boateng.abankus.employee.interfaces.EmployeeService;
+import com.boateng.abankus.services.AuthenticationService;
+import com.boateng.abankus.services.EmployeeService;
 
 /**
  * @author hkboateng

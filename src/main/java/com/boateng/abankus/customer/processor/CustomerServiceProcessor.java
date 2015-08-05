@@ -14,19 +14,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import com.boateng.abankus.customer.service.CustomerService;
 import com.boateng.abankus.domain.Address;
 import com.boateng.abankus.domain.Customer;
 import com.boateng.abankus.domain.CustomerAccount;
 import com.boateng.abankus.domain.Email;
 import com.boateng.abankus.domain.Employee;
 import com.boateng.abankus.domain.Phone;
-import com.boateng.abankus.employee.interfaces.AuthenticationService;
-import com.boateng.abankus.employee.interfaces.CustomerService;
-import com.boateng.abankus.employee.interfaces.EmployeeService;
 import com.boateng.abankus.fields.AddressFields;
 import com.boateng.abankus.fields.CustomerFields;
 import com.boateng.abankus.fields.EmailFields;
 import com.boateng.abankus.fields.PhoneFields;
+import com.boateng.abankus.services.AuthenticationService;
+import com.boateng.abankus.services.EmployeeService;
 import com.boateng.abankus.utils.SecurityUtils;
 
 @Service

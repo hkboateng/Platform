@@ -17,7 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.boateng.abankus.domain.Employee;
 import com.boateng.abankus.domain.Role;
 import com.boateng.abankus.domain.UserRole;
-import com.boateng.abankus.employee.interfaces.AuthenticationService;
+import com.boateng.abankus.services.AuthenticationService;
 
 public class UserCollection{
 

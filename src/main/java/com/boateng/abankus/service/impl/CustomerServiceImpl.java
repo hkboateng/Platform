@@ -6,18 +6,16 @@ import java.util.List;
 import org.hibernate.CacheMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.boateng.abankus.customer.service.CustomerService;
 import com.boateng.abankus.domain.Address;
 import com.boateng.abankus.domain.Customer;
 import com.boateng.abankus.domain.CustomerAccount;
 import com.boateng.abankus.domain.Email;
 import com.boateng.abankus.domain.Phone;
-import com.boateng.abankus.employee.interfaces.Customers;
-import com.boateng.abankus.employee.interfaces.CustomerService;
 
 @Component
 public class CustomerServiceImpl implements CustomerService {

@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.boateng.abankus.domain.Product;
-import com.boateng.abankus.employee.interfaces.ProductService;
+import com.boateng.abankus.services.ProductService;
 
 
 /**

@@ -15,9 +15,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import com.boateng.abankus.domain.Employee;
 import com.boateng.abankus.domain.User;
 import com.boateng.abankus.domain.UserRole;
-import com.boateng.abankus.employee.interfaces.EmployeeService;
 import com.boateng.abankus.employees.utils.EmployeeValidation;
 import com.boateng.abankus.exception.AbankusException;
+import com.boateng.abankus.services.EmployeeService;
 import com.boateng.abankus.utils.SecurityUtils;
 
 /**

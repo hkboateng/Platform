@@ -2,16 +2,16 @@ function createRegionList(){
 	var str = "";
 		str += "<select name='state' class='form-control'>";
 		str += "<option value=''> Select </option>";
-		str += "<option value='ashanti'> Ashanti </option>";
-		str += "<option value='brong'> Brong-Ahafo </option>";
-		str += "<option value='central'> Central </option>";
-		str += "<option value='eastern'> Eastern </option>";
-		str += "<option value='accra'> Greater Accra </option>";
-		str += "<option value='north'> Northern </option>";
-		str += "<option value='uppereast'> Upper-East </option>";
-		str += "<option value='upperwest'> Upper West </option>";
-		str += "<option value='volta'> Volta </option>";
-		str += "<option value='western'> Western </option>";
+		str += "<option value='AR'> Ashanti </option>";
+		str += "<option value='BA'> Brong-Ahafo </option>";
+		str += "<option value='CR'> Central </option>";
+		str += "<option value=ER'> Eastern </option>";
+		str += "<option value='GAR'> Greater Accra </option>";
+		str += "<option value='NR'> Northern </option>";
+		str += "<option value='UER'> Upper-East </option>";
+		str += "<option value='UWR'> Upper West </option>";
+		str += "<option value='VR'> Volta </option>";
+		str += "<option value='WR'> Western </option>";
 		str += "</select>";
 		
 		document.write(str);
@@ -30,19 +30,38 @@ function genderList(){
 
 /*jQuery time*/
 $(document).ready(function(){
+	
+	$("#btnSarchCustomer").click(function(){
+		var accountNo = $("#accountNumber").val();
+		
+		$.ajax({
+			url: 'findCustomer',
+			data: {
+				accountNumber:accountNo,
+			},
+			dataType: "json",
+			beforeSend:function(){
+				$("#pending").text("Loading...");
+			},
+			success: function(results){
+				
+				if(results == null){
+					results = "No Account Information was found";
+				}
+				$("#pending").text(results);
+			},
+			error :function(data){
+				console.log(data);
+			}
+		});			
+	});
+	
 	$("#accordian h3").click(function(){
-		//slide up all the link lists
 		$("#accordian ul ul").slideUp();
-		//slide down the link list below the h3 clicked - only if its closed
 		if(!$(this).next().is(":visible"))
 		{
 			$(this).next().slideDown();
 		}
-	})
+	});
 })
 
-function searchCustomerByAccountNumber(accountNumber){
-	$(document).ready(function(){
-		
-	});
-}

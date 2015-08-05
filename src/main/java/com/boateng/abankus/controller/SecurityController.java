@@ -20,8 +20,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.boateng.abankus.domain.Employee;
 import com.boateng.abankus.domain.User;
-import com.boateng.abankus.employee.interfaces.AuthenticationService;
 import com.boateng.abankus.exception.PlatformException;
+import com.boateng.abankus.services.AuthenticationService;
 import com.boateng.abankus.servlet.PlatformAbstractServlet;
 import com.boateng.abankus.users.UserCollection;
 

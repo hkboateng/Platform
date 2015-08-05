@@ -18,9 +18,9 @@ import com.boateng.abankus.domain.CustomerAccount;
 import com.boateng.abankus.domain.Employee;
 import com.boateng.abankus.domain.User;
 import com.boateng.abankus.domain.UserRole;
-import com.boateng.abankus.employee.interfaces.AuthenticationService;
-import com.boateng.abankus.employee.interfaces.EmployeeService;
 import com.boateng.abankus.employees.utils.EmployeeUtils;
+import com.boateng.abankus.services.AuthenticationService;
+import com.boateng.abankus.services.EmployeeService;
 
 @Component
 public class EmployeeServiceImpl implements EmployeeService{
