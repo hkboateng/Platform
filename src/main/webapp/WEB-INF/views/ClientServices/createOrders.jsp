@@ -19,7 +19,7 @@
 <div class="row">
 <jsp:include page="../sidebar.jsp"/>
 		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h1>Add New Employee</h1>
+          <h1>Create Orders</h1>
 			<hr>
 				<div class="form-group">
 					<span>Account Number:</span>
@@ -27,7 +27,9 @@
 					<input type="text" name="accountNumber" id="accountNumber" class="custom-text" placeholder="Enter Account Number"/>
 					<button  id="btnSarchCustomer" class="btn btn-success" title="Search for Customer using Customer AccountNumber" ><i class="fa fa-search"></i></button>								
 				</div>
-				<div id="pending"></div>
+				<div id="pending">
+				
+				</div>
 			<hr>
 			
 			<form>

@@ -44,14 +44,14 @@ $(document).ready(function(){
 				$("#pending").text("Loading...");
 			},
 			success: function(results){
-				
+				console.log(results);
 				if(results == null){
 					results = "No Account Information was found";
 				}
 				$("#pending").text(results);
 			},
 			error :function(data){
-				console.log(data);
+				
 			}
 		});			
 	});

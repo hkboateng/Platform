@@ -5,7 +5,11 @@ import java.io.Serializable;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -22,6 +26,9 @@ public class CustomerAccount implements Serializable {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int customerAccount;
 
+	@Transient
+	private Map<String, Customer> customerMap = new HashMap<String,Customer>();
+	
 	@NotNull
 	private String accountNumber;
 
@@ -29,7 +36,7 @@ public class CustomerAccount implements Serializable {
 
 	//bi-directional many-to-one association to Customer
 	@NotNull
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="employeeId", referencedColumnName="employeeId")	
 	private Employee employee;
 
@@ -42,7 +49,8 @@ public class CustomerAccount implements Serializable {
 	private String industry;
 	
 	//bi-directional many-to-one association to Customer
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JsonBackReference
 	@JoinColumn(name="customerNumber", referencedColumnName="customerNumber")
 	private Customer customer;
 
@@ -88,6 +96,10 @@ public class CustomerAccount implements Serializable {
 	}
 
 	public void setCustomer(Customer customer) {
+		String customerNumber = customer.getCustomerNumber(); 
+		if(!customerMap.containsKey(customerNumber)){
+			customerMap.put(customerNumber, customer);
+		}
 		this.customer = customer;
 	}
 
@@ -133,4 +145,28 @@ public class CustomerAccount implements Serializable {
 		this.industry = industry;
 	}
 
+	public boolean isCustomerActive(){
+		boolean accountStatus = false;
+		if(status.equals("Active")){
+			accountStatus = true;
+		}
+		return accountStatus;
+	}
+	
+	public boolean isCustomerAccountLocked(){
+		boolean accountStatus = false;
+		if(status.equals("Locked")){
+			accountStatus = true;
+		}		
+		return accountStatus;
+	}
+	
+	public Customer getCustomer(String customerNumber){
+		Customer customer = null;
+		if(customerMap.containsKey(customerNumber)){
+			customer = customerMap.get(customerNumber);
+		}
+			
+		return customer;
+	}
 }

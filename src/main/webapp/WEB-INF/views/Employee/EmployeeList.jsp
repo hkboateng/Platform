@@ -100,7 +100,7 @@
 										<p>${empList.city }${empList.state }${empList.zipcode }</p>
 									</td>
 									<td>${empList.cellphone } ${empList.email}</td>
-									<td><a href="" class="btn btn-primary">Select <span class="btn btn-primary"></span></a></td>
+									<td><a href="" class="btn btn-success"><i class="fa fa-eye moveR_10"></i>Select</a></td>
 								</tr>
 							</c:forEach>
 						</tbody>

@@ -79,7 +79,7 @@
 		          			<td>${customer.firstname }</td>
 		          			<td>${customer.lastname}</td>
 		          			<td>${customer.company_name }</td>
-		          			<td><a href="<c:url value="viewProfile?customerId=${customer.customerId }"/>">Select</a></td>
+		          			<td><a class="btn btn-success" href="<c:url value="viewProfile?customerId=${customer.customerId }"/>"><i class="fa fa-eye moveR_10"></i>Select</a></td>
 		          		</tr>
 		          	</c:forEach>
 		          		</tbody>

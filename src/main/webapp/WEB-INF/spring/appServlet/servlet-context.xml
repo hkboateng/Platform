@@ -75,7 +75,7 @@
 	<rabbit:connection-factory    id="connectionFactory"
 			cache-mode="CONNECTION"
 			host="localhost"
-			port="5627"
+			port="5672"
 			username="guest"
 			password="guest"
 			connection-cache-size="25"/>
@@ -100,7 +100,7 @@
     </rabbit:direct-exchange>
     
 	<rabbit:listener-container connection-factory="connectionFactory">
-	    <rabbit:listener queues="platform.save.customer" ref="com.boateng.abankus.controller.HomeController" method="handle"/>
+	    <rabbit:listener queues="platform.save.customer" ref="homeController" method="handle"/>
 	</rabbit:listener-container>    
     <!-- Controller and Entity Beans -->
     <beans:bean id="homeController" class="com.boateng.abankus.controller.HomeController"/>

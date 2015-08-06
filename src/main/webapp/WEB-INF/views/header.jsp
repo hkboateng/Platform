@@ -36,7 +36,7 @@
 		          <li><a href="/abankus/client/createOrders"><i class="fa fa-pencil-square-o fa-lg moveR_5"></i>Create Orders</a></li>
 		          <li role="separator" class="divider"></li>
 		          <li><a href="/abankus/customers/create"><i class="fa fa-sign-out fa-lg moveR_5"></i>Add New Customers</a></li>
-		          <li><a href="/abankus/customers/listCustomers"><i class="fa fa-sign-out fa-lg moveR_5"></i>List Customers</a></li>
+		          <li><a href="/abankus/customers/listCustomer"><i class="fa fa-sign-out fa-lg moveR_5"></i>List Customers</a></li>
 		        </ul>		                  
             </li>
             <li>

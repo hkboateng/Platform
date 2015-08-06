@@ -27,14 +27,16 @@
 
           <div class="row">
           <div class="col-md-8">
+          <c:if test="${not empty errors}">
           <div class="alert alert-danger alert-dismissible fade in" role="alert">
      	  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
 	          <ul>
-		          <c:if test="${not empty errors}">
+		          
 		          	<li class="alert alert-warning">${errors }</li>
-		          </c:if>
+		          
 	          </ul>
     	  </div>
+    	  </c:if>
 			<sf:form method="post" modelAttribute="employee" action="addEmployee"  name="newEmployee" class="form">
 			<input type="hidden" name="trigger" value="personal">
 			<input type="hidden" name="punt" value="employeeDepartmentInfo">

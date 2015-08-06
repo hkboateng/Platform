@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import com.boateng.abankus.utils.SecurityUtils;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.List;
 
@@ -37,7 +38,8 @@ public class Customer implements Serializable {
 	private String middlename;
 
 	//bi-directional many-to-one association to Customeraccount
-	@OneToMany(mappedBy="customer")
+	@OneToMany(fetch = FetchType.EAGER,mappedBy="customer")
+	@JsonManagedReference
 	private List<CustomerAccount> customerAccounts;
 
 	private String customerNumber;

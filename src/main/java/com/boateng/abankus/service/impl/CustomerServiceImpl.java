@@ -6,6 +6,7 @@ import java.util.List;
 import org.hibernate.CacheMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -114,10 +115,10 @@ public class CustomerServiceImpl implements CustomerService {
 	
 	@Transactional
 	@Override
-	public CustomerAccount findCustomerAccountByCustomerNumber(String customerNo) {
+	public CustomerAccount findCustomerAccountByCustomerNumber(String accountNumber) {
 		Session session = getSessionFactory().getCurrentSession();
-		CustomerAccount customerAccount = (CustomerAccount) session.createQuery("From CustomerAccount where customerNumber=?")
-						.setParameter(0, customerNo)
+		CustomerAccount customerAccount = (CustomerAccount) session.createCriteria(CustomerAccount.class)
+						.add(Restrictions.eq("accountNumber", accountNumber))
 						.setCacheMode(CacheMode.NORMAL)
 						.uniqueResult();
 		return customerAccount;

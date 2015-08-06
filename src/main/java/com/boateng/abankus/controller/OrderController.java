@@ -3,6 +3,8 @@
  */
 package com.boateng.abankus.controller;
 
+import java.io.IOException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.boateng.abankus.customer.processor.CustomerServiceProcessor;
 import com.boateng.abankus.domain.CustomerAccount;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
 /**
@@ -45,13 +49,18 @@ public class OrderController {
 		return modelView;
 	}
 	
-	@RequestMapping(value = "/findCustomer", method = RequestMethod.GET, produces = "text/html")
+	@RequestMapping(value = "/findCustomer", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public String findCustomer(@RequestParam(value="accountNumber",required=true) String accountNumber){
+	public String findCustomer(@RequestParam(value="accountNumber",required=true) String accountNumber) throws IOException{
 		logger.info("Employee ID: XXXXX is searching for Account Number: "+accountNumber);
 		CustomerAccount account = customerServiceProcessor.findCustomerAccountByCustomerNumber(accountNumber);
-		Gson gson = new Gson();
-		String acct = gson.toJson(account);
+		logger.info("Employee ID:XXX has found User with Account number: "+ account.getCustomer().getFirstname());
+
+		ObjectMapper mapper = new ObjectMapper();
+		logger.info("JSON has being convert..below is the Output...");
+		mapper.writeValue(System.out, account);
+		String acct = mapper.writeValueAsString(account);
+		
 		return acct;
 	}
 }

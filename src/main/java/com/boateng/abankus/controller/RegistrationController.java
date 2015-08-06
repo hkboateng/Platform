@@ -67,7 +67,7 @@ public class RegistrationController {
 		}
 		boolean isEmailUsed =  authenticationServiceImpl.doEmailExist((employee.getEmail()));
 		if(isEmailUsed){
-			request.setAttribute("errors", "Email Address already exist in system.");
+			request.setAttribute("errors", "Email Address already in use.");
 			return "Employee/AddNewEmployee";
 		}	
 		
@@ -107,7 +107,7 @@ public class RegistrationController {
 		}else{
 			
 		}
-		request.setAttribute("success", "Congratolations on registering. Please Login !!!");
+		request.setAttribute("success", "Congratulations on registering. Please Login !!!");
 		return "index";
 	}
 	

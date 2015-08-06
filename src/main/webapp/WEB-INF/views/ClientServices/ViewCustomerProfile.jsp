@@ -16,6 +16,9 @@
 <link href="<c:url value="/resources/css/bootstrap.css" />" rel="stylesheet"/>
 <link href="<c:url value="/resources/css/platform.css" />" rel="stylesheet"/>
 <link href="<c:url value="/resources/css/datepicker.css" />" rel="stylesheet"/>
+<script src="<c:url value="/resources/js/jquery.js" />" type="text/javascript"></script>
+
+<script src="<c:url value="/resources/js/bootstrap.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/application.js" />" type="text/javascript"></script>
 </head>
 <body>
@@ -64,7 +67,7 @@
  				 <div id="customerDetailBlock">
  				 	<div>
 					  	<ul class="navigation-linear">
-					  	<li class="pull-left">Personal Details</li>
+					  	<li class="pull-left bold">Personal Details</li>
 						  <li class="pull-right"><a href="" class=""><i class="glyphicon glyphicon-pencil moveR_10"></i>Edit </a></li>
 						</ul>  				 	
  				 	</div>
@@ -81,7 +84,7 @@
 				  	
  				 	<div>
 					  	<ul class="navigation-linear">
-					  	<li class="pull-left">Account Details</li>
+					  	<li class="pull-left bold">Account Details</li>
 					  	<c:if test="${not empty customerAccount}">
 						  <li class="pull-right"><a href="" class=""><i class="glyphicon glyphicon-pencil moveR_10"></i>Edit </a></li>
 						  </c:if>
@@ -93,7 +96,7 @@
 						<c:when test="${not empty customerAccount}">
 					  	<div id="customerAccountData">
 					  		<p><span class="bold">Account Number: </span>${customerAccount.accountNumber }</p>
-					  		<p><span class="bold">Account Status: </span> ${customerAccount.status }</p>
+					  		<p><span class="bold">Account Status: </span> ${customerAccount.status } <a href="" class=" btn btn-success btn-sm moveR_10"><i class="glyphicon glyphicon-edit  moveR_5"></i>Edit </a></p>
 					  		<p><span class="bold">Date Created: </span><fmt:formatDate type="date" dateStyle="long" timeStyle="long" value="${customerAccount.dateCreate }" /> </p>
 					  		<p><span class="bold">Notes: </span> ${customerAccount.notes }</p>
 					  	</div> 	
@@ -107,7 +110,7 @@
 					<div class="clearfix"></div>
  				 	<div>
 					  	<ul class="navigation-linear">
-					  	<li class="pull-left">Address</li>
+					  	<li class="pull-left bold">Address</li>
 					  	<c:if test="${not empty address}">
 						  <li class="pull-right"><a href="" class=""><i class="glyphicon glyphicon-pencil moveR_10"></i>Edit </a></li>
 						  </c:if>
