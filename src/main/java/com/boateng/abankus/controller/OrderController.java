@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -68,7 +69,7 @@ public class OrderController {
 	public String findCustomer(@RequestParam(value="accountNumber",required=true) String accountNumber,HttpServletRequest request) throws IOException{
 		session = request.getSession(false);
 		
-		Employee employee = (Employee) session.getAttribute(EmployeeFields.EMPLOYEE_SESSION);
+		Employee employee = (Employee) request.getSession(false).getAttribute(EmployeeFields.EMPLOYEE_SESSION);
 		if(employee != null){
 			logger.info("Employee ID: "+employee.getEmployeeId()+" is searching for Account Number: "+accountNumber);
 		}
@@ -77,20 +78,20 @@ public class OrderController {
 		if(account == null){
 			return "Account Number is invalid";
 		}
-		logger.info("Employee ID: "+employee.getEmployeeId()+" has found User with Account number: "+ account.getCustomer().getFirstname());
+		logger.info("Employee ID: "+employee.getEmployeeId()+" has found Customer with Account number: "+account.getAccountNumber()+" and Name: "+ account.getCustomer().getFirstname());
 
 		ObjectMapper mapper = new ObjectMapper();
 		logger.info("JSON has being convert..below is the Output...");
 		mapper.writeValue(System.out, account);
 		String acct = mapper.writeValueAsString(account);
-		
+	
 		return acct;
 	}
 
 	
 	@RequestMapping(value = "/addProductToCart", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public String addProductToCart(@RequestParam(value="productCode",required=true) String productCode,HttpServletRequest request){
+	public String addProductToCart(@RequestParam(value="productCode",required=true) String productCode,@RequestParam(value="customerAccount",required=true) String customerAccount,HttpServletRequest request){
 		session = request.getSession(false);
 		Employee employee = (Employee) session.getAttribute(EmployeeFields.EMPLOYEE_SESSION);
 		if(employee != null){
@@ -101,7 +102,7 @@ public class OrderController {
 			session.setAttribute("NUMBER_OF_ITEMS_IN_CART", numberOfItems);
 		
 		
-		productServiceProcessor.addProductsToChart(productCode, session);
+		productServiceProcessor.addProductsToChart(productCode,customerAccount, session);
 		return String.valueOf(numberOfItems);
 	}
 	
@@ -115,5 +116,16 @@ public class OrderController {
 		}
 		
 		return numberOfItems;
+	}
+	
+	@RequestMapping(value = "/addCustomerOrder", method = RequestMethod.POST)
+	public void addCustomerOrder(HttpServletRequest request, Model model){
+		
+	}
+	
+	//@RequestMapping(value = "/customerOrderDetail", method = RequestMethod.GET)
+	public String customerOrderDetail(HttpServletRequest request, Model model){
+		
+		return "ClientOrderSummary";
 	}
 }

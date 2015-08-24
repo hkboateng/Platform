@@ -77,8 +77,11 @@ $(document).ready(function(){
 })
 
 function populateOrderForm(results){
+	console.log(results);
 	var t = "";
 	$.each(results,function(index,row){
+		$("#accountStatus").text(results.status);
+		$("#customerAccount").val(results.accountNumber);
 		console.log(index+" : "+row);
 	});
 	if(results.customerActive == false){

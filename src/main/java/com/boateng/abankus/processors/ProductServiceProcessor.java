@@ -3,12 +3,15 @@
  */
 package com.boateng.abankus.processors;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.HttpSession;
 
@@ -16,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import com.boateng.abankus.customer.service.Client;
 import com.boateng.abankus.domain.Product;
 import com.boateng.abankus.service.impl.ProductServiceImpl;
 import com.boateng.abankus.services.ProductService;
@@ -32,6 +36,10 @@ public class ProductServiceProcessor {
 	@Qualifier(value="productServiceImpl")
 	private ProductService productServiceImpl;
 
+	private static Map<String, Product> productMap = new ConcurrentHashMap<String, Product>();
+	
+	private static Map<String, Set<Product>> customerProductMap = new ConcurrentHashMap<String,Set<Product>>();
+	
 	public void processProduct(Product product){
 		
 		String productNumber = PlatformUtils.getProductNumber();
@@ -47,7 +55,13 @@ public class ProductServiceProcessor {
 	public List<Product> getAllProducts(){
 		
 		List<Product> productList = productServiceImpl.getAllProducts();
-		
+		/**
+		 * Add Products from 'productList' to productMap. The Key is productCode and
+		 * value is Product object.
+		 */
+		for(Product product: productList){
+			productMap.put(product.getProductCode(), product);
+		}
 		return productList;
 	}
 
@@ -64,21 +78,29 @@ public class ProductServiceProcessor {
 	}
 	
 	public Product findProductByProductCode(String productCode){
-		Product product = productServiceImpl.findProductByProductCode(productCode);
+		Product product = productMap.get(productCode);
 		
 		return product;
 	}
 	
-	@SuppressWarnings("unchecked")
-	public void addProductsToChart(String productCode,HttpSession session){
-		Set<Product>  listProducts = (Set<Product>) session.getAttribute("LIST_OF_PRODUCTS_PER_SESSION");
-		if(listProducts == null){
-			listProducts = new LinkedHashSet<Product>();
-		}
+	public void addProductsToChart(String productCode,String customerAccount,HttpSession session){
+		session.getAttribute("CUSTOMER_ORDER_LIST");
+		Set<Product>  listProducts = null;
+
 		Product product = findProductByProductCode(productCode);
-		if(product != null){
+		
+		if(customerProductMap.containsKey(customerAccount)){
+			listProducts = customerProductMap.get(customerAccount);
 			listProducts.add(product);
+		}else{
+			listProducts = new HashSet<Product>();
+			listProducts.add(product);
+			
+			
 		}
-		session.setAttribute("LIST_OF_PRODUCTS_PER_SESSION", listProducts);
+		customerProductMap.put(customerAccount, listProducts);
+		System.out.println(customerProductMap.size());
+		session.setAttribute("CUSTOMER_ORDER_LIST", customerProductMap);
 	}
+
 }

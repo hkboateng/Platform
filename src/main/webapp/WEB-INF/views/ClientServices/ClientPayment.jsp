@@ -1,1 +1,1 @@
-<%-- Page when the Sales Person goes to the Client/Customer to collect money orpayment --%>
+<%-- Page when the Sales Person goes to the Client/Customer to collect money or payment --%>

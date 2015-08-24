@@ -53,6 +53,22 @@
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 " id="productList">
 						<label>Product/Services:</label>
 						<c:if test="${not empty productList}" >
+						<select name="product" id="product" class="form-control"  onchange="javascript:getProductCode(this);" onblur="javascript:getProductCode(this);">
+						<option value=''>Select Product/Service </option>
+						<c:forEach items="${productList}" var="products" varStatus="list">
+							<option value="${products.productCode }" title="${products.description }">${products.productName }</option>
+						</c:forEach>
+						</select>
+						<div>
+						<p>
+							<b>Product Description:</b><span id="productDescription"></span>
+						</p>
+						<p>
+							<b>Product Cost (Unit Cost):</b><span id="unitCost"></span>
+						</p>
+
+						</div>
+						<!-- 
 							<table class="table table-striped">
 								<tr>
 									<th>No.</th>
@@ -76,14 +92,19 @@
 								</tr>
 								<input type="hidden" name="productCode" value="${products.productCode}" id="productCode"/>
 								</c:forEach>
-							</table>						
+							</table>
+							 -->						
 						</c:if>
 
 						</div>					
 					</div>					
 			<hr />
 			<p>
-			<input type="submit"  class="btn btn-success" onclick="javascript:continueToOrderPayment(document.customerOrderForm);" value="Continue to payment"/>
+
+			<input type="hidden" name="productCode" value="${products.productCode}" id="productCode"/>		
+			<input type="hidden" name="customerAccount" value="" id="customerAccount"/>
+			<input type="button" value="Add to Cart" onclick="addProductToChart();" class="btn btn-primary moveR_20"/>	
+			<input type="submit"  class="btn btn-success" onclick="javascript:document.customerOrderForm.submit()" value="Continue to payment"/>
 			</p>					
 			  </div>
 			</div>
@@ -99,6 +120,11 @@ $(document).ready(function(){
 	getChartItemNumber();
 
 });
+
+function getProductCode(form){
+	var productCode = $("#product").val();
+	$("#productCode").val(productCode);
+}
 function isQuantityValid(quantity){
 	var valid = validQuantity(quantity.value);
 	if(valid){
@@ -118,10 +144,13 @@ function addProductToChart(){
 	var noOfItems = $("#noOfItems").text();
 
 	var productCode = $("#productCode").val();
+	
+	var customerAccount = $("#customerAccount").val();
+	console.log(productCode);
 	$.ajax({
 		url: 'addProductToCart',
 		data: {
-			productCode:productCode
+			productCode:productCode, customerAccount:customerAccount
 		},
 		dataType: "json",
 		success: function(results){
@@ -152,22 +181,7 @@ function populateCart(results){
 }
 
 function continueToOrderPayment(form){
-
-			var productCode = $("#productCode").val();
-			var quantity =  $("#quantity").val();
-
-	$.ajax({
-		url: 'getNumberInChart',
-		data: {	productCode : productCode,quantity: quantity	},
-		cache: false,
-		dataType: "json",
-		success: function(results){
-			populateCart(results);
-		},
-		error :function(data){
-			console.log(data.responseText);
-		}
-	});		
+	
 }
 </script>
 
