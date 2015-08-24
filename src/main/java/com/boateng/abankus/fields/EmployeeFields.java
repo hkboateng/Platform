@@ -18,4 +18,6 @@ public class EmployeeFields {
 			+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 	
 	public static final String ALPHA_PATTERN = "^[a-zA-Z0-9]";
+	
+	public static final String EMPLOYEE_SESSION = "employee";
 }

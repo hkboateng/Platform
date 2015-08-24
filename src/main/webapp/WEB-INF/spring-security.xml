@@ -10,6 +10,7 @@
     	<intercept-url pattern="/security/**" access="isAnonymous()"/>
     	<intercept-url pattern="/abankus/**" access="isFullyAuthenticated()"/>
     	<intercept-url pattern="/client/**" access="isFullyAuthenticated()"/>
+    	<intercept-url pattern="/platform/**" access="isFullyAuthenticated()"/>
     	<intercept-url pattern="/registration/**" access="isFullyAuthenticated()"/>
     	<intercept-url pattern="/customers/**" access="isFullyAuthenticated()"/>
     	<form-login login-page='/security/login' default-target-url='/platform/dashboard'

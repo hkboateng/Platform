@@ -3,6 +3,7 @@
  */
 package com.boateng.abankus.controller;
 
+import java.util.List;
 import java.util.Set;
 
 import javax.validation.Valid;
@@ -56,7 +57,7 @@ public class ProductController {
 	
 	@RequestMapping(value = "/listProduct", method = RequestMethod.GET)
 	public String listProductList(Model model){
-		Set<Product> list = productServiceProcessor.getAllProducts();
+		List<Product> list = productServiceProcessor.getAllProducts();
 		
 		model.addAttribute("productList", list);
 				
@@ -69,7 +70,7 @@ public class ProductController {
 		return "Product/editProduct";
 	}
 
-	@RequestMapping(value="/updateProduct", method=RequestMethod.POST)
+	@RequestMapping(value="/updateProducts", method=RequestMethod.POST)
 	public String updateProduct(@Valid Product product,BindingResult bindingResult,Model model){
 		if(bindingResult.hasErrors()){
 			model.addAttribute("error", bindingResult.getFieldErrors());

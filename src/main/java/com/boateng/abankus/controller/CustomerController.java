@@ -70,9 +70,9 @@ public class CustomerController {
 	}
 	
 	@RequestMapping(value="/addCustomer", method=RequestMethod.POST)
-	public String addCustomer(@Valid Customer customers,BindingResult result,HttpServletRequest request,Model model){
+	public String addCustomer(@Valid Customer customers,BindingResult result,HttpServletRequest request,RedirectAttributes redirectAttributess){
 		if(result.hasErrors()){
-			model.addAttribute("errors",result);
+			redirectAttributess.addAttribute("errors",result);
 			return "redirect:/create/individual";
 		}
 		try {
@@ -82,8 +82,8 @@ public class CustomerController {
 			e.printStackTrace();
 		}
 		
-		model.addAttribute("info", "Customer has being added successfully");
-		return "redirect:/create";
+		redirectAttributess.addAttribute("info", "Customer has being added successfully");
+		return "redirect:/platform/index";
 	}
 	
 	@RequestMapping(value="/listCustomer", method=RequestMethod.GET)
@@ -109,6 +109,7 @@ public class CustomerController {
 			model.addAttribute("message", "The Customer Identification you used is Invalid.");
 			return "ClientServices/ViewCustomerProfile";
 		}
+		
 		CustomerAccount customerAccount = customerServiceProcessor.findCustomerAccountByCustomerNumber(customer.getCustomerNumber());
 		
 		List<Address> address = customerServiceProcessor.findAddressByCustomerId(customer.getCustomerId());

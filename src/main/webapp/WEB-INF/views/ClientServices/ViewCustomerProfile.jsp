@@ -27,7 +27,7 @@
 <%-- End of Include page header --%>
 <div class="container">
 <div class="row">
-<div class="col-sm-3 col-md-2 sidebar" ng-controller="DatepickerDemoCtrl">
+<div class="col-sm-3 col-md-2 sidebar" >
 
           <ul class="nav nav-sidebar">
             <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>

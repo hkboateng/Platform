@@ -12,5 +12,6 @@
 		<class>com.boateng.abankus.domain.User</class>
 		<class>com.boateng.abankus.domain.CustomerAccount</class>
 		<class>com.boateng.abankus.domain.Product</class>
+		<class>com.boateng.abankus.domain.Team</class>
 	</persistence-unit>
 </persistence>

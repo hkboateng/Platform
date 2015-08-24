@@ -23,79 +23,29 @@
 <!-- Body Begins-->
 <div class="container-fluid">
 <div class="row">
-<div class="col-sm-3 col-md-2 sidebar">
-			    <div id="accordian">
-				<ul>
-					<li>
-						<h3><span class="fa fa-tachometer fa-2x"></span>Dashboard</h3>
-						<ul>
-							<li><a href="<c:url value='/customers/create/individual' />">New Prospect Customer - Individual</a></li>
-							<li><a href="<c:url value='/customers/create/company' />">New Prospect Customer - Customer</a></li>
-							<li><a href="#">Graphs</a></li>
-							<li><a href="#">Settings</a></li>
-						</ul>
-					</li>
-					<!-- we will keep this LI open by default -->
-					<li class="active">
-						<h3><span class="icon-tasks"></span>Bill and Payments</h3>
-						<ul>
-							<li><a href="#">Today's tasks</a></li>
-							<li><a href="#">Urgent</a></li>
-							<li><a href="#">Overdues</a></li>
-							<li><a href="#">Recurring</a></li>
-							<li><a href="#">Settings</a></li>
-						</ul>
-					</li>
-					<li>
-						<h3><span class="icon-calendar"></span>Employee Service</h3>
-						<ul>
-							<li><a href="#">Add Employee</a></li>
-							<li><a href="#">Search</a></li>
-							<li><a href="#">List Employee</a></li>
-							<li><a href="#">Update Employee Details</a></li>
-						</ul>
-					</li>
-					<li>
-						<h3><span class="fa fa-sign-out"></span>Products and Services</h3>
-						<ul>
-							<li><a href="#">Add Product/Services</a></li>
-							<li><a href="#">Search</a></li>
-							<li><a href="#">Update Products/Services</a></li>
-							<li><a href="#">List Products/Services</a></li>
-						</ul>
-					</li>
-					<li>
-						<h3><span class="fa fa-sign-out"></span>Client Service</h3>
-						<ul>
-							<li><a href="#">Add Product/Services</a></li>
-							<li><a href="#">Search</a></li>
-							<li><a href="#">Update Products/Services</a></li>
-							<li><a href="#">List Products/Services</a></li>
-						</ul>
-					</li>	
-					<li>
-						<h3><span class="fa fa-sign-out"></span>Reports and Documents</h3>
-						<ul>
-							<li><a href="#">Add Product/Services</a></li>
-							<li><a href="#">Search</a></li>
-							<li><a href="#">Update Products/Services</a></li>
-							<li><a href="#">List Products/Services</a></li>
-						</ul>
-					</li>									
-					<li>
-						<h3><a class="text-primary" href="<c:url value='logout'/>"><span class="fa fa-sign-out fa-lg"></span> Sign Out</a></h3>
-				
-					</li>
-				</ul>
-			</div>
+<div class="col-sm-11 col-md-10 center-block main">
 
-</div>
-<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-
-          <h1>Dashboard</h1>
+          <h2>Overview</h2>
 			<hr>
           <div class="row">
-          
+          	<div class="col-xs-12 col-sm-6 col-md-4">
+          	
+          	</div>
+          	<div class="col-xs-12 col-sm-6 col-md-4">
+          	
+          	</div>
+          	<div class="col-xs-12 col-sm-6 col-md-4">
+          	
+          	</div>
+          	<div class="col-xs-12 col-sm-6 col-md-4">
+          	
+          	</div>
+          </div>
+          <div class="row">
+	          <div class="quick-stats">
+	          	<div id="quick-stats-word" class="anw"> Quick Statistics</div>
+	          </div>
+          	
           </div>
 </div>
 </div>

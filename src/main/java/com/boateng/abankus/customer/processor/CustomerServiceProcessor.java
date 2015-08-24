@@ -10,6 +10,7 @@ import java.util.concurrent.Executors;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -21,9 +22,11 @@ import com.boateng.abankus.domain.CustomerAccount;
 import com.boateng.abankus.domain.Email;
 import com.boateng.abankus.domain.Employee;
 import com.boateng.abankus.domain.Phone;
+import com.boateng.abankus.employees.utils.EmployeeCollection;
 import com.boateng.abankus.fields.AddressFields;
 import com.boateng.abankus.fields.CustomerFields;
 import com.boateng.abankus.fields.EmailFields;
+import com.boateng.abankus.fields.EmployeeFields;
 import com.boateng.abankus.fields.PhoneFields;
 import com.boateng.abankus.services.AuthenticationService;
 import com.boateng.abankus.services.EmployeeService;
@@ -49,6 +52,9 @@ public class CustomerServiceProcessor {
 	@Qualifier(value="authenticationServiceImpl")
 	private AuthenticationService authenticationServiceImpl;
 	
+    @Autowired
+    private volatile RabbitTemplate rabbitTemplate;
+    
 	ExecutorService executorService = Executors.newFixedThreadPool(10);
 	
 	public Email addEmail(String emailAddress,String emailType){
@@ -156,11 +162,15 @@ public class CustomerServiceProcessor {
 
 	public void processNewCustomer(Customer customers, Email email, Phone phone, Address address,HttpServletRequest request){
 		String username = request.getUserPrincipal().getName();
-		Employee employee =authenticationServiceImpl.findEmployeeByUserName(username);
+		
+		//employeeCollection.getEmployeeCollectionByUsername(username);
+		Employee employee = (Employee) request.getSession(false).getAttribute(EmployeeFields.EMPLOYEE_SESSION);
+		
+		rabbitTemplate.convertAndSend(employee.toString());
 
 		Customer customer =  customerServiceImpl.addNewCustomer(customers,email,phone,address);
-		//EmployeeServiceProcessor process = new EmployeeServiceProcessor();
-		String industry = request.getParameter("industry");
+
+		String industry = request.getParameter("customerIndustry");
 		String notes = request.getParameter("notes");
 		employeeSvcImpl.addEmployeeSalesAccount(employee, customer,industry,notes);
 	}
@@ -182,8 +192,19 @@ public class CustomerServiceProcessor {
 		return customer;
 	}
 	
-	public CustomerAccount findCustomerAccountByCustomerNumber(String customerNo){
-		CustomerAccount customerAccount = customerServiceImpl.findCustomerAccountByCustomerNumber(customerNo);
+	/**
+	 * Use to search for CustomerAccountObject by using customer Number.
+	 * @param customerNo - Customer Number
+	 * @return
+	 */
+	public CustomerAccount findCustomerAccountByAccountNumber(String customerNo){
+		CustomerAccount customerAccount = customerServiceImpl.findCustomerAccountByAccountNumber(customerNo);
+		return customerAccount;
+	}
+	
+	public CustomerAccount findCustomerAccountByCustomerNumber(String customerNumber){
+		CustomerAccount customerAccount = customerServiceImpl.findCustomerAccountByCustomerNumber(customerNumber);
+		
 		return customerAccount;
 	}
 	

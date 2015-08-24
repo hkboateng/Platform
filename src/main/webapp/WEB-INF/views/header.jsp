@@ -46,6 +46,7 @@
 		        </a>
 	            <ul id="menu1" class="dropdown-menu" aria-labelledby="aEmployeeInfoLink">
 		          <li><a href="#"><i class="fa fa-pencil-square-o fa-lg moveR_5"></i>Update your Profile</a></li>
+		          <li><a href="#"><i class="fa fa-cogs fa-lg moveR_5"></i></a>Account Settings</li>
 		          <li role="separator" class="divider"></li>
 		          <li><a href="#"><i class="fa fa-sign-out fa-lg moveR_5"></i>Logout</a></li>
 		        </ul>

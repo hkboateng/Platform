@@ -11,7 +11,7 @@
 <link href="<c:url value="/resources/css/platform.css" />" rel="stylesheet"/>
 <script src="<c:url value="/resources/js/jquery.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/bootstrap.js" />" type="text/javascript"></script>
-<script src="<c:url value="/resources/js/angular.js" />" type="text/javascript"></script>
+<script src="<c:url value="/resources/js/bootstrap-datepicker.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/application.js" />" type="text/javascript"></script>
 </head>
 <body  ng-app="">
@@ -46,10 +46,10 @@
 				<label for="firstname" > First Name:</label>
 				<input type="text" class="form-control" id="firstname" name="firstname">			
 			</div>
+			<div class="clear"></div>
 			<div class="col-xs-6 col-sm-6 col-md-6">
 				<label for="lastname" > Last Name:</label>
 				<input type="text" class="form-control" id="lastname" name="lastname">				
-
 			</div>
 				<div class="col-xs-12 col-sm-12 col-md-12">
 				<label for="address1" >Address:</label>
@@ -62,7 +62,7 @@
 			<div class="col-xs-6 col-sm-6 col-md-6">
 
 				<label for="email" >Email Address:</label>
-				<input type="text" class="form-control" id="email" ng-model="username" name="email">	
+				<input type="email" class="form-control" id="email" ng-model="username" name="email">	
 				</div>	
 			<div class="col-xs-6 col-sm-6 col-md-6">
 				<label for="phone" >Phone Number:</label>
@@ -84,7 +84,7 @@
 			<div class="col-xs-6 col-sm-6 col-md-6">
 			  <label for="dateOfBirth" >Date of Birth:<span> </span></label>
 			  <div class="form-group">
-			  	<input type="text" name="dateOfBirth" id="day" placeholder=" dd" size="3" maxlength="2">
+			  	<input type="text" name="dateOfBirth" id="day" placeholder=" dd" size="3" maxlength="2" >
 				<input type="text" name="month" id="month" placeholder=" mm" size="3" maxlength="2">
 				<input type="text" name="year" id="year" placeholder=" yyyy" size="3" maxlength="4">	
 				</div>	
@@ -96,12 +96,13 @@
 				<option value="female"> Female </option>
 				</select>					
 			</div>
-	
+          		  		 
 			<p>
-			<button class="btn btn-primary"> Save Employee </button>
+			<hr>
+			<input type="submit" value=" Save Employee " class="btn btn-primary" />
 			&nbsp;&nbsp;&nbsp;
 			<a href="#"> Cancel </a>
-			</p>
+			</p> 
 			</sf:form>
           </div>
           <%--
@@ -137,14 +138,18 @@
           </div>
            --%>
                     </div>
-            <hr> 	
-</div>        
+
+</div>  
+     
 </div>
 </div>
 </body>
-
-
 <script>
+$('.datepicker').datepicker()
+</script>
+<%--
+<script>
+
 var app = angular.module('myApp', []);
 app.controller('validateCtrl', function($scope) {
     $scope.user = 'John Doe';
@@ -168,7 +173,7 @@ function validatePassword(){
 	message.innerHTML = msg;
 	
 }
-
+$('.datepicker').datepicker()
 function submitForm(document){
 	var form = document.form;
 	if(cpwd !== pwd){
@@ -178,4 +183,5 @@ function submitForm(document){
 	}
 }
 </script>
+ --%>
 </html>

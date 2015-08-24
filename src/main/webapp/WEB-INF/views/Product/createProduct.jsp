@@ -14,6 +14,7 @@
 	<script src="<c:url value='/resources/js/jquery.js' />" type="text/javascript"></script>
 
 <script src="<c:url value="/resources/js/bootstrap.js" />" type="text/javascript"></script>
+<script src="<c:url value="/resources/js/validation/jquery.validation.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/application.js" />" type="text/javascript"></script>
 </head>
 <body>
@@ -107,7 +108,7 @@
 					<textarea rows="5" cols="50" class="form-control" name="description"></textarea>
  					<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
 					<p>
-						<input type="submit" onClick="javascript:document.createProductForm.submit();" value=" Add Product" class="btn btn-success">
+						<input type="button" id="btnCreateProduct" value=" Add Product" class="btn btn-success">
 						
 						<a href="#"> Cancel </a>
 					</p>
@@ -119,5 +120,12 @@
 
 </div>
 </div>
+<script>
+$(document).ready(function(){
+	$("#btnCreateProduct").click(function(){
+		
+	});
+});
+</script>
 </body>
 </html>

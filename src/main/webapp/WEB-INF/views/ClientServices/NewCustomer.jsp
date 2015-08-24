@@ -52,39 +52,51 @@
           <div class="row">
           <div class="col-md-7">
           <div class="errors">
-          <ul>
-          <c:if test="${not empty errors}">
-          <li>${errors }</li>
-          </c:if>
-          </ul>
+	          <ul>
+		          <c:if test="${not empty errors}">
+		          	<li>${errors }</li>
+		          </c:if>
+	          </ul>
           </div>
-
-			<sf:form method="post" modelAttribute="customer" action="/abankus/customers/addCustomer"  name="newCustomerForm" class="form" >
+          <div class="info_message">
+	          <ul>
+		          <c:if test="${not empty message}">
+		          	<li>${message }</li>
+		          </c:if>
+	          </ul>
+          </div>
+			<sf:form method="post" modelAttribute="customer" action="/abankus/customers/addCustomer"  name="customerForm" id="customerForm" class="form" >
 			<input type="hidden" name="customerType" id="custIndividual" value="${customerType }"/>
-			<div>
-
+					<div  class="row">
+						<div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
 						<label>
 						First Name:</label>
 						<input type="text" name="firstname" id="firstname" class="form-control" placeholder="First Name"/>
-						
+						</div>
+						<div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
 						<label for="lastname">
 						Last Name:</label>
 						<input type="text" name="lastname" id="lastname" placeholder="Last Name" class="form-control"/>	
+						</div>
+						</div>
 					<div class="row">
-					<div class="col-sm-12 col-md-6">
+					<div class="col-xs-12 col-sm-6 col-md-6">
 						<label for="state" >Gender:</label>
 						<script>genderList();</script>				
 					</div>
-					
+					<div class="col-xs-12 col-sm-6 col-md-6">
+						<label for="state" >Type of Identification:</label>
+						<script>typeOfIdentification();</script>
+						<div class="clear"></div>
+						<label for="IdNumber" >Identification Number:</label>	
+						<input type="text" name="IdNumber" id="IdNumber" placeholder="Id Number" class="form-control"/>			
+					</div>					
 					</div>
-
-						
-						<label>	Company or Organization Name: (Optional)</label>
-						<input type="text" name="company_name" id="company_name" class="form-control" placeholder="Company Name"/>
-
-
-					<div class="row">				
-					
+					<div class="row">	
+					<div class="col-sm-12 col-md-12">			
+					<label>	Company or Organization Name: (Optional)</label>
+					<input type="text" name="company_name" id="company_name" class="form-control" placeholder="Company Name"/>	
+					</div>				
 					<div class="col-sm-12 col-md-12">
 					<label for="address1">Address 1:</label>
 					<input type="text" name="address1" id="address1" placeholder="Postal Address"  class="form-control"/>
@@ -103,17 +115,20 @@
 					</div>
 					<div class="col-xs-6 col-sm-6 col-md-4">
 						<label for="zip" >Zip Code:</label>
-						<input type="text" class="form-control" id="zip" name="zipcode" size="6" maxlength="5">				
+						<input type="text" class="form-control" id="zipcode" name="zipcode" size="6" maxlength="5">				
 					</div>
 					<div class="col-xs-6 col-sm-6 col-md-6">
 						<label for="phoneNumber">Phone Number:</label>	
 						<input class="form-control "  id="phoneNumber" name="phoneNumber" type="text" placeholder="(Area Code)XXX-XXXX">
-									  	<label>
-						<input type="radio" name="phoneType" id="homePhone" value="homePhone" checked/> Home Phone
-					</label>		
-					<label >
-				  		<input type="radio" name="phoneType" id="cellPhone" value="cellPhone"/> Cell (Mobile) Phone			
-				  	</label> 						
+					<div class="spaceBelow_10">
+						<label>
+							<input type="radio" name="phoneType" id="homePhone" value="homePhone" checked/> Home Phone
+						</label>		
+						<label >
+					  		<input type="radio" name="phoneType" id="cellPhone" value="cellPhone"/> Cell (Mobile) Phone			
+					  	</label>					
+					</div>
+ 						
 					</div>
 
 				  <div class="col-xs-6 col-sm-6">
@@ -138,12 +153,12 @@
 						</div>
 						<div class="col-xs-6 col-sm-6">
 						<label for="customerIndustry">Industry</label>
-							<select name="industry" class="form-control">
+							<select name="customerIndustry" class="form-control">
 								<option value="">Select Industry</option>
-								<option value="active">Financial Services</option>
-								<option value="prospect">Prospective</option>
-								<option value="inactive">InActive</option>
-								<option value="close">Closed</option>
+								<option value="financial">Financial Services</option>
+								<option value="retail">Retail</option>
+								<option value="selfemployed">Self-Employed</option>
+								<option value="government">Government</option>
 							</select>
 						</div>
 						<div class="col-xs-12 col-sm-12 col-md-12">
@@ -154,10 +169,10 @@
 
 
 				  </div>							
-			</div>
+			
 			<hr>
 			<p>
-			<button class="btn btn-primary"> Save Customer </button>
+			<button class="btn btn-primary" onClick="javascript:customerValidation(document.customerForm);return false;"> Save Customer </button>
 			&nbsp;&nbsp;&nbsp;
 			<a href="#"> Cancel </a>
 			</p>
@@ -172,10 +187,11 @@
 
 
 <script src="<c:url value='/resources/js/jquery.js' />" type="text/javascript"></script>
-
+<script src="<c:url value="/resources/js/validation/jquery.validation.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/bootstrap.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/jquery-masked.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/application.js" />" type="text/javascript"></script>
+<script src="<c:url value="/resources/js/validation/customerValidation.js" />" type="text/javascript"></script>
 <script>
 $(document).ready(function(){
 	$('#phoneNumber').mask('000-000-0000');

@@ -77,16 +77,25 @@ public class ProductServiceImpl implements ProductService{
 	@Transactional
 	@Override	
 	@SuppressWarnings("unchecked")
-	public Set<Product> getAllProducts(){
+	public List<Product> getAllProducts(){
 		Session session = sessionFactory.getCurrentSession();
-		Set<Product> listProducts = new LinkedHashSet<Product>();	
-		List<Product> list  = session.createQuery(" from Product")
+		
+		List<Product> listProducts  = session.createQuery(" from Product")
 											.setCacheMode(CacheMode.NORMAL)
 											.list();
-		for(Product l: list){
-			listProducts.add(l);
-		}
-			
+
 		return listProducts;
+	}
+
+
+	@Override
+	@Transactional
+	public Product findProductByProductCode(String productCode) {
+		Session session = sessionFactory.getCurrentSession();
+		Product product = (Product) session.createQuery("from Product p where p.productCode=?")
+							.setParameter(0, productCode)
+							.setCacheMode(CacheMode.NORMAL)
+							.uniqueResult();
+		return product;
 	}
 }

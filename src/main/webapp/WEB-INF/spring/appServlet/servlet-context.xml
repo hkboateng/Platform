@@ -70,6 +70,9 @@
             </beans:props>
         </beans:property>
     </beans:bean>
+    <cache:annotation-driven />
+    <context:component-scan base-package="com.boateng.abankus" />
+
 
 	<!-- RabbitMQ -->
 	<rabbit:connection-factory    id="connectionFactory"
@@ -79,7 +82,9 @@
 			username="guest"
 			password="guest"
 			connection-cache-size="25"/>
-	<rabbit:template id="rabbitTemplate" connection-factory="connectionFactory" />
+	<rabbit:template id="rabbitTemplate" connection-factory="connectionFactory" exchange="abankusPlatform" routing-key="platform"/>
+	
+	<rabbit:admin id="amqpAdmin" connection-factory="connectionFactory"/>
 	
 	<beans:bean id="retryTemplate" class="org.springframework.retry.support.RetryTemplate">
 		<beans:property name="backOffPolicy">
@@ -91,17 +96,28 @@
 		</beans:property>
 	</beans:bean>
 	
-	<rabbit:queue name="platform.save.customer"/>
+	<rabbit:queue name="platformCustomer"/>
 	
-    <rabbit:direct-exchange name="abankus.platform">
+    <rabbit:direct-exchange name="abankusPlatform">
     	<rabbit:bindings>
-    		<rabbit:binding queue="platform.save.customer" key="platform.data.save.customer"/>
+    		<rabbit:binding queue="platformCustomer" key="platform.data.save.customer"/>
     	</rabbit:bindings>
     </rabbit:direct-exchange>
     
+    <rabbit:annotation-driven/> 
+    
+    <beans:bean id="rabbitListenerContainerFactory"
+	      class="org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory">
+	    <beans:property name="connectionFactory" ref="connectionFactory"/>
+	    <beans:property name="concurrentConsumers" value="3"/>
+	    <beans:property name="maxConcurrentConsumers" value="10"/>
+	</beans:bean>
+	
 	<rabbit:listener-container connection-factory="connectionFactory">
-	    <rabbit:listener queues="platform.save.customer" ref="homeController" method="handle"/>
+	    <rabbit:listener queues="platformCustomer" ref="customerServiceProccessor" method="handle"/>
 	</rabbit:listener-container>    
+	
+	<!-- End Spring AMPQ -->
     <!-- Controller and Entity Beans -->
     <beans:bean id="homeController" class="com.boateng.abankus.controller.HomeController"/>
     
@@ -114,9 +130,10 @@
 	<beans:bean id="employeeServiceProccessor" class="com.boateng.abankus.processors.EmployeeServiceProcessor"/>
 	
 	<beans:bean id="productServiceProcessor" class="com.boateng.abankus.processors.ProductServiceProcessor" />
+	
 	<beans:bean id="customerServiceImpl" class="com.boateng.abankus.service.impl.CustomerServiceImpl">
 		<beans:property name="sessionFactory" ref="sessionFactory" />
-		</beans:bean>
+	</beans:bean>
 	
 	<beans:bean id="authenticationServiceImpl" class="com.boateng.abankus.service.impl.AuthenticationServiceImpl">
 		<beans:property name="sessionFactory" ref="sessionFactory" />

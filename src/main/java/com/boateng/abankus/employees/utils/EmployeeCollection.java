@@ -15,11 +15,11 @@ import com.boateng.abankus.exception.PlatformException;
  */
 public class EmployeeCollection {
 
-	private Map<String,Employee> employeeMap = new HashMap<String, Employee>();
+	private static Map<String,Employee> employeeMap = new HashMap<String, Employee>();
 	
 	private static final EmployeeCollection employeeCollection = new EmployeeCollection();
 	
-	private EmployeeCollection(){}
+	public EmployeeCollection(){}
 	
 	public static EmployeeCollection getInstance(){
 		return employeeCollection;

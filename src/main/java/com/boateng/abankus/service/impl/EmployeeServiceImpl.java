@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.boateng.abankus.domain.Customer;
 import com.boateng.abankus.domain.CustomerAccount;
 import com.boateng.abankus.domain.Employee;
+import com.boateng.abankus.domain.Team;
 import com.boateng.abankus.domain.User;
 import com.boateng.abankus.domain.UserRole;
 import com.boateng.abankus.employees.utils.EmployeeUtils;
@@ -62,17 +63,24 @@ public class EmployeeServiceImpl implements EmployeeService{
 		session.save(user);
 		
 		/** Saving Employee UserRole **/
-
+		UserRole userRole = null;
 		for(int i=0;i< role.length;i++){
-			UserRole userRole = new UserRole(user,role[i]);
+			userRole = new UserRole(user,role[i]);
 			session.save(userRole);
-			session.flush();	
-			session.clear();
+
 		}
 		
+		/**
+		 * Add Employee to default teams
+		 */
+		Team team = new Team();
+		team.setTeamNumber(Team.generateTeamId());
+		team.setEmployee(e);
+		team.setTeamname("Default");
+		session.save(team);
 		session.flush();
-		
 		return e;	
+		
 		}catch(HibernateException ex){
 			ex.getMessage();
 			return null;
@@ -121,5 +129,13 @@ public class EmployeeServiceImpl implements EmployeeService{
 		Employee employee  = (Employee) session.load(Employee.class, employeeId);
 		log.info("");
 		return employee;
+	}
+	
+	public Team generateSaleTeam(Employee employee){
+		Team team = new Team();
+		team.setTeamNumber(Team.generateTeamId());
+		team.setEmployee(employee);
+		team.setTeamname("Default");
+		return team;
 	}
 }

@@ -13,27 +13,41 @@ public interface CustomerService {
 	Customer addNewCustomer(Customer customers, Email email, Phone phone, Address address);
 
 	/**
-	 * @param customerNo
+	 * Returns an instance of a Customer based on a Customer Number.
+	 * 
+	 * @param customerNo - Unique Customer Number
 	 * @return
 	 */
 	Customer findCustomerByCustomerNumber(String customerNo);
 
+	
 	/**
+	 * Returns an Instance of a CustomerAccount by searching using customer's Account Number.
+	 * @param customerNumber
+	 * @return
+	 */
+	CustomerAccount findCustomerAccountByCustomerNumber(String customerNumber);
+	
+	/**
+	 * Returns a list of all Customers
 	 * @return 
 	 * 
 	 */
+	
 	List<Customer> getAllCustomers();
 
 	/**
+	 * Returns an instance of a Customer by searching for the Customer Id.
 	 * @param id
 	 */
 	Customer findCustomerByCustomerId(int id);
 
 	/**
+	 * 
 	 * @param customerNo
 	 * @return
 	 */
-	CustomerAccount findCustomerAccountByCustomerNumber(String customerNo);
+	CustomerAccount findCustomerAccountByAccountNumber(String customerNo);
 
 	/**
 	 * @param Id

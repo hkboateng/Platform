@@ -44,9 +44,9 @@ public class AuthenticationServiceImpl  implements AuthenticationService{
 		
 		List<User> login = new ArrayList<User>();
 		login = sessionFactory.getCurrentSession()
-				.createQuery("from User where username=?")
+				.createQuery("from User where username= :username")
 				.setCacheable(true)
-				.setParameter(0, username)
+				.setParameter("username", username)
 				.list();
 		/**** Validating User's Password****/
 		if(login.size() == 1){
@@ -65,8 +65,8 @@ public class AuthenticationServiceImpl  implements AuthenticationService{
 
 	public List<Role> findRoleByUser(String username) {
 		List<Role> roles = getSessionFactory().getCurrentSession()	
-				 .createQuery("role from UserRole where username=?")
-				 .setParameter(0, username)
+				 .createQuery("role from UserRole where username= :username")
+				 .setParameter("username", username)
 				 .setCacheable(true)
 				 .setCacheMode(CacheMode.GET)
 				 .list();
@@ -91,8 +91,8 @@ public class AuthenticationServiceImpl  implements AuthenticationService{
 	@Override
 	public User findUserByUserName(String username) {
 		List query = getSessionFactory().getCurrentSession()
-				.createQuery("from User where username=?")
-				.setParameter(0, username)
+				.createQuery("from User where username= :username")
+				.setParameter("username", username)
 				.list();
 		return (User) query.get(0);
 	}
@@ -102,8 +102,8 @@ public class AuthenticationServiceImpl  implements AuthenticationService{
 	@Override
 	public boolean doEmailExist(String email){
 		List query = getSessionFactory().getCurrentSession()
-					.createQuery("from Employee where email=?")
-					.setParameter(0, email)
+					.createQuery("from Employee where email= :email")
+					.setParameter("email", email)
 					.list();
 		if(query.size() < 1 ){
 			return false;
@@ -116,8 +116,8 @@ public class AuthenticationServiceImpl  implements AuthenticationService{
 	@Override
 	public boolean doUserNameExist(String username) {
 		List query = getSessionFactory().getCurrentSession()
-				.createQuery("from User where username=?")
-				.setParameter(0, username)
+				.createQuery("from User where username= :username")
+				.setParameter("username", username)
 				.list();
 			if(query.size() < 1 ){
 				return false;
@@ -130,8 +130,8 @@ public class AuthenticationServiceImpl  implements AuthenticationService{
 	@Override
 	public boolean isEmployeeIdExist(String employeeId){
 		List query = getSessionFactory().getCurrentSession()
-				.createQuery("from Employee where employeeid=?")
-				.setParameter(0, employeeId)
+				.createQuery("from Employee where employeeid= :employeeId")
+				.setParameter("employeeId", employeeId)
 				.list();	
 		if(query.size() > 0){
 			return true;
@@ -144,8 +144,8 @@ public class AuthenticationServiceImpl  implements AuthenticationService{
 	@Override
 	public Employee findEmployeeByUserName(String username) {
 		Query userQuery = getSessionFactory().getCurrentSession()
-							.createQuery("from User where username=?")
-							.setParameter(0, username)
+							.createQuery("from User where username= :username")
+							.setParameter("username", username)
 							.setCacheable(true);
 		User user = (User) userQuery.uniqueResult();
 		
@@ -154,8 +154,8 @@ public class AuthenticationServiceImpl  implements AuthenticationService{
 			return null;
 		}
 		List employee = getSessionFactory().getCurrentSession()
-								.createQuery("from Employee where employeeId=?")
-								.setParameter(0, user.getEmployeeId())
+								.createQuery("from Employee where employeeId= :employeeId")
+								.setParameter("employeeId", user.getEmployeeId())
 								.list();
 		if(employee == null || employee.size() < 1){
 			return null;

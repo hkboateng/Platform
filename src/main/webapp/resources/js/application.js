@@ -17,6 +17,17 @@ function createRegionList(){
 		document.write(str);
 }
 
+function typeOfIdentification(){
+	var str = "";
+	str += "<select name='IdType' class='form-control'>";
+	str += "<option value=''> Select Identification </option>";
+	str += "<option value='healthInsurance'> National Health Insurance </option>";
+	str += "<option value='passport'> Passport </option>";	
+	str += "<option value='driverLicense'> Driver's Licence </option>";
+	str += "</select>";
+	
+	document.write(str);	
+}
 function genderList(){
 	var str = "";
 	str += "<select name='gender' class='form-control'>";
@@ -33,27 +44,27 @@ $(document).ready(function(){
 	
 	$("#btnSarchCustomer").click(function(){
 		var accountNo = $("#accountNumber").val();
-		
-		$.ajax({
-			url: 'findCustomer',
-			data: {
-				accountNumber:accountNo,
-			},
-			dataType: "json",
-			beforeSend:function(){
-				$("#pending").text("Loading...");
-			},
-			success: function(results){
-				console.log(results);
-				if(results == null){
-					results = "No Account Information was found";
+		if(isCharacter(accountNo )){
+			$.ajax({
+				url: 'findCustomer',
+				data: {
+					accountNumber:accountNo,
+				},
+				dataType: "json",
+				beforeSend:function(){
+					$("#pending").text("Loading...");
+				},
+				success: function(results){
+					populateOrderForm(results);
+				},
+				error :function(data){
+					displayErrorMessage(data.responseText);
 				}
-				$("#pending").text(results);
-			},
-			error :function(data){
-				
-			}
-		});			
+			});			
+		}else{
+			displayErrorMessage("Value you enttered is invalid");
+		}
+			
 	});
 	
 	$("#accordian h3").click(function(){
@@ -65,3 +76,22 @@ $(document).ready(function(){
 	});
 })
 
+function populateOrderForm(results){
+	var t = "";
+	$.each(results,function(index,row){
+		console.log(index+" : "+row);
+	});
+	if(results.customerActive == false){
+		$("#pending").html("Customer is not eligible to make order");
+
+	}
+	
+}
+
+function displayErrorMessage(error){
+	$("#pending").html("<p class='alert alert-danger'><span class='glyphicon glyphicon-info-sign  moveR_10'></span>"+error+"</p>");
+}
+
+function isCharacter(word){
+	return $.isNumeric(word);
+}

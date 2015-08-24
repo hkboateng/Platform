@@ -3,11 +3,14 @@ package com.boateng.abankus.service.impl;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.Cacheable;
+
 import org.hibernate.CacheMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +22,7 @@ import com.boateng.abankus.domain.Email;
 import com.boateng.abankus.domain.Phone;
 
 @Component
+
 public class CustomerServiceImpl implements CustomerService {
 
 	@Autowired
@@ -46,6 +50,7 @@ public class CustomerServiceImpl implements CustomerService {
 	 */
 	@Transactional
 	@Override
+	
 	public Customer addNewCustomer(Customer customers,Email email, Phone phone,Address address){
 		try{
 			Session session = getSessionFactory().getCurrentSession();
@@ -105,7 +110,8 @@ public class CustomerServiceImpl implements CustomerService {
 	@Transactional	
 	public Customer findCustomerByCustomerId(int id) {
 		 Session session = getSessionFactory().getCurrentSession();
-		 Customer customer = (Customer) session.get(Customer.class, id);
+
+		 Customer customer = (Customer) session.createQuery("From Customer where customerId=?").setParameter(0, id).uniqueResult();
 		return customer;
 	}
 
@@ -115,12 +121,14 @@ public class CustomerServiceImpl implements CustomerService {
 	
 	@Transactional
 	@Override
-	public CustomerAccount findCustomerAccountByCustomerNumber(String accountNumber) {
+	public CustomerAccount findCustomerAccountByAccountNumber(String accountNumber) {
+		
 		Session session = getSessionFactory().getCurrentSession();
-		CustomerAccount customerAccount = (CustomerAccount) session.createCriteria(CustomerAccount.class)
-						.add(Restrictions.eq("accountNumber", accountNumber))
+		CustomerAccount customerAccount = (CustomerAccount) session.createQuery("From CustomerAccount where accountNumber =?")
+						.setParameter(0, accountNumber)
 						.setCacheMode(CacheMode.NORMAL)
 						.uniqueResult();
+						
 		return customerAccount;
 	}
 	
@@ -134,5 +142,19 @@ public class CustomerServiceImpl implements CustomerService {
 										.list();
 		
 		return address;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.boateng.abankus.customer.service.CustomerService#findCustomerAccountByCustomerNumber(java.lang.String)
+	 */
+	@Override
+	@Transactional
+	public CustomerAccount findCustomerAccountByCustomerNumber(String customerNumber) {
+		Session session = getSessionFactory().getCurrentSession();
+		String sqlQuery = "From CustomerAccount where customerNumber =?";
+		Object account = session.createQuery(sqlQuery)
+								.setParameter(0, customerNumber)
+								.uniqueResult();
+		return (CustomerAccount) account;
 	}
 }

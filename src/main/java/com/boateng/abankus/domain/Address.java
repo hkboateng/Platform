@@ -12,6 +12,7 @@ import java.math.BigInteger;
  * 
  */
 @Entity
+
 @NamedQuery(name="Address.findAll", query="SELECT a FROM Address a")
 public class Address implements Serializable {
 	private static final long serialVersionUID = 1L;

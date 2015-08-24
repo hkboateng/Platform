@@ -77,7 +77,8 @@
 			<div class="row">
 			<%-- Filter List --%>
 				<div>
-				
+				<h2>Employee List</h2>
+				<hr/>
 				</div>
 				<div id="listOfEmployee">
 					<table class="table">

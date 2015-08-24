@@ -17,7 +17,11 @@ import org.hibernate.validator.constraints.NotEmpty;
  */
 @Entity
 @Table(name="products")
-@NamedQuery(name="Product.findAll", query="SELECT p FROM Product p")
+@NamedQueries({
+@NamedQuery(name="Product.findAll", query="SELECT p FROM Product p"),
+@NamedQuery(name="Product.findProductByCode", query="SELECT p FROM Product p where p.productCode=:productCode"),
+@NamedQuery(name="Product.findProductBProductId", query="SELECT p FROM Product p where p.productCode=:productId")
+})
 public class Product implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -25,18 +29,37 @@ public class Product implements Serializable {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer productId;
 
-	@NotNull
+	@NotNull (message="Product Description cannot be null or empty.")
 	private String description;
 
-	@NotNull
-	@Size(min=2, max=8)
+	@NotNull(message="Product Code cannot be null or empty.")
+	@Size(min=2, max=8, message="Product Code should be 2 and 8 characters.")
 	private String productCode;
 
-	@NotNull
+	@NotNull(message="Product Name cannot be null or empty.")
 	private String productName;
 	
 
 	private String productNumber;
+
+	@NotNull
+	private float unitCost;
+	
+	/**
+	 * @return the unitCost
+	 */
+	public float getUnitCost() {
+		return unitCost;
+	}
+
+
+	/**
+	 * @param unitCost the unitCost to set
+	 */
+	public void setUnitCost(float unitCost) {
+		this.unitCost = unitCost;
+	}
+
 
 	public Product() {
 	}
@@ -94,4 +117,71 @@ public class Product implements Serializable {
 		this.productNumber = productNumber;
 	}
 
+	@Override
+	public String toString(){
+		StringBuffer str = new StringBuffer();
+		str.append(getProductCode());
+		str.append(" - ");
+		str.append(getProductName());
+		return str.toString();
+	}
+
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((productCode == null) ? 0 : productCode.hashCode());
+		result = prime * result
+				+ ((productId == null) ? 0 : productId.hashCode());
+		result = prime * result
+				+ ((productNumber == null) ? 0 : productNumber.hashCode());
+		return result;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (!(obj instanceof Product)) {
+			return false;
+		}
+		Product other = (Product) obj;
+		if (productCode == null) {
+			if (other.productCode != null) {
+				return false;
+			}
+		} else if (!productCode.equals(other.productCode)) {
+			return false;
+		}
+		if (productId == null) {
+			if (other.productId != null) {
+				return false;
+			}
+		} else if (!productId.equals(other.productId)) {
+			return false;
+		}
+		if (productNumber == null) {
+			if (other.productNumber != null) {
+				return false;
+			}
+		} else if (!productNumber.equals(other.productNumber)) {
+			return false;
+		}
+		return true;
+	}
+	
+	
 }

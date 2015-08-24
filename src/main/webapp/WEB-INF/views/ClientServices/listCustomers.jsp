@@ -16,6 +16,8 @@
 <link href="<c:url value="/resources/css/bootstrap.css" />" rel="stylesheet"/>
 <link href="<c:url value="/resources/css/platform.css" />" rel="stylesheet"/>
 <link href="<c:url value="/resources/css/datepicker.css" />" rel="stylesheet"/>
+<script src="<c:url value="/resources/js/jquery.js" />" type="text/javascript"></script>
+<script src="<c:url value="/resources/js/bootstrap.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/application.js" />" type="text/javascript"></script>
 </head>
 <body>
@@ -24,7 +26,7 @@
 <%-- End of Include page header --%>
 <div class="container">
 <div class="row">
-<div class="col-sm-3 col-md-2 sidebar" ng-controller="DatepickerDemoCtrl">
+<div class="col-sm-3 col-md-2 sidebar" >
 
           <ul class="nav nav-sidebar">
             <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>

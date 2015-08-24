@@ -3,6 +3,7 @@
  */
 package com.boateng.abankus.services;
 
+import java.util.List;
 import java.util.Set;
 
 import com.boateng.abankus.domain.Product;
@@ -35,5 +36,7 @@ public interface ProductService {
 	/**
 	 * @return
 	 */
-	Set<Product> getAllProducts();
+	List<Product> getAllProducts();
+	
+	public Product findProductByProductCode(String productCode);
 }
