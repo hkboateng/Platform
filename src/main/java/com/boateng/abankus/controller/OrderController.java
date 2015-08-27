@@ -49,13 +49,15 @@ public class OrderController {
 	@Autowired(required=true)
 	private ProductServiceProcessor productServiceProcessor;	
 	private HttpSession session;
+	
+	ModelAndView modelView = null;
 	public OrderController(){
 		
 	}
 	
 	@RequestMapping(value = "/createOrders", method = RequestMethod.GET)
 	public ModelAndView createOrder(){
-		ModelAndView modelView = new ModelAndView();
+		modelView = new ModelAndView();
 		
 		logger.info("Username: is viewing Create Order page.");
 		List<Product> productList = productServiceProcessor.getAllProducts();
@@ -123,9 +125,22 @@ public class OrderController {
 		
 	}
 	
-	//@RequestMapping(value = "/customerOrderDetail", method = RequestMethod.GET)
-	public String customerOrderDetail(HttpServletRequest request, Model model){
-		
-		return "ClientOrderSummary";
+	@RequestMapping(value = "/clientOrderDetail", method = RequestMethod.POST)
+	public ModelAndView clientOrderDetail(HttpServletRequest request, Model model){
+		logger.info("Employee is viewing Client Order Summary");
+		modelView = new ModelAndView();
+		modelView.setViewName("ClientServices/ClientOrderSummary");
+		return modelView;
 	}
+	
+	@RequestMapping(value = "/getProductDetails", method = RequestMethod.GET, produces = "application/json")
+	@ResponseBody
+	public String getProductDetails(@RequestParam(value="productCode",required=true) String productCode) throws JsonProcessingException{
+		Product product = productServiceProcessor.findProductByProductCode(productCode);
+		ObjectMapper mapper = new ObjectMapper();
+		String productDetails = mapper.writeValueAsString(product);
+		
+		return productDetails;
+	}
+
 }

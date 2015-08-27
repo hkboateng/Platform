@@ -108,7 +108,7 @@
 					<textarea rows="5" cols="50" class="form-control" name="description"></textarea>
  					<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
 					<p>
-						<input type="button" id="btnCreateProduct" value=" Add Product" class="btn btn-success">
+						<input type="submit" id="btnCreateProduct" value=" Add Product" class="btn btn-success">
 						
 						<a href="#"> Cancel </a>
 					</p>

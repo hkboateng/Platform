@@ -51,7 +51,7 @@ public class ProductServiceImpl implements ProductService{
 		Session session = sessionFactory.getCurrentSession();
 		session.save("product", product);
 		session.flush();
-		return null;
+		return product;
 	}
 	@Transactional
 	@Override	
@@ -98,4 +98,5 @@ public class ProductServiceImpl implements ProductService{
 							.uniqueResult();
 		return product;
 	}
+	
 }

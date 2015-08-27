@@ -80,6 +80,7 @@ function populateOrderForm(results){
 	console.log(results);
 	var t = "";
 	$.each(results,function(index,row){
+		$("#clientFullName").text(results.accountNumber);
 		$("#accountStatus").text(results.status);
 		$("#customerAccount").val(results.accountNumber);
 		console.log(index+" : "+row);

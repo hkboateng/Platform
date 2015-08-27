@@ -39,12 +39,12 @@
 				<div id="pending">
 				
 				</div>			
-			<form class="forms" method="post" action="" name="customerOrderForm">
+			<sf:form class="forms" method="post" action="clientOrderDetail" name="customerOrderForm">
 			<div class="panel panel-success">
 			<div class="panel-heading">Customer Order <span class="pull-right"><span class=" bold ">Cart:</span> <span id="noOfItems"></span></span></div>
 			  <div class="panel-body">
 					<div id="clientName">
-						<label for="clientName">Client Name:</label><span id="clientFullName"></span>
+						<p><b>Client Name:</b><span id="clientFullName"></span></p>
 					</div>
 					<div id="clinetAccountStatus">
 						<label>Account Status:</label><span id="accountStatus"></span>
@@ -61,10 +61,10 @@
 						</select>
 						<div>
 						<p>
-							<b>Product Description:</b><span id="productDescription"></span>
+							<b>Product Description:</b>&nbsp;<span id="productDescription"></span>
 						</p>
 						<p>
-							<b>Product Cost (Unit Cost):</b><span id="unitCost"></span>
+							<b>Product Cost (Unit Cost):</b>&nbsp;<span id="unitCost"></span>
 						</p>
 
 						</div>
@@ -109,7 +109,7 @@
 			  </div>
 			</div>
 
-			</form>
+			</sf:form>
 		</div>        
 </div>
 </div>
@@ -123,7 +123,29 @@ $(document).ready(function(){
 
 function getProductCode(form){
 	var productCode = $("#product").val();
-	$("#productCode").val(productCode);
+	if(productCode == ""){
+		$("#productDescription").text("");
+		$("#unitCost").text("");	
+		$("#productCode").val("");
+	}else{
+		$("#productCode").val(productCode);
+		
+		$.ajax({
+			url: 'getProductDetails',
+			data: {
+				productCode:productCode
+			},
+			dataType: "json",
+			success: function(results){
+				console.log(results);
+				$("#productDescription").text(results.description);
+				$("#unitCost").text(results.unitCost);
+			},
+			error :function(data){
+				console.log(data.responseText);
+			}
+		});	
+	}
 }
 function isQuantityValid(quantity){
 	var valid = validQuantity(quantity.value);

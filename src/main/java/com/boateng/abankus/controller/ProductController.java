@@ -41,6 +41,7 @@ public class ProductController {
 	
 	@RequestMapping(value = "/addProduct", method = RequestMethod.POST)
 	public String addNewProduct(@Valid Product product,BindingResult bindingResult,Model model){
+		log.info("Validation has passed..");
 		if(bindingResult.hasErrors()){
 			model.addAttribute("error", bindingResult.getFieldErrors());
 			return "Product/createProduct"; 
