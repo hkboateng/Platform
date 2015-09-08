@@ -1,7 +1,4 @@
-
-	
-
-	function validation(){
+function validation(){
 		$("form").validate({
 			onsubmit:false,
 			rules :{

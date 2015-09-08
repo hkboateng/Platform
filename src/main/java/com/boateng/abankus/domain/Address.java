@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 import java.math.BigInteger;
 
 
@@ -12,7 +14,7 @@ import java.math.BigInteger;
  * 
  */
 @Entity
-
+@DynamicUpdate(value=true)
 @NamedQuery(name="Address.findAll", query="SELECT a FROM Address a")
 public class Address implements Serializable {
 	private static final long serialVersionUID = 1L;

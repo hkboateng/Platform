@@ -18,8 +18,11 @@
 	<div class="container">
 		<div class="row">
 			<jsp:include page="../sidebar.jsp"/>
-			<div class="col-xs-12 col-sm-12 col-md-9 col-md-offset-3 main">
-			
+			<div class="col-xs-12 col-sm-12 col-md-10">
+			<h1 class="line1">Customer Order Summary</h1>
+			<div id="orderSummary">
+				<p></p>
+			</div>
 			</div>
 		</div>
 	</div>

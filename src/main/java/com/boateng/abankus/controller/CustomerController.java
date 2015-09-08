@@ -8,6 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,6 +21,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -25,6 +31,8 @@ import com.boateng.abankus.customer.service.CustomerService;
 import com.boateng.abankus.domain.Address;
 import com.boateng.abankus.domain.Customer;
 import com.boateng.abankus.domain.CustomerAccount;
+import com.boateng.abankus.domain.Email;
+import com.boateng.abankus.domain.Phone;
 
 @Controller
 @RequestMapping("/customers")
@@ -36,6 +44,7 @@ public class CustomerController {
 
 	public static final String CUSTOMERS_COMPANY = "company";
 
+	private static final Log log = LogFactory.getLog(CustomerController.class);
 	@Autowired(required=true)
 	@Qualifier(value="customerServiceImpl")
 	private CustomerService customerServiceImpl;
@@ -110,13 +119,38 @@ public class CustomerController {
 			return "ClientServices/ViewCustomerProfile";
 		}
 		
-		CustomerAccount customerAccount = customerServiceProcessor.findCustomerAccountByCustomerNumber(customer.getCustomerNumber());
+		CustomerAccount customerAccount = customerServiceProcessor.findCustomerAccountByCustomerNumber(customer.getCustomerId());
 		
 		List<Address> address = customerServiceProcessor.findAddressByCustomerId(customer.getCustomerId());
 		
+		List<Phone> phone = customerServiceProcessor.findCustomerPhoneByCustomerId(customer.getCustomerId());
+		
+		List<Email> email = customerServiceProcessor.findCustomerEmailByCustomerId(customer.getCustomerId());
 		model.addAttribute("address",address);
 		model.addAttribute("customerAccount",customerAccount);
 		model.addAttribute("customer",customer);
+		model.addAttribute("phone",phone);
+		model.addAttribute("email",email);
 		return "ClientServices/ViewCustomerProfile";
+	}
+	
+	@RequestMapping(value="/isCustomerEmailUnique", method=RequestMethod.GET, produces = "application/json")
+	@ResponseBody
+	public boolean isEmailUnique(@RequestParam(value="emailAddress",required=true) String emailAddress){
+		log.info("Checking is Customer email is unique.");
+		boolean isUnique = false;
+		if(emailAddress != null || StringUtils.isAsciiPrintable(emailAddress)){
+			Email customer = customerServiceProcessor.FindCustomerByEmailAddress(emailAddress);
+			if(customer != null){
+				isUnique = true;
+			}
+		}
+		log.info("Customer is "+emailAddress+" is unique: "+isUnique);
+		return isUnique;
+	}
+	
+	@RequestMapping(value="/updateAccountStatus", method=RequestMethod.POST)
+	public void updateCustomerAccountStatus(HttpServletRequest request){
+		System.out.println("Updating Customer Account Status");
 	}
 }

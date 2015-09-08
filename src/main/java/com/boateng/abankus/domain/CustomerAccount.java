@@ -5,6 +5,9 @@ import java.io.Serializable;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.DynamicUpdate;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import java.sql.Timestamp;
@@ -19,6 +22,7 @@ import java.util.Map;
 @Entity
 @Table(name="customeraccount")
 @NamedQuery(name="CustomerAccount.findAll", query="SELECT c FROM CustomerAccount c")
+@DynamicUpdate(value=true)
 public class CustomerAccount implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -37,6 +41,8 @@ public class CustomerAccount implements Serializable {
 	//bi-directional many-to-one association to Customer
 	@NotNull
 	@ManyToOne(fetch = FetchType.EAGER)
+	@JsonBackReference
+	@Cascade(value=org.hibernate.annotations.CascadeType.MERGE)
 	@JoinColumn(name="employeeId", referencedColumnName="employeeId")	
 	private Employee employee;
 
@@ -47,11 +53,10 @@ public class CustomerAccount implements Serializable {
 	
 	@NotNull
 	private String industry;
-	
 	//bi-directional many-to-one association to Customer
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JsonBackReference
-	@JoinColumn(name="customerNumber", referencedColumnName="customerNumber")
+	@Cascade(value=org.hibernate.annotations.CascadeType.MERGE)
+	@JoinColumn(name="customerId", referencedColumnName="customerId")
 	private Customer customer;
 
 	public CustomerAccount() {

@@ -10,6 +10,9 @@
   height: 60px;
   background-color: #6974d1;
 }
+.main-container{
+	margin-top:40px;	
+}
 .line1{
 	border:1px solid #000;
 }
@@ -395,6 +398,15 @@ ul.progressbar-list-3 .normal{
   margin-left: 5px;
   max-height: 0.5em;
 }
+.help-text-inline-error{
+  display:inline-block;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  color: #ff0000;
+  font-size: 90%;
+  margin-left: 5px;
+  max-height: 0.7em;
+}
 .bold{
 	font-weight:bold;
 }
@@ -454,4 +466,68 @@ ul.progressbar-list-3 .normal{
     margin-bottom: 0;
     font-size: 100%;
     color: inherit;
+}
+#menu1{
+	width:200px;
+}
+.pageHeading{
+	border-bottom: 1px solid #000;
+}
+.list-button-group{
+
+	position:relative;
+	background: transparent;
+
+}
+.list-button-group li{
+	display:inline-block;
+	list-style:none;
+	width:100%;
+	border-bottom:1px solid #000;
+	padding-bottom:10px;
+	padding-top:10px;
+}
+.list-button-group li:last-child{
+	display:inline-block;
+	list-style:none;
+	width:100%;
+	border-bottom:none;
+	padding-bottom:10px;
+	padding-top:10px;
+}
+.list-button-group > li > a{
+	margin-left:10px;
+	color: #0080ff;
+	font-weight:bold;
+}
+.list-button-group > li > a:hover{
+text-decoration:none;
+}
+.resultHeading:before{
+	position: absolute;
+    top: 50%;
+    display: block;
+    content: "";
+    width: 98.2%;
+    height: 1px;
+    background-color: #434857;
+    margin-left:15px  !important;
+}
+.resultHeading{
+	margin-bottom:30px;
+	position: relative;
+    font-size: 12px;
+    line-height: 20px;
+    text-align: center;
+    text-transform: uppercase;
+}
+#resultHeading-word{
+    position: relative;
+    z-index: 2;
+    display: inline-block;
+    padding-left: 1em;
+    padding-right: 1em;
+    color: #6f7890;
+    vertical-align: middle;
+    background-color: #FFF;
 }

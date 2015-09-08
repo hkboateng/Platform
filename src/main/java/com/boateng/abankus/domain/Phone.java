@@ -1,7 +1,11 @@
 package com.boateng.abankus.domain;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
+import org.hibernate.annotations.DynamicUpdate;
+
 import java.math.BigInteger;
 
 
@@ -10,6 +14,7 @@ import java.math.BigInteger;
  * 
  */
 @Entity
+@DynamicUpdate(value=true)
 @NamedQuery(name="Phone.findAll", query="SELECT p FROM Phone p")
 public class Phone implements Serializable {
 	private static final long serialVersionUID = 1L;

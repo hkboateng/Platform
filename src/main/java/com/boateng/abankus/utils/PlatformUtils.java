@@ -4,6 +4,7 @@
 package com.boateng.abankus.utils;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.joda.time.DateTime;
 
 /**
  * @author hkboateng
@@ -28,12 +29,19 @@ public class PlatformUtils {
 	}
 	
 
-	public static String getClientOrderId(){
+	public static synchronized String getClientOrderNumber(){
 		StringBuilder sbr = new StringBuilder();
+		DateTime dt = DateTime.now();
+		
 		String characters = RandomStringUtils.randomAlphanumeric(6).toUpperCase();
-		String numbers = RandomStringUtils.randomNumeric(6).toUpperCase();		
-		sbr.append(characters).append("-").append(numbers);
+		sbr.append(characters);
+		sbr.append("-").append(dt.getHourOfDay())
+					   .append(dt.getMinuteOfHour())
+					   .append(dt.getSecondOfDay());
+		
 		return sbr.toString();
 	}
+	
+
 
 }

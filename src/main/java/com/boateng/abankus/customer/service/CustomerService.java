@@ -26,7 +26,7 @@ public interface CustomerService {
 	 * @param customerNumber
 	 * @return
 	 */
-	CustomerAccount findCustomerAccountByCustomerNumber(String customerNumber);
+	CustomerAccount findCustomerAccountByCustomerId(int customerId);
 	
 	/**
 	 * Returns a list of all Customers
@@ -53,6 +53,19 @@ public interface CustomerService {
 	 * @param Id
 	 * @return
 	 */
-	List<Address> findAddressByCustomerId(int Id);
+	List<Address> findCustomerAddressByCustomerId(int Id);
 
+	Email findCustomerByEmailAddress(String email);
+
+	/**
+	 * @param customerId
+	 * @return
+	 */
+	List<Email> findCustomerEmailByCustomerId(int customerId);
+
+	/**
+	 * @param customerId
+	 * @return
+	 */
+	List<Phone> findCustomerPhoneByCustomerId(int customerId);
 }

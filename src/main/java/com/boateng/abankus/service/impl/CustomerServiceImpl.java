@@ -111,7 +111,7 @@ public class CustomerServiceImpl implements CustomerService {
 	public Customer findCustomerByCustomerId(int id) {
 		 Session session = getSessionFactory().getCurrentSession();
 
-		 Customer customer = (Customer) session.createQuery("From Customer where customerId=?").setParameter(0, id).uniqueResult();
+		 Customer customer = (Customer) session.createQuery("From Customer where customerId=:customerId").setParameter("customerId", id).uniqueResult();
 		return customer;
 	}
 
@@ -134,7 +134,7 @@ public class CustomerServiceImpl implements CustomerService {
 	
 	@Transactional
 	@Override
-	public List<Address> findAddressByCustomerId(int Id){
+	public List<Address> findCustomerAddressByCustomerId(int Id){
 		Session session = getSessionFactory().getCurrentSession();
 		@SuppressWarnings("unchecked")
 		List<Address> address =  session.createQuery("From Address where customerId=?")
@@ -149,12 +149,61 @@ public class CustomerServiceImpl implements CustomerService {
 	 */
 	@Override
 	@Transactional
-	public CustomerAccount findCustomerAccountByCustomerNumber(String customerNumber) {
+	public CustomerAccount findCustomerAccountByCustomerId(int customerId) {
 		Session session = getSessionFactory().getCurrentSession();
-		String sqlQuery = "From CustomerAccount where customerNumber =?";
-		Object account = session.createQuery(sqlQuery)
-								.setParameter(0, customerNumber)
+		String sqlQuery = "From CustomerAccount where customerId=:customerId";
+		CustomerAccount account = (CustomerAccount)session.createQuery(sqlQuery)
+								.setParameter("customerId", customerId)
 								.uniqueResult();
-		return (CustomerAccount) account;
+		return account;
 	}
+
+	/* (non-Javadoc)
+	 * @see com.boateng.abankus.customer.service.CustomerService#findCustomerByEmailAddress(java.lang.String)
+	 */
+	@Override
+	@Transactional
+	public Email findCustomerByEmailAddress(String email) {
+		Session session = getSessionFactory().getCurrentSession();
+		String query = "From Email e where e.emailAddress=:email";
+		@SuppressWarnings("unchecked")
+		List<Email> emailList = session.createQuery(query)
+						.setParameter("email", email)
+						.list();
+		if(emailList.size() > 0){
+		return emailList.get(0);
+		}else{
+			return null;
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see com.boateng.abankus.customer.service.CustomerService#findCustomerEmailByCustomerId(int)
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	@Transactional
+	public List<Email> findCustomerEmailByCustomerId(int customerId) {
+		Session session = getSessionFactory().getCurrentSession();
+		List<Email> email =	session.createQuery("from Email e where e.customer.customerId=:customerId")
+							.setParameter("customerId", customerId)
+							.list();
+		return email;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.boateng.abankus.customer.service.CustomerService#findCustomerPhoneByCustomerId(int)
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	@Transactional
+	public List<Phone> findCustomerPhoneByCustomerId(int customerId) {
+		Session session = getSessionFactory().getCurrentSession();
+		List<Phone> phone = session.createQuery("from Phone p where p.customer.customerId=:customerId")
+							.setParameter("customerId", customerId)
+							.list();
+		return phone;
+	}
+
+
 }

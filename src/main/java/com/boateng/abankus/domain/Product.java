@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.NotEmpty;
 
 
@@ -17,6 +18,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  */
 @Entity
 @Table(name="products")
+@DynamicUpdate(value=true)
 @NamedQueries({
 @NamedQuery(name="Product.findAll", query="SELECT p FROM Product p"),
 @NamedQuery(name="Product.findProductByCode", query="SELECT p FROM Product p where p.productCode=:productCode"),

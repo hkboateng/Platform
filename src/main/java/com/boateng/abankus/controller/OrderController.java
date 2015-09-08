@@ -20,15 +20,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.boateng.abankus.customer.processor.CustomerServiceProcessor;
 import com.boateng.abankus.domain.CustomerAccount;
 import com.boateng.abankus.domain.Employee;
 import com.boateng.abankus.domain.Product;
 import com.boateng.abankus.fields.EmployeeFields;
+import com.boateng.abankus.processors.CustomerOrderProcessor;
 import com.boateng.abankus.processors.ProductServiceProcessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.gson.Gson;
 
 /**
@@ -45,6 +48,9 @@ public class OrderController {
 	
 	@Autowired(required=true)
 	private CustomerServiceProcessor customerServiceProcessor;
+
+	@Autowired(required=true)
+	private CustomerOrderProcessor customerOrderProcessor;
 	
 	@Autowired(required=true)
 	private ProductServiceProcessor productServiceProcessor;	
@@ -71,22 +77,22 @@ public class OrderController {
 	public String findCustomer(@RequestParam(value="accountNumber",required=true) String accountNumber,HttpServletRequest request) throws IOException{
 		session = request.getSession(false);
 		
-		Employee employee = (Employee) request.getSession(false).getAttribute(EmployeeFields.EMPLOYEE_SESSION);
-		if(employee != null){
-			logger.info("Employee ID: "+employee.getEmployeeId()+" is searching for Account Number: "+accountNumber);
-		}
+		//Employee employee = (Employee) request.getSession(false).getAttribute(EmployeeFields.EMPLOYEE_SESSION);
+		//if(employee != null){
+		//	logger.info("Employee ID: "+employee.getEmployeeId()+" is searching for Account Number: "+accountNumber);
+		//}
 		
 		CustomerAccount account = customerServiceProcessor.findCustomerAccountByAccountNumber(accountNumber);
 		if(account == null){
 			return "Account Number is invalid";
 		}
-		logger.info("Employee ID: "+employee.getEmployeeId()+" has found Customer with Account number: "+account.getAccountNumber()+" and Name: "+ account.getCustomer().getFirstname());
+		//logger.info("Employee ID: "+employee.getEmployeeId()+" has found Customer with Account number: "+account.getAccountNumber()+" and Name: "+ account.getCustomer().getFirstname());
 
-		ObjectMapper mapper = new ObjectMapper();
+		ObjectMapper mapper = new ObjectMapper().configure(SerializationFeature.INDENT_OUTPUT, true);
 		logger.info("JSON has being convert..below is the Output...");
 		mapper.writeValue(System.out, account);
 		String acct = mapper.writeValueAsString(account);
-	
+
 		return acct;
 	}
 
@@ -143,4 +149,14 @@ public class OrderController {
 		return productDetails;
 	}
 
+	@RequestMapping(value = "/submitCustomerOrder", method = RequestMethod.POST)
+	public String orderSummary(HttpServletRequest request, Model model,RedirectAttributes redirectAttributess){
+		List<String> validation = customerOrderProcessor.processClientOrder(request);
+		if(validation.size() > 0){
+			redirectAttributess.addAttribute("validation", validation);
+			return "redirect:/client/createOrders" ;
+		}
+		//customerOrderProcessor.processClientOrder(request);
+		return "";
+	}
 }

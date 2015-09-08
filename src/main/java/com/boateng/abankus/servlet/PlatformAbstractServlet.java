@@ -30,10 +30,6 @@ import com.boateng.abankus.services.ProductService;
  *
  */
 public abstract class PlatformAbstractServlet {
-	/**
-	 * 
-	 */
-	public static final String EMPLOYEE_SESSION = "employee";
 
 	private static final Logger logger = LoggerFactory.getLogger(PlatformAbstractServlet.class);
 	
@@ -51,8 +47,9 @@ public abstract class PlatformAbstractServlet {
 	public void loadUserIntoSession(HttpServletRequest request) throws PlatformException{
 		HttpSession session = request.getSession(false);
 		String username = request.getUserPrincipal().getName();
-		logger.info("User: "+username+" has being loaded into session.");
+		
 		if(session.getAttribute("user") == null){
+			logger.info("User: "+username+" has being loaded into session.");
 			User user = authenticationServiceImpl.findUserByUserName(username);
 			session.setAttribute("user",user);
 		}
@@ -61,8 +58,9 @@ public abstract class PlatformAbstractServlet {
 	public void loadEmployeeIntoSessionByUsername(HttpServletRequest request) throws PlatformException{
 		HttpSession session = request.getSession(false);
 		String username = request.getUserPrincipal().getName();
-		logger.info("Employee: "+username+" has being loaded into session.");
+		
 		if(session.getAttribute(EmployeeFields.EMPLOYEE_SESSION) == null){
+			logger.info("Employee: "+username+" has being loaded into session.");
 			//Loading User into Session
 			Employee employee = authenticationServiceImpl.findEmployeeByUserName(username);
 			EmployeeCollection.getInstance().addEmployee(username, employee);
@@ -90,4 +88,6 @@ public abstract class PlatformAbstractServlet {
 			}			
 		}
 	}
+	
+
 }

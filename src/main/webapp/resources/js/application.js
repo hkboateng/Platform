@@ -43,6 +43,7 @@ function genderList(){
 $(document).ready(function(){
 	
 	$("#btnSarchCustomer").click(function(){
+		$("#customerOrderForm").addClass("hidden");
 		var accountNo = $("#accountNumber").val();
 		if(isCharacter(accountNo )){
 			$.ajax({
@@ -55,6 +56,7 @@ $(document).ready(function(){
 					$("#pending").text("Loading...");
 				},
 				success: function(results){
+					$("#pending").text(" ");
 					populateOrderForm(results);
 				},
 				error :function(data){
@@ -77,13 +79,14 @@ $(document).ready(function(){
 })
 
 function populateOrderForm(results){
+	$("#resultHeading").removeClass("hidden");
+	$("#customerOrderForm").removeClass("hidden");
 	console.log(results);
-	var t = "";
 	$.each(results,function(index,row){
+		$("#customerName").text(results.customer.firstname+" "+results.customer.lastname);
 		$("#clientFullName").text(results.accountNumber);
 		$("#accountStatus").text(results.status);
-		$("#customerAccount").val(results.accountNumber);
-		console.log(index+" : "+row);
+		$("#customerId").val(results.customer.customerId);
 	});
 	if(results.customerActive == false){
 		$("#pending").html("Customer is not eligible to make order");
@@ -93,9 +96,11 @@ function populateOrderForm(results){
 }
 
 function displayErrorMessage(error){
+	$("#resultHeading").removeClass("hidden");
 	$("#pending").html("<p class='alert alert-danger'><span class='glyphicon glyphicon-info-sign  moveR_10'></span>"+error+"</p>");
 }
 
 function isCharacter(word){
 	return $.isNumeric(word);
 }
+

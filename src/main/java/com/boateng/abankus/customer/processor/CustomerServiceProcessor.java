@@ -10,11 +10,15 @@ import java.util.concurrent.Executors;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import com.boateng.abankus.controller.CustomerController;
 import com.boateng.abankus.customer.service.CustomerService;
 import com.boateng.abankus.domain.Address;
 import com.boateng.abankus.domain.Customer;
@@ -28,13 +32,14 @@ import com.boateng.abankus.fields.CustomerFields;
 import com.boateng.abankus.fields.EmailFields;
 import com.boateng.abankus.fields.EmployeeFields;
 import com.boateng.abankus.fields.PhoneFields;
+import com.boateng.abankus.processors.AbankusBaseProcessor;
 import com.boateng.abankus.services.AuthenticationService;
 import com.boateng.abankus.services.EmployeeService;
 import com.boateng.abankus.utils.SecurityUtils;
 
 @Service
-public class CustomerServiceProcessor {
-
+public class CustomerServiceProcessor extends AbankusBaseProcessor{
+	private static final Log log = LogFactory.getLog(CustomerServiceProcessor.class);
 
 	/**
 	 * 
@@ -202,14 +207,48 @@ public class CustomerServiceProcessor {
 		return customerAccount;
 	}
 	
-	public CustomerAccount findCustomerAccountByCustomerNumber(String customerNumber){
-		CustomerAccount customerAccount = customerServiceImpl.findCustomerAccountByCustomerNumber(customerNumber);
+	public CustomerAccount findCustomerAccountByCustomerNumber(int customerId){
+		CustomerAccount customerAccount = customerServiceImpl.findCustomerAccountByCustomerId(customerId);
 		
 		return customerAccount;
 	}
 	
 	public List<Address> findAddressByCustomerId(int Id){
-		List<Address> address = customerServiceImpl.findAddressByCustomerId(Id);
+		List<Address> address = customerServiceImpl.findCustomerAddressByCustomerId(Id);
 		return address;
+	}
+	
+	public Email FindCustomerByEmailAddress(String email){
+		Email customer = null;
+		if(!isNullOrBlank(email)){
+			customer = customerServiceImpl.findCustomerByEmailAddress(email);
+		}
+		return customer;
+	}
+	
+	public List<Email> findCustomerEmailByCustomerId(int customerId){
+		List<Email> emailList = null;
+		if(!(customerId < 0)){
+			emailList = customerServiceImpl.findCustomerEmailByCustomerId(customerId);
+		}
+		if(emailList == null || emailList.isEmpty()){
+			log.info("Email List for Customer Id: "+customerId+" is null or empty");
+		}else{
+			log.info("Email List for Customer Id: "+customerId+" has "+emailList.size()+" entries.");
+		}
+		return emailList;
+	}
+	
+	public List<Phone> findCustomerPhoneByCustomerId(int customerId){
+		List<Phone> phoneList = null;
+		if(!(customerId < 0)){
+			phoneList = customerServiceImpl.findCustomerPhoneByCustomerId(customerId);
+		}
+		if(phoneList == null || phoneList.isEmpty()){
+			log.info("Email List for Customer Id: "+customerId+" is null or empty");
+		}else{
+			log.info("Email List for Customer Id: "+customerId+" has "+phoneList.size()+" entries.");
+		}		
+		return phoneList;
 	}
 }

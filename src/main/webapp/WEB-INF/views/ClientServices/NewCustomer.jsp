@@ -15,7 +15,12 @@
 <link href="<c:url value="/resources/css/bootstrap.css" />" rel="stylesheet"/>
 <link href="<c:url value="/resources/css/platform.css" />" rel="stylesheet"/>
 <link href="<c:url value="/resources/css/datepicker.css" />" rel="stylesheet"/>
+<script src="<c:url value='/resources/js/jquery.js' />" type="text/javascript"></script>
+<script src="<c:url value="/resources/js/validation/jquery.validation.js" />" type="text/javascript"></script>
+<script src="<c:url value="/resources/js/bootstrap.js" />" type="text/javascript"></script>
+<script src="<c:url value="/resources/js/jquery-masked.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/application.js" />" type="text/javascript"></script>
+<script src="<c:url value="/resources/js/validation/customerValidation.js" />" type="text/javascript"></script>
 </head>
 <body>
 <%-- Include page header --%>
@@ -23,7 +28,7 @@
 
 <div class="container">
 <div class="row">
-<div class="col-sm-3 col-md-2 sidebar" ng-controller="DatepickerDemoCtrl">
+<div class="col-sm-3 col-md-2 sidebar">
 
           <ul class="nav nav-sidebar">
             <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
@@ -133,7 +138,7 @@
 
 				  <div class="col-xs-6 col-sm-6">
 				  	<label for="emailAddress">Email Address:</label><span id="email-error" class="help-text-inline"></span>
-				   	<input type="email" id="emailAddress" name="emailAddress" class="form-control" placeholder="Email Address" ">						
+				   	<input type="email" id="emailAddress" name="emailAddress" class="form-control" placeholder="Email Address"  onblur="javascript:isEmailUnique(this.value);">						
 								  
 				  </div>
 					</div>	
@@ -172,7 +177,7 @@
 			
 			<hr>
 			<p>
-			<button class="btn btn-primary" onClick="javascript:customerValidation(document.customerForm);return false;"> Save Customer </button>
+			<button class="btn btn-primary" onClick="javascript:customerValidation(document.customerForm);"> Save Customer </button>
 			&nbsp;&nbsp;&nbsp;
 			<a href="#"> Cancel </a>
 			</p>
@@ -185,18 +190,26 @@
 </div>
 </body>
 
-
-<script src="<c:url value='/resources/js/jquery.js' />" type="text/javascript"></script>
-<script src="<c:url value="/resources/js/validation/jquery.validation.js" />" type="text/javascript"></script>
-<script src="<c:url value="/resources/js/bootstrap.js" />" type="text/javascript"></script>
-<script src="<c:url value="/resources/js/jquery-masked.js" />" type="text/javascript"></script>
-<script src="<c:url value="/resources/js/application.js" />" type="text/javascript"></script>
-<script src="<c:url value="/resources/js/validation/customerValidation.js" />" type="text/javascript"></script>
 <script>
 $(document).ready(function(){
 	$('#phoneNumber').mask('000-000-0000');
 	$('#dateOfBirth').mask('00/00/0000');
 });
+function isEmailUnique(email){
 
+	$.ajax({
+		url: 'isCustomerEmailUnique',
+		data: {
+			emailAddress:email
+		},
+		dataType: "json",
+		success: function(results){
+			console.log(results)
+		},
+		error :function(data){
+			console.log(data.responseText);
+		}
+	});			
+}
 </script>
 </html>

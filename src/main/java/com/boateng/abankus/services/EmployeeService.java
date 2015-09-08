@@ -28,5 +28,12 @@ public interface EmployeeService {
 	 * @return
 	 */
 	CustomerAccount addEmployeeSalesAccount(Employee employee,Customer customer, String industry, String notes);
+
+
+	/**
+	 * @param Id
+	 * @param employee
+	 */
+	void updateEmployeeByIdAndEmployeeId(Integer Id, Employee employee);
 	
 }

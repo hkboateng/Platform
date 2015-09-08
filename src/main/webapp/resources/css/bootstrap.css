@@ -5156,10 +5156,16 @@ a.thumbnail.active {
 }
 a.list-group-item {
   color: #555;
+  
 }
 a.list-group-item .list-group-item-heading {
   color: #333;
 }
+/**
+a.list-group-item:hover:before{
+	content: "\e258";
+}
+**/
 a.list-group-item:hover,
 a.list-group-item:focus {
   color: #555;

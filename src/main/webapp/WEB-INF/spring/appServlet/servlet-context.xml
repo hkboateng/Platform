@@ -131,10 +131,16 @@
 	
 	<beans:bean id="productServiceProcessor" class="com.boateng.abankus.processors.ProductServiceProcessor" />
 	
+	<beans:bean id="orderOrderProcessor" class="com.boateng.abankus.processors.CustomerOrderProcessor" />
+	
 	<beans:bean id="customerServiceImpl" class="com.boateng.abankus.service.impl.CustomerServiceImpl">
 		<beans:property name="sessionFactory" ref="sessionFactory" />
 	</beans:bean>
-	
+
+	<beans:bean id="customerOrderServiceImpl" class="com.boateng.abankus.service.impl.CustomerOrderServiceImpl">
+		<beans:property name="sessionFactory" ref="sessionFactory" />
+	</beans:bean>
+		
 	<beans:bean id="authenticationServiceImpl" class="com.boateng.abankus.service.impl.AuthenticationServiceImpl">
 		<beans:property name="sessionFactory" ref="sessionFactory" />
 	</beans:bean>

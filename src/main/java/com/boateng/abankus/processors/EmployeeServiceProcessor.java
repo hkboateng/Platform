@@ -6,12 +6,16 @@ package com.boateng.abankus.processors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import com.boateng.abankus.controller.OrderController;
 import com.boateng.abankus.domain.Employee;
 import com.boateng.abankus.domain.User;
 import com.boateng.abankus.domain.UserRole;
+import com.boateng.abankus.fields.EmployeeFields;
 import com.boateng.abankus.services.EmployeeService;
 import com.boateng.abankus.utils.SecurityUtils;
 
@@ -20,6 +24,9 @@ import com.boateng.abankus.utils.SecurityUtils;
  *
  */
 public class EmployeeServiceProcessor {
+	
+	private static final Logger logger = LoggerFactory.getLogger(EmployeeServiceProcessor.class);
+	
 	@Autowired
 	@Qualifier(value="employeeSvcImpl")
 	private EmployeeService employeeSvcImpl;
@@ -39,7 +46,7 @@ public class EmployeeServiceProcessor {
 	
 	private EmployeeServiceProcessor(){}
 
-
+	
 	public Employee createEmployeeObject(HttpServletRequest request){
 		String firstname = request.getParameter("firstname").trim();
 		String lastname = request.getParameter("lastname").trim();
@@ -55,8 +62,6 @@ public class EmployeeServiceProcessor {
 		String gender= request.getParameter("gender").trim();
 		String email = request.getParameter("email").trim();
 		String cellPhone = request.getParameter("cellPhone").trim();
-		String jobTitle = request.getParameter("position");
-		String depart = request.getParameter("department");
 		
 		StringBuffer sbr = new StringBuffer();
 		sbr.append(month).append(day).append(year);
@@ -78,11 +83,12 @@ public class EmployeeServiceProcessor {
 		}
 		employee.setCity(city);
 		employee.setState(state);
+		employee.setZipcode(zipcode);
 		employee.setDateOfBirth(sbr.toString());
 		return employee;
 	}
 
-	
+
 	public User saveEmployeeLogin(User user,Employee employee){
 		//EmployeeProcessor.getInstance()
 		if(user !=null && employee != null){
@@ -114,6 +120,71 @@ public class EmployeeServiceProcessor {
 				
 		}
 		return userRole;		
+		
+	}
+	
+	public String process(String action, HttpServletRequest request){
+		if(action.equals("update")){
+			updateEmployeeInformation(request);
+		}
+		return action;
+		
+	}
+	
+	private void updateEmployeeInformation(HttpServletRequest request){
+		Integer Id  = Integer.valueOf(request.getParameter("jumbo"));
+		String employeeId = request.getParameter("employeeId");
+		Employee employee = buildEmployeeInstance(request,employeeId,Id);
+		
+		employeeSvcImpl.updateEmployeeByIdAndEmployeeId(Id, employee);
+		session = request.getSession(false);
+		logger.info("Loading new Employee into Session.");
+		session.setAttribute(EmployeeFields.EMPLOYEE_SESSION,employee);	
+	}
+	
+	private Employee buildEmployeeInstance(HttpServletRequest request,String employeeId,Integer Id){
+		String firstname = request.getParameter("firstname").trim();
+		String lastname = request.getParameter("lastname").trim();
+		String middlename = request.getParameter("lastname");
+		String address1= request.getParameter("address1").trim();
+		String address2= request.getParameter("address2").trim();
+		String city= request.getParameter("city").trim();
+		String state= request.getParameter("state").trim();
+		String zipcode= request.getParameter("zipcode").trim();
+		String month= request.getParameter("month").trim();
+		String day= request.getParameter("day").trim();
+		String year= request.getParameter("year").trim();
+		String gender= request.getParameter("gender").trim();
+		String email = request.getParameter("email").trim();
+		String cellPhone = request.getParameter("cellphone").trim();	
+		
+		/*******************************
+		 * Building Employee Instance obtain from the search result
+		 */
+		Employee employee = employeeSvcImpl.getEmployeeById(Id);
+		logger.info("Employee with Employee Id: "+employeeId+" is update Employee Object.");
+		
+		StringBuffer sbr = new StringBuffer();
+		sbr.append(month).append(day).append(year);
+		
+		employee.setFirstname(firstname);
+		employee.setLastname(lastname);
+		if(middlename != null){
+			employee.setMiddlename(middlename);
+		}
+		employee.setEmail(email);
+		employee.setCellphone(cellPhone);
+		employee.setGender(gender);
+			
+		employee.setAddress1(address1);
+		if(address2 != null){
+			employee.setAddress2(address2);
+		}
+		employee.setCity(city);
+		employee.setState(state);
+		employee.setZipcode(zipcode);
+		employee.setDateOfBirth(sbr.toString());
+		return employee;
 		
 	}
 }

@@ -3,15 +3,11 @@
  */
 package com.boateng.abankus.service.impl;
 
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.hibernate.CacheMode;
-import org.hibernate.LockMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.engine.query.spi.sql.NativeSQLQueryReturn;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -80,7 +76,7 @@ public class ProductServiceImpl implements ProductService{
 	public List<Product> getAllProducts(){
 		Session session = sessionFactory.getCurrentSession();
 		
-		List<Product> listProducts  = session.createQuery(" from Product")
+		List<Product> listProducts  = session.getNamedQuery("Product.findAll")
 											.setCacheMode(CacheMode.NORMAL)
 											.list();
 
@@ -92,11 +88,29 @@ public class ProductServiceImpl implements ProductService{
 	@Transactional
 	public Product findProductByProductCode(String productCode) {
 		Session session = sessionFactory.getCurrentSession();
-		Product product = (Product) session.createQuery("from Product p where p.productCode=?")
+		Product product = (Product) session.getNamedQuery("Product.findProductByCode")
 							.setParameter(0, productCode)
 							.setCacheMode(CacheMode.NORMAL)
 							.uniqueResult();
 		return product;
 	}
-	
+	@Transactional	
+	public Product updateProduct(String productCode, String productName, String description,float unitCost){
+		Session session = sessionFactory.getCurrentSession();
+		Product p = (Product) session.createQuery("from Product p where p.productCode=?")
+					.setParameter("productCode", productCode)
+					.uniqueResult();
+		//session.
+		if(productName != null || !productName.isEmpty()){
+			p.setProductName(productName);
+		}
+		if(description != null || !description.isEmpty()){
+			p.setDescription(description);
+		}
+		if(unitCost != 0.0f || unitCost != 0 || unitCost != 0.0){
+			p.setUnitCost(unitCost);
+		}
+		session.update("product", p);
+		return p;
+	}
 }

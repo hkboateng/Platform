@@ -1,3 +1,4 @@
+ <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!-- Page Header -->
 <nav id="" class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
@@ -39,21 +40,28 @@
 		          <li><a href="/abankus/customers/listCustomer"><i class="fa fa-sign-out fa-lg moveR_5"></i>List Customers</a></li>
 		        </ul>		                  
             </li>
-            <li>
+            <li id="">
 	            <a id="aEmployeeInfoLink" href="#" class=" dropdown-toggle header-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
 		          <i class="fa fa-user fa-md moveR_10"></i>${employee.firstname}&nbsp;${employee.lastname}
 		          <span class="caret"></span>
 		        </a>
 	            <ul id="menu1" class="dropdown-menu" aria-labelledby="aEmployeeInfoLink">
-		          <li><a href="#"><i class="fa fa-pencil-square-o fa-lg moveR_5"></i>Update your Profile</a></li>
-		          <li><a href="#"><i class="fa fa-cogs fa-lg moveR_5"></i></a>Account Settings</li>
+		          <li><a href="/abankus/employee/editEmployee?employeeId=${employee.employeeId}&jumboId=${employee.id}"><i class="fa fa-pencil-square-o fa-lg moveR_5"></i>Update your Profile</a></li>
+		          <sec:authorize access="hasRole('supervisor')">
+			          <li><a href="#"><i class="fa fa-cogs fa-lg moveR_5"></i></a>Account Settings</li>
+		          </sec:authorize>
 		          <li role="separator" class="divider"></li>
-		          <li><a href="#"><i class="fa fa-sign-out fa-lg moveR_5"></i>Logout</a></li>
+		          <li><a href="logout"><i class="fa fa-sign-out fa-lg moveR_5"></i>Logout</a></li>
 		        </ul>
             </li>
 
           </ul>
-
+      <form class="navbar-form navbar-right" action="/abankus/customers/viewProfile" role="search">
+        <div class="form-group">
+          <input type="text" class="custom-text" name="customerId" placeholder="Search for Customer" title="Search for Customer by Customer Number, Account Number">
+        </div>
+        <button type="submit" class="btn btn-success"><i class="fa fa-search"></i>&nbsp;Search</button>
+      </form>
         </div>
       </div>
     </nav>

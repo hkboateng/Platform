@@ -4,7 +4,10 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 import com.boateng.abankus.utils.SecurityUtils;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.List;
@@ -15,7 +18,7 @@ import java.util.List;
  * 
  */
 @Entity
-
+@DynamicUpdate(value=true)
 @NamedQuery(name="Customer.findAll", query="SELECT c FROM Customer c")
 public class Customer implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -37,11 +40,6 @@ public class Customer implements Serializable {
 	private String lastname;
 
 	private String middlename;
-
-	//bi-directional many-to-one association to Customeraccount
-	@OneToMany(fetch = FetchType.EAGER,mappedBy="customer")
-	@JsonManagedReference
-	private List<CustomerAccount> customerAccounts;
 
 	private String customerNumber;
 	
@@ -116,27 +114,6 @@ public class Customer implements Serializable {
 		this.middlename = middlename;
 	}
 
-	public List<CustomerAccount> getCustomeraccounts() {
-		return this.customerAccounts;
-	}
-
-	public void setCustomeraccounts(List<CustomerAccount> customerAccounts) {
-		this.customerAccounts = customerAccounts;
-	}
-
-	public CustomerAccount addCustomeraccount(CustomerAccount customerAccount) {
-		getCustomeraccounts().add(customerAccount);
-		customerAccount.setCustomer(this);
-
-		return customerAccount;
-	}
-
-	public CustomerAccount removeCustomeraccount(CustomerAccount customerAccount) {
-		getCustomeraccounts().remove(customerAccount);
-		customerAccount.setCustomer(null);
-
-		return customerAccount;
-	}
 	public String getCustomerNumber() {
 		return customerNumber;
 	}

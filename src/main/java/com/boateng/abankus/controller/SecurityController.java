@@ -60,7 +60,7 @@ public class SecurityController extends PlatformAbstractServlet {
 
 	
 	
-	@RequestMapping(value = "/security/logout", method = RequestMethod.GET)
+	@RequestMapping(value = "/employee/logout", method = RequestMethod.GET)
 	public String logout(HttpServletRequest request, Model model) {
 
 		HttpSession session = request.getSession(false);
@@ -111,6 +111,6 @@ public class SecurityController extends PlatformAbstractServlet {
 		}
 		String Id = UUID.randomUUID().toString();
 		redirectAttributess.addFlashAttribute("info", "You have logout successfully.");
-		return "redirect:/login?info="+Id;
+		return "redirect:/login";
 	}		
 }

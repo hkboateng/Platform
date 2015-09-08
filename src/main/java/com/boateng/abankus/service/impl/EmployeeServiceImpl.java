@@ -119,6 +119,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 		return listEmployee;
 	}
 	
+	@Transactional
 	@Cacheable(value="employee" ,key="#employeeId")
 	public Employee getEmployeeById(int employeeId){
 		if(employeeId < 1){
@@ -126,8 +127,8 @@ public class EmployeeServiceImpl implements EmployeeService{
 			return null;
 		}
 		Session session = getSessionFactory().getCurrentSession();
-		Employee employee  = (Employee) session.load(Employee.class, employeeId);
-		log.info("");
+		Employee employee  = (Employee) session.get(Employee.class, employeeId);
+		log.info("Employee Instance has being reteived from Database.");
 		return employee;
 	}
 	
@@ -137,5 +138,13 @@ public class EmployeeServiceImpl implements EmployeeService{
 		team.setEmployee(employee);
 		team.setTeamname("Default");
 		return team;
+	}
+	
+	@Transactional
+	@Override
+	public void updateEmployeeByIdAndEmployeeId(Integer Id,Employee employee){
+		Session session = getSessionFactory().getCurrentSession();
+						session.update("employee", employee);
+						
 	}
 }

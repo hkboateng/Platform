@@ -9,8 +9,10 @@
 <link href="<c:url value="/resources/css/bootstrap.css" />" rel="stylesheet"/>
 <link href="<c:url value="/resources/css/platform.css" />" rel="stylesheet"/>
 <script src="<c:url value="/resources/js/jquery.js" />" type="text/javascript"></script>
+<script src="<c:url value="/resources/js/validation/jquery.validation.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/bootstrap.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/application.js" />" type="text/javascript"></script>
+<script src="<c:url value="/resources/js/accounting/accounting.js" />" type="text/javascript"></script>
 </head>
 <body>
 <%-- Include page header --%>
@@ -21,27 +23,46 @@
 <jsp:include page="../sidebar.jsp"/>
  
 		<div class="col-sm-9 col-md-10 col-md-offset-2 main">
+
           <h1>Create Orders</h1>
 			<hr>
+				<c:if test="${not empty validation }">
+					<div>
+						<ul>
+							<c:forEach items="${validation}" var="errors">
+								<li>${errors }</li>
+							</c:forEach>
+						</ul>
+					</div>
+				</c:if>			
 			<%-- Description of what this page is for. --%>
 			<div>
 			The Create Orders page, is the Page that Sales Reps or Consultants will use to create an Order for Customer. The order can be a sale of a product or services.
 			When an order is created, a Bill of Invoice will also be created for the Customer in which the customer can use the invoice to make payments
 			</div>
+			<hr>
 				<div class="form-group">
 					<span>Search:</span>
 					<label for="customerAccount" class="sr-only">Customer Account Number:</label>
 					<input type="text" name="accountNumber" id="accountNumber" class="custom-text" placeholder="Enter Account Number, Customer Number"/>
 					<button  id="btnSarchCustomer" class="btn btn-success" title="Search for Customer using Customer AccountNumber" ><i class="fa fa-search"></i></button>								
 				</div>
-
-			<hr>
-				<div id="pending">
-				
-				</div>			
-			<sf:form class="forms" method="post" action="clientOrderDetail" name="customerOrderForm">
+				<div class="row">
+				  <div id="resultHeading" class="resultHeading hidden">
+		          	<div id="resultHeading-word" class="anw">Search Results</div>
+		          </div>	
+		         </div>			
+				 <div id="pending">	
+		          		
+				 </div>				
+			<sf:form class="forms hidden" method="post"  name="customerOrderForm" id="customerOrderForm">
 			<div class="panel panel-success">
-			<div class="panel-heading">Customer Order <span class="pull-right"><span class=" bold ">Cart:</span> <span id="noOfItems"></span></span></div>
+			<div class="panel-heading">Customer Order  <span id="customerName" class="bold"></span>
+				<span class="pull-right">
+					<span class=" bold ">Cart:</span> 
+					<span id="noOfItems"></span>
+				</span>
+			</div>
 			  <div class="panel-body">
 					<div id="clientName">
 						<p><b>Client Name:</b><span id="clientFullName"></span></p>
@@ -49,16 +70,19 @@
 					<div id="clinetAccountStatus">
 						<label>Account Status:</label><span id="accountStatus"></span>
 					</div>
-					<div class="row">
-						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 " id="productList">
-						<label>Product/Services:</label>
-						<c:if test="${not empty productList}" >
-						<select name="product" id="product" class="form-control"  onchange="javascript:getProductCode(this);" onblur="javascript:getProductCode(this);">
-						<option value=''>Select Product/Service </option>
-						<c:forEach items="${productList}" var="products" varStatus="list">
-							<option value="${products.productCode }" title="${products.description }">${products.productName }</option>
-						</c:forEach>
-						</select>
+					<c:if test="${not empty productList}" >
+						<div class="row">
+						<div class="col-xs-4">
+							<label for="product">Product/Services:</label><span id="product-error" class="help-text-inline-error"></span>
+							
+							<select name="product" id="product" class="form-control"  onchange="javascript:getProductCode(this);" onblur="javascript:getProductCode(this);">
+								<option value=" ">Select Product/Service </option>
+								<c:forEach items="${productList}" var="products" varStatus="list">
+									<option value="${products.productCode }" title="${products.description }">${products.productName }</option>
+								</c:forEach>
+							</select>
+						</div>						
+						</div>
 						<div>
 						<p>
 							<b>Product Description:</b>&nbsp;<span id="productDescription"></span>
@@ -66,45 +90,20 @@
 						<p>
 							<b>Product Cost (Unit Cost):</b>&nbsp;<span id="unitCost"></span>
 						</p>
-
-						</div>
-						<!-- 
-							<table class="table table-striped">
-								<tr>
-									<th>No.</th>
-									<th>Product Name</th>
-									<th>Product Description</th>
-									
-									<th class="text-nowrap">Product Cost</th>
-									<th>Quantity</th>
-									<th></th>
-								</tr>
-								<c:forEach items="${productList}" var="products" varStatus="list">
-								
-								<tr>
-									<td>${list.count }</td>
-									<td class="text-nowrap">${products.productName }</td>
-									<td>${products.description }</td>
-									<td class="text-nowrap">${products.unitCost }</td>
-									<td><input type="number" name="quantity" id="quantity" maxLength="1" min="1" max="100" value="1"/></td>
-									<td><a href="#" onclick="addProductToChart();" class="btn btn-success">Add to Cart</a></td>
-									
-								</tr>
-								<input type="hidden" name="productCode" value="${products.productCode}" id="productCode"/>
-								</c:forEach>
-							</table>
-							 -->						
-						</c:if>
-
+						<p>
+						<label class="bold">Quantity:</label><input type="number" name="quantity" id="productQuantity" maxLength="1" min="1" max="100" value="1"/>
+						</p>
 						</div>					
-					</div>					
+						</c:if>
+				
 			<hr />
 			<p>
 
-			<input type="hidden" name="productCode" value="${products.productCode}" id="productCode"/>		
-			<input type="hidden" name="customerAccount" value="" id="customerAccount"/>
-			<input type="button" value="Add to Cart" onclick="addProductToChart();" class="btn btn-primary moveR_20"/>	
-			<input type="submit"  class="btn btn-success" onclick="javascript:document.customerOrderForm.submit()" value="Continue to payment"/>
+			<input type="hidden" name="xUnitCost" value="" id="xUnitCost"/>		
+			<input type="hidden" name="customerId" value="" id="customerId"/>
+			<input type="button" value="Add to Cart" onclick="addProductToChart();" class="btn btn-primary moveR_20 hidden"/>	
+			<button type="button"  class="btn btn-success" id="showOrderSummary" >Continue to payment</button>
+			
 			</p>					
 			  </div>
 			</div>
@@ -114,16 +113,109 @@
 </div>
 </div>
 </body>
+<!-- Customer Order Summary Modal -->
+<div>
+<div class="modal fade"  id="customerSummaryModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Order Summary</h4>
+      </div>
+      <div class="modal-body">
+        <p>Customer Number: <span id="summaryCustomerNo"></span></p>
+        <p><b>Account Status:</b><span id="summaryCustomerStatus"></span></p>
+        <p><b>Product Information:</b><span id="summaryCustomerProduct"></span></p>
+        <p><b>Quantity:</b><span id="summaryCustomerQuantity"></span></p>
+        <p><b>Unit Cost:</b><span id="summaryCustomerUnitCost"></span></p>
+        <p><b>Total Cost:</b><span id="summaryCustomerTotalAmount"></span></p>
+        <hr />
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Edit</button>
+        <button type="button" class="btn btn-success" id="submitCustomerOrder" onclick="javascript:submitForm(document.customerOrderForm,'submitCustomerOrder')" onsubmit="return false">Submit Order</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+</div>
+
+<!-- End Customer Order Summary -->
 <script>
+function submitForm(form,action){
+	var action = action;
+	form.action = action;
+	form.submit();
+}
 $(document).ready(function(){
 	var noOfItems = $("#noOfItems").text();
 	getChartItemNumber();
-
+ 	$("#showOrderSummary").click(function(){
+ 		showOrderSummary();
+ 	});
+ 	
+ 	$("#submitCustomerOrder").click(function(){
+ 		var form = document.customerOrderForm;
+ 		var action = "submitCustomerOrder";
+ 		submitForm(form,action);
+ 		return false;
+ 	});
 });
-
+function showOrderSummary(){
+	var quantity = parseFloat($("#productQuantity").val());
+	var product = $("#product  option:selected").text();
+	var productDescription= $("#productDescription").text();
+	var unitCost = $("#unitCost").text();
+	var xUnitCost = $("#xUnitCost").val();
+	var accountStatus = $("#accountStatus").text();
+	var totalCost = (parseFloat(xUnitCost)* quantity);
+	console.log(unitCost);
+	if(OrderValidation()){
+		$("#customerSummaryModal").modal({
+			backdrop:"static"
+		});
+		$("#summaryCustomerNo").text();
+		$("#summaryCustomerProduct").text(product);
+		$("#summaryCustomerQuantity").text(quantity);
+		$("#summaryCustomerUnitCost").text(accounting.formatMoney(unitCost));
+		$("#summaryCustomerStatus").text(accountStatus);
+		$("#summaryCustomerTotalAmount").text(accounting.formatMoney(totalCost));
+	}
+}
+function OrderValidation(){
+	var product = $("#product").val();
+	if(product == "" || product == " "){
+		$("#product-error").addClass("help-text-inline-error");
+		$("#product-error").text("Select a Product!!!!")
+		$("#product").focus();
+		return;
+	}else{
+		$("#product-error").removeClass("help-text-inline-error");
+		$("#product-error").text(" ")		
+	}
+	$("form").validate({
+		onsubmit:false,
+		rules : {
+			quantity: {
+				required :true,
+				digits:true
+			}
+		},
+		messages : {
+			quantity : {
+				required: "Product Quantity is required. Enter a valid Quantity.",
+				digits: "Quantity can only be a whole number!!."
+			}
+		}
+	});
+	if(!$('form').valid())
+		 return false;
+	 return true;		
+}
 function getProductCode(form){
 	var productCode = $("#product").val();
-	if(productCode == ""){
+	if(productCode == " "){
 		$("#productDescription").text("");
 		$("#unitCost").text("");	
 		$("#productCode").val("");
@@ -139,7 +231,8 @@ function getProductCode(form){
 			success: function(results){
 				console.log(results);
 				$("#productDescription").text(results.description);
-				$("#unitCost").text(results.unitCost);
+				$("#unitCost").text(accounting.formatMoney(results.unitCost));
+				$("#xUnitCost").val(results.unitCost);
 			},
 			error :function(data){
 				console.log(data.responseText);
@@ -202,9 +295,7 @@ function populateCart(results){
 	$("#noOfItems").text(results);
 }
 
-function continueToOrderPayment(form){
-	
-}
+
 </script>
 
 </html>
