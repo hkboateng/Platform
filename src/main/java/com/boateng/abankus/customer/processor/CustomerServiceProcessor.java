@@ -25,6 +25,7 @@ import com.boateng.abankus.domain.Customer;
 import com.boateng.abankus.domain.CustomerAccount;
 import com.boateng.abankus.domain.Email;
 import com.boateng.abankus.domain.Employee;
+import com.boateng.abankus.domain.EmployeeCustomerAccount;
 import com.boateng.abankus.domain.Phone;
 import com.boateng.abankus.employees.utils.EmployeeCollection;
 import com.boateng.abankus.fields.AddressFields;
@@ -177,7 +178,12 @@ public class CustomerServiceProcessor extends AbankusBaseProcessor{
 
 		String industry = request.getParameter("customerIndustry");
 		String notes = request.getParameter("notes");
-		employeeSvcImpl.addEmployeeSalesAccount(employee, customer,industry,notes);
+		CustomerAccount customerAccount = customerServiceImpl.addEmployeeSalesAccount(employee, customer, industry, notes);
+		
+		EmployeeCustomerAccount eca = new EmployeeCustomerAccount();
+		eca.setCustomerAccount(customerAccount.getCustomerAccount());
+		eca.setEmployee(employee);
+		employeeSvcImpl.saveEmployeeCustomer(eca);
 	}
 	
 	public Set<Customer> getAllCustomers(){

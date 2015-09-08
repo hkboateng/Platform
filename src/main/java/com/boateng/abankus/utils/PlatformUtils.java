@@ -29,7 +29,7 @@ public class PlatformUtils {
 	}
 	
 
-	public static synchronized String getClientOrderNumber(){
+	public static String getClientOrderNumber(){
 		StringBuilder sbr = new StringBuilder();
 		DateTime dt = DateTime.now();
 		

@@ -6,6 +6,7 @@ import com.boateng.abankus.domain.Address;
 import com.boateng.abankus.domain.Customer;
 import com.boateng.abankus.domain.CustomerAccount;
 import com.boateng.abankus.domain.Email;
+import com.boateng.abankus.domain.Employee;
 import com.boateng.abankus.domain.Phone;
 
 public interface CustomerService {
@@ -68,4 +69,14 @@ public interface CustomerService {
 	 * @return
 	 */
 	List<Phone> findCustomerPhoneByCustomerId(int customerId);
+
+	/**
+	 * @param employee
+	 * @param customer
+	 * @param industry
+	 * @param notes
+	 * @return
+	 */
+	CustomerAccount addEmployeeSalesAccount(Employee employee,
+			Customer customer, String industry, String notes);
 }

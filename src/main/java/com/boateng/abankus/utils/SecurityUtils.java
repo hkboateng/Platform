@@ -1,6 +1,8 @@
  package com.boateng.abankus.utils;
 
+import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 
@@ -77,8 +79,46 @@ public class SecurityUtils {
 	  }
 
 
-	  public  List<Role> getAllRoles(){
-		  return authenticate.getAllRoles();
+	  public static String hashPin(String pin, String password) throws NoSuchAlgorithmException, InvalidKeySpecException{
+		  StringBuilder str = new StringBuilder(pin);
+		  str.append(password);
+
+		  generateStorngCodeHash(str.toString());
+
+		  return passwdencode().encode(password);
 	  }
+	    private static String generateStorngCodeHash(String password) throws NoSuchAlgorithmException, InvalidKeySpecException
+	    {
+	        int iterations = 1000;
+	        char[] chars = password.toCharArray();
+	        byte[] salt = getSalt().getBytes();
+	         
+	        PBEKeySpec spec = new PBEKeySpec(chars, salt, iterations, 64 * 8);
+	        SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+	        byte[] hash = skf.generateSecret(spec).getEncoded();
+	        return iterations + ":" + toHex(salt) + ":" + toHex(hash);
+	    }
+	     
+	    private static String getSalt() throws NoSuchAlgorithmException
+	    {
+	        SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
+	        byte[] salt = new byte[16];
+	        sr.nextBytes(salt);
+	        return salt.toString();
+	    }
+	     
+	    private static String toHex(byte[] array) throws NoSuchAlgorithmException
+	    {
+	        BigInteger bi = new BigInteger(1, array);
+	        String hex = bi.toString(16);
+	        int paddingLength = (array.length * 2) - hex.length();
+	        if(paddingLength > 0)
+	        {
+	            return String.format("%0"  +paddingLength + "d", 0) + hex;
+	        }else{
+	            return hex;
+	        }
+	    }
+	    
 	    
 }

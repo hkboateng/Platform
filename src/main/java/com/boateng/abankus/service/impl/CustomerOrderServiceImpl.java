@@ -32,10 +32,10 @@ public class CustomerOrderServiceImpl implements CustomerOrderService{
 	
 	@Transactional
 	@Override
-	public void saveCustomerOrder(CustomerOrder order){
+	public CustomerOrder saveCustomerOrder(CustomerOrder order){
 		Session session = sessionFactory.getCurrentSession();
 		session.save("clientorder", order);
-		
+		return order;
 	}
 	
 }

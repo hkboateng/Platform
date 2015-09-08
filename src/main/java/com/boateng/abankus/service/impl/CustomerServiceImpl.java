@@ -19,7 +19,9 @@ import com.boateng.abankus.domain.Address;
 import com.boateng.abankus.domain.Customer;
 import com.boateng.abankus.domain.CustomerAccount;
 import com.boateng.abankus.domain.Email;
+import com.boateng.abankus.domain.Employee;
 import com.boateng.abankus.domain.Phone;
+import com.boateng.abankus.employees.utils.EmployeeUtils;
 
 @Component
 
@@ -205,5 +207,21 @@ public class CustomerServiceImpl implements CustomerService {
 		return phone;
 	}
 
-
+	@Transactional
+	@Override	
+	public CustomerAccount addEmployeeSalesAccount(Employee employee,Customer customer,String industry,String notes){
+		CustomerAccount customerAccount = new CustomerAccount();
+		
+		String accountNo  = EmployeeUtils.generateAccountNumber();
+		customerAccount.setAccountNumber(accountNo);
+		customerAccount.setCustomer(customer);
+		customerAccount.setStatus("Active");
+		customerAccount.setIndustry(industry);
+		customerAccount.setNotes(notes);
+		Session session = getSessionFactory().getCurrentSession();
+		
+		session.save(customerAccount);
+		
+		return customerAccount;
+	}
 }

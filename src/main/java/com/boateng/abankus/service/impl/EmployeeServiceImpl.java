@@ -16,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.boateng.abankus.domain.Customer;
 import com.boateng.abankus.domain.CustomerAccount;
 import com.boateng.abankus.domain.Employee;
+import com.boateng.abankus.domain.EmployeeCustomerAccount;
+import com.boateng.abankus.domain.Salesemployee;
 import com.boateng.abankus.domain.Team;
 import com.boateng.abankus.domain.User;
 import com.boateng.abankus.domain.UserRole;
@@ -87,24 +89,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 		}
 	}
 
-	@Transactional
-	@Override	
-	public CustomerAccount addEmployeeSalesAccount(Employee employee,Customer customer,String industry,String notes){
-		CustomerAccount customerAccount = new CustomerAccount();
-		
-		String accountNo  = EmployeeUtils.generateAccountNumber();
-		customerAccount.setAccountNumber(accountNo);
-		customerAccount.setCustomer(customer);
-		customerAccount.setEmployee(employee);
-		customerAccount.setStatus("Active");
-		customerAccount.setIndustry(industry);
-		customerAccount.setNotes(notes);
-		Session session = getSessionFactory().getCurrentSession();
-		
-		session.save(customerAccount);
-		
-		return customerAccount;
-	}
+
 	
 	@SuppressWarnings("unchecked")
 	@Transactional
@@ -146,5 +131,23 @@ public class EmployeeServiceImpl implements EmployeeService{
 		Session session = getSessionFactory().getCurrentSession();
 						session.update("employee", employee);
 						
+	}
+	/* (non-Javadoc)
+	 * @see com.boateng.abankus.services.EmployeeService#saveEmployeeSales(com.boateng.abankus.domain.Salesemployee)
+	 */
+	@Transactional	
+	@Override
+	public Salesemployee saveEmployeeSales(Salesemployee employeeSale) {
+		Session session = getSessionFactory().getCurrentSession();
+				session.save("Salesemployee", employeeSale);
+				
+				return employeeSale;
+	}
+	
+	@Override
+	public EmployeeCustomerAccount saveEmployeeCustomer(EmployeeCustomerAccount eca){
+		Session session = getSessionFactory().getCurrentSession();
+				session.save("Employeecustomeraccount", eca);
+		return eca;
 	}
 }

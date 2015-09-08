@@ -14,9 +14,10 @@
 		<class>com.boateng.abankus.domain.Product</class>
 		<class>com.boateng.abankus.domain.Team</class>
 		<class>com.boateng.abankus.domain.CustomerOrder</class>
-		<class>com.boateng.abankus.domain.Employeesale</class>
 		<class>com.boateng.abankus.domain.Clientorder</class>
 		<class>com.boateng.abankus.domain.Orderpayment</class>
 		<class>com.boateng.abankus.domain.Paymentmethod</class>
+		<class>com.boateng.abankus.domain.EmployeeCustomerAccount</class>
+		<class>com.boateng.abankus.domain.Salesemployee</class>
 	</persistence-unit>
 </persistence>

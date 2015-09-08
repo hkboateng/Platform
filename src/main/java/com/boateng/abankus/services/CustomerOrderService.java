@@ -11,5 +11,5 @@ import com.boateng.abankus.domain.CustomerOrder;
  */
 public interface CustomerOrderService {
 
-	void saveCustomerOrder(CustomerOrder order);
+	CustomerOrder saveCustomerOrder(CustomerOrder order);
 }

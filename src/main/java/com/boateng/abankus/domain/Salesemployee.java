@@ -6,18 +6,17 @@ import java.sql.Timestamp;
 
 
 /**
- * The persistent class for the employeesales database table.
+ * The persistent class for the salesemployee database table.
  * 
  */
 @Entity
-@Table(name="employeesales")
-@NamedQuery(name="Employeesale.findAll", query="SELECT e FROM Employeesale e")
-public class Employeesale implements Serializable {
+@NamedQuery(name="Salesemployee.findAll", query="SELECT s FROM Salesemployee s")
+public class Salesemployee implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	private int employeeSalesId;
+	private int saleEmployeeId;
 
 	private Timestamp dateCreated;
 
@@ -26,17 +25,31 @@ public class Employeesale implements Serializable {
 	@JoinColumn(name="employeeId")
 	private Employee employee;
 
-	private CustomerAccount customeraccount;
+	private long clientorderId;
 
-	public Employeesale() {
+	/**
+	 * @return the clientOrder
+	 */
+	public long getClientOrder() {
+		return clientorderId;
 	}
 
-	public int getEmployeeSalesId() {
-		return this.employeeSalesId;
+	/**
+	 * @param clientOrder the clientOrder to set
+	 */
+	public void setClientOrder(long clientOrder) {
+		this.clientorderId = clientOrder;
 	}
 
-	public void setEmployeeSalesId(int employeeSalesId) {
-		this.employeeSalesId = employeeSalesId;
+	public Salesemployee() {
+	}
+
+	public int getSaleEmployeeId() {
+		return this.saleEmployeeId;
+	}
+
+	public void setSaleEmployeeId(int saleEmployeeId) {
+		this.saleEmployeeId = saleEmployeeId;
 	}
 
 	public Timestamp getDateCreated() {
@@ -55,12 +68,5 @@ public class Employeesale implements Serializable {
 		this.employee = employee;
 	}
 
-	public CustomerAccount getCustomeraccount() {
-		return this.customeraccount;
-	}
-
-	public void setCustomeraccount(CustomerAccount customeraccount) {
-		this.customeraccount = customeraccount;
-	}
 
 }
