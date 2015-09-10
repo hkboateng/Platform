@@ -234,10 +234,10 @@
   				 	</c:otherwise>
 				</c:choose>
   				 	<li>
-				  		<a href="makePayment" class=""><i class="fa fa-money moveR_20"></i>Add Customer Payment</a>  				 	
+				  		<a href="makePayment" class=""><i class="fa fa-money moveR_20"></i>Make A Payment</a>  				 	
   				 	</li>	
   				 	<li>
-  				 		<a href="viewTransaction" ><i class="fa fa-exchange moveR_20"></i>View Customer Transaction</a>
+  				 		<a href="/abankus/client/orderHistory?customerId=${customerAccount.customer.customerId}" ><i class="fa fa-exchange moveR_20"></i>View Customer Order History</a>
   				 	</li>	
   				 	<li>
   				 		<a href="createCustomerOrder"><i class="fa fa-exchange moveR_20"></i>Add New Order</a>

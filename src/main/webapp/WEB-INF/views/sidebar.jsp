@@ -17,7 +17,7 @@
 							<li><a href="#">Today's tasks</a></li>
 							<li><a href="#">Urgent</a></li>
 							<li><a href="#">Overdues</a></li>
-							<li><a href="#">Recurring</a></li>
+							<li><a href="/abankus/customers/searchForCustomer"><i class="fa fa-search  moveR_10"></i>Customer Search</a></li>
 							<li><a href="#"><span class="glyphicon glyphicon-envelope moveR_10"></span>Send Client a Message</a></li>
 						</ul>
 					</li>

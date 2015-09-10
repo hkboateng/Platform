@@ -3,6 +3,9 @@
  */
 package com.boateng.abankus.services;
 
+import java.util.List;
+
+import com.boateng.abankus.domain.Customer;
 import com.boateng.abankus.domain.CustomerOrder;
 
 /**
@@ -12,4 +15,11 @@ import com.boateng.abankus.domain.CustomerOrder;
 public interface CustomerOrderService {
 
 	CustomerOrder saveCustomerOrder(CustomerOrder order);
+	
+
+	/**
+	 * @param customerId
+	 * @return
+	 */
+	List<CustomerOrder> findAllCustomerOrderByCustomerId(int customerId);
 }

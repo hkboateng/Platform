@@ -5,6 +5,8 @@ import java.math.BigDecimal;
 
 import javax.persistence.*;
 
+import org.joda.time.DateTime;
+
 import com.boateng.abankus.customer.service.Client;
 
 import java.util.List;
@@ -94,7 +96,7 @@ public class CustomerOrder implements Client, Serializable{
 		this.customer = customer;
 	}
 
-	public String getOrderNumbere() {
+	public String getOrderNumber() {
 		return this.orderNumber;
 	}
 
@@ -129,6 +131,20 @@ public class CustomerOrder implements Client, Serializable{
 	public void setTotalAmount(BigDecimal totalAmount) {
 		this.totalAmount = totalAmount;
 	}
+	private static final int TIME_TO_CANCEL_ORDER  =1800000;
+	public boolean isOrderPending(){
 
+		DateTime dt = new DateTime(getOrderDate());
+		boolean isPending  = false;
+		DateTime sdt = dt.plusMillis(TIME_TO_CANCEL_ORDER);
+		DateTime now = DateTime.now();
+		if (!now.isAfter(sdt.getMillis())){
+			if(now.isAfter(dt.getMillis()) && now.isBefore(sdt.getMillis())){
+				isPending = true;
+				System.out.println(isPending);
+			}
+		}
 
+		return isPending;
+	}
 }

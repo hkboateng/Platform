@@ -120,5 +120,14 @@ public class CustomerOrderProcessor implements OrderService{
 		}
 		return null;
 	}
+	
+	public List<CustomerOrder>  loadAllOrderByCustomer(int customerId){
+		Customer customer = customerServiceProcessor.findCustomerByCustomerId(customerId);
+		List<CustomerOrder> orderList = null;
+		if(customer != null){
+			 orderList = customerOrderServiceImpl.findAllCustomerOrderByCustomerId(customerId);
+		}
+		return orderList;
+	}
 
 }

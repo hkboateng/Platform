@@ -24,6 +24,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.boateng.abankus.customer.processor.CustomerServiceProcessor;
 import com.boateng.abankus.domain.CustomerAccount;
+import com.boateng.abankus.domain.CustomerOrder;
 import com.boateng.abankus.domain.Employee;
 import com.boateng.abankus.domain.Product;
 import com.boateng.abankus.fields.EmployeeFields;
@@ -76,12 +77,7 @@ public class OrderController {
 	@ResponseBody
 	public String findCustomer(@RequestParam(value="accountNumber",required=true) String accountNumber,HttpServletRequest request) throws IOException{
 		session = request.getSession(false);
-		
-		//Employee employee = (Employee) request.getSession(false).getAttribute(EmployeeFields.EMPLOYEE_SESSION);
-		//if(employee != null){
-		//	logger.info("Employee ID: "+employee.getEmployeeId()+" is searching for Account Number: "+accountNumber);
-		//}
-		
+				
 		CustomerAccount account = customerServiceProcessor.findCustomerAccountByAccountNumber(accountNumber);
 		if(account == null){
 			return "Account Number is invalid";
@@ -157,6 +153,16 @@ public class OrderController {
 			return "redirect:/client/createOrders" ;
 		}
 		//customerOrderProcessor.processClientOrder(request);
-		return "";
+		return "redirect:/client/createOrders";
+	}
+	
+	@RequestMapping(value = "/orderHistory", method = RequestMethod.GET)
+	public String orderHistory(HttpServletRequest request, Model model,RedirectAttributes redirectAttributess){
+		logger.info("Viewing Customer Order history page.");
+		
+		int customerId = Integer.parseInt(request.getParameter("customerId"));
+		List<CustomerOrder> orderList = customerOrderProcessor.loadAllOrderByCustomer(customerId);
+		model.addAttribute("customerOrder", orderList);
+		return "ClientServices/OrderHistory";
 	}
 }

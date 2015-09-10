@@ -153,4 +153,9 @@ public class CustomerController {
 	public void updateCustomerAccountStatus(HttpServletRequest request){
 		System.out.println("Updating Customer Account Status");
 	}
+	
+	@RequestMapping(value="/searchForCustomer", method=RequestMethod.GET)
+	public String searchForCustomer(){
+		return "ClientServices/CustomerSearch";
+	}
 }

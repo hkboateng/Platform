@@ -167,9 +167,7 @@ public class CustomerServiceProcessor extends AbankusBaseProcessor{
 	}
 
 	public void processNewCustomer(Customer customers, Email email, Phone phone, Address address,HttpServletRequest request){
-		String username = request.getUserPrincipal().getName();
-		
-		//employeeCollection.getEmployeeCollectionByUsername(username);
+
 		Employee employee = (Employee) request.getSession(false).getAttribute(EmployeeFields.EMPLOYEE_SESSION);
 		
 		rabbitTemplate.convertAndSend(employee.toString());

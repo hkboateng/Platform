@@ -150,4 +150,13 @@ public class EmployeeServiceImpl implements EmployeeService{
 				session.save("Employeecustomeraccount", eca);
 		return eca;
 	}
+	/* (non-Javadoc)
+	 * @see com.boateng.abankus.services.EmployeeService#addEmployeeSalesAccount(com.boateng.abankus.domain.Employee, com.boateng.abankus.domain.Customer, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public CustomerAccount addEmployeeSalesAccount(Employee employee,
+			Customer customer, String industry, String notes) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
