@@ -45,7 +45,6 @@ public class AuthenticationServiceImpl  implements AuthenticationService{
 		List<User> login = new ArrayList<User>();
 		login = sessionFactory.getCurrentSession()
 				.createQuery("from User where username= :username")
-				.setCacheable(true)
 				.setParameter("username", username)
 				.list();
 		/**** Validating User's Password****/
@@ -67,8 +66,6 @@ public class AuthenticationServiceImpl  implements AuthenticationService{
 		List<Role> roles = getSessionFactory().getCurrentSession()	
 				 .createQuery("role from UserRole where username= :username")
 				 .setParameter("username", username)
-				 .setCacheable(true)
-				 .setCacheMode(CacheMode.GET)
 				 .list();
 		return roles;
 	}
@@ -145,8 +142,7 @@ public class AuthenticationServiceImpl  implements AuthenticationService{
 	public Employee findEmployeeByUserName(String username) {
 		Query userQuery = getSessionFactory().getCurrentSession()
 							.createQuery("from User where username= :username")
-							.setParameter("username", username)
-							.setCacheable(true);
+							.setParameter("username", username);
 		User user = (User) userQuery.uniqueResult();
 		
 		/** Finding Employee using username from User **/

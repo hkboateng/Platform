@@ -77,7 +77,6 @@ public class ProductServiceImpl implements ProductService{
 		Session session = sessionFactory.getCurrentSession();
 		
 		List<Product> listProducts  = session.getNamedQuery("Product.findAll")
-											.setCacheMode(CacheMode.NORMAL)
 											.list();
 
 		return listProducts;
@@ -90,7 +89,6 @@ public class ProductServiceImpl implements ProductService{
 		Session session = sessionFactory.getCurrentSession();
 		Product product = (Product) session.getNamedQuery("Product.findProductByCode")
 							.setParameter(0, productCode)
-							.setCacheMode(CacheMode.NORMAL)
 							.uniqueResult();
 		return product;
 	}

@@ -170,7 +170,7 @@ function showOrderSummary(){
 	var xUnitCost = $("#xUnitCost").val();
 	var accountStatus = $("#accountStatus").text();
 	var totalCost = (parseFloat(xUnitCost)* quantity);
-	console.log(unitCost);
+
 	if(OrderValidation()){
 		$("#customerSummaryModal").modal({
 			backdrop:"static"

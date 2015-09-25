@@ -24,7 +24,7 @@
 					<li>
 						<h3><span class="fa fa-money fa-lg"></span>Transaction</h3>
 						<ul>
-							<li><a href="#">Current Month</a></li>
+							<li><a href="/abankus/customers/makePaymentSearch">Make Payment</a></li>
 							<li><a href="#">Current Week</a></li>
 							<li><a href="#">Previous Month</a></li>
 							<li><a href="#">Previous Week</a></li>

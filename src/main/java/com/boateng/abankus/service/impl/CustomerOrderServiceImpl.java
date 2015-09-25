@@ -6,17 +6,12 @@ package com.boateng.abankus.service.impl;
 
 import java.util.List;
 
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
-
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.codec.Hex;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.boateng.abankus.domain.Customer;
 import com.boateng.abankus.domain.CustomerOrder;
 import com.boateng.abankus.services.CustomerOrderService;
 
@@ -57,6 +52,19 @@ public class CustomerOrderServiceImpl implements CustomerOrderService{
 												.list();
 		 
 		return  customerOrderList;
+	}
+	/* (non-Javadoc)
+	 * @see com.boateng.abankus.services.CustomerOrderService#findCustomerOrderByOrderNumber(java.lang.String)
+	 */
+	@SuppressWarnings("unchecked")
+	@Transactional	
+	@Override
+	public List<CustomerOrder> findCustomerOrderByOrderNumber(String orderNumber) {
+		Session session = getSessionFactory().getCurrentSession();
+		List<CustomerOrder> customerOrderList = session.createQuery("from CustomerOrder co where co.orderNumber = :orderNumber")
+		.setParameter("orderNumber", orderNumber)
+		.list();
+		return customerOrderList;
 	}
 
 	

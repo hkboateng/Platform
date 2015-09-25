@@ -19,5 +19,6 @@
 		<class>com.boateng.abankus.domain.Paymentmethod</class>
 		<class>com.boateng.abankus.domain.EmployeeCustomerAccount</class>
 		<class>com.boateng.abankus.domain.Salesemployee</class>
+		<class>com.boateng.abankus.domain.Authenticatecustomer</class>
 	</persistence-unit>
 </persistence>

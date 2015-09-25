@@ -147,4 +147,10 @@ public class CustomerOrder implements Client, Serializable{
 
 		return isPending;
 	}
+	
+	public  String convertOrderDate(){
+		DateTime date = new DateTime(getOrderDate());
+
+		return date.toString("MMMM d yyyy");
+	}
 }

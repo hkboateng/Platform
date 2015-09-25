@@ -12,7 +12,9 @@ import org.joda.time.DateTime;
 import com.boateng.abankus.customer.service.Client;
 import com.boateng.abankus.domain.CustomerOrder;
 import com.boateng.abankus.domain.CustomerBilling;
+import com.boateng.abankus.domain.Email;
 import com.boateng.abankus.entity.validation.CustomerOrderUtils;
+import com.boateng.abankus.fields.EmailFields;
 import com.boateng.abankus.utils.PlatformUtils;
 
 /**
@@ -34,6 +36,14 @@ public class FactoryImpl extends Factory {
 		return client;
 	}
 
+	public Email addEmail(String emailAddress,String emailType){
+		Email email = new Email(emailAddress);
+		email.setEmailType(emailType);
+		if(email.getEmailType() == null || email.getEmailType().isEmpty()){
+			email.setEmailType(EmailFields.PRIMARY_EMAIL);
+		}
+		return email;
+	}
 
 	/**
 	 * @param request

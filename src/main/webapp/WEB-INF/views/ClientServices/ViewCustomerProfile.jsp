@@ -17,7 +17,7 @@
 <link href="<c:url value="/resources/css/platform.css" />" rel="stylesheet"/>
 <link href="<c:url value="/resources/css/datepicker.css" />" rel="stylesheet"/>
 <script src="<c:url value="/resources/js/jquery.js" />" type="text/javascript"></script>
-
+<script src="<c:url value="/resources/js/platform-functions.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/bootstrap.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/application.js" />" type="text/javascript"></script>
 </head>
@@ -210,7 +210,7 @@
  				 	</c:choose>				  	
 				  									 
  				 </div>
-  				 <div class="col-xs-6 col-md-4">
+  				 <div class="col-xs-12 col-md-4">
   				 <div id="customerDetailBlock">
  				 	<div>
 					  	<ul class="navigation-linear">
@@ -234,13 +234,13 @@
   				 	</c:otherwise>
 				</c:choose>
   				 	<li>
-				  		<a href="makePayment" class=""><i class="fa fa-money moveR_20"></i>Make A Payment</a>  				 	
+				  		<a href="javascript:makePayment('makePayment',document.makeCustomerPayment);" class=""><i class="fa fa-money moveR_20"></i>Make A Payment</a>  				 	
   				 	</li>	
   				 	<li>
   				 		<a href="/abankus/client/orderHistory?customerId=${customerAccount.customer.customerId}" ><i class="fa fa-exchange moveR_20"></i>View Customer Order History</a>
   				 	</li>	
   				 	<li>
-  				 		<a href="createCustomerOrder"><i class="fa fa-exchange moveR_20"></i>Add New Order</a>
+  				 		<a href="/abankus/client/createOrders"><i class="fa fa-exchange moveR_20"></i>Add New Order</a>
   				 	</li>			
 				</ul>
   				 </div>		  	
@@ -250,8 +250,10 @@
 
 	
 	          <sf:form name="frmUpdateAccountStatus" method="post" action="updateAccountStatus">
-		          <input type="hidden" value="${customer.customerId }" name="customerId"/>
-	          	  <input type="hidden" value="${customer.customerNumber }" name="customerName"/>	          
+	          	  <input type="hidden" value="${customer.customerNumber }" name="customerNumber"/>	          
+	          </sf:form>
+	          <sf:form name="makeCustomerPayment" method="post" action="">
+	          <input type="hidden" value="${customer.customerNumber }" name="customerNumber"/>
 	          </sf:form>			
 			</c:if>
 	<!-- Modal -->
@@ -272,7 +274,15 @@
     </div>
   </div>
 </div>  
-		  
+	<script>
+	function makePayment(url,form){
+		if(isEmpty(url) || !isAlphaNumeric(url)){
+			return true;
+		}
+		form.action="/abankus/customers/"+url
+		form.submit();
+	}
+	</script>	  
 
 
           

@@ -45,6 +45,7 @@ public class CustomerController {
 	public static final String CUSTOMERS_COMPANY = "company";
 
 	private static final Log log = LogFactory.getLog(CustomerController.class);
+	
 	@Autowired(required=true)
 	@Qualifier(value="customerServiceImpl")
 	private CustomerService customerServiceImpl;
@@ -145,7 +146,7 @@ public class CustomerController {
 				isUnique = true;
 			}
 		}
-		log.info("Customer is "+emailAddress+" is unique: "+isUnique);
+		log.info("Customer is "+emailAddress+" is unique?: "+isUnique);
 		return isUnique;
 	}
 	
@@ -158,4 +159,16 @@ public class CustomerController {
 	public String searchForCustomer(){
 		return "ClientServices/CustomerSearch";
 	}
+	@RequestMapping(value = "/makePayment", method = RequestMethod.POST)
+	public String makePayment(HttpServletRequest request){
+		
+		return "ClientTransaction/CustomerPayment";
+	}	
+	
+	@RequestMapping(value = "/makePaymentSearch", method = RequestMethod.GET)
+	public String makePaymentSearch(){
+		return "ClientTransaction/CustomerPaymentSearch";
+	}		
+	
+
 }

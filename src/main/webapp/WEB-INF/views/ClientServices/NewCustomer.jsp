@@ -76,12 +76,12 @@
 						<div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
 						<label>
 						First Name:</label>
-						<input type="text" name="firstname" id="firstname" class="form-control" placeholder="First Name"/>
+						<input type="text" name="firstname" id="firstname" class="form-state" placeholder="First Name"/>
 						</div>
 						<div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
 						<label for="lastname">
 						Last Name:</label>
-						<input type="text" name="lastname" id="lastname" placeholder="Last Name" class="form-control"/>	
+						<input type="text" name="lastname" id="lastname" placeholder="Last Name" class="form-state"/>	
 						</div>
 						</div>
 					<div class="row">
@@ -94,25 +94,25 @@
 						<script>typeOfIdentification();</script>
 						<div class="clear"></div>
 						<label for="IdNumber" >Identification Number:</label>	
-						<input type="text" name="IdNumber" id="IdNumber" placeholder="Id Number" class="form-control"/>			
+						<input type="text" name="IdNumber" id="IdNumber" placeholder="Id Number" class="form-state"/>			
 					</div>					
 					</div>
 					<div class="row">	
 					<div class="col-sm-12 col-md-12">			
 					<label>	Company or Organization Name: (Optional)</label>
-					<input type="text" name="company_name" id="company_name" class="form-control" placeholder="Company Name"/>	
+					<input type="text" name="company_name" id="company_name" class=" form-state" placeholder="Company Name"/>	
 					</div>				
 					<div class="col-sm-12 col-md-12">
 					<label for="address1">Address 1:</label>
-					<input type="text" name="address1" id="address1" placeholder="Postal Address"  class="form-control"/>
+					<input type="text" name="address1" id="address1" placeholder="Postal Address"  class="form-state"/>
 					</div>
 					<div class="col-sm-12 col-md-12">
 					<label for="address2"> Address 2:</label>
-					<input type="text" name="address2" placeholder="Optional" class="form-control" id="address2"/>				
+					<input type="text" name="address2" placeholder="Optional" class=" form-state" id="address2"/>				
 					</div>					
 					<div class="col-sm-12 col-md-4">
 						<label for="city" >City:</label>
-						<input type="text" class="form-control" id="city" name="city">					
+						<input type="text" class="form-state" id="city" name="city">					
 					</div>
 					<div class="col-sm-12 col-md-4">
 						<label for="state" >State:</label>
@@ -120,11 +120,11 @@
 					</div>
 					<div class="col-xs-6 col-sm-6 col-md-4">
 						<label for="zip" >Zip Code:</label>
-						<input type="text" class="form-control" id="zipcode" name="zipcode" size="6" maxlength="5">				
+						<input type="text" class="form-state" id="zipcode" name="zipcode" size="6" maxlength="5">				
 					</div>
 					<div class="col-xs-6 col-sm-6 col-md-6">
 						<label for="phoneNumber">Phone Number:</label>	
-						<input class="form-control "  id="phoneNumber" name="phoneNumber" type="text" placeholder="(Area Code)XXX-XXXX">
+						<input class="form-state "  id="phoneNumber" name="phoneNumber" type="text" placeholder="(Area Code)XXX-XXXX">
 					<div class="spaceBelow_10">
 						<label>
 							<input type="radio" name="phoneType" id="homePhone" value="homePhone" checked/> Home Phone
@@ -138,14 +138,14 @@
 
 				  <div class="col-xs-6 col-sm-6">
 				  	<label for="emailAddress">Email Address:</label><span id="email-error" class="help-text-inline"></span>
-				   	<input type="email" id="emailAddress" name="emailAddress" class="form-control" placeholder="Email Address"  onblur="javascript:isEmailUnique(this.value);">						
+				   	<input type="email" id="emailAddress" name="emailAddress" class="form-state" placeholder="Email Address"  onblur="javascript:isEmailUnique(this.value);">						
 								  
 				  </div>
 					</div>	
 				  <div class="row">
 						<div class="col-xs-6 col-sm-6">
 						<label for="phoneNumber">Account Status:</label>	
-							<select name="accountStatus" class="form-control">
+							<select name="accountStatus" class="form-state">
 								<option value="">Select Account Status</option>
 								<option value="active">Active</option>
 								<option value="prospect" selected>Prospective</option>
@@ -158,7 +158,7 @@
 						</div>
 						<div class="col-xs-6 col-sm-6">
 						<label for="customerIndustry">Industry</label>
-							<select name="customerIndustry" class="form-control">
+							<select name="customerIndustry" class="form-state">
 								<option value="">Select Industry</option>
 								<option value="financial">Financial Services</option>
 								<option value="retail">Retail</option>
@@ -168,7 +168,7 @@
 						</div>
 						<div class="col-xs-12 col-sm-12 col-md-12">
 						<label for="customerNotes">Notes:</label>
-						<textarea name="notes" id="customerNotes" rows="4" class="form-control"></textarea>
+						<textarea name="notes" id="customerNotes" rows="4" class="form-state"></textarea>
 						</div>					
 
 

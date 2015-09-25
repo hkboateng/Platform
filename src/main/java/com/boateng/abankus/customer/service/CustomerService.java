@@ -79,4 +79,11 @@ public interface CustomerService {
 	 */
 	CustomerAccount addEmployeeSalesAccount(Employee employee,
 			Customer customer, String industry, String notes);
+
+	/**
+	 * @param pin
+	 * @param customer
+	 * @throws Exception
+	 */
+	void saveCustomerPin(String pin, Customer customer) throws Exception;
 }

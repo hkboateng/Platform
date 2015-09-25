@@ -61,7 +61,7 @@ public class CustomerServiceProcessor extends AbankusBaseProcessor{
     @Autowired
     private volatile RabbitTemplate rabbitTemplate;
     
-	ExecutorService executorService = Executors.newFixedThreadPool(10);
+	//ExecutorService executorService = Executors.newFixedThreadPool(10);
 	
 	public Email addEmail(String emailAddress,String emailType){
 		Email email = new Email(emailAddress);
@@ -195,6 +195,15 @@ public class CustomerServiceProcessor extends AbankusBaseProcessor{
 		return customers;
 	}
 	
+	public Customer findCustomerByCustomerNumber(String number){
+		if(!StringUtils.isNoneBlank(number) && !StringUtils.isNotEmpty(number)){
+			return null;
+		}
+		
+		Customer customer = customerServiceImpl.findCustomerByCustomerNumber(number);
+		
+		return customer;		
+	}
 	public Customer findCustomerByCustomerId(int Id){
 		Customer customer = customerServiceImpl.findCustomerByCustomerId(Id);
 		
@@ -212,6 +221,9 @@ public class CustomerServiceProcessor extends AbankusBaseProcessor{
 	}
 	
 	public CustomerAccount findCustomerAccountByCustomerNumber(int customerId){
+		if(customerId < 1){
+			return null;
+		}
 		CustomerAccount customerAccount = customerServiceImpl.findCustomerAccountByCustomerId(customerId);
 		
 		return customerAccount;
@@ -255,4 +267,6 @@ public class CustomerServiceProcessor extends AbankusBaseProcessor{
 		}		
 		return phoneList;
 	}
+	
+
 }

@@ -35,6 +35,12 @@ label.error {
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
           box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
 }
+.error {
+  color: #de2c3b;
+    border-color: #a94442;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+}
 .custom-text{
 	line-height:1.5em;
 	font-size:14px;
@@ -539,7 +545,65 @@ text-decoration:none;
   border-radius: 0;
   outline: none;
   margin-bottom:20px;
+    height: 34px;
+letter-spacing:2px;  
 }
 .platform_form-block{
 	display:block;
+}
+.form-state{
+  font-family:"Raleway","Helvetica Neue", Helvetica, Tahoma, sans-serif;
+  font-size: 1em;
+  box-shadow: none;
+  padding: 0.3em 0.35em;
+  line-height: 1.5em;
+  border-radius: 0;
+    height: 34px;
+  outline: none;
+  margin-bottom:20px;
+  letter-spacing:2px;	
+  display:block;	
+  width:100%;
+}
+textarea.form-state {
+  height: auto;
+}
+select#paymentType{
+		   background: transparent;
+		   border: 1px solid #000;
+		   font-size: 14px;
+		   height: 29px;
+		   letter-spacing:2px;
+		   padding: 5px; /* If you add too much padding here, the options won't show in IE */
+		   width: 268px;
+}
+label{
+		font-size: 13px;
+		letter-spacing:1px;
+}
+.platform-alert{
+	padding:0.5em;
+	background: transparent;
+	line-height: 1.5em;
+	margin-bottom:20px;
+}
+.platform-alert-caution{
+	background-color:#DC143C;
+	color:#fff;
+	text-align:center;
+}
+.width-50{
+	width:48%;
+}
+.width-30{
+	width:28%;
+}
+.width-100{
+	width:98%;
+}
+.width-70{
+	width:68%;
+}
+.width-75{
+	width:73%;
 }

@@ -61,7 +61,9 @@ public class PlatformException extends Exception {
 	 */
 	public PlatformException(Throwable cause) {
 		super(cause);
-		log.warn(cause);
+		log.warn(cause.getMessage());
+		cause.printStackTrace();
+
 	}
 
 	

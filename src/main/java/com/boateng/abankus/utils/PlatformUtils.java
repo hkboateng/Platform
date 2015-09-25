@@ -43,5 +43,9 @@ public class PlatformUtils {
 	}
 	
 
+	public static DateTime convertUnixTime(String date){
+		return DateTime.parse(date).toDateTime();
+	}
+
 
 }

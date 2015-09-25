@@ -38,13 +38,6 @@ public class CustomerAccount implements Serializable {
 
 	private Timestamp dateCreate;
 
-	//bi-directional many-to-one association to Customer
-	@NotNull
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JsonBackReference
-	@Cascade(value=org.hibernate.annotations.CascadeType.MERGE)
-	@JoinColumn(name="employeeId", referencedColumnName="employeeId")	
-	private Employee employee;
 
 	@NotNull
 	private String status;
@@ -108,19 +101,6 @@ public class CustomerAccount implements Serializable {
 		this.customer = customer;
 	}
 
-	/**
-	 * @return the employee
-	 */
-	public Employee getEmployee() {
-		return employee;
-	}
-
-	/**
-	 * @param employee the employee to set
-	 */
-	public void setEmployee(Employee employee) {
-		this.employee = employee;
-	}
 
 	/**
 	 * @return the notes

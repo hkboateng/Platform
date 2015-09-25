@@ -115,7 +115,6 @@ public class ProductServiceProcessor {
 			
 		}
 		customerProductMap.put(customerAccount, listProducts);
-		System.out.println(customerProductMap.size());
 		session.setAttribute("CUSTOMER_ORDER_LIST", customerProductMap);
 	}
 

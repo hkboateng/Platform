@@ -19,14 +19,6 @@ import com.boateng.abankus.fields.EmployeeFields;
  */
 public abstract class PlatformAbstract {
 	private static final Logger logger = LoggerFactory.getLogger(PlatformAbstract.class);
-	
-	private HttpSession session;
-	
-	private Employee employee;
-	
-	public void log(HttpServletRequest request){
-		
-	employee = (Employee) session.getAttribute(EmployeeFields.EMPLOYEE_SESSION);
-	
-	}
+
+
 }

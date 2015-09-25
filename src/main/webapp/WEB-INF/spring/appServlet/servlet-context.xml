@@ -8,16 +8,14 @@
 	xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:rabbit="http://www.springframework.org/schema/rabbit"
 	xmlns:security="http://www.springframework.org/schema/security"
-	xmlns:cache="http://www.springframework.org/schema/cache"
-	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
-		http://www.springframework.org/schema/rabbit http://www.springframework.org/schema/rabbit/spring-rabbit.xsd
-		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.1.xsd
+	xsi:schemaLocation="http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.1.xsd
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
-		http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-4.1.xsd
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+		http://www.springframework.org/schema/rabbit http://www.springframework.org/schema/rabbit/spring-rabbit.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.8.xsd
-		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
 	
@@ -70,7 +68,6 @@
             </beans:props>
         </beans:property>
     </beans:bean>
-    <cache:annotation-driven />
     <context:component-scan base-package="com.boateng.abankus" />
 
 
@@ -80,8 +77,7 @@
 			host="localhost"
 			port="5672"
 			username="guest"
-			password="guest"
-			connection-cache-size="25"/>
+			password="guest"/>
 	<rabbit:template id="rabbitTemplate" connection-factory="connectionFactory" exchange="abankusPlatform" routing-key="platform"/>
 	
 	<rabbit:admin id="amqpAdmin" connection-factory="connectionFactory"/>
@@ -123,6 +119,8 @@
     
     <beans:bean id="productController" class="com.boateng.abankus.controller.ProductController" />
     
+    <beans:bean id="paymentController" class="com.boateng.abankus.controller.PaymentController" />
+    
 	<beans:bean id="employeeSvcImpl" class="com.boateng.abankus.service.impl.EmployeeServiceImpl"/>
 	
 	<beans:bean id="customerServiceProccessor" class="com.boateng.abankus.customer.processor.CustomerServiceProcessor"/>
@@ -136,6 +134,7 @@
 	<beans:bean id="customerServiceImpl" class="com.boateng.abankus.service.impl.CustomerServiceImpl">
 		<beans:property name="sessionFactory" ref="sessionFactory" />
 	</beans:bean>
+
 
 	<beans:bean id="customerOrderServiceImpl" class="com.boateng.abankus.service.impl.CustomerOrderServiceImpl">
 		<beans:property name="sessionFactory" ref="sessionFactory" />

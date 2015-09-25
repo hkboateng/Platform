@@ -27,12 +27,6 @@
 			</headers>
 			<csrf/>
     </http>
-
-	<!-- Security Beans -->
-
-	
-	<beans:bean id="securityEmployeeUtils" class="com.boateng.abankus.security.utils.SecurityEmployeeUtils"/>
-	<!-- End Security Beans -->
 	
 	<jee:jndi-lookup id="dataSource" jndi-name="jdbc/platformDB"/>
     <authentication-manager>

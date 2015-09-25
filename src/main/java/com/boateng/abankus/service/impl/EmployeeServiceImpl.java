@@ -94,18 +94,15 @@ public class EmployeeServiceImpl implements EmployeeService{
 	@SuppressWarnings("unchecked")
 	@Transactional
 	@Override
-	@Cacheable(value="allEmployee")
 	public List<Employee> getAllEmployee(){
 		Session session = getSessionFactory().getCurrentSession();
 		List<Employee> listEmployee = 	session.createQuery("From Employee")
-						.setCacheMode(CacheMode.NORMAL)
 						.list();
 		
 		return listEmployee;
 	}
 	
 	@Transactional
-	@Cacheable(value="employee" ,key="#employeeId")
 	public Employee getEmployeeById(int employeeId){
 		if(employeeId < 1){
 			log.warn("Employee Id is Null.");
@@ -144,6 +141,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 				return employeeSale;
 	}
 	
+	@Transactional
 	@Override
 	public EmployeeCustomerAccount saveEmployeeCustomer(EmployeeCustomerAccount eca){
 		Session session = getSessionFactory().getCurrentSession();

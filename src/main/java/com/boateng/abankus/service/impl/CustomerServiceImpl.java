@@ -16,12 +16,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.boateng.abankus.customer.service.CustomerService;
 import com.boateng.abankus.domain.Address;
+import com.boateng.abankus.domain.Authenticatecustomer;
 import com.boateng.abankus.domain.Customer;
 import com.boateng.abankus.domain.CustomerAccount;
 import com.boateng.abankus.domain.Email;
 import com.boateng.abankus.domain.Employee;
 import com.boateng.abankus.domain.Phone;
 import com.boateng.abankus.employees.utils.EmployeeUtils;
+import com.boateng.abankus.utils.SecurityUtils;
 
 @Component
 
@@ -56,13 +58,15 @@ public class CustomerServiceImpl implements CustomerService {
 	public Customer addNewCustomer(Customer customers,Email email, Phone phone,Address address){
 		try{
 			Session session = getSessionFactory().getCurrentSession();
-					Serializable i = session.save(customers);
+					session.save(customers);
 					email.setCustomer(customers);
 					phone.setCustomer(customers);
 					address.setCustomer(customers);
+					Authenticatecustomer auth = addCustomerAuthentication(customers);
 					session.save(email);
 					session.save(address);
 					session.save(phone);
+					session.save(auth);
 					session.flush();
 					return customers;
 		}catch(Exception e){
@@ -71,6 +75,21 @@ public class CustomerServiceImpl implements CustomerService {
 		}
 	}
 	
+	/**
+	 * @param customers
+	 * @throws Exception 
+	 */
+	private Authenticatecustomer addCustomerAuthentication(Customer customers) throws Exception {
+		String pin = SecurityUtils.generateCustomerPIN();
+		System.out.println("Pin Number is: "+pin);
+		Authenticatecustomer auth = new Authenticatecustomer();
+		auth.setCustomer(customers);
+		String encryptedPIN = SecurityUtils.encode(pin);
+		auth.setPin(encryptedPIN);	
+		return auth;
+		
+	}
+
 	@Transactional	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -78,7 +97,6 @@ public class CustomerServiceImpl implements CustomerService {
 		Session session = getSessionFactory().getCurrentSession();
 		List<Customer> list = session.createQuery("from Customer where customerNumber =?")
 				.setParameter(0, customerNo)
-				.setCacheable(true)
 				.list();
 		
 		if(list.size() > 0){
@@ -128,7 +146,6 @@ public class CustomerServiceImpl implements CustomerService {
 		Session session = getSessionFactory().getCurrentSession();
 		CustomerAccount customerAccount = (CustomerAccount) session.createQuery("From CustomerAccount where accountNumber =?")
 						.setParameter(0, accountNumber)
-						.setCacheMode(CacheMode.NORMAL)
 						.uniqueResult();
 						
 		return customerAccount;
@@ -211,17 +228,28 @@ public class CustomerServiceImpl implements CustomerService {
 	@Override	
 	public CustomerAccount addEmployeeSalesAccount(Employee employee,Customer customer,String industry,String notes){
 		CustomerAccount customerAccount = new CustomerAccount();
-		
+		Session session = getSessionFactory().getCurrentSession();
 		String accountNo  = EmployeeUtils.generateAccountNumber();
 		customerAccount.setAccountNumber(accountNo);
 		customerAccount.setCustomer(customer);
 		customerAccount.setStatus("Active");
 		customerAccount.setIndustry(industry);
 		customerAccount.setNotes(notes);
-		Session session = getSessionFactory().getCurrentSession();
 		
 		session.save(customerAccount);
 		
 		return customerAccount;
+	}
+	
+	@Transactional
+	@Override
+	public void saveCustomerPin(String pin,Customer customer) throws Exception{
+		Session session = getSessionFactory().getCurrentSession();
+		Authenticatecustomer auth = new Authenticatecustomer();
+		auth.setCustomer(customer);
+		String encryptedPIN = SecurityUtils.encode(pin);
+		auth.setPin(encryptedPIN);
+		
+		session.save(auth);
 	}
 }

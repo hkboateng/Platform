@@ -20,9 +20,10 @@ public class Paymentmethod implements Serializable {
 	private String paymentType;
 
 	//bi-directional many-to-one association to Customer
+
 	@ManyToOne
-	@JoinColumn(name="customerId")
-	private Customer customer;
+	@JoinColumn(name="clientOrderId")
+	private CustomerOrder customerOrder;
 
 	public Paymentmethod() {
 	}
@@ -43,12 +44,12 @@ public class Paymentmethod implements Serializable {
 		this.paymentType = paymentType;
 	}
 
-	public Customer getCustomer() {
-		return this.customer;
+	public CustomerOrder getCustomer() {
+		return this.customerOrder;
 	}
 
-	public void setCustomer(Customer customer) {
-		this.customer = customer;
+	public void setCustomer(CustomerOrder customer) {
+		this.customerOrder = customer;
 	}
 
 	public boolean isPaymentTypeCash(){

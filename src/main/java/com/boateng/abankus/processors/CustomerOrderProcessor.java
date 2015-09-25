@@ -7,11 +7,14 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.boateng.abankus.customer.processor.CustomerServiceProcessor;
+import com.boateng.abankus.customer.service.CustomerService;
 import com.boateng.abankus.domain.Customer;
 import com.boateng.abankus.domain.CustomerOrder;
 import com.boateng.abankus.domain.Employee;
@@ -23,7 +26,6 @@ import com.boateng.abankus.fields.EmployeeFields;
 import com.boateng.abankus.services.CustomerOrderService;
 import com.boateng.abankus.services.EmployeeService;
 import com.boateng.abankus.services.OrderService;
-import com.boateng.abankus.utils.PlatformUtils;
 
 /**
  * @author hkboateng
@@ -41,22 +43,12 @@ public class CustomerOrderProcessor implements OrderService{
 
 	@Autowired
 	private CustomerServiceProcessor customerServiceProcessor;
-	
-	private String quantity;
-	
-	private String productCode;
-	
-	private String productname;
-	
-	private String unitCost = null;
-	
-	private String customerId = null;
-	
-	private String orderNumber;
-	
+
+	@Autowired
+	private CustomerService customerServiceImpl;
 	
 	public CustomerOrderProcessor(){
-		this.orderNumber = PlatformUtils.getClientOrderNumber();
+		//this.orderNumber = PlatformUtils.getClientOrderNumber();
 	}
 	public CustomerOrderProcessor(HttpServletRequest request){
 
@@ -129,5 +121,26 @@ public class CustomerOrderProcessor implements OrderService{
 		}
 		return orderList;
 	}
+	/**
+	 * This method is used to retierve all customer Order's that are unpaid.
+	 */
+	public void customerOrderPayment(HttpServletRequest request){
+		String cust = request.getParameter("customerNumber");
+		List<CustomerOrder> orderList = null;
+		Customer customer = customerServiceImpl.findCustomerByCustomerNumber(cust);
+		
+		if(customer != null){
+			 orderList = loadAllOrderByCustomer(customer.getCustomerId());
+		}
+	}
+	
+	public List<CustomerOrder>  loadAllOrderByCustomerNumber(String customerNumber){
+		if(StringUtils.isBlank(customerNumber)){
+			return null;
+		}
+		List<CustomerOrder> orderList = customerOrderServiceImpl.findCustomerOrderByOrderNumber(customerNumber);
 
+		
+		return orderList;
+	}
 }

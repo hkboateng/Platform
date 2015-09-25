@@ -24,10 +24,35 @@
 			<hr  class="line1"/>
 			<div id="orderSummary">
 			<c:if test="${not empty customerOrder }">
+			<table class="table">
+				<thead>
+					<tr>
+						<th></th>
+						<th>Date:</th>
+						<th>Product Code</th>
+						<th>Sale Pending?</th>
+						<th>Total Amount:</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
 				<c:forEach items="${customerOrder }" var="customerOrderList">
-					<li>${customerOrderList.productCode}</li>
-					<p>${customerOrderList.isOrderPending()}</p>
-				</c:forEach>
+					<tr>
+						<td id="tableId">
+						  <label for="tableId">
+						    <input type="radio" name="blankRadio" id="blankRadio1" value="${customerOrderList.getOrderNumber()  }" aria-label="...">
+						  </label>
+						</td>
+						<td>${customerOrderList.convertOrderDate()}</td>
+						<td>${customerOrderList.getProductCode()}</td>
+						<td>${customerOrderList.isOrderPending()}</td>
+						<td>$ ${customerOrderList.getTotalAmount()}</td>
+						<td></td>
+					</tr>
+				</c:forEach>				
+				</tbody>			
+
+			</table>
 			</c:if>
 			<c:if test="${empty customerOrder }">
 			<div class="alert alert-success" role="alert">
@@ -36,6 +61,8 @@
 				
 				<button type="button" class="btn btn-success center-block " onclick="javascript:pushToURL('clients/createOrder')">Add Order for Customer<i class="fa fa-chevron-right moveL_30"></i></button>
 			</c:if>
+			<hr>
+			<button type="button" class="btn btn-primary">Make Payment</button>
 			</div>
 			</div>
 		</div>

@@ -22,4 +22,11 @@ public interface CustomerOrderService {
 	 * @return
 	 */
 	List<CustomerOrder> findAllCustomerOrderByCustomerId(int customerId);
+
+
+	/**
+	 * @param customerNumber
+	 * @return
+	 */
+	List<CustomerOrder> findCustomerOrderByOrderNumber(String customerNumber);
 }

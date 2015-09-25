@@ -81,7 +81,6 @@ $(document).ready(function(){
 function populateOrderForm(results){
 	$("#resultHeading").removeClass("hidden");
 	$("#customerOrderForm").removeClass("hidden");
-	console.log(results);
 	$.each(results,function(index,row){
 		$("#customerName").text(results.customer.firstname+" "+results.customer.lastname);
 		$("#clientFullName").text(results.accountNumber);
@@ -104,3 +103,34 @@ function isCharacter(word){
 	return $.isNumeric(word);
 }
 
+function isEmpty(str){
+    return !str.replace(/^\s+/g, '').length; // boolean (`true` if field is empty)
+}
+function paymentConfirmation(form){
+	
+	var accountnumber = getElementById("accountNumber") ;
+	var paymentamount = getElementById("paymentAmount");
+	var paymenttype = getElementById("paymentType");
+	if(isEmpty(paymentamount.value)){
+		$("#paymentMessage").addClass('platform-alert-caution');
+		getElementById("paymentMessage").innerHTML = "Payment Amount cannot by empty.";
+	}else{
+		getElementById("paymentMessage").innerHTML = "";
+		$("#paymentMessage").removeClass('platform-alert-caution');
+	}
+}
+function showPaymentDetails(select){
+	if(select.value == "installmentPayment"){
+		$("#paymentDetails").removeClass('hidden');
+	}else{
+		$("#paymentDetails").addClass('hidden');
+	}
+}
+
+function showBankInfoDiv(select){
+	if(select.value === "check"){
+		$("#bankInfoDiv").removeClass('hidden');
+	}else{
+		$("#bankInfoDiv").addClass('hidden');
+	}
+}

@@ -8,18 +8,25 @@ import com.datastax.driver.core.Session;
 
 //@Configuration
 public class CassandraClient {
+	/**
+	 * 
+	 */
+	public static final String HOSTNAME = "127.0.0.1";
+
 	private Cluster cluster;
 	
 	private Session session;
 	public void connect(){
-		cluster = Cluster.builder().addContactPoint("127.0.0.1").build();
-	
+		cluster = Cluster.builder().addContactPoint(HOSTNAME).build();
+	/**
 		Metadata metadata = cluster.getMetadata();
-		//System.out.println("Key Space is.."+metadata.getKeyspace("platformGH").asCQLQuery());
+		
 	    for ( Host host : metadata.getAllHosts() ) {
 	         System.out.printf("Datatacenter: %s; Host: %s; Rack: %s\n",
 	               host.getDatacenter(), host.getAddress(), host.getRack());
-	      }		
+	      }	
+	      **/
+		cluster.connect();
 	}
 	
 	public void close() {

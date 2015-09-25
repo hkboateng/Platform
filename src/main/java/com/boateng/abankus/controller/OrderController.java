@@ -42,7 +42,6 @@ import com.google.gson.Gson;
  */
 
 @Controller
-@RequestMapping("/client")
 public class OrderController {
 
 	private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
@@ -62,7 +61,7 @@ public class OrderController {
 		
 	}
 	
-	@RequestMapping(value = "/createOrders", method = RequestMethod.GET)
+	@RequestMapping(value = "/client/createOrders", method = RequestMethod.GET)
 	public ModelAndView createOrder(){
 		modelView = new ModelAndView();
 		
@@ -73,7 +72,7 @@ public class OrderController {
 		return modelView;
 	}
 	
-	@RequestMapping(value = "/findCustomer", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/client/findCustomer", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public String findCustomer(@RequestParam(value="accountNumber",required=true) String accountNumber,HttpServletRequest request) throws IOException{
 		session = request.getSession(false);
@@ -93,7 +92,7 @@ public class OrderController {
 	}
 
 	
-	@RequestMapping(value = "/addProductToCart", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/client/addProductToCart", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public String addProductToCart(@RequestParam(value="productCode",required=true) String productCode,@RequestParam(value="customerAccount",required=true) String customerAccount,HttpServletRequest request){
 		session = request.getSession(false);
@@ -110,7 +109,7 @@ public class OrderController {
 		return String.valueOf(numberOfItems);
 	}
 	
-	@RequestMapping(value = "/getNumberInChart", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/client/getNumberInChart", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public int getNumberInChart(HttpServletRequest request){
 		session = request.getSession(false);
@@ -122,12 +121,12 @@ public class OrderController {
 		return numberOfItems;
 	}
 	
-	@RequestMapping(value = "/addCustomerOrder", method = RequestMethod.POST)
+	@RequestMapping(value = "/client/addCustomerOrder", method = RequestMethod.POST)
 	public void addCustomerOrder(HttpServletRequest request, Model model){
 		
 	}
 	
-	@RequestMapping(value = "/clientOrderDetail", method = RequestMethod.POST)
+	@RequestMapping(value = "/client/clientOrderDetail", method = RequestMethod.POST)
 	public ModelAndView clientOrderDetail(HttpServletRequest request, Model model){
 		logger.info("Employee is viewing Client Order Summary");
 		modelView = new ModelAndView();
@@ -135,7 +134,7 @@ public class OrderController {
 		return modelView;
 	}
 	
-	@RequestMapping(value = "/getProductDetails", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/client/getProductDetails", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public String getProductDetails(@RequestParam(value="productCode",required=true) String productCode) throws JsonProcessingException{
 		Product product = productServiceProcessor.findProductByProductCode(productCode);
@@ -145,7 +144,7 @@ public class OrderController {
 		return productDetails;
 	}
 
-	@RequestMapping(value = "/submitCustomerOrder", method = RequestMethod.POST)
+	@RequestMapping(value = "/client/submitCustomerOrder", method = RequestMethod.POST)
 	public String orderSummary(HttpServletRequest request, Model model,RedirectAttributes redirectAttributess){
 		List<String> validation = customerOrderProcessor.processClientOrder(request);
 		if(validation.size() > 0){
@@ -156,7 +155,7 @@ public class OrderController {
 		return "redirect:/client/createOrders";
 	}
 	
-	@RequestMapping(value = "/orderHistory", method = RequestMethod.GET)
+	@RequestMapping(value = "/client/orderHistory", method = RequestMethod.GET)
 	public String orderHistory(HttpServletRequest request, Model model,RedirectAttributes redirectAttributess){
 		logger.info("Viewing Customer Order history page.");
 		
@@ -165,4 +164,31 @@ public class OrderController {
 		model.addAttribute("customerOrder", orderList);
 		return "ClientServices/OrderHistory";
 	}
+	
+	@RequestMapping(value = "/order/findCustomerOrder", method = RequestMethod.GET ,produces = "application/json")
+	@ResponseBody
+	public String findCustomerOrder(@RequestParam(value="orderNumber",required=true) String orderNumber){
+		
+		return "";
+	}
+
+	@RequestMapping(value = "/order/findOrderByOrderNumber", method = RequestMethod.POST)
+	public ModelAndView findOrderByOrderNumber(HttpServletRequest request, Model model,RedirectAttributes redirectAttributess){
+		ModelAndView view = new ModelAndView();
+		String customerNumber = request.getParameter("orderNumber");
+		logger.info("Finding for Customer Order: "+customerNumber);
+		List<CustomerOrder> orderList = customerOrderProcessor.loadAllOrderByCustomerNumber(customerNumber);
+		if(orderList == null){
+			logger.info("Customer Number:"+ customerNumber+" did not return any result.");
+			view.setViewName("");
+			
+			return  view;
+		}
+		
+		view.addObject("orderList", orderList);
+		view.setViewName("ClientTransaction/CustomerPaymentSearch");
+		//getOrderByOrderNumber(model,orderList);
+		return view;
+	}
+
 }
