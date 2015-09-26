@@ -119,6 +119,34 @@ function paymentConfirmation(form){
 		$("#paymentMessage").removeClass('platform-alert-caution');
 	}
 }
+/**
+ * Shows the Summary of Order Payment and pops up the Modal window.
+ */
+function customerPaymentConfirmation(form){
+	
+	var accountnumber = $("#accountNumber").val() ;
+	var paymentamount = $("#paymentAmount").val();
+	var paymenttype = $("#paymentType").val();
+	var paymentschedule = $("#paymentSchedule").val();
+	
+	if(isEmpty(paymentamount)){
+		$("#paymentMessage").addClass('platform-alert-caution');
+		getElementById("paymentMessage").innerHTML = "Payment Amount cannot by empty.";
+	}else{
+		getElementById("paymentMessage").innerHTML = "";
+		$("#paymentMessage").removeClass('platform-alert-caution');
+		
+		$("#accountNumberSummary").html(accountnumber);
+		$("#paymentamountSummary").html(paymentamount);
+		$("#paymentTypeSummary").html(paymenttype.toUpperCase());
+		$("#paymentscheduleSummary").html(paymentschedule.toUpperCase());
+		// Openning Modal
+		$("#paymentSummaryModal").modal({
+			backdrop:"static"
+		});			
+	}
+
+}
 function showPaymentDetails(select){
 	if(select.value == "installmentPayment"){
 		$("#paymentDetails").removeClass('hidden');

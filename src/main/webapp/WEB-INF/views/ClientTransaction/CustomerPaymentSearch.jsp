@@ -34,7 +34,7 @@
 							<p>Search for Customer's Order:</p>
 							<label class="sr-only">Order Number:</label>
     						<input type="text" name="searchOrderId" id="searchOrderId"  class="custom-text" placeholder="Order Number"/>
-    						<button class="btn btn-primary" value="Search" id="btnSearchOrder"><i class="fa fa-search"></i></button>
+    						<button class="btn btn-success" value="Search" id="btnSearchOrder"><i class="fa fa-search"></i></button>
     						<hr>
 						</div>	
 						<c:choose>

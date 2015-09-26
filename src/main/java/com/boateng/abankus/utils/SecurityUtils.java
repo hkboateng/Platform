@@ -14,6 +14,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
@@ -21,6 +22,9 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.encrypt.Encryptors;
+import org.springframework.security.crypto.encrypt.TextEncryptor;
+import org.springframework.security.crypto.keygen.KeyGenerators;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.boateng.abankus.exception.PlatformException;
@@ -38,6 +42,11 @@ public class SecurityUtils {
 	private static final String SECURITY_ITERATIONS = "65536";
 	
 	private static final String ENCODING = "UTF-8";
+	
+	private static final String AES_ALGORITHM = "AES";
+
+	/*** Encoding Type */
+	private static final String ENCODING_TYPE = "AES/CBC/PKCS5Padding";	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
@@ -98,7 +107,7 @@ public class SecurityUtils {
 	  }
 
 
-	  public static String hashPin(String pin, String password) throws NoSuchAlgorithmException, InvalidKeySpecException{
+	  public static String hashPin(String pin, String password) throws NoSuchAlgorithmException, InvalidKeySpecException, PlatformException{
 		  StringBuilder str = new StringBuilder(pin);
 		  str.append(password);
 
@@ -106,16 +115,22 @@ public class SecurityUtils {
 
 		  return passwdencode().encode(password);
 	  }
-	    private static String generateStorngCodeHash(String password) throws NoSuchAlgorithmException, InvalidKeySpecException
+	    private static String generateStorngCodeHash(String password) throws  PlatformException
 	    {
-	        int iterations = 1000;
-	        char[] chars = password.toCharArray();
-	        byte[] salt = getSalt().getBytes();
-	         
-	        PBEKeySpec spec = new PBEKeySpec(chars, salt, iterations, 64 * 8);
-	        SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-	        byte[] hash = skf.generateSecret(spec).getEncoded();
-	        return iterations + ":" + toHex(salt) + ":" + toHex(hash);
+	    	try{
+		        int iterations = 1000;
+		        char[] chars = password.toCharArray();
+		        byte[] salt = getSalt().getBytes();
+		         
+		        PBEKeySpec spec = new PBEKeySpec(chars, salt, iterations, 64 * 8);
+		        SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+		        byte[] hash = skf.generateSecret(spec).getEncoded();
+		        return iterations + ":" + toHex(salt) + ":" + toHex(hash);
+		        
+	    	}catch( NoSuchAlgorithmException | InvalidKeySpecException e){
+				PlatformException ace = new PlatformException(e);
+				throw ace;	        	
+	        }
 	    }
 	     
 	    private static String getSalt() throws NoSuchAlgorithmException
@@ -138,43 +153,12 @@ public class SecurityUtils {
 	            return hex;
 	        }
 	    }
-	    
-	    /**
-	     * Encryting messages
-	     * @param message
-	     * @return
-	     * @throws Exception
-	     */
-	    public static String encode(String message) throws Exception {
-	    	try{
-		    	Cipher cipher = Cipher.getInstance(SECURITY_ALGORITHM);
-		        cipher.init(Cipher.ENCRYPT_MODE, generateKey());
-		         byte[] encrypted = cipher.doFinal(message.getBytes(ENCODING));	    	
-		    	return Base64.encodeBase64String(encrypted);
-	    	}
-	    	catch(Exception e){
-	    		throw e;
-	    	}
-	    }
-	    
-	    public static String decrypt(String key,String message){
 
-            try {
-    	    	Cipher cipher = Cipher.getInstance(SECURITY_ALGORITHM);
-    	    	
-    	    	cipher.init(Cipher.DECRYPT_MODE,  generateKey());            	
-				new String(cipher.doFinal(message.getBytes()), "UTF-8");
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} 	
-	    	return "";
-	    }
 	    private static SecretKey generateKey() throws PlatformException{
 	    	SecretKey key = null;
 			try {
-		    	SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-		        KeySpec spec = new PBEKeySpec(SECURITY_KEY.toCharArray(), getSalt().getBytes(), Integer.parseInt(SECURITY_ITERATIONS),256);
+		    	SecretKeyFactory factory = SecretKeyFactory.getInstance("AES");
+		        KeySpec spec = new PBEKeySpec(SECURITY_KEY.toCharArray(), getSalt().getBytes(), Integer.parseInt(SECURITY_ITERATIONS),128);
 		        SecretKey tmp = factory.generateSecret(spec);
 		        SecretKey secret = new SecretKeySpec(tmp.getEncoded(), "AES");	 		
 		        key = new SecretKeySpec(SECURITY_KEY.getBytes(ENCODING),"AES");
@@ -187,11 +171,102 @@ public class SecurityUtils {
 	    	    	
 	    }
     
-	    public static String generateCustomerPIN(){
+	    public static String generateCustomerPIN() throws PlatformException{
 	    	
 	    	StringBuilder sbr = new StringBuilder();
 	    	String pin = RandomStringUtils.random(6, true, true).toUpperCase();
 	    	sbr.append(pin);
 	    	return sbr.toString();
 	    }
+	    
+	    public static String encode(String message) throws PlatformException{
+
+			try {
+				Cipher cipher = Cipher.getInstance(ENCODING_TYPE);
+				byte[] keyBytes = new byte[16];
+				byte[] b = SecurityUtils.SECURITY_KEY.getBytes(SecurityUtils.ENCODING);
+				int len = b.length;
+				if (len > keyBytes.length) {
+					len = keyBytes.length;
+				}
+				System.arraycopy(b, 0, keyBytes, 0, len);
+				SecretKeySpec keySpec = new SecretKeySpec(keyBytes, SecurityUtils.AES_ALGORITHM);
+				IvParameterSpec ivSpec = new IvParameterSpec(keyBytes);
+				cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivSpec);
+				byte[] encryptResults = cipher.doFinal(message.getBytes(SecurityUtils.ENCODING));
+				byte[] encodedByte = Base64.encodeBase64(encryptResults);
+				String result = new String(encodedByte);
+				return result;
+			} catch (Exception e) {
+				PlatformException ace = new PlatformException(e);
+				throw ace;
+			}
+	    }
+	    public static String decode(String message) throws PlatformException{
+	    	
+	    	try {
+				Cipher cipher = Cipher.getInstance(ENCODING_TYPE);
+				byte[] keyBytes = new byte[16];
+				byte[] b = SecurityUtils.SECURITY_KEY.getBytes(SecurityUtils.ENCODING);
+				int len = b.length;
+				if (len > keyBytes.length) {
+					len = keyBytes.length;
+				}
+				System.arraycopy(b, 0, keyBytes, 0, len);
+				SecretKeySpec keySpec = new SecretKeySpec(keyBytes, SecurityUtils.AES_ALGORITHM);
+				IvParameterSpec ivSpec = new IvParameterSpec(keyBytes);
+				cipher.init(Cipher.DECRYPT_MODE, keySpec, ivSpec);
+				byte[] results = cipher.doFinal(new Base64().decode(message.getBytes()));
+				return new String(results, SecurityUtils.ENCODING);
+
+			} catch (Exception e) {
+				PlatformException ace = new PlatformException(e);
+				throw ace;
+			}
+	    }	    
+	    public static String encryptOrderNumber(String order) throws PlatformException{
+
+			try {
+				Cipher cipher = Cipher.getInstance(ENCODING_TYPE);
+				byte[] keyBytes = new byte[16];
+				byte[] b = SecurityUtils.SECURITY_KEY.getBytes(SecurityUtils.ENCODING);
+				int len = b.length;
+				if (len > keyBytes.length) {
+					len = keyBytes.length;
+				}
+				System.arraycopy(b, 0, keyBytes, 0, len);
+				SecretKeySpec keySpec = new SecretKeySpec(keyBytes, SecurityUtils.AES_ALGORITHM);
+				IvParameterSpec ivSpec = new IvParameterSpec(keyBytes);
+				cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivSpec);
+				byte[] encryptResults = cipher.doFinal(order.getBytes(SecurityUtils.ENCODING));
+				byte[] encodedByte = Base64.encodeBase64(encryptResults);
+				String result = new String(encodedByte);
+				return result;
+			} catch (Exception e) {
+				PlatformException ace = new PlatformException(e);
+				throw ace;
+			}
+	    }
+	    public static String decryptOrderNumber(String order) throws PlatformException{
+	    	
+	    	try {
+				Cipher cipher = Cipher.getInstance(ENCODING_TYPE);
+				byte[] keyBytes = new byte[16];
+				byte[] b = SecurityUtils.SECURITY_KEY.getBytes(SecurityUtils.ENCODING);
+				int len = b.length;
+				if (len > keyBytes.length) {
+					len = keyBytes.length;
+				}
+				System.arraycopy(b, 0, keyBytes, 0, len);
+				SecretKeySpec keySpec = new SecretKeySpec(keyBytes, SecurityUtils.AES_ALGORITHM);
+				IvParameterSpec ivSpec = new IvParameterSpec(keyBytes);
+				cipher.init(Cipher.DECRYPT_MODE, keySpec, ivSpec);
+				byte[] results = cipher.doFinal(new Base64().decode(order.getBytes()));
+				return new String(results, SecurityUtils.ENCODING);
+
+			} catch (Exception e) {
+				PlatformException ace = new PlatformException(e);
+				throw ace;
+			}
+	    }    
 }

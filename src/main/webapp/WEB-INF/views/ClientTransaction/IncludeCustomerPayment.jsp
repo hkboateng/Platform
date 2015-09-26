@@ -1,7 +1,6 @@
 <%@ page import="com.boateng.abankus.utils.PlatformUtils" %>
 <%@taglib prefix="joda" uri="http://www.joda.org/joda/time/tags" %>
-<sf:form class="forms" name="paymentForm" action="submitOrderPayment"
-	method="post">
+<sf:form class="forms" name="paymentForm" action="submitOrderPayment"	method="post">
 	<div class="row">
 		<div class="col-md-6">
 
@@ -79,7 +78,7 @@
 </sf:form>
 <p>
 	<button name="paymentSubmitBtn" id="paymentSubmitBtn"
-		onclick="javascript:paymentConfirmation(document.paymentForm);return false;"
+		onclick="javascript:customerPaymentConfirmation(document.paymentForm);return false;"
 		class="btn btn-success">Continue with Payment</button>
 </p>
 <!-- Payment Summary Modal -->
@@ -138,34 +137,7 @@
 			
 	});
 	
-	/**
-	 * Shows the Summary of Order Payment and pops up the Modal window.
-	 */
-	function paymentConfirmation(form){
-		
-		var accountnumber = $("#accountNumber").val() ;
-		var paymentamount = $("#paymentAmount").val();
-		var paymenttype = $("#paymentType").val();
-		var paymentschedule = $("#paymentSchedule").val();
-		
-		if(isEmpty(paymentamount)){
-			$("#paymentMessage").addClass('platform-alert-caution');
-			getElementById("paymentMessage").innerHTML = "Payment Amount cannot by empty.";
-		}else{
-			getElementById("paymentMessage").innerHTML = "";
-			$("#paymentMessage").removeClass('platform-alert-caution');
-			
-			$("#accountNumberSummary").html(accountNumber);
-			$("#paymentamountSummary").html(paymentamount);
-			$("#paymentTypeSummary").html(paymenttype.toUpperCase());
-			$("#paymentscheduleSummary").html(paymentschedule.toUpperCase());
-			// Openning Modal
-			$("#paymentSummaryModal").modal({
-				backdrop:"static"
-			});			
-		}
 
-	}
 	
 	function findCustomerOrder(){
 		var orderNumber = $("#searchOrderId").val();

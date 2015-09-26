@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
+<%@ page import="com.boateng.abankus.utils.SecurityUtils"  %>
 <%-- Page for enter Client Order which creates a ClientBilling instance --%>
-<c:import var="customerOrderUtils" url="com.boateng.abankus.customerorders.utils.CustomerOrderUtils" scope="application"/>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -40,18 +40,26 @@
 					<tr>
 						<td id="tableId">
 						  <label for="tableId">
-						    <input type="radio" name="blankRadio" id="blankRadio1" value="${customerOrderList.getOrderNumber()  }" aria-label="...">
+						  <c:set value="${customerOrderList.getOrderNumber()}" var="orderNumber"/>
+						  	<% String t = (String)pageContext.getAttribute("orderNumber"); %>
+						    <input type="radio" name="orderNumber" id="orderNumberRd" value="<%=SecurityUtils.encryptOrderNumber(t) %>" checked="checked">
 						  </label>
 						</td>
-						<td>${customerOrderList.convertOrderDate()}</td>
-						<td>${customerOrderList.getProductCode()}</td>
+						<td id="tblOrderDate">${customerOrderList.convertOrderDate()}</td>
+						<td id="tblProductCode">${customerOrderList.getProductCode()}</td>
 						<td>${customerOrderList.isOrderPending()}</td>
-						<td>$ ${customerOrderList.getTotalAmount()}</td>
+						<td>$<span  id="tblTotalAmount"> ${customerOrderList.getTotalAmount()}</span></td>
 						<td></td>
 					</tr>
 				</c:forEach>				
 				</tbody>			
-
+				<tfoot>
+					<tr>
+					<td colspan="6">
+						<button type="button" id="makePaymentBtn" class="btn btn-primary">Make Payment</button>
+					</td>
+			</tr>
+				</tfoot>
 			</table>
 			</c:if>
 			<c:if test="${empty customerOrder }">
@@ -61,11 +69,30 @@
 				
 				<button type="button" class="btn btn-success center-block " onclick="javascript:pushToURL('clients/createOrder')">Add Order for Customer<i class="fa fa-chevron-right moveL_30"></i></button>
 			</c:if>
-			<hr>
-			<button type="button" class="btn btn-primary">Make Payment</button>
+
 			</div>
 			</div>
 		</div>
 	</div>
+	<sf:form action="/abankus/Payments/makeCustomerOrderPayment" name="makeCustomerOrderPayment" method="get">
+		<input type="hidden" name="orderNumber" id="orderNumberHdn" value=""/>
+		<input type="hidden" name="totalAmount" id="totalAmountHdn"  value=""/>
+		<input type="hidden" name="orderDate" id="OrderDateHdn"  value=""/>
+		<input type="hidden" name="productCode" id="productCodeHdn"  value=""/>
+	</sf:form>
 </body>
+<script>
+$(document).ready(function(){
+	$("#makePaymentBtn").click(function(){
+		var orderNo = $("#orderNumberRd").val();
+		var amount= $("#tblTotalAmount").text();
+		var form = document.makeCustomerOrderPayment;
+		form.orderNumber.value = orderNo;
+		form.totalAmount.value = amount;
+		form.orderDate.value = $("#tblOrderDate").text();
+		form.productCode.value = $("#tblProductCode").text();
+		form.submit();
+	});
+});
+</script>
 </html>

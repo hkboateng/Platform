@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
  */
 public class AbankusBaseProcessor {
 	private static Logger logger = null;
+	
 	public boolean isNullOrBlank(String str){
 		return (StringUtils.isBlank(str) || StringUtils.isEmpty(str));
 	}

@@ -43,7 +43,19 @@
 		        </ul>            
             </li>			
 			</sec:authorize>
-			
+			<sec:authorize access="hasRole('EMPLOYEE')">
+            <li>
+	            <a id="aEmployeeInfoLink" href="#" class=" dropdown-toggle header-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+		          <i class="glyphicon glyphicon-tasks moveR_10"></i>Payments and Collection
+		          <span class="caret"></span>
+		        </a> 
+				<ul id="menu1" class="dropdown-menu" aria-labelledby="aEmployeeInfoLink">
+		          <li><a href="/abankus/registration/employee"><i class="fa fa-pencil-square-o fa-lg moveR_5"></i>Accept Payment</a></li>
+		          <li role="separator" class="divider"></li>
+		          <li><a href="/abankus/employee/listEmployee"><i class="fa fa-sign-out fa-lg moveR_5"></i>List Employees</a></li>
+		        </ul>            
+            </li>			
+			</sec:authorize>			
             <li>
 	            <a id="aClientInfoLink" href="#" class=" dropdown-toggle header-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
 		          <i class="fa fa-user fa-md moveR_10"></i>Client Services
