@@ -5,6 +5,7 @@ package com.boateng.abankus.service.impl;
 
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -21,7 +22,7 @@ import com.boateng.abankus.services.CustomerOrderService;
  */
 @Component
 public class CustomerOrderServiceImpl implements CustomerOrderService{
-	
+	Logger logger = Logger.getLogger(CustomerOrderServiceImpl.class.getName());
 	@Autowired
 	private SessionFactory sessionFactory;
 
@@ -53,18 +54,17 @@ public class CustomerOrderServiceImpl implements CustomerOrderService{
 		 
 		return  customerOrderList;
 	}
-	/* (non-Javadoc)
-	 * @see com.boateng.abankus.services.CustomerOrderService#findCustomerOrderByOrderNumber(java.lang.String)
-	 */
-	@SuppressWarnings("unchecked")
-	@Transactional	
+
+	@Transactional
 	@Override
-	public List<CustomerOrder> findCustomerOrderByOrderNumber(String orderNumber) {
+	public CustomerOrder findCustomerOrderByOrderNumber(String orderNumber) {
+
 		Session session = getSessionFactory().getCurrentSession();
-		List<CustomerOrder> customerOrderList = session.createQuery("from CustomerOrder co where co.orderNumber = :orderNumber")
-		.setParameter("orderNumber", orderNumber)
-		.list();
-		return customerOrderList;
+		String query = "From CustomerOrder c where c.orderNumber = :orderNumber";
+		CustomerOrder customerOrder = (CustomerOrder) session.createQuery(query)
+										.setParameter("orderNumber", orderNumber)
+										.uniqueResult();
+		return customerOrder;
 	}
 
 	

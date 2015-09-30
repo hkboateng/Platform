@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.Cacheable;
 
+import org.apache.log4j.Logger;
 import org.hibernate.CacheMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -29,6 +30,7 @@ import com.boateng.abankus.utils.SecurityUtils;
 
 public class CustomerServiceImpl implements CustomerService {
 
+	private static final Logger logger = Logger.getLogger(CustomerServiceImpl.class);
 	@Autowired
 	private SessionFactory sessionFactory;
 	
@@ -81,7 +83,7 @@ public class CustomerServiceImpl implements CustomerService {
 	 */
 	private Authenticatecustomer addCustomerAuthentication(Customer customers) throws Exception {
 		String pin = SecurityUtils.generateCustomerPIN();
-		System.out.println("Pin Number is: "+pin);
+		logger.info("Pin Number is: "+pin);
 		Authenticatecustomer auth = new Authenticatecustomer();
 		auth.setCustomer(customers);
 		String encryptedPIN = SecurityUtils.encode(pin);

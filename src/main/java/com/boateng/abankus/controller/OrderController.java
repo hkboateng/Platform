@@ -27,6 +27,7 @@ import com.boateng.abankus.domain.CustomerAccount;
 import com.boateng.abankus.domain.CustomerOrder;
 import com.boateng.abankus.domain.Employee;
 import com.boateng.abankus.domain.Product;
+import com.boateng.abankus.exception.PlatformException;
 import com.boateng.abankus.fields.EmployeeFields;
 import com.boateng.abankus.processors.CustomerOrderProcessor;
 import com.boateng.abankus.processors.ProductServiceProcessor;
@@ -56,14 +57,13 @@ public class OrderController {
 	private ProductServiceProcessor productServiceProcessor;	
 	private HttpSession session;
 	
-	ModelAndView modelView = null;
 	public OrderController(){
 		
 	}
 	
 	@RequestMapping(value = "/client/createOrders", method = RequestMethod.GET)
 	public ModelAndView createOrder(){
-		modelView = new ModelAndView();
+		ModelAndView modelView = new ModelAndView();
 		
 		logger.info("Username: is viewing Create Order page.");
 		List<Product> productList = productServiceProcessor.getAllProducts();
@@ -71,18 +71,28 @@ public class OrderController {
 		modelView.setViewName("ClientServices/createOrders");
 		return modelView;
 	}
-	
+	@RequestMapping(value = "/client/createCustomerOrder", method = RequestMethod.GET)
+	public String createOrder(@RequestParam(value="accountNumber",required=true) String accountNumber,Model model){
+	logger.info("Username: is viewing Create Order page.");
+					
+			CustomerAccount account = customerServiceProcessor.findCustomerAccountByAccountNumber(accountNumber);
+			if(account == null){
+				return "Account Number is invalid";
+			}		
+		List<Product> productList = productServiceProcessor.getAllProducts();
+		model.addAttribute("productList", productList);
+		model.addAttribute("account",account);
+		return "ClientServices/createOrders";
+	}	
 	@RequestMapping(value = "/client/findCustomer", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public String findCustomer(@RequestParam(value="accountNumber",required=true) String accountNumber,HttpServletRequest request) throws IOException{
-		session = request.getSession(false);
+		
 				
 		CustomerAccount account = customerServiceProcessor.findCustomerAccountByAccountNumber(accountNumber);
 		if(account == null){
 			return "Account Number is invalid";
 		}
-		//logger.info("Employee ID: "+employee.getEmployeeId()+" has found Customer with Account number: "+account.getAccountNumber()+" and Name: "+ account.getCustomer().getFirstname());
-
 		ObjectMapper mapper = new ObjectMapper().configure(SerializationFeature.INDENT_OUTPUT, true);
 		logger.info("JSON has being convert..below is the Output...");
 		mapper.writeValue(System.out, account);
@@ -129,7 +139,7 @@ public class OrderController {
 	@RequestMapping(value = "/client/clientOrderDetail", method = RequestMethod.POST)
 	public ModelAndView clientOrderDetail(HttpServletRequest request, Model model){
 		logger.info("Employee is viewing Client Order Summary");
-		modelView = new ModelAndView();
+		ModelAndView modelView = new ModelAndView();
 		modelView.setViewName("ClientServices/ClientOrderSummary");
 		return modelView;
 	}
@@ -155,13 +165,14 @@ public class OrderController {
 		return "redirect:/client/createOrders";
 	}
 	
-	@RequestMapping(value = "/client/orderHistory", method = RequestMethod.GET)
+	@RequestMapping(value = "/client/orderHistory", method = RequestMethod.POST)
 	public String orderHistory(HttpServletRequest request, Model model,RedirectAttributes redirectAttributess){
 		logger.info("Viewing Customer Order history page.");
-		
-		int customerId = Integer.parseInt(request.getParameter("customerId"));
+		String custId = request.getParameter("customerId");
+		int customerId = Integer.parseInt(custId);
 		List<CustomerOrder> orderList = customerOrderProcessor.loadAllOrderByCustomer(customerId);
 		model.addAttribute("customerOrder", orderList);
+		model.addAttribute("customerId", custId);
 		return "ClientServices/OrderHistory";
 	}
 	
@@ -177,7 +188,13 @@ public class OrderController {
 		ModelAndView view = new ModelAndView();
 		String customerNumber = request.getParameter("orderNumber");
 		logger.info("Finding for Customer Order: "+customerNumber);
-		List<CustomerOrder> orderList = customerOrderProcessor.loadAllOrderByCustomerNumber(customerNumber);
+		List<CustomerOrder> orderList = null;
+		try {
+			orderList = customerOrderProcessor.loadAllOrderByCustomerNumber(customerNumber);
+		} catch (PlatformException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		if(orderList == null){
 			logger.info("Customer Number:"+ customerNumber+" did not return any result.");
 			view.setViewName("");

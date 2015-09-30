@@ -41,6 +41,7 @@ public abstract class PlatformAbstractServlet {
 	@Qualifier(value="productServiceImpl")
 	private ProductService productServiceImpl;
 
+	@Autowired
 	@Qualifier(value="productServiceProcessor")
 	private ProductServiceProcessor productServiceProcessor;
 	
@@ -75,18 +76,7 @@ public abstract class PlatformAbstractServlet {
 	 * 
 	 */
 	public void loadProductIntoMap(){
-		Map<String, Product> productMap = productServiceProcessor.getProductMap();
-		if(productMap.isEmpty()){
-			List<Product> productList = null;
-			productList = productServiceImpl.getAllProducts();
-				/**
-				 * Add Products from 'productList' to productMap. The Key is productCode and
-				 * value is Product object.
-				 */			
-			for(Product product: productList){
-				productMap.put(product.getProductCode(), product);
-			}			
-		}
+		productServiceProcessor.loadProductIntoSession();
 	}
 	
 

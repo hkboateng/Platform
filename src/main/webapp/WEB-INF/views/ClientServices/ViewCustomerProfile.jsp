@@ -237,10 +237,10 @@
 				  		<a href="javascript:makePayment('makePayment',document.makeCustomerPayment);" class=""><i class="fa fa-money moveR_20"></i>Make A Payment</a>  				 	
   				 	</li>	
   				 	<li>
-  				 		<a href="/abankus/client/orderHistory?customerId=${customerAccount.customer.customerId}" ><i class="fa fa-exchange moveR_20"></i>View Customer Order History</a>
+  				 		<a href="javascript:orderHistory('orderHistory',document.formOrderHistroy);" ><i class="fa fa-exchange moveR_20"></i>View Customer Order History</a>
   				 	</li>	
   				 	<li>
-  				 		<a href="/abankus/client/createOrders"><i class="fa fa-exchange moveR_20"></i>Add New Order</a>
+  				 		<a href="/abankus/client/createCustomerOrder?accountNumber=${customerAccount.accountNumber }"><i class="fa fa-exchange moveR_20"></i>Add New Order</a>
   				 	</li>			
 				</ul>
   				 </div>		  	
@@ -248,7 +248,9 @@
 			</div>
 			<hr>	
 
-	
+			  <sf:form  name="formOrderHistroy" method="post" action="">
+			  	<input type="hidden" name="customerId" id="customerIdHdn"  value="${customer.customerId }"/>
+			``</sf:form>
 	          <sf:form name="frmUpdateAccountStatus" method="post" action="updateAccountStatus">
 	          	  <input type="hidden" value="${customer.customerNumber }" name="customerNumber"/>	          
 	          </sf:form>
@@ -277,9 +279,17 @@
 	<script>
 	function makePayment(url,form){
 		if(isEmpty(url) || !isAlphaNumeric(url)){
-			return true;
+			return false;
 		}
 		form.action="/abankus/customers/"+url
+		form.submit();
+	}
+	
+	function orderHistory(url,form){
+		if(isEmpty(url) || !isAlphaNumeric(url)){
+			return false;
+		}		
+		form.action = "/abankus/client/"+url;
 		form.submit();
 	}
 	</script>	  

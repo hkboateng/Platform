@@ -17,8 +17,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
+import com.boateng.abankus.customer.service.CustomerService;
 import com.boateng.abankus.domain.Product;
 import com.boateng.abankus.services.ProductService;
 import com.boateng.abankus.utils.PlatformUtils;
@@ -34,6 +36,9 @@ public class ProductServiceProcessor {
 	@Autowired(required=true)
 	@Qualifier(value="productServiceImpl")
 	private ProductService productServiceImpl;
+	
+	@Autowired(required=true)
+	private CustomerService customerServiceImpl;
 
 	private static Map<String, Product> productMap = new ConcurrentHashMap<String, Product>();
 	
@@ -51,6 +56,10 @@ public class ProductServiceProcessor {
 	public void updateProductInfo(Product newProduct, String product){
 		updateProductMap(newProduct);
 	}
+	public void  loadProductIntoSession(){
+		logger.info("Loading Products into Session");
+		productServiceImpl.getAllProducts();
+	}
 	public List<Product> loadProductIntoMap(){
 		List<Product> productList = null;
 		
@@ -67,11 +76,12 @@ public class ProductServiceProcessor {
 		
 	}
 	public List<Product> getAllProducts(){
-		logger.info("Getting all Products Information...");
+		
 		List<Product> productList = null;
 		if(productMap.isEmpty()){
 			productList = loadProductIntoMap();
 		}else{
+			logger.info("Getting all Products Information...");
 			productList = new ArrayList<Product>(productMap.values());
 		}
 		return productList;
@@ -94,7 +104,15 @@ public class ProductServiceProcessor {
 	
 	public Product findProductByProductCode(String productCode){
 		logger.info("Platform is searching for Product Details using Key: {}",productCode);
-		Product product = productMap.get(productCode);
+		List<Product> productList =  getAllProducts();
+		Product product = null;
+		for(Product prodt:productList){
+			if(productCode.equalsIgnoreCase(prodt.getProductCode())){
+				product = prodt;
+				break;
+			}
+		}
+		
 		
 		return product;
 	}
@@ -126,5 +144,13 @@ public class ProductServiceProcessor {
 		if(!productMap.containsKey(product.getProductCode())){
 			productMap.put(product.getProductCode(), product);
 		}
+	}
+
+	/**
+	 * @param customerpin
+	 */
+	public void authenticatePasscode(String customerpin) {
+		customerServiceImpl.findCustomerByCustomerNumber("");
+		BCrypt.checkpw(customerpin, "");
 	}
 }

@@ -607,3 +607,10 @@ label{
 .width-75{
 	width:73%;
 }
+.inlineBlock{
+	display:inline-block !important;
+}
+input[readonly]{
+	broder:none;
+	color:#000;
+}

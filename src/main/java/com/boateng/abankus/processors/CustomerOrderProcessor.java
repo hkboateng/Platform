@@ -22,6 +22,7 @@ import com.boateng.abankus.domain.Salesemployee;
 import com.boateng.abankus.domain.factory.Factory;
 import com.boateng.abankus.domain.factory.FactoryImpl;
 import com.boateng.abankus.entity.validation.CustomerOrderUtils;
+import com.boateng.abankus.exception.PlatformException;
 import com.boateng.abankus.fields.EmployeeFields;
 import com.boateng.abankus.services.CustomerOrderService;
 import com.boateng.abankus.services.EmployeeService;
@@ -134,13 +135,28 @@ public class CustomerOrderProcessor implements OrderService{
 		}
 	}
 	
-	public List<CustomerOrder>  loadAllOrderByCustomerNumber(String customerNumber){
+	public List<CustomerOrder>  loadAllOrderByCustomerNumber(String customerNumber) throws PlatformException{
 		if(StringUtils.isBlank(customerNumber)){
 			return null;
 		}
-		List<CustomerOrder> orderList = customerOrderServiceImpl.findCustomerOrderByOrderNumber(customerNumber);
-
 		
-		return orderList;
+		Customer customer = customerServiceImpl.findCustomerByCustomerNumber(customerNumber);
+		
+		if(customer !=null){
+			List<CustomerOrder> orderList = customerOrderServiceImpl.findAllCustomerOrderByCustomerId(customer.getCustomerId());
+			return orderList;
+		}else{
+			throw new PlatformException("There is no Customer information for the Customer Number : "+customerNumber+".");
+		}
+		
+		
+	}
+	
+	public CustomerOrder findCustomerOrderByOrderNumber(String orderNumber){
+		if(StringUtils.isBlank(orderNumber.trim())){
+			return null;
+		}
+		CustomerOrder customerOrder = customerOrderServiceImpl.findCustomerOrderByOrderNumber(orderNumber);
+		return customerOrder;
 	}
 }

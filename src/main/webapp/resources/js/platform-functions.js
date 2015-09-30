@@ -26,7 +26,7 @@ function isEmpty(str){
  */
 function isAlphaNumeric(str){
 	var alphanumeric = /^[a-zA-Z0-9]+$/i;
-	return alphanumeric.test(str.value);
+	return alphanumeric.test(str);
 }
 
 /**
@@ -36,5 +36,5 @@ function isAlphaNumeric(str){
  */
 function isAlphaNumericAndDash(str){
 	var alphanumeric = /^[a-zA-Z0-9-]+$/i;
-	return alphanumeric.test(str.value);
+	return alphanumeric.test(str);
 }

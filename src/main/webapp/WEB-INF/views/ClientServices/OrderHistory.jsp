@@ -9,8 +9,10 @@
 		<title>Abankus Sales Connection - Client Order Summary</title>
 		<link href="<c:url value="/resources/css/bootstrap.css" />" rel="stylesheet"/>
 		<link href="<c:url value="/resources/css/platform.css" />" rel="stylesheet"/>
+		<link href="<c:url value="/resources/css/tables/jquery.dataTables.css" />" rel="stylesheet"/>
 		<script src="<c:url value="/resources/js/jquery.js" />" type="text/javascript"></script>
 		<script src="<c:url value="/resources/js/bootstrap.js" />" type="text/javascript"></script>
+		<script src="<c:url value="/resources/js/tables/jquery.dataTables.js" />" type="text/javascript"></script>
 		<script src="<c:url value="/resources/js/application.js" />" type="text/javascript"></script>
 	</head>
 <body>
@@ -24,7 +26,7 @@
 			<hr  class="line1"/>
 			<div id="orderSummary">
 			<c:if test="${not empty customerOrder }">
-			<table class="table">
+			<table id='orderHistoryTable' class="table">
 				<thead>
 					<tr>
 						<th></th>
@@ -36,19 +38,19 @@
 					</tr>
 				</thead>
 				<tbody>
-				<c:forEach items="${customerOrder }" var="customerOrderList">
+				<c:forEach items="${customerOrder }" var="customerOrderList" varStatus="counter">
 					<tr>
 						<td id="tableId">
 						  <label for="tableId">
 						  <c:set value="${customerOrderList.getOrderNumber()}" var="orderNumber"/>
 						  	<% String t = (String)pageContext.getAttribute("orderNumber"); %>
-						    <input type="radio" name="orderNumber" id="orderNumberRd" value="<%=SecurityUtils.encryptOrderNumber(t) %>" checked="checked">
+						    <input type="radio" name="orderNumber" id="orderNumberRd${counter.count }" value="<%=SecurityUtils.encryptOrderNumber(t) %>">
 						  </label>
 						</td>
-						<td id="tblOrderDate">${customerOrderList.convertOrderDate()}</td>
-						<td id="tblProductCode">${customerOrderList.getProductCode()}</td>
+						<td id="tblOrderDate${counter.count }">${customerOrderList.convertOrderDate()}</td>
+						<td id="tblProductCode${counter.count }">${customerOrderList.getProductCode()}</td>
 						<td>${customerOrderList.isOrderPending()}</td>
-						<td>$<span  id="tblTotalAmount"> ${customerOrderList.getTotalAmount()}</span></td>
+						<td>$<span  id="tblTotalAmount${counter.count }"> ${customerOrderList.getTotalAmount()}</span></td>
 						<td></td>
 					</tr>
 				</c:forEach>				
@@ -74,17 +76,19 @@
 			</div>
 		</div>
 	</div>
-	<sf:form action="/abankus/Payments/makeCustomerOrderPayment" name="makeCustomerOrderPayment" method="get">
+	<sf:form action="/abankus/Payments/makeCustomerOrderPayment" name="makeCustomerOrderPayment" method="post">
 		<input type="hidden" name="orderNumber" id="orderNumberHdn" value=""/>
 		<input type="hidden" name="totalAmount" id="totalAmountHdn"  value=""/>
 		<input type="hidden" name="orderDate" id="OrderDateHdn"  value=""/>
 		<input type="hidden" name="productCode" id="productCodeHdn"  value=""/>
+		<input type="hidden" name="customerId" id="customerIdHdn"  value="${customerId }"/>
 	</sf:form>
 </body>
 <script>
 $(document).ready(function(){
+	 $('#orderHistoryTable').DataTable();
 	$("#makePaymentBtn").click(function(){
-		var orderNo = $("#orderNumberRd").val();
+		var orderNo = $("input:radio[name=orderNumber]:checked").val();
 		var amount= $("#tblTotalAmount").text();
 		var form = document.makeCustomerOrderPayment;
 		form.orderNumber.value = orderNo;

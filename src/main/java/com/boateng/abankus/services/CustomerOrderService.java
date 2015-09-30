@@ -24,9 +24,6 @@ public interface CustomerOrderService {
 	List<CustomerOrder> findAllCustomerOrderByCustomerId(int customerId);
 
 
-	/**
-	 * @param customerNumber
-	 * @return
-	 */
-	List<CustomerOrder> findCustomerOrderByOrderNumber(String customerNumber);
+	
+	CustomerOrder findCustomerOrderByOrderNumber(String orderNumber);
 }

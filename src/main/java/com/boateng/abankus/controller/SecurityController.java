@@ -93,6 +93,7 @@ public class SecurityController extends PlatformAbstractServlet {
 		try {
 			loadUserIntoSession(request);
 			loadEmployeeIntoSessionByUsername(request);
+			loadProductIntoMap();
 		} catch (PlatformException e) {
 			e.printStackTrace();
 		}

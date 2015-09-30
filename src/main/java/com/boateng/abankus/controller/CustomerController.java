@@ -3,6 +3,7 @@ package com.boateng.abankus.controller;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -92,7 +93,7 @@ public class CustomerController {
 			e.printStackTrace();
 		}
 		
-		redirectAttributess.addAttribute("info", "Customer has being added successfully");
+		redirectAttributess.addAttribute("success", UUID.randomUUID().toString());
 		return "redirect:/platform/index";
 	}
 	

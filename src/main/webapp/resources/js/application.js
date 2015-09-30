@@ -108,9 +108,9 @@ function isEmpty(str){
 }
 function paymentConfirmation(form){
 	
-	var accountnumber = getElementById("accountNumber") ;
+	var accountnumber = getElementById("orderNumber") ;
 	var paymentamount = getElementById("paymentAmount");
-	var paymenttype = getElementById("paymentType");
+	var paymenttype = getElementById("paymentForm");
 	if(isEmpty(paymentamount.value)){
 		$("#paymentMessage").addClass('platform-alert-caution');
 		getElementById("paymentMessage").innerHTML = "Payment Amount cannot by empty.";
@@ -124,7 +124,7 @@ function paymentConfirmation(form){
  */
 function customerPaymentConfirmation(form){
 	
-	var accountnumber = $("#accountNumber").val() ;
+	var accountnumber = $("#orderNumber").val() ;
 	var paymentamount = $("#paymentAmount").val();
 	var paymenttype = $("#paymentType").val();
 	var paymentschedule = $("#paymentSchedule").val();
@@ -135,15 +135,14 @@ function customerPaymentConfirmation(form){
 	}else{
 		getElementById("paymentMessage").innerHTML = "";
 		$("#paymentMessage").removeClass('platform-alert-caution');
-		
+		$("#paymentHeading").html("Review and Confirm Payment");
 		$("#accountNumberSummary").html(accountnumber);
 		$("#paymentamountSummary").html(paymentamount);
-		$("#paymentTypeSummary").html(paymenttype.toUpperCase());
+		$("#paymentFormSummary").html(paymenttype.toUpperCase());
 		$("#paymentscheduleSummary").html(paymentschedule.toUpperCase());
 		// Openning Modal
-		$("#paymentSummaryModal").modal({
-			backdrop:"static"
-		});			
+		$('#paymentEntry').hide();
+		$("#paymentSummary").removeClass("hidden");
 	}
 
 }
@@ -154,7 +153,28 @@ function showPaymentDetails(select){
 		$("#paymentDetails").addClass('hidden');
 	}
 }
-
+/**
+ * customer is the Customer PIN number
+ * @param customer
+ * @param customerId
+ */
+function validateCustomerCredential(customer,customerId){
+	var valid = false;
+	if(customer === '' || customer === null || customer === undefined){
+		valid = false;
+	}else if(customer.length < 6){
+		valid = false;
+	}else{
+		$.trim(customer);
+		$.ajax({
+			url:'',
+			data: {pin:customer,customerId:customerId},
+			dataType: 'html'
+		});
+	}
+	
+	return valid;
+}
 function showBankInfoDiv(select){
 	if(select.value === "check"){
 		$("#bankInfoDiv").removeClass('hidden');

@@ -54,8 +54,9 @@
 		         </div>			
 				 <div id="pending">	
 		          		
-				 </div>				
-			<sf:form class="forms hidden" method="post"  name="customerOrderForm" id="customerOrderForm">
+				 </div>			
+			<c:set var="formState" value="${not empty account ? '' : 'hidden' }"/>	
+			<sf:form class="forms ${formState}" method="post"  action="" name="customerOrderForm" id="customerOrderForm">
 			<div class="panel panel-success">
 			<div class="panel-heading">Customer Order  <span id="customerName" class="bold"></span>
 				<span class="pull-right">
@@ -65,10 +66,10 @@
 			</div>
 			  <div class="panel-body">
 					<div id="clientName">
-						<p><b>Client Name:</b><span id="clientFullName"></span></p>
+						<p><b>Client Name:</b><span id="clientFullName">${account.customer.firstname}&nbsp;${account.customer.lastname}</span></p>
 					</div>
 					<div id="clinetAccountStatus">
-						<label>Account Status:</label><span id="accountStatus"></span>
+						<label>Account Status:</label><span id="accountStatus">${account.status }</span>
 					</div>
 					<c:if test="${not empty productList}" >
 						<div class="row">
@@ -100,8 +101,8 @@
 			<p>
 
 			<input type="hidden" name="xUnitCost" value="" id="xUnitCost"/>		
-			<input type="hidden" name="customerId" value="" id="customerId"/>
-			<input type="button" value="Add to Cart" onclick="addProductToChart();" class="btn btn-primary moveR_20 hidden"/>	
+			<input type="hidden" name="customerId" value="${account.customer.customerId }" id="customerId"/>
+			<a href="/abankus/platform/dashboard" class="btn btn-primary moveR_20">Cancel Transaction</a>	
 			<button type="button"  class="btn btn-success" id="showOrderSummary" >Continue to payment</button>
 			
 			</p>					
