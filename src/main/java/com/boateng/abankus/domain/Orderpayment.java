@@ -11,15 +11,16 @@ import java.math.BigDecimal;
  * 
  */
 @Entity
-@NamedQuery(name="Orderpayment.findAll", query="SELECT o FROM Orderpayment o")
-public class Orderpayment implements Serializable {
+@Table(name="Orderpayment")
+@NamedQuery(name="Orderpayment.findAll", query="SELECT o FROM OrderPayment o")
+public class OrderPayment implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int orderPaymentId;
 
-	private BigDecimal amountPaid;
+	private double amountPaid;
 
 	private Timestamp paymentDate;
 
@@ -33,9 +34,20 @@ public class Orderpayment implements Serializable {
 	//bi-directional many-to-one association to Clientorder
 	@ManyToOne
 	@JoinColumn(name="clientOrderId")
-	private Clientorder clientorder;
+	private CustomerOrder clientorder;
 
-	public Orderpayment() {
+	public OrderPayment() {
+	}
+
+	/**
+	 * @param amountPaid
+	 * @param employee
+	 * @param clientorder
+	 */
+	public OrderPayment(double amountPaid, Employee employee,CustomerOrder clientorder) {
+		this.amountPaid = amountPaid;
+		this.employee = employee;
+		this.clientorder = clientorder;
 	}
 
 	public int getOrderPaymentId() {
@@ -46,11 +58,11 @@ public class Orderpayment implements Serializable {
 		this.orderPaymentId = orderPaymentId;
 	}
 
-	public BigDecimal getAmountPaid() {
+	public double getAmountPaid() {
 		return this.amountPaid;
 	}
 
-	public void setAmountPaid(BigDecimal amountPaid) {
+	public void setAmountPaid(double amountPaid) {
 		this.amountPaid = amountPaid;
 	}
 
@@ -78,12 +90,13 @@ public class Orderpayment implements Serializable {
 		this.employee = employee;
 	}
 
-	public Clientorder getClientorder() {
+	public CustomerOrder getClientorder() {
 		return this.clientorder;
 	}
 
-	public void setClientorder(Clientorder clientorder) {
+	public void setClientorder(CustomerOrder clientorder) {
 		this.clientorder = clientorder;
 	}
 
 }
+

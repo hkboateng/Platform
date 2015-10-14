@@ -10,20 +10,25 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.http.HttpSession;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import com.boateng.abankus.customer.service.CustomerService;
+import com.boateng.abankus.domain.Authenticatecustomer;
+import com.boateng.abankus.domain.Customer;
 import com.boateng.abankus.domain.Product;
+import com.boateng.abankus.exception.PlatformException;
 import com.boateng.abankus.services.ProductService;
 import com.boateng.abankus.utils.PlatformUtils;
+import com.boateng.abankus.utils.SecurityUtils;
 
 /**
  * @author hkboateng
@@ -31,7 +36,7 @@ import com.boateng.abankus.utils.PlatformUtils;
  */
 @Service
 public class ProductServiceProcessor {
-	private static final Logger logger = LoggerFactory.getLogger(ProductServiceProcessor.class);
+	private static final Logger logger = Logger.getLogger(ProductServiceProcessor.class.getName());
 	
 	@Autowired(required=true)
 	@Qualifier(value="productServiceImpl")
@@ -57,7 +62,7 @@ public class ProductServiceProcessor {
 		updateProductMap(newProduct);
 	}
 	public void  loadProductIntoSession(){
-		logger.info("Loading Products into Session");
+		logger.log(Level.FINEST,"Product list are being loaded....");
 		productServiceImpl.getAllProducts();
 	}
 	public List<Product> loadProductIntoMap(){
@@ -103,12 +108,13 @@ public class ProductServiceProcessor {
 	}
 	
 	public Product findProductByProductCode(String productCode){
-		logger.info("Platform is searching for Product Details using Key: {}",productCode);
+		logger.log(Level.FINEST,"Platform is searching for Product Details using Key: {}",productCode);
 		List<Product> productList =  getAllProducts();
 		Product product = null;
 		for(Product prodt:productList){
 			if(productCode.equalsIgnoreCase(prodt.getProductCode())){
 				product = prodt;
+				logger.log(Level.INFO,"Product Code: "+productCode+" has being found ....");
 				break;
 			}
 		}
@@ -149,8 +155,34 @@ public class ProductServiceProcessor {
 	/**
 	 * @param customerpin
 	 */
-	public void authenticatePasscode(String customerpin) {
-		customerServiceImpl.findCustomerByCustomerNumber("");
-		BCrypt.checkpw(customerpin, "");
+	public boolean authenticatePasscode(String pin,String customerId)  throws PlatformException {
+		Authenticatecustomer customer = null;
+		boolean valid = false;
+		try{
+			if(StringUtils.isAlphanumeric(pin) && StringUtils.isNumeric(customerId)){
+			logger.log(Level.INFO,"Platform is validating customer Pin Code.");
+			int custId = Integer.parseInt(customerId);
+			customer = customerServiceImpl.findCustomerById(custId);
+				
+			}else{
+				return valid;
+			}
+			if(customer == null){
+				return valid;
+			}
+			valid = isCustomerPasscodeValid(pin,customer.getPin());
+			logger.info("Authenticating Customer results is: "+valid);
+			return valid;
+		}catch(Exception e){
+			PlatformException ace = new PlatformException();
+			logger.log(Level.WARNING,e.getMessage());
+			throw ace;
+		}
+
+	}
+	
+	private boolean isCustomerPasscodeValid(String pin, String hashpin){
+		
+		return SecurityUtils.authenticatePassword(pin, hashpin);
 	}
 }

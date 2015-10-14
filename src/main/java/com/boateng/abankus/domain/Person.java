@@ -144,6 +144,7 @@ public class Person {
 	public void setNameSuffix(String nameSuffix) {
 		this.nameSuffix = nameSuffix;
 	}
+
 	
 
 	

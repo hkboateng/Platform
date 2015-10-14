@@ -21,7 +21,9 @@ import java.util.List;
 @NamedQuery(name="ClientOrder.findAll", query="SELECT c FROM CustomerOrder c")
 public class CustomerOrder implements Client, Serializable{
 	private static final long serialVersionUID = 1L;
-
+	
+	private static final int TIME_TO_CANCEL_ORDER  =1800000;
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private long clientOrderId;
@@ -43,6 +45,10 @@ public class CustomerOrder implements Client, Serializable{
 	private String productCode;
 
 	private BigDecimal totalAmount;
+	
+	//bi-directional many-to-one association to Orderpayment
+	@OneToMany(mappedBy="clientorder", fetch=FetchType.EAGER)
+	private List<OrderPayment> orderpayments;
 	
 	public CustomerOrder() {
 	}
@@ -131,7 +137,27 @@ public class CustomerOrder implements Client, Serializable{
 	public void setTotalAmount(BigDecimal totalAmount) {
 		this.totalAmount = totalAmount;
 	}
-	private static final int TIME_TO_CANCEL_ORDER  =1800000;
+
+	public List<OrderPayment> getOrderpayments() {
+		return this.orderpayments;
+	}
+	
+	public OrderPayment addOrderpayment(OrderPayment orderpayment) {
+		getOrderpayments().add(orderpayment);
+		orderpayment.setClientorder(this);
+
+		return orderpayment;
+	}
+
+	public boolean removeOrderpayment(OrderPayment orderpayment) {
+		
+		if(getOrderpayments().contains(orderpayment)){
+			getOrderpayments().remove(orderpayment);
+			return true;
+		}
+
+		return false;
+	}
 	public boolean isOrderPending(){
 
 		DateTime dt = new DateTime(getOrderDate());

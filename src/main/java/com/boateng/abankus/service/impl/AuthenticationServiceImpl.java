@@ -10,6 +10,7 @@ import org.hibernate.CacheMode;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,7 @@ import com.boateng.abankus.services.AuthenticationService;
 import com.boateng.abankus.utils.SecurityUtils;
 
 @Component
+
 public class AuthenticationServiceImpl  implements AuthenticationService{
 	private final Logger log = Logger.getLogger( AuthenticationServiceImpl.class);
 

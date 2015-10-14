@@ -3,6 +3,11 @@
  */
 package com.boateng.abankus.exception;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -12,7 +17,8 @@ import org.apache.commons.logging.LogFactory;
  */
 public class PlatformException extends Exception {
 
-	public static final Log log = LogFactory.getLog(PlatformException.class);
+	private static final Log log = LogFactory.getLog(PlatformException.class);
+	private static final Logger logger = Logger.getLogger(PlatformException.class.getName());
 	/**
 	 * 
 	 */
@@ -27,6 +33,9 @@ public class PlatformException extends Exception {
 
 	public void logger(String message, Throwable t){
 		log.warn(message, t);
+	}
+	public void logger(Level level,String message, Throwable t){
+		logger.log(level, message,t);
 	}
 	/**
 	 * @param message
@@ -55,7 +64,13 @@ public class PlatformException extends Exception {
 		super(message);
 		log.warn(message);
 	}
-
+	/**
+	 * @param message
+	 */
+	public PlatformException(String message,HttpServletRequest request) {
+		super(message);
+		log.warn(message);
+	}
 	/**
 	 * @param cause
 	 */

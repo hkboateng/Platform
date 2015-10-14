@@ -19,12 +19,24 @@ public class Paymentmethod implements Serializable {
 
 	private String paymentType;
 
-	//bi-directional many-to-one association to Customer
+	private String orderNumber;
 
-	@ManyToOne
-	@JoinColumn(name="clientOrderId")
-	private CustomerOrder customerOrder;
+	public String getOrderNumber() {
+		return orderNumber;
+	}
 
+	public void setOrderNumber(String orderNumber) {
+		this.orderNumber = orderNumber;
+	}
+
+	private String bankname;
+	
+	private String banknumber;
+	
+	private String checknumber;
+	
+	private String accountnumber;
+	
 	public Paymentmethod() {
 	}
 
@@ -44,15 +56,67 @@ public class Paymentmethod implements Serializable {
 		this.paymentType = paymentType;
 	}
 
-	public CustomerOrder getCustomer() {
-		return this.customerOrder;
-	}
-
-	public void setCustomer(CustomerOrder customer) {
-		this.customerOrder = customer;
-	}
 
 	public boolean isPaymentTypeCash(){
 		return getPaymentType() == "Cash" ? true : false;
 	}
+
+	/**
+	 * @return the bankname
+	 */
+	public String getBankname() {
+		return bankname;
+	}
+
+	/**
+	 * @param bankname the bankname to set
+	 */
+	public void setBankname(String bankname) {
+		this.bankname = bankname;
+	}
+
+	/**
+	 * @return the banknumber
+	 */
+	public String getBanknumber() {
+		return banknumber;
+	}
+
+	/**
+	 * @param banknumber the banknumber to set
+	 */
+	public void setBanknumber(String banknumber) {
+		this.banknumber = banknumber;
+	}
+
+	/**
+	 * @return the checknumber
+	 */
+	public String getChecknumber() {
+		return checknumber;
+	}
+
+	/**
+	 * @param checknumber the checknumber to set
+	 */
+	public void setChecknumber(String checknumber) {
+		this.checknumber = checknumber;
+	}
+
+	/**
+	 * @return the accountnumber
+	 */
+	public String getAccountnumber() {
+		return accountnumber;
+	}
+
+	/**
+	 * @param accountnumber the accountnumber to set
+	 */
+	public void setAccountnumber(String accountnumber) {
+		this.accountnumber = accountnumber;
+	}
+
+	
+	
 }

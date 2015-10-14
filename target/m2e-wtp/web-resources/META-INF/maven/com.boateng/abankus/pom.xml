@@ -38,12 +38,8 @@
 	<artifactId>jackson-core</artifactId>
 	<version>2.6.1</version>
 </dependency>
-<!-- Security Bouncy Castle -->
-<dependency>
-	<groupId>org.bouncycastle</groupId>
-	<artifactId>bcprov-jdk15on</artifactId>
-	<version>1.52</version>
-</dependency>
+<!-- Java Mail -->
+
 <dependency>
 	<groupId>javax.mail</groupId>
 	<artifactId>javax.mail-api</artifactId>
@@ -80,7 +76,7 @@
 		<dependency>
         	<groupId>org.springframework.amqp</groupId>
         	<artifactId>spring-rabbit</artifactId>
-        	<version>1.4.5.RELEASE</version>
+        	<version>1.5.1.RELEASE</version>
     	</dependency>
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
@@ -243,6 +239,7 @@
 			<artifactId>javax.inject</artifactId>
 			<version>1</version>
 		</dependency>
+
 				
 		<!-- Servlet -->
 		<dependency>

@@ -24,6 +24,11 @@
 			<div class="col-xs-12 col-sm-12 col-md-10">
 			<h1>Customer Order History</h1>
 			<hr  class="line1"/>
+			<div id="orderHistoryMessage" class="hidden" role="alert">
+			
+			</div>
+
+
 			<div id="orderSummary">
 			<c:if test="${not empty customerOrder }">
 			<table id='orderHistoryTable' class="table">
@@ -89,14 +94,28 @@ $(document).ready(function(){
 	 $('#orderHistoryTable').DataTable();
 	$("#makePaymentBtn").click(function(){
 		var orderNo = $("input:radio[name=orderNumber]:checked").val();
-		var amount= $("#tblTotalAmount").text();
-		var form = document.makeCustomerOrderPayment;
-		form.orderNumber.value = orderNo;
-		form.totalAmount.value = amount;
-		form.orderDate.value = $("#tblOrderDate").text();
-		form.productCode.value = $("#tblProductCode").text();
-		form.submit();
+		if(validSubmit(orderNo)){
+			var amount= $("#tblTotalAmount").text();
+			var form = document.makeCustomerOrderPayment;
+			form.orderNumber.value = orderNo;
+			form.totalAmount.value = amount;
+			form.orderDate.value = $("#tblOrderDate").text();
+			form.productCode.value = $("#tblProductCode").text();
+			form.submit();			
+		}else{
+			$('#orderHistoryMessage').removeClass('hidden');
+			$('#orderHistoryMessage').addClass('alert alert-danger');
+			$('#orderHistoryMessage').html('You must select at least one option from the list of Order');
+		}
+
 	});
 });
+
+function validSubmit(radio){
+	if(radio == undefined){
+		return false;
+	}
+	return true;
+}
 </script>
 </html>

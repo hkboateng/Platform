@@ -31,7 +31,7 @@
 			<hr class="line1">
 						<div class="paymentContainer">
 						<div class="platform-alert" id="paymentMessage">
-						
+						${validation }
 						</div>
 						<div class="platform-alert" id="paymentForm">
 						<c:choose>
@@ -75,16 +75,17 @@
 										</select>
 										<div id="paymentDetails" class="hidden">
 											<p>Hello EveryOne</p>
-										</div>
+										</div><%--<fmt:formatNumber value="${customerOrder.getTotalAmount()} --%>
 										<label for="paymentAmount">Payment Amount:</label>
-										 <input type="text"	name="paymentAmount" class="form-state  width-75" id="paymentAmount" value="<fmt:formatNumber value="${customerOrder.getTotalAmount()}" type="currency"/>" />
+										 <input type="text"	name="paymentAmount" class="form-state  width-75" id="paymentAmount" value="0.00" />
 											<p>
 												<button name="paymentSubmitBtn" id="paymentSubmitBtn" onclick="javascript:customerPaymentConfirmation(document.paymentForm);return false;" class="btn btn-success">Continue with Payment</button>
 											</p>	
 																			
 											<input type="hidden" name="pId" value="${orderNumber }" id="pId"/>	
-											<input type="hidden" name="orderTotalAmount" id="orderTotalAmount" value="${amount }">	
+											<input type="hidden" name="orderTotalAmount" id="orderTotalAmount" value="${customerOrder.getTotalAmount()}">	
 											<input type="hidden" name="cust" id="cust" value="${cust}">
+											
 											</div>		
 												<!-- Review and Submit Customer Payment -->
 												<div class="hidden col-md-6" id="paymentSummary">
@@ -97,7 +98,7 @@
 														<label for="customerPin">Customer PIN Number:</label>									
 															<div id="customerPin-error" class="help-text-inline-error">
 															</div>	
-														<input type="text" name="customerPIN" id="customerPIN" class="form-state width-50"  />
+														<input type="password" name="customerPIN" id="customerPIN" onchange="" class="form-state width-50"  />
 														<div class="help-text-inline inlineBlock">
 															Click only once because clicking more than once will submit the payment more than once.
 														</div>	
@@ -133,42 +134,116 @@
 
 <script>
 $(document).ready(function(){
+	var messageDiv = $('#paymentMessage');
+	
 	$("#paymentHeading").html("Make A Payment");
 	$('#paymentAmount').blur(function(){
 		$(this).mask('000,000.00', {reverse: true});
 	});
+	
 	$('#paymentAmount').focusout(function(){
 		$(this).mask('000,000.00', {reverse: true});
 	});	
 
-
 	
+	$('#submitBtn').click(function(e){
+		e.preventDefault();
+		var custId = $("#customerPIN").val();
+		var customerId = $("#cust").val();
+		
+		if(!validatePin(custId)){
+			$('#customerPin-error').text("You must enter a valid Pin Number!!!");
+			showMessage("You must enter a valid Pin Number!!!","alert");
+			return;
+		}else{
+			$('#customerPin-error').text(" ");
+			hideMessageDiv(messageDiv);
+			$.ajax({
+				url: 'validateCustomerAuthenticate',
+				data : {
+					customerId:customerId , customerpin:custId
+					},
+				dataType: 'json',
+				success : function(result){
+					if(result == "true"){
+						submitPayment(result,messageDiv);
+					}else{
+						showMessage("You must enter a valid Pin Number!!!","alert",messageDiv);
+						$('#customerPin-error').text("You entered an invalid Pin Code. Try again");
+					}
+					
+				},
+				error : function(err){
+					console.log(err+" error");
+				}
+			});
+			
+		}		
+	});
 });
+function hideMessageDiv(message){
+	message.removeClass('platform-alert-caution');
+	message.removeClass('platform-info-caution ');	
+	message.html(" ");
+	message.addClass('hidden');
+}
 
+function showMessage(message,level,messageDiv){
+	if(level === "alert"){
+		messageDiv.addClass('platform-alert-caution');
+	}else if(level === "info"){
+		messageDiv.addClass('platform-info-caution ');	
+	}
+	messageDiv.html(message);
+	messageDiv.removeClass('hidden');	
+}
+function submitPayment(results,messageId){
+	//document.customerPaymentForm.submit();
+
+	var data = {
+		orderTotalAmount : $("#orderTotalAmount").val(),
+		orderNumber : $("#orderNumber").val(),
+		paymentSchedule :$("#paymentSchedule").val(),
+		paymentAmount: $("#paymentAmount").val(),
+		paymentType: $("#paymentType").val()
+	}
+	$.ajax({
+		url: 'submitOrderPayment',
+
+		data : data,
+		type: 'get',
+		dataType: 'json',
+		success : function(result){
+			if(!result.status){
+				displayMessage(result,messageId);
+				console.log(result);				
+			}
+			
+		},
+		error : function(err){
+			console.log(err);
+		}
+	});
+}
 function validatePin(custId){
 	console.log(custId)
 	var valid = false;
-	if(isEmpty(custId) || !isAlphaNumeric(custId)){
-		valid = false
-	}else{
+	if(!isEmpty(custId) || isAlphaNumeric(custId)){
 		valid = true;
 	}
 	
 	return valid;
 }
-
-function submitPayment(custId){
-
-	if(!validatePin(custId.value)){
-		$('#customerPin-error').text("You must enter a valid Pin Number!!!");
-		return;
-	}else{
-		$('#customerPin-error').text(" ");
-		$('#pId').val($("#customerPIN").val());
-		document.customerPaymentForm.submit();
-	}
+function displayMessage(resultmessageDiv){
+	messageDiv.addClass('platform-info-caution');
+	$.each(result,function(key,value){
+		messageDiv.text(result);
+	});
 	
+	//$('#customerPin-error').text("You entered an invalid Pin Code. Try again");
 }
+
+
 </script>
 	</body>
 	</html>

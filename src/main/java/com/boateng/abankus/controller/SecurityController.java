@@ -2,6 +2,7 @@ package com.boateng.abankus.controller;
 
 import java.util.Locale;
 import java.util.UUID;
+import java.util.logging.Level;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -88,14 +89,15 @@ public class SecurityController extends PlatformAbstractServlet {
 	
 	@RequestMapping(value = "/platform/dashboard", method = RequestMethod.GET)
 	public String dashbaord(Locale locale, Model model,HttpServletRequest request) {
-		String username = request.getUserPrincipal().getName();
-		logger.info("User: {} has logged in successfully.",username);
+				
 		try {
 			loadUserIntoSession(request);
 			loadEmployeeIntoSessionByUsername(request);
 			loadProductIntoMap();
-		} catch (PlatformException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			PlatformException ace  = new PlatformException();
+			ace.logger(Level.WARNING,e.getMessage(), e);
+
 		}
 		
 		logger.info("User data has being saved into the current session.");
@@ -110,7 +112,6 @@ public class SecurityController extends PlatformAbstractServlet {
 			session.removeAttribute("user");
 			session.invalidate();
 		}
-		String Id = UUID.randomUUID().toString();
 		redirectAttributess.addFlashAttribute("info", "You have logout successfully.");
 		return "redirect:/login";
 	}		

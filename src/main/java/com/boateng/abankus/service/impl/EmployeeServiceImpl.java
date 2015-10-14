@@ -26,6 +26,7 @@ import com.boateng.abankus.services.AuthenticationService;
 import com.boateng.abankus.services.EmployeeService;
 
 @Component
+
 public class EmployeeServiceImpl implements EmployeeService{
 	private final Logger log = Logger.getLogger(EmployeeServiceImpl.class);
 
@@ -140,21 +141,5 @@ public class EmployeeServiceImpl implements EmployeeService{
 				
 				return employeeSale;
 	}
-	
-	@Transactional
-	@Override
-	public EmployeeCustomerAccount saveEmployeeCustomer(EmployeeCustomerAccount eca){
-		Session session = getSessionFactory().getCurrentSession();
-				session.save("Employeecustomeraccount", eca);
-		return eca;
-	}
-	/* (non-Javadoc)
-	 * @see com.boateng.abankus.services.EmployeeService#addEmployeeSalesAccount(com.boateng.abankus.domain.Employee, com.boateng.abankus.domain.Customer, java.lang.String, java.lang.String)
-	 */
-	@Override
-	public CustomerAccount addEmployeeSalesAccount(Employee employee,
-			Customer customer, String industry, String notes) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 }

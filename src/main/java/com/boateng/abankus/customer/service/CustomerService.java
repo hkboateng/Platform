@@ -2,7 +2,10 @@ package com.boateng.abankus.customer.service;
 
 import java.util.List;
 
+import org.hibernate.Session;
+
 import com.boateng.abankus.domain.Address;
+import com.boateng.abankus.domain.Authenticatecustomer;
 import com.boateng.abankus.domain.Customer;
 import com.boateng.abankus.domain.CustomerAccount;
 import com.boateng.abankus.domain.Email;
@@ -21,6 +24,7 @@ public interface CustomerService {
 	 */
 	Customer findCustomerByCustomerNumber(String customerNo);
 
+	Customer findCustomerByCustomerIdAndPinCode(int customerId,String pinCode);
 	
 	/**
 	 * Returns an Instance of a CustomerAccount by searching using customer's Account Number.
@@ -85,5 +89,7 @@ public interface CustomerService {
 	 * @param customer
 	 * @throws Exception
 	 */
-	void saveCustomerPin(String pin, Customer customer) throws Exception;
+	void saveCustomerPin(String pin, Customer customer,Session session) throws Exception;
+	
+	Authenticatecustomer findCustomerById(int id);
 }

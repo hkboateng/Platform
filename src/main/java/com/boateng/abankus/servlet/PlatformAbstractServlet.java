@@ -6,12 +6,15 @@ package com.boateng.abankus.servlet;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -31,7 +34,7 @@ import com.boateng.abankus.services.ProductService;
  */
 public abstract class PlatformAbstractServlet {
 
-	private static final Logger logger = LoggerFactory.getLogger(PlatformAbstractServlet.class);
+	private static final Logger logger = Logger.getLogger(PlatformAbstractServlet.class.getName());
 	
 	@Autowired(required=true)
 	@Qualifier(value="authenticationServiceImpl")
@@ -50,7 +53,7 @@ public abstract class PlatformAbstractServlet {
 		String username = request.getUserPrincipal().getName();
 		
 		if(session.getAttribute("user") == null){
-			logger.info("User: "+username+" has being loaded into session.");
+			logger.log(Level.FINEST,"User: "+username+" has being loaded into session.");
 			User user = authenticationServiceImpl.findUserByUserName(username);
 			session.setAttribute("user",user);
 		}
@@ -76,6 +79,7 @@ public abstract class PlatformAbstractServlet {
 	 * 
 	 */
 	public void loadProductIntoMap(){
+		
 		productServiceProcessor.loadProductIntoSession();
 	}
 	

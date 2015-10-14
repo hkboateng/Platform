@@ -22,15 +22,6 @@ public interface EmployeeService {
 
 	Employee getEmployeeById(int employeeId);
 
-	/**
-	 * @param employee
-	 * @param customer
-	 * @param industry
-	 * @param notes
-	 * @return
-	 */
-	CustomerAccount addEmployeeSalesAccount(Employee employee,Customer customer, String industry, String notes);
-
 
 	/**
 	 * @param Id
@@ -46,10 +37,5 @@ public interface EmployeeService {
 	Salesemployee saveEmployeeSales(Salesemployee employeeSale);
 
 
-	/**
-	 * @param eca
-	 * @return
-	 */
-	EmployeeCustomerAccount saveEmployeeCustomer(EmployeeCustomerAccount eca);
 	
 }

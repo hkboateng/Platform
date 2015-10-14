@@ -7,11 +7,13 @@ import javax.persistence.Cacheable;
 
 import org.apache.log4j.Logger;
 import org.hibernate.CacheMode;
+import org.hibernate.LockMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Caching;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +29,6 @@ import com.boateng.abankus.employees.utils.EmployeeUtils;
 import com.boateng.abankus.utils.SecurityUtils;
 
 @Component
-
 public class CustomerServiceImpl implements CustomerService {
 
 	private static final Logger logger = Logger.getLogger(CustomerServiceImpl.class);
@@ -86,8 +87,9 @@ public class CustomerServiceImpl implements CustomerService {
 		logger.info("Pin Number is: "+pin);
 		Authenticatecustomer auth = new Authenticatecustomer();
 		auth.setCustomer(customers);
-		String encryptedPIN = SecurityUtils.encode(pin);
+		String encryptedPIN = SecurityUtils.generateStorngPasswordHash(pin);
 		auth.setPin(encryptedPIN);	
+		auth.setPasscode(pin);
 		return auth;
 		
 	}
@@ -237,21 +239,52 @@ public class CustomerServiceImpl implements CustomerService {
 		customerAccount.setStatus("Active");
 		customerAccount.setIndustry(industry);
 		customerAccount.setNotes(notes);
-		
+		customerAccount.setEmployee(employee);
 		session.save(customerAccount);
-		
+		session.flush();
 		return customerAccount;
 	}
 	
 	@Transactional
 	@Override
-	public void saveCustomerPin(String pin,Customer customer) throws Exception{
-		Session session = getSessionFactory().getCurrentSession();
+	public void saveCustomerPin(String pin,Customer customer,Session session) throws Exception{
+		session = getSessionFactory().getCurrentSession();
 		Authenticatecustomer auth = new Authenticatecustomer();
 		auth.setCustomer(customer);
 		String encryptedPIN = SecurityUtils.encode(pin);
 		auth.setPin(encryptedPIN);
-		
+		auth.setPasscode(pin);
 		session.save(auth);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.boateng.abankus.customer.service.CustomerService#findCustomerByCustomerIdAndPinCode(java.lang.String, java.lang.String)
+	 */
+	@Override
+	@Transactional
+	public Customer findCustomerByCustomerIdAndPinCode(int customerId,String pinCode) {
+		Session session = getSessionFactory().getCurrentSession();
+		String query = "From Authenticatecustomer ac where ac.customer.customerId = :customerId and ac.passcode=:pinCode";
+		Customer customer = (Customer) session.createQuery(query)
+				.setLockMode("customerpasscode", LockMode.PESSIMISTIC_WRITE)
+							.setParameter("customerId", customerId)
+							.setParameter("pinCode", pinCode)
+							.uniqueResult();
+		return customer;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.boateng.abankus.customer.service.CustomerService#findCustomerById(int)
+	 */
+	@Override
+	@Transactional
+	public Authenticatecustomer findCustomerById(int id) {
+		Session session = getSessionFactory().getCurrentSession();
+		String query = "From Authenticatecustomer ac where ac.customer.customerId = :customerId";
+		Authenticatecustomer customer = (Authenticatecustomer) session.createQuery(query)
+				.setLockMode("customerpasscode", LockMode.PESSIMISTIC_WRITE)
+							.setParameter("customerId", id)
+							.uniqueResult();
+		return customer;
 	}
 }

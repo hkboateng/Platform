@@ -98,8 +98,10 @@ public class SecurityUtils {
 	        }
 	        return bytes;
 	    }
-	  public static synchronized String generateStorngPasswordHash(String password){
-		  return passwdencode().encode(password);
+	  public static  String generateStorngPasswordHash(String password){
+		  synchronized(password){
+			  return passwdencode().encode(password);
+		  }
 	  }
 	  
 	  public static boolean authenticatePassword(String originalPassword, String storedPassword){

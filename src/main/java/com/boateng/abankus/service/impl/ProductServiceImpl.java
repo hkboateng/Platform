@@ -19,6 +19,7 @@ import com.boateng.abankus.services.ProductService;
  * @author hkboateng
  *
  */
+
 public class ProductServiceImpl implements ProductService{
 
 	@Autowired

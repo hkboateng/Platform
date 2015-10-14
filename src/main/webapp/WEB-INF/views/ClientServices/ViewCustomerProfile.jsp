@@ -211,6 +211,37 @@
 				  									 
  				 </div>
   				 <div class="col-xs-12 col-md-4">
+	  				 <div class="dropdown">
+						  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+						    Action
+						    <span class="caret"></span>
+						  </button>
+						  <ul class="dropdown-menu " aria-labelledby="dropdownMenu1">
+			  				 <c:choose>
+			  				 	<c:when test="${customerAccount.isCustomerActive()}">
+				  				 	<li>
+								  		<a href="sendMessage" class=""><span class="glyphicon glyphicon-envelope moveR_20" aria-hidden="true"></span>Send Message</a>  				 	
+				  				 	</li>  				 	
+			  				 	</c:when>
+			  				 	<c:otherwise>
+				  				 	<li>
+								  		<a href="snedSaleMessage" class=""><span class="glyphicon glyphicon-envelope moveR_20" aria-hidden="true"></span>Send Sales Message</a>  				 	
+				  				 	</li>   				 	
+			  				 	</c:otherwise>
+							</c:choose>
+							<li role="separator" class="divider"></li>
+			  				 	<li>
+							  		<a href="javascript:makePayment('makePayment',document.makeCustomerPayment);" class=""><i class="fa fa-money moveR_20"></i>Make A Payment</a>  				 	
+			  				 	</li>	
+			  				 	<li>
+			  				 		<a href="javascript:orderHistory('orderHistory',document.formOrderHistroy);" ><i class="fa fa-exchange moveR_20"></i>View Customer Order History</a>
+			  				 	</li>	
+			  				 	<li role="separator" class="divider"></li>
+			  				 	<li>
+			  				 		<a href="/abankus/client/createCustomerOrder?accountNumber=${customerAccount.accountNumber }"><i class="fa fa-exchange moveR_20"></i>Add New Order</a>
+			  				 	</li>	
+						  </ul>
+						</div>
   				 <div id="customerDetailBlock">
  				 	<div>
 					  	<ul class="navigation-linear">

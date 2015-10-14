@@ -42,6 +42,17 @@ public class PlatformUtils {
 		return sbr.toString();
 	}
 	
+	public static String generateConfirmationNo(){
+		StringBuilder sbr = new StringBuilder();
+		DateTime dt = DateTime.now();
+		String characters = RandomStringUtils.randomAlphanumeric(6).toUpperCase();
+		sbr.append(characters);
+		sbr.append("-").append(dt.getHourOfDay())
+		   .append(dt.getMinuteOfHour())
+		   .append(dt.getSecondOfDay())
+		   .append(dt.getMillisOfSecond());
+		return sbr.toString();
+	}
 
 	public static DateTime convertUnixTime(String date){
 		return DateTime.parse(date).toDateTime();

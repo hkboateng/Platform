@@ -1,5 +1,4 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
- 
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <!DOCTYPE html>
@@ -28,6 +27,11 @@
           <h2>Overview</h2>
 			<hr>
           <div class="row">
+          <c:if test="${not empty success }">
+	          <div class="alert alert-success" role="alert">
+	          	${success}
+	          </div>
+          </c:if>
           	<div class="col-xs-12 col-sm-6 col-md-4">
           	
           	</div>
@@ -48,6 +52,9 @@
           	
           </div>
 </div>
+<script type="text/javascript">
+
+</script>
 </div>
 </div>
 </body>

@@ -34,7 +34,7 @@ public class Clientorder implements Serializable {
 
 	//bi-directional many-to-one association to Orderpayment
 	@OneToMany(mappedBy="clientorder", fetch=FetchType.EAGER)
-	private List<Orderpayment> orderpayments;
+	private List<OrderPayment> orderpayments;
 
 	public Clientorder() {
 	}
@@ -95,26 +95,13 @@ public class Clientorder implements Serializable {
 		this.unitCost = unitCost;
 	}
 
-	public List<Orderpayment> getOrderpayments() {
+	public List<OrderPayment> getOrderpayments() {
 		return this.orderpayments;
 	}
 
-	public void setOrderpayments(List<Orderpayment> orderpayments) {
+	public void setOrderpayments(List<OrderPayment> orderpayments) {
 		this.orderpayments = orderpayments;
 	}
 
-	public Orderpayment addOrderpayment(Orderpayment orderpayment) {
-		getOrderpayments().add(orderpayment);
-		orderpayment.setClientorder(this);
-
-		return orderpayment;
-	}
-
-	public Orderpayment removeOrderpayment(Orderpayment orderpayment) {
-		getOrderpayments().remove(orderpayment);
-		orderpayment.setClientorder(null);
-
-		return orderpayment;
-	}
 
 }

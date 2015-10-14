@@ -592,6 +592,12 @@ label{
 	color:#fff;
 	text-align:center;
 }
+.platform-info-caution{
+	background-color:#06b7ea;
+	border: 1px solid #0080ff;
+	color:#fff;
+	text-align:center;
+}
 .width-50{
 	width:48%;
 }

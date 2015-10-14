@@ -38,6 +38,9 @@ public class CustomerAccount implements Serializable {
 
 	private Timestamp dateCreate;
 
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="employeeId", referencedColumnName="employeeId")
+	private Employee employee;
 
 	@NotNull
 	private String status;
@@ -46,6 +49,7 @@ public class CustomerAccount implements Serializable {
 	
 	@NotNull
 	private String industry;
+	
 	//bi-directional many-to-one association to Customer
 	@ManyToOne(fetch = FetchType.EAGER)
 	@Cascade(value=org.hibernate.annotations.CascadeType.MERGE)
@@ -153,5 +157,19 @@ public class CustomerAccount implements Serializable {
 		}
 			
 		return customer;
+	}
+
+	/**
+	 * @return the employee
+	 */
+	public Employee getEmployee() {
+		return employee;
+	}
+
+	/**
+	 * @param employee the employee to set
+	 */
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
 	}
 }

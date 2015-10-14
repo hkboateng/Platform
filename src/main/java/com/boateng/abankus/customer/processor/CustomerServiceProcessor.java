@@ -177,11 +177,7 @@ public class CustomerServiceProcessor extends AbankusBaseProcessor{
 		String industry = request.getParameter("customerIndustry");
 		String notes = request.getParameter("notes");
 		CustomerAccount customerAccount = customerServiceImpl.addEmployeeSalesAccount(employee, customer, industry, notes);
-		
-		EmployeeCustomerAccount eca = new EmployeeCustomerAccount();
-		eca.setCustomerAccount(customerAccount.getCustomerAccount());
-		eca.setEmployee(employee);
-		employeeSvcImpl.saveEmployeeCustomer(eca);
+
 	}
 	
 	public Set<Customer> getAllCustomers(){

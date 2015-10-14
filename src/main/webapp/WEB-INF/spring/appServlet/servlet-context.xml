@@ -8,14 +8,14 @@
 	xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:rabbit="http://www.springframework.org/schema/rabbit"
 	xmlns:security="http://www.springframework.org/schema/security"
-	xsi:schemaLocation="http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.1.xsd
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.1.xsd
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
-		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
-		http://www.springframework.org/schema/rabbit http://www.springframework.org/schema/rabbit/spring-rabbit.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.8.xsd
-		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+		http://www.springframework.org/schema/rabbit http://www.springframework.org/schema/rabbit/spring-rabbit.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
 
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
 	
@@ -71,7 +71,7 @@
     <context:component-scan base-package="com.boateng.abankus" />
 
 
-	<!-- RabbitMQ -->
+	<!-- RabbitMQ 
 	<rabbit:connection-factory    id="connectionFactory"
 			cache-mode="CONNECTION"
 			host="localhost"
@@ -113,7 +113,7 @@
 	    <rabbit:listener queues="platformCustomer" ref="customerServiceProccessor" method="handle"/>
 	</rabbit:listener-container>    
 	
-	<!-- End Spring AMPQ -->
+	 End Spring AMPQ -->
     <!-- Controller and Entity Beans -->
     <beans:bean id="homeController" class="com.boateng.abankus.controller.HomeController"/>
     
@@ -130,12 +130,19 @@
 	<beans:bean id="productServiceProcessor" class="com.boateng.abankus.processors.ProductServiceProcessor" />
 	
 	<beans:bean id="orderOrderProcessor" class="com.boateng.abankus.processors.CustomerOrderProcessor" />
+
+	
+	<beans:bean id="paymentProcessor" class="com.boateng.abankus.processors.PaymentProcessor" />
 	
 	<beans:bean id="customerServiceImpl" class="com.boateng.abankus.service.impl.CustomerServiceImpl">
 		<beans:property name="sessionFactory" ref="sessionFactory" />
+
 	</beans:bean>
 
-
+	<beans:bean id="paymentServiceImpl" class="com.boateng.abankus.service.impl.PaymentServiceImpl">
+		<beans:property name="sessionFactory" ref="sessionFactory" />
+	</beans:bean>
+	
 	<beans:bean id="customerOrderServiceImpl" class="com.boateng.abankus.service.impl.CustomerOrderServiceImpl">
 		<beans:property name="sessionFactory" ref="sessionFactory" />
 	</beans:bean>
