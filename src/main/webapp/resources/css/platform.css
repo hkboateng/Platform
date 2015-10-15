@@ -605,7 +605,7 @@ label{
 	width:28%;
 }
 .width-100{
-	width:98%;
+	width:98% !important;
 }
 .width-70{
 	width:68%;
@@ -619,4 +619,28 @@ label{
 input[readonly]{
 	broder:none;
 	color:#000;
+}
+.buttonAction {
+  display: inline-block;
+  margin-bottom: 0;
+  font-weight: normal;
+  text-align:right !important;
+  -ms-touch-action: manipulation;
+      touch-action: manipulation;
+  cursor: pointer;
+  background-image: none;
+  border: none;
+  white-space: nowrap;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  border-radius: 4px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;	
+  color: #333333;
+  background-color: #ffffff;
+  border-color: #cccccc;
+  width:100%;
 }

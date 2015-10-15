@@ -3,13 +3,14 @@
  */
 package com.boateng.abankus.domain;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.joda.time.DateTime;
+
 import com.boateng.abankus.application.interfaces.Billing;
-import com.boateng.abankus.customer.service.Client;
 
 /**
  * @author hkboateng
@@ -23,7 +24,7 @@ public class CustomerBilling implements Billing {
 	
 	private CustomerOrder clientOrderId;
 	
-	private Date orderDate;
+	private DateTime orderDate;
 	
 	private String totalOrderAmount;
 	
@@ -31,11 +32,29 @@ public class CustomerBilling implements Billing {
 
 	private Map<String, OrderPayment> paymentMap;
 	
-	public CustomerBilling(Customer customer){
-		this.customer = customer;
+	public CustomerBilling(CustomerOrder clientOrderId){
 		payments = new ArrayList<OrderPayment>();
+		if(clientOrderId != null){
+			this.clientOrderId = clientOrderId;
+			this.orderDate = convertDateFromLong(clientOrderId);
+			this.totalOrderAmount = clientOrderId.getTotalAmount().toString();
+			this.customer = clientOrderId.getCustomer();
+			//addPaymentToList();
+		}
 	}
 
+	/**
+	 * @param payments the payments to set
+	 */
+	public void setPayments(List<OrderPayment> payments) {
+		this.payments = payments;
+	}
+
+	private DateTime convertDateFromLong(CustomerOrder order){
+		DateTime dateTime = new DateTime(order.getOrderDate());
+		
+		return dateTime;
+	}
 	/**
 	 * @return the billingId
 	 */
@@ -81,14 +100,14 @@ public class CustomerBilling implements Billing {
 	/**
 	 * @return the orderDate
 	 */
-	public Date getOrderDate() {
+	public DateTime getOrderDate() {
 		return orderDate;
 	}
 
 	/**
 	 * @param orderDate the orderDate to set
 	 */
-	public void setOrderDate(Date orderDate) {
+	public void setOrderDate(DateTime orderDate) {
 		this.orderDate = orderDate;
 	}
 
@@ -128,8 +147,44 @@ public class CustomerBilling implements Billing {
 	}
 
 	public void addPaymentToList(OrderPayment payment){
-		if(payment.getClientorder().getOrderNumber().equals(getClientOrderId().getOrderNumber())){
+		if(getClientOrderId().getOrderNumber().equals(payment.getClientorder().getOrderNumber())){
 			payments.add(payment);
 		}
+	}
+	
+	public float totalAmountPaid(){
+		float total = 0.0f;
+		if(!getPayments().isEmpty()){
+			
+			for(OrderPayment payment: payments){
+				total +=payment.getAmountPaid();
+			}
+		}
+		
+		return total;
+	}
+	
+	public double totalAmountRemaining(){
+		double total = 0.00;
+		BigDecimal d = null;
+		if(!finishPaying()){
+			double amountPaid = totalAmountPaid();
+			double totalAmount = Double.valueOf(getTotalOrderAmount());
+			
+			total = totalAmount - amountPaid;
+			d = new BigDecimal(total);
+			d = d.setScale(2, BigDecimal.ROUND_HALF_UP);
+		}
+		
+		return d.doubleValue();
+	}
+	
+	public boolean finishPaying(){
+		boolean finished = false;
+		float totalAmount = Float.valueOf(getTotalOrderAmount());
+		if(totalAmount == totalAmountPaid()){
+			finished = true;
+		}
+		return finished;
 	}
 }

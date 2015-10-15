@@ -179,4 +179,6 @@ public class CustomerOrder implements Client, Serializable{
 
 		return date.toString("MMMM d yyyy");
 	}
+	
+	
 }

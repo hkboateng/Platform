@@ -4,6 +4,7 @@
 package com.boateng.abankus.service.impl;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.transaction.Transactional;
@@ -52,11 +53,25 @@ public class PaymentServiceImpl implements PaymentService {
 		Session session = getSessionFactory().getCurrentSession();
 		session.save(paymentMethod);
 		payment.setPaymentMethodId(paymentMethod.getPaymentMethodId());
+		String confirmationNo = PlatformUtils.generateConfirmationNo();
+		payment.setConfirmationNumber(confirmationNo);
 		session.save(payment);
 		session.flush();
 		
-		String confirmationNo = PlatformUtils.generateConfirmationNo();
+		
 		return confirmationNo;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional
+	@Override
+	public List<OrderPayment> findPaymentsByOrderId(long customerOrderId){
+		Session session = getSessionFactory().getCurrentSession();
+		List<OrderPayment> orderPayment = session.createQuery("from OrderPayment o where o.clientorder.clientOrderId =:orderId")
+		.setParameter("orderId", customerOrderId)
+		.list();
+		
+		return orderPayment;
 	}
 
 }

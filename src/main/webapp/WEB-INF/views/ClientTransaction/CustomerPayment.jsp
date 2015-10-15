@@ -41,7 +41,7 @@
 									<div class="col-md-6" id="paymentEntry">
 										<label for="orderNumber">Order Number:</label> <input type="text"
 											name="orderNumber" id="orderNumber" class="form-state  width-75"
-											value="${order }" /> 
+											value="${billing.getClientOrderId().getOrderNumber() }" /> 
 											<label for="paymentType">Select Payment
 											Type:</label> <select name="paymentForm" id="paymentType" class="form-state"
 											onchange="javascript:showBankInfoDiv(this);">
@@ -52,17 +52,13 @@
 										<div id="bankInfoDiv" class="hidden moveL_100">
 											<label for="bankName">Name of Bank:</label> <input type="text"
 												name="bankName" class="form-state width-100" id="bankName" value="" />
-											<label for="bankAccountNumber">Account Number:</label> <input
-												type="text" id="bankAccountNumber" name="bankAccountNumber"
-												class="form-state  width-100" />
+											<label for="bankAccountNumber">Account Number:</label> <input type="text" id="bankAccountNumber" name="bankAccountNumber"	class="form-state  width-100" />
 											<div class="help-text bold">Confirm Account Number</div>
-											<input type="text" id="confirmAccountNumber"
-												name="confirmAccountNumber" class="form-state  width-100" /> <label
-												for="bankRoutingNumber">Routing Number:</label> <input type="text"
-												id="bankRoutingNumber" name="bankRoutingNumber"
-												class="form-state  width-100" /> <label for="bankCustName">Name
-												on Bank Account:</label> <input type="text" name="bankCustName"
-												class="form-state width-50" id="bankCustName" value="" />
+											<input type="text" id="confirmAccountNumber" name="confirmAccountNumber" class="form-state  width-100" />
+											<label for="bankRoutingNumber">Routing Number:</label>
+											<input type="text"	id="bankRoutingNumber" name="bankRoutingNumber"	class="form-state  width-100" />
+											<label for="bankCustName">Name on Bank Account:</label>
+											<input type="text" name="bankCustName"	class="form-state width-50" id="bankCustName" value="" />
 										</div>
 										<label for="paymentSchedule">Payment Schedule:</label>
 										<select
@@ -76,8 +72,9 @@
 										<div id="paymentDetails" class="hidden">
 											<p>Hello EveryOne</p>
 										</div><%--<fmt:formatNumber value="${customerOrder.getTotalAmount()} --%>
+										<c:set var="amountLeft" value="${billing.totalAmountRemaining() }"/>
 										<label for="paymentAmount">Payment Amount:</label>
-										 <input type="text"	name="paymentAmount" class="form-state  width-75" id="paymentAmount" value="0.00" />
+										 <input type="text"	name="paymentAmount" class="form-state  width-75" id="paymentAmount" value="${amountLeft}" onblur="javascript:checkAmountPaid(this.value)" />
 											<p>
 												<button name="paymentSubmitBtn" id="paymentSubmitBtn" onclick="javascript:customerPaymentConfirmation(document.paymentForm);return false;" class="btn btn-success">Continue with Payment</button>
 											</p>	
@@ -85,7 +82,7 @@
 											<input type="hidden" name="pId" value="${orderNumber }" id="pId"/>	
 											<input type="hidden" name="orderTotalAmount" id="orderTotalAmount" value="${customerOrder.getTotalAmount()}">	
 											<input type="hidden" name="cust" id="cust" value="${cust}">
-											
+											<input type="hidden" name="amountleft" id="amountleft" value="${amountLeft}"/>
 											</div>		
 												<!-- Review and Submit Customer Payment -->
 												<div class="hidden col-md-6" id="paymentSummary">
@@ -134,6 +131,7 @@
 
 <script>
 $(document).ready(function(){
+	$('#paymentSubmitBtn').attr('disabled','disabled');
 	var messageDiv = $('#paymentMessage');
 	
 	$("#paymentHeading").html("Make A Payment");
@@ -218,7 +216,7 @@ function submitPayment(results,messageId){
 				displayMessage(result,messageId);
 				console.log(result);				
 			}
-			
+			console.log(result);
 		},
 		error : function(err){
 			console.log(err);
@@ -234,8 +232,8 @@ function validatePin(custId){
 	
 	return valid;
 }
-function displayMessage(resultmessageDiv){
-	messageDiv.addClass('platform-info-caution');
+function displayMessage(result,messageDiv){
+	$(messageDiv).addClass('platform-info-caution');
 	$.each(result,function(key,value){
 		messageDiv.text(result);
 	});
@@ -243,7 +241,24 @@ function displayMessage(resultmessageDiv){
 	//$('#customerPin-error').text("You entered an invalid Pin Code. Try again");
 }
 
+function checkAmountPaid(amount){
+	var amountleft = $('#amountleft').val();
+	amount = amount.replace(',','');
+	if(compare(parseFloat(amount),parseFloat(amountleft))){
+		$('#paymentSubmitBtn').attr('disabled','disabled');
+		$("#paymentMessage").addClass('platform-alert-caution').text("You cannot pay more than what you owe. You must up to $"+amountleft)
+		$('#paymentAmount').val("");
+		$('#paymentAmount').focus();
+		
+	}else{
+		$("#paymentMessage").removeClass('platform-alert-caution').text("").addClass('hidden');
+		$('#paymentSubmitBtn').removeAttr('disabled');
+	}
+}
 
+function compare(a,b){
+	return (a > b);
+}
 </script>
 	</body>
 	</html>

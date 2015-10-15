@@ -27,10 +27,20 @@ public class FactoryImpl extends Factory {
 	Client client = null;
 
 	Billing billing = null;
+	
+	private static final FactoryImpl factory = new FactoryImpl();
+	
+	private FactoryImpl(){}
+	
+	public static FactoryImpl getFactory(){
+		return factory;
+	}
+	
 	@Override
-	public Billing build(String domain, HttpServletRequest request) {
-		if(domain.contentEquals(domain)){
-			billing = createCustomerBilling(request);
+	public CustomerBilling customerBilling(CustomerOrder customerOrder) {
+		CustomerBilling billing = null;
+		if(customerOrder != null){
+			billing = new CustomerBilling(customerOrder);
 		}
 
 		return billing;
@@ -69,10 +79,6 @@ public class FactoryImpl extends Factory {
 		return customerOrder;
 	}
 
-
-	private CustomerBilling createCustomerBilling(HttpServletRequest request){
-		return null;
-	}
 
 	/* (non-Javadoc)
 	 * @see com.boateng.abankus.domain.factory.Factory#construct(java.lang.String, javax.servlet.http.HttpServletRequest)

@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.boateng.abankus.customer.processor.CustomerServiceProcessor;
@@ -97,6 +98,7 @@ public class PaymentProcessor {
 			
 		}catch(NumberFormatException e){
 			PlatformException ace = new PlatformException(e);
+			
 			sbr.append("Amount Entered contains invalid characters!!. Please check and try again!!!.");
 		}
 		return sbr.toString();
@@ -108,7 +110,7 @@ public class PaymentProcessor {
 			paidAmount = Double.parseDouble(amount);
 			
 			CustomerOrder order = customerOrderServiceImpl.findCustomerOrderByOrderNumber(orderNumber);
-			
+
 			OrderPayment orderPayment = new OrderPayment(paidAmount,employee,order);
 			Paymentmethod paymentMethod = new Paymentmethod();
 			/**

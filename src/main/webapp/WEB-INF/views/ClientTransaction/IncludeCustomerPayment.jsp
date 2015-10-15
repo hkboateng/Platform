@@ -1,5 +1,6 @@
 <%@ page import="com.boateng.abankus.utils.PlatformUtils" %>
 <%@taglib prefix="joda" uri="http://www.joda.org/joda/time/tags" %>
+<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
 <sf:form class="forms" name="paymentForm" action="submitOrderPayment"	method="post">
 	<div class="row">
 		<div class="col-md-6">

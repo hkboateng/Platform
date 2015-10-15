@@ -26,6 +26,22 @@ public class OrderPayment implements Serializable {
 
 	private int paymentMethodId;
 
+	private String confirmationNumber;
+	
+	/**
+	 * @return the confirmationNumber
+	 */
+	public String getConfirmationNumber() {
+		return confirmationNumber;
+	}
+
+	/**
+	 * @param confirmationNumber the confirmationNumber to set
+	 */
+	public void setConfirmationNumber(String confirmationNumber) {
+		this.confirmationNumber = confirmationNumber;
+	}
+
 	//bi-directional many-to-one association to Employee
 	@ManyToOne
 	@JoinColumn(name="employeeId")

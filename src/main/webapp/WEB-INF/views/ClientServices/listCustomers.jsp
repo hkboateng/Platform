@@ -16,6 +16,7 @@
 <link href="<c:url value="/resources/css/bootstrap.css" />" rel="stylesheet"/>
 <link href="<c:url value="/resources/css/platform.css" />" rel="stylesheet"/>
 <link href="<c:url value="/resources/css/datepicker.css" />" rel="stylesheet"/>
+<link href="<c:url value="/resources/css/tables/jquery.dataTables.css" />" rel="stylesheet"/>
 <script src="<c:url value="/resources/js/jquery.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/bootstrap.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/application.js" />" type="text/javascript"></script>
@@ -61,10 +62,8 @@
 			          </ul>
 		          </div>
 		          <div class="">
-		          <div class="panel panel-info">
-				  <!-- Default panel contents -->
-				  <div class="panel-heading">Panel heading</div>
-					<table class="table table-striped">
+
+					<table id="customerList" class="table table-striped">
 						<thead>
 							<tr>
 								<th>#</th>
@@ -86,13 +85,18 @@
 		          	</c:forEach>
 		          		</tbody>
 		          		</table>
-		          		</div>
-		          </div>
 	          <input type="hidden" value="${customer.customerId }" name="customerId"/>
 	          <input type="hidden" value="${customer.customerNumber }" name="customerName"/>
           </div>
 </div>        
 </div>
 </div>
+<script src="<c:url value="/resources/js/tables/jquery.dataTables.js" />" type="text/javascript"></script>
+<script>
+$(document).ready(function(){
+	 $('#customerList').DataTable();
+})
+</script>
+
 </body>
 </html>

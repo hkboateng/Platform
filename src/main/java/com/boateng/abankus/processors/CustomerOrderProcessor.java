@@ -18,6 +18,7 @@ import com.boateng.abankus.customer.service.CustomerService;
 import com.boateng.abankus.domain.Customer;
 import com.boateng.abankus.domain.CustomerOrder;
 import com.boateng.abankus.domain.Employee;
+import com.boateng.abankus.domain.OrderPayment;
 import com.boateng.abankus.domain.Salesemployee;
 import com.boateng.abankus.domain.factory.Factory;
 import com.boateng.abankus.domain.factory.FactoryImpl;
@@ -27,6 +28,7 @@ import com.boateng.abankus.fields.EmployeeFields;
 import com.boateng.abankus.services.CustomerOrderService;
 import com.boateng.abankus.services.EmployeeService;
 import com.boateng.abankus.services.OrderService;
+import com.boateng.abankus.services.PaymentService;
 
 /**
  * @author hkboateng
@@ -47,6 +49,9 @@ public class CustomerOrderProcessor implements OrderService{
 
 	@Autowired
 	private CustomerService customerServiceImpl;
+	
+	@Autowired
+	private PaymentService paymentServiceImpl;
 	
 	public CustomerOrderProcessor(){
 		//this.orderNumber = PlatformUtils.getClientOrderNumber();
@@ -80,11 +85,11 @@ public class CustomerOrderProcessor implements OrderService{
 	}
 	/* (non-Javadoc)
 	 * @see com.boateng.abankus.services.OrderService#orderService(com.boateng.abankus.domain.CustomerOrder)
-	 */
+	*/
 	@Override
 	public CustomerOrder orderService(HttpServletRequest request, String action) {
-		Factory factory = new FactoryImpl();
-		CustomerOrder customerOrder = (CustomerOrder) factory.construct(action, request);
+
+		CustomerOrder customerOrder = (CustomerOrder) FactoryImpl.getFactory().construct(action, request);
 		try{
 		Integer custId= 0;
 		custId = Integer.valueOf(request.getParameter("customerId"));
@@ -99,7 +104,7 @@ public class CustomerOrderProcessor implements OrderService{
 		
 		return customerOrder;
 	}
-
+	
 	@Override
 	public Salesemployee employeeSales(HttpServletRequest request,CustomerOrder customerOrder) {
 		Employee emp = (Employee) request.getSession(false).getAttribute(EmployeeFields.EMPLOYEE_SESSION);
@@ -158,5 +163,14 @@ public class CustomerOrderProcessor implements OrderService{
 		}
 		CustomerOrder customerOrder = customerOrderServiceImpl.findCustomerOrderByOrderNumber(orderNumber);
 		return customerOrder;
+	}
+
+	@Override
+	public List<OrderPayment> getAllPaymentByCustomerOrder(CustomerOrder order){
+		List<OrderPayment> orderPayment =  null;
+		if(order != null){
+			orderPayment = paymentServiceImpl.findPaymentsByOrderId(order.getClientOrderId());
+		}
+		return orderPayment;
 	}
 }

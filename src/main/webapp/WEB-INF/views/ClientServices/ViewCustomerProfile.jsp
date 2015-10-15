@@ -212,11 +212,11 @@
  				 </div>
   				 <div class="col-xs-12 col-md-4">
 	  				 <div class="dropdown">
-						  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+						  <button class="buttonAction dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
 						    Action
-						    <span class="caret"></span>
+						   <i class="glyphicon glyphicon-tasks moveR_10"></i>
 						  </button>
-						  <ul class="dropdown-menu " aria-labelledby="dropdownMenu1">
+						  <ul class="dropdown-menu width-100 " aria-labelledby="dropdownMenu1">
 			  				 <c:choose>
 			  				 	<c:when test="${customerAccount.isCustomerActive()}">
 				  				 	<li>

@@ -171,8 +171,8 @@ public class OrderController {
 		String custId = request.getParameter("customerId");
 		int customerId = Integer.parseInt(custId);
 		List<CustomerOrder> orderList = customerOrderProcessor.loadAllOrderByCustomer(customerId);
-		model.addAttribute("customerOrder", orderList);
-		model.addAttribute("customerId", custId);
+			model.addAttribute("customerOrder", orderList);
+			model.addAttribute("customerId", custId);
 		return "ClientServices/OrderHistory";
 	}
 	

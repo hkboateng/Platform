@@ -22,10 +22,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.boateng.abankus.domain.CustomerBilling;
 import com.boateng.abankus.domain.CustomerOrder;
 import com.boateng.abankus.domain.Employee;
 import com.boateng.abankus.domain.OrderPayment;
 import com.boateng.abankus.domain.Product;
+import com.boateng.abankus.domain.factory.FactoryImpl;
 import com.boateng.abankus.exception.PlatformException;
 import com.boateng.abankus.fields.EmployeeFields;
 import com.boateng.abankus.processors.CustomerOrderProcessor;
@@ -94,15 +96,16 @@ public class PaymentController {
 		String customerId= request.getParameter("customerId");
 		String order = SecurityUtils.decryptOrderNumber(orderNumber);
 		CustomerOrder customerOrder = customerOrderProcessor.findCustomerOrderByOrderNumber(order);
-
-
+		List<OrderPayment> payments = customerOrderProcessor.getAllPaymentByCustomerOrder(customerOrder);
+		CustomerBilling billing = FactoryImpl.getFactory().customerBilling(customerOrder);
+		billing.setPayments(payments);
 		if(customerOrder !=null){
 			Product product = productServiceProcessor.findProductByProductCode(customerOrder.getProductCode());
-			model.addAttribute("orderNumber", orderNumber);
-			model.addAttribute("order", order);
+
 			model.addAttribute("product",product);		
 			model.addAttribute("cust",customerId);	
 			model.addAttribute("customerOrder",customerOrder);	
+			model.addAttribute("billing", billing);
 		}
 
 		
