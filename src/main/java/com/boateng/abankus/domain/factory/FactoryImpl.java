@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.joda.time.DateTime;
 
+import com.boateng.abankus.application.interfaces.Billing;
 import com.boateng.abankus.customer.service.Client;
 import com.boateng.abankus.domain.CustomerOrder;
 import com.boateng.abankus.domain.CustomerBilling;
@@ -25,15 +26,14 @@ public class FactoryImpl extends Factory {
 
 	Client client = null;
 
+	Billing billing = null;
 	@Override
-	public Client construct(String domain, HttpServletRequest request) {
+	public Billing build(String domain, HttpServletRequest request) {
 		if(domain.contentEquals(domain)){
-			client = createCustomerBilling(request);
+			billing = createCustomerBilling(request);
 		}
-		if(domain.equals("customerOrder")){
-			client = createCustomerOrder(request);
-		}
-		return client;
+
+		return billing;
 	}
 
 	public Email addEmail(String emailAddress,String emailType){
@@ -72,6 +72,17 @@ public class FactoryImpl extends Factory {
 
 	private CustomerBilling createCustomerBilling(HttpServletRequest request){
 		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.boateng.abankus.domain.factory.Factory#construct(java.lang.String, javax.servlet.http.HttpServletRequest)
+	 */
+	@Override
+	public Client construct(String domain, HttpServletRequest request) {
+		if(domain.equals("customerOrder")){
+			client = createCustomerOrder(request);
+		}
+		return client;
 	}
 
 }
