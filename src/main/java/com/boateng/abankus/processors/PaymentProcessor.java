@@ -11,11 +11,13 @@ import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.boateng.abankus.customer.processor.CustomerServiceProcessor;
 import com.boateng.abankus.customer.service.CustomerService;
+import com.boateng.abankus.domain.Authenticatecustomer;
 import com.boateng.abankus.domain.CustomerOrder;
 import com.boateng.abankus.domain.Employee;
 import com.boateng.abankus.domain.OrderPayment;
@@ -25,6 +27,7 @@ import com.boateng.abankus.fields.EmployeeFields;
 import com.boateng.abankus.services.CustomerOrderService;
 import com.boateng.abankus.services.EmployeeService;
 import com.boateng.abankus.services.PaymentService;
+import com.boateng.abankus.utils.SecurityUtils;
 import com.boateng.abankus.utils.ValidationUtils;
 
 /**
@@ -44,18 +47,16 @@ public class PaymentProcessor {
 	@Autowired
 	private CustomerOrderService customerOrderServiceImpl;
 	
+	@Autowired(required=true)
+	private CustomerService customerServiceImpl;
+	
 	private static final Logger logger = Logger.getLogger(PaymentProcessor.class.getName());
 
 	
 	private HttpSession session;
 	
 	public PaymentProcessor(){}
-	
-	public PaymentProcessor(HttpServletRequest request){
-		//String customerPin = request.getParameter("customerPIN");
-	
-		
-	}
+
 	
 	public List<String> validateOrderPayment(String amount,String orderAmount,String orderNumber, String typeOfPayment, String formOfPayment){
 
@@ -133,4 +134,39 @@ public class PaymentProcessor {
 			throw ace;
 		}
 	}
+	
+	/**
+	 * @param customerpin
+	 */
+	public boolean authenticatePasscode(String pin,String customerId)  throws PlatformException {
+		Authenticatecustomer customer = null;
+		boolean valid = false;
+		try{
+			if(StringUtils.isAlphanumeric(pin) && StringUtils.isNumeric(customerId)){
+			logger.log(Level.INFO,"Platform is validating customer Pin Code.");
+			int custId = Integer.parseInt(customerId);
+			customer = customerServiceImpl.findCustomerById(custId);
+				
+			}else{
+				return valid;
+			}
+			if(customer == null){
+				return valid;
+			}
+			valid = isCustomerPasscodeValid(pin,customer.getPin());
+			logger.info("Authenticating Customer results is: "+valid);
+			return valid;
+		}catch(Exception e){
+			PlatformException ace = new PlatformException();
+			logger.log(Level.WARNING,e.getMessage());
+			throw ace;
+		}
+
+	}
+	
+	private boolean isCustomerPasscodeValid(String pin, String hashpin) throws PlatformException{
+		String encodedPin = SecurityUtils.encryptOrderNumber(pin);
+		return hashpin.contentEquals(encodedPin);
+		//return SecurityUtils.authenticatePassword(pin, hashpin);
+	}	
 }

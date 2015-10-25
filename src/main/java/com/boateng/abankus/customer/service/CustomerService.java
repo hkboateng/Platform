@@ -59,9 +59,11 @@ public interface CustomerService {
 	 * @return
 	 */
 	List<Address> findCustomerAddressByCustomerId(int Id);
+	
 
 	Email findCustomerByEmailAddress(String email);
 
+	Customer findCustomerByEmail(String email);
 	/**
 	 * @param customerId
 	 * @return
@@ -92,4 +94,19 @@ public interface CustomerService {
 	void saveCustomerPin(String pin, Customer customer,Session session) throws Exception;
 	
 	Authenticatecustomer findCustomerById(int id);
+	
+	Customer findCustomerByFirstNameAndLastName(String firstname,String lastname);
+
+	/**
+	 * @param lastname
+	 * @return
+	 */
+	List<Customer> findCustomerByLastName(String lastname);
+	
+	/**
+	 * 
+	 * @param firstname
+	 * @return
+	 */
+	List<Customer> findCustomerByFirstName(String firstname);
 }

@@ -38,11 +38,12 @@
 						<th>Date:</th>
 						<th>Product Code</th>
 						<th>Sale Pending?</th>
+						<th>Total Amount Remaining</th>
 						<th>Total Amount:</th>
-						<th></th>
 					</tr>
 				</thead>
 				<tbody>
+				<%-- 
 				<c:forEach items="${customerOrder }" var="customerOrderList" varStatus="counter">
 					<tr>
 						<td id="tableId">
@@ -58,7 +59,25 @@
 						<td>$<span  id="tblTotalAmount${counter.count }"> ${customerOrderList.getTotalAmount()}</span></td>
 						<td></td>
 					</tr>
-				</c:forEach>				
+				</c:forEach>	
+				--%>
+				<c:forEach items="${billing.getBillingMap() }" var="billings" varStatus="counter">
+					<c:set value="${billings.key }" var="key" />
+						<c:if test="${billing.getCustomerBilling(key).totalAmountRemaining() gt 0}">
+							<tr>
+								<c:set value="${billings.key }" var="key" />
+								<td id="tableId">
+									<input type="radio" name="orderNumber" id="orderNumber${counter.count }" value="${key }"/>
+								</td> 
+								<td id="tblOrderDate${counter.count }">${billing.getCustomerBilling(key).onvertOrderDate()}</td>
+								<td id="tblProductCode${counter.count }"> ${billing.getCustomerBilling(key).getProductCode()}</td>
+								<td>$</td>
+								<td>$<span  id="tblTotalAmount${counter.count }">${billing.getCustomerBilling(key).totalAmountRemaining() }</span></td>
+								<td>$&nbsp;${billing.getCustomerBilling(key).getTotalOrderAmount()}</td>						
+							</tr>						
+						</c:if>
+
+				</c:forEach>			
 				</tbody>			
 				<tfoot>
 					<tr>

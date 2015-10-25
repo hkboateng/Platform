@@ -152,37 +152,5 @@ public class ProductServiceProcessor {
 		}
 	}
 
-	/**
-	 * @param customerpin
-	 */
-	public boolean authenticatePasscode(String pin,String customerId)  throws PlatformException {
-		Authenticatecustomer customer = null;
-		boolean valid = false;
-		try{
-			if(StringUtils.isAlphanumeric(pin) && StringUtils.isNumeric(customerId)){
-			logger.log(Level.INFO,"Platform is validating customer Pin Code.");
-			int custId = Integer.parseInt(customerId);
-			customer = customerServiceImpl.findCustomerById(custId);
-				
-			}else{
-				return valid;
-			}
-			if(customer == null){
-				return valid;
-			}
-			valid = isCustomerPasscodeValid(pin,customer.getPin());
-			logger.info("Authenticating Customer results is: "+valid);
-			return valid;
-		}catch(Exception e){
-			PlatformException ace = new PlatformException();
-			logger.log(Level.WARNING,e.getMessage());
-			throw ace;
-		}
 
-	}
-	
-	private boolean isCustomerPasscodeValid(String pin, String hashpin){
-		
-		return SecurityUtils.authenticatePassword(pin, hashpin);
-	}
 }

@@ -37,7 +37,7 @@
 	<jee:jndi-lookup id="dataSource" jndi-name="jdbc/platformDB"/>
 	
 	<tx:annotation-driven transaction-manager="transactionManager" />
-  <beans:bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+  	<beans:bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         
         <beans:property name="dataSource" ref="dataSource" />
         <beans:property name="jpaVendorAdapter" ref="jpaVendorAdapter" />
@@ -68,7 +68,6 @@
             </beans:props>
         </beans:property>
     </beans:bean>
-    <context:component-scan base-package="com.boateng.abankus" />
 
 
 	<!-- RabbitMQ 
@@ -131,7 +130,7 @@
 	
 	<beans:bean id="orderOrderProcessor" class="com.boateng.abankus.processors.CustomerOrderProcessor" />
 
-	
+
 	<beans:bean id="paymentProcessor" class="com.boateng.abankus.processors.PaymentProcessor" />
 	
 	<beans:bean id="customerServiceImpl" class="com.boateng.abankus.service.impl.CustomerServiceImpl">

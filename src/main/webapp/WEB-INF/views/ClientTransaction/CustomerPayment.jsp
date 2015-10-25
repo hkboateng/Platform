@@ -29,11 +29,13 @@
 			<div class="col-sm-9 col-md-10 col-md-offset-2 main">
 			<h1 id="paymentHeading"> Make A Payment</h1>
 			<hr class="line1">
-						<div class="paymentContainer">
+						<div class="paymentContainer" id="paymentContainer">
 						<div class="platform-alert" id="paymentMessage">
 						${validation }
 						</div>
 						<div class="platform-alert" id="paymentForm">
+						<div id="loading">
+						</div>
 						<c:choose>
 							<c:when test="${not empty customerOrder }">
 								
@@ -49,7 +51,9 @@
 											<option value="check">Bank Draft (Check)</option>
 							
 										</select>
-										<div id="bankInfoDiv" class="hidden moveL_100">
+										<div id="bankInfoDiv" class="hidden moveL_30">
+											<h4>Cheque Details</h4>
+											<hr/>
 											<label for="bankName">Name of Bank:</label> <input type="text"
 												name="bankName" class="form-state width-100" id="bankName" value="" />
 											<label for="bankAccountNumber">Account Number:</label> <input type="text" id="bankAccountNumber" name="bankAccountNumber"	class="form-state  width-100" />
@@ -58,7 +62,7 @@
 											<label for="bankRoutingNumber">Routing Number:</label>
 											<input type="text"	id="bankRoutingNumber" name="bankRoutingNumber"	class="form-state  width-100" />
 											<label for="bankCustName">Name on Bank Account:</label>
-											<input type="text" name="bankCustName"	class="form-state width-50" id="bankCustName" value="" />
+											<input type="text" name="bankCustName"	class="form-state width-100" id="bankCustName" value="" />
 										</div>
 										<label for="paymentSchedule">Payment Schedule:</label>
 										<select
@@ -127,12 +131,14 @@
 			</div>
 		</div>
 	</div>
-
+	<%--- Confirmation Page --%>
 
 <script>
 $(document).ready(function(){
 	$('#paymentSubmitBtn').attr('disabled','disabled');
+	
 	var messageDiv = $('#paymentMessage');
+	$("#loading").hide();
 	
 	$("#paymentHeading").html("Make A Payment");
 	$('#paymentAmount').blur(function(){
@@ -143,12 +149,21 @@ $(document).ready(function(){
 		$(this).mask('000,000.00', {reverse: true});
 	});	
 
-	
+
+		
 	$('#submitBtn').click(function(e){
 		e.preventDefault();
 		var custId = $("#customerPIN").val();
 		var customerId = $("#cust").val();
-		
+		var data = {
+				customerId:customerId ,
+				customerpin:custId,
+				orderTotalAmount : $("#orderTotalAmount").val(),
+				orderNumber : $("#orderNumber").val(),
+				paymentSchedule :$("#paymentSchedule").val(),
+				paymentAmount: $("#paymentAmount").val(),
+				paymentType: $("#paymentType").val()
+			}
 		if(!validatePin(custId)){
 			$('#customerPin-error').text("You must enter a valid Pin Number!!!");
 			showMessage("You must enter a valid Pin Number!!!","alert");
@@ -156,18 +171,26 @@ $(document).ready(function(){
 		}else{
 			$('#customerPin-error').text(" ");
 			hideMessageDiv(messageDiv);
+			$(document).ajaxStart(function() {
+				  $("#loading").show();
+			});
+
+			$(document).ajaxComplete(function() {
+				 $("#loading").hide();
+			});
 			$.ajax({
 				url: 'validateCustomerAuthenticate',
-				data : {
-					customerId:customerId , customerpin:custId
-					},
+				data : data,
 				dataType: 'json',
+				beforeSend: function(){
+					 $("#loading").text("Validating your Pin Number");
+				},
 				success : function(result){
-					if(result == "true"){
-						submitPayment(result,messageDiv);
-					}else{
+					console.log(result);
+					$('#paymentContainer').html('<p>Your payment have being submitted.</p><p>Your confirmation number is: <b>'+result+'</b></p>');
+					if(result == "false"){
 						showMessage("You must enter a valid Pin Number!!!","alert",messageDiv);
-						$('#customerPin-error').text("You entered an invalid Pin Code. Try again");
+						
 					}
 					
 				},
@@ -175,7 +198,6 @@ $(document).ready(function(){
 					console.log(err+" error");
 				}
 			});
-			
 		}		
 	});
 });
@@ -211,12 +233,15 @@ function submitPayment(results,messageId){
 		data : data,
 		type: 'get',
 		dataType: 'json',
+		beforeSend: function(){
+			$('#lodaing').text(" ")
+			$('#lodaing').text("Everthing looks good, sending data.");
+		},
 		success : function(result){
 			if(!result.status){
-				displayMessage(result,messageId);
-				console.log(result);				
+				displayMessage(result,messageId);			
 			}
-			console.log(result);
+			
 		},
 		error : function(err){
 			console.log(err);
@@ -237,8 +262,6 @@ function displayMessage(result,messageDiv){
 	$.each(result,function(key,value){
 		messageDiv.text(result);
 	});
-	
-	//$('#customerPin-error').text("You entered an invalid Pin Code. Try again");
 }
 
 function checkAmountPaid(amount){

@@ -41,6 +41,22 @@ public class CustomerOrder implements Client, Serializable{
 
 	private String unitCost;
 
+	/**
+	 * @return the productName
+	 */
+	public String getProductName() {
+		return productName;
+	}
+
+	/**
+	 * @param productName the productName to set
+	 */
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
+
+	@Transient
+	private String productName;
 
 	private String productCode;
 

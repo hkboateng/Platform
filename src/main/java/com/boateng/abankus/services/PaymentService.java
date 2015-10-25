@@ -17,4 +17,10 @@ public interface PaymentService {
 	String submitPayment(OrderPayment payment, Paymentmethod paymentMethod);
 	
 	List<OrderPayment> findPaymentsByOrderId(long customerOrderId);
+
+	/**
+	 * @param customerId
+	 * @return
+	 */
+	List<OrderPayment> findPaymentsByOrderId(int customerId);
 }

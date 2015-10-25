@@ -5,6 +5,7 @@ package com.boateng.abankus.domain;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +14,7 @@ import org.joda.time.DateTime;
 import com.boateng.abankus.application.interfaces.Billing;
 
 /**
+ * Collection of all customer's orders and its payments
  * @author hkboateng
  *
  */
@@ -28,26 +30,38 @@ public class CustomerBilling implements Billing {
 	
 	private String totalOrderAmount;
 	
+	private String productCode;
+	
+	private String productName;
+	/**
+	 * List of Payments for an Order
+	 */
 	private List<OrderPayment> payments;
 
-	private Map<String, OrderPayment> paymentMap;
+	/**
+	 * Map of Order Payments with orderNumber as Key.
+	 */
+	private Map<String, List<OrderPayment>> paymentMap;
 	
 	public CustomerBilling(CustomerOrder clientOrderId){
-		payments = new ArrayList<OrderPayment>();
+		paymentMap = new HashMap<String, List<OrderPayment>>();
 		if(clientOrderId != null){
 			this.clientOrderId = clientOrderId;
 			this.orderDate = convertDateFromLong(clientOrderId);
 			this.totalOrderAmount = clientOrderId.getTotalAmount().toString();
 			this.customer = clientOrderId.getCustomer();
-			//addPaymentToList();
+			this.productCode = clientOrderId.getProductCode();
+			this.productName = clientOrderId.getProductName();
 		}
 	}
 
 	/**
 	 * @param payments the payments to set
 	 */
-	public void setPayments(List<OrderPayment> payments) {
-		this.payments = payments;
+	public void setPayments(OrderPayment payments) {
+		if(payments != null){
+			 addPaymentListToMap(payments);
+		}
 	}
 
 	private DateTime convertDateFromLong(CustomerOrder order){
@@ -137,24 +151,62 @@ public class CustomerBilling implements Billing {
 	/**
 	 * @return the paymentMap
 	 */
-	public Map<String, OrderPayment> getPaymentMap() {
+	public Map<String, List<OrderPayment>> getPaymentMap() {
 		return paymentMap;
 	}
 
 	
-	public void addPaymentToMap(OrderPayment payment){
-		
+
+	/**
+	 * @return the productCode
+	 */
+	public String getProductCode() {
+		return productCode;
+	}
+
+	/**
+	 * @param productCode the productCode to set
+	 */
+	public void setProductCode(String productCode) {
+		this.productCode = productCode;
+	}
+
+	
+	/**
+	 * @return the productName
+	 */
+	public String getProductName() {
+		return productName;
+	}
+
+	/**
+	 * @param productName the productName to set
+	 */
+	public void setProductName(String productName) {
+		this.productName = productName;
 	}
 
 	public void addPaymentToList(OrderPayment payment){
+		payments = new ArrayList<OrderPayment>();
 		if(getClientOrderId().getOrderNumber().equals(payment.getClientorder().getOrderNumber())){
 			payments.add(payment);
 		}
 	}
 	
+	public void addPaymentListToMap(OrderPayment payment){
+		String orderNumber = payment.getClientorder().getOrderNumber();
+		if(getPaymentMap().containsKey(orderNumber)){
+			payments = getPaymentMap().get(orderNumber);
+			payments.add(payment);
+		}else{
+			payments = new ArrayList<OrderPayment>();
+			payments.add(payment);
+			getPaymentMap().put(orderNumber, payments);
+		}
+	}
 	public float totalAmountPaid(){
 		float total = 0.0f;
-		if(!getPayments().isEmpty()){
+		if(getPayments() != null && !getPayments().isEmpty()){
 			
 			for(OrderPayment payment: payments){
 				total +=payment.getAmountPaid();
@@ -166,7 +218,7 @@ public class CustomerBilling implements Billing {
 	
 	public double totalAmountRemaining(){
 		double total = 0.00;
-		BigDecimal d = null;
+		BigDecimal d = BigDecimal.ZERO;
 		if(!finishPaying()){
 			double amountPaid = totalAmountPaid();
 			double totalAmount = Double.valueOf(getTotalOrderAmount());
@@ -186,5 +238,10 @@ public class CustomerBilling implements Billing {
 			finished = true;
 		}
 		return finished;
+	}
+	public  String convertOrderDate(){
+		DateTime date = new DateTime(getOrderDate());
+
+		return date.toString("MMMM d yyyy");
 	}
 }

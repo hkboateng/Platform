@@ -15,7 +15,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.boateng.abankus.customer.processor.CustomerServiceProcessor;
 import com.boateng.abankus.customer.service.CustomerService;
+import com.boateng.abankus.domain.BillingCollection;
 import com.boateng.abankus.domain.Customer;
+import com.boateng.abankus.domain.CustomerBilling;
 import com.boateng.abankus.domain.CustomerOrder;
 import com.boateng.abankus.domain.Employee;
 import com.boateng.abankus.domain.OrderPayment;
@@ -119,18 +121,38 @@ public class CustomerOrderProcessor implements OrderService{
 		return null;
 	}
 	
-	public List<CustomerOrder>  loadAllOrderByCustomer(int customerId){
-		Customer customer = customerServiceProcessor.findCustomerByCustomerId(customerId);
-		List<CustomerOrder> orderList = null;
-		if(customer != null){
-			 orderList = customerOrderServiceImpl.findAllCustomerOrderByCustomerId(customerId);
+	public List<CustomerOrder>  loadAllOrderByCustomer(int customerId) throws PlatformException{
+		if(customerId < 1){
+			throw new PlatformException("Customer ID cannot be less than 1 or null.");
 		}
+		List<CustomerOrder>  orderList = customerOrderServiceImpl.findAllCustomerOrderByCustomerId(customerId);
+
 		return orderList;
+	}
+	
+	public BillingCollection getCustomerBillings(int customerId){
+		List<CustomerOrder> orderList = null;
+		BillingCollection collection = null;
+		try {
+			orderList = loadAllOrderByCustomer(customerId);
+			if(orderList != null){
+				collection = new BillingCollection(orderList);
+				List<OrderPayment> paymentList = getAllPaymentByCustomerOrder(customerId);
+				
+				collection.setPaymentList(paymentList);
+			}			
+		} catch (PlatformException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return collection;
 	}
 	/**
 	 * This method is used to retierve all customer Order's that are unpaid.
+	 * @throws PlatformException 
 	 */
-	public void customerOrderPayment(HttpServletRequest request){
+	public void customerOrderPayment(HttpServletRequest request) throws PlatformException{
 		String cust = request.getParameter("customerNumber");
 		List<CustomerOrder> orderList = null;
 		Customer customer = customerServiceImpl.findCustomerByCustomerNumber(cust);
@@ -170,6 +192,15 @@ public class CustomerOrderProcessor implements OrderService{
 		List<OrderPayment> orderPayment =  null;
 		if(order != null){
 			orderPayment = paymentServiceImpl.findPaymentsByOrderId(order.getClientOrderId());
+		}
+		return orderPayment;
+	}
+	
+	@Override
+	public List<OrderPayment> getAllPaymentByCustomerOrder(int customerId){
+		List<OrderPayment> orderPayment =  null;
+		if(customerId > 0){
+			orderPayment = paymentServiceImpl.findPaymentsByOrderId(customerId);
 		}
 		return orderPayment;
 	}

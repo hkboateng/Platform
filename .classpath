@@ -27,5 +27,6 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/Program Files/Java/jdk1.8.0_05/jre/lib/security/local_policy.jar"/>
 	<classpathentry kind="lib" path="C:/Program Files/Java/jdk1.8.0_05/jre/lib/security/US_export_policy.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/CustomerWS.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

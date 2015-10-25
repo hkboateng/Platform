@@ -26,4 +26,10 @@ public interface OrderService {
 	 * @return
 	 */
 	List<OrderPayment> getAllPaymentByCustomerOrder(CustomerOrder order);
+
+	/**
+	 * @param customerId
+	 * @return
+	 */
+	List<OrderPayment> getAllPaymentByCustomerOrder(int customerId);
 }

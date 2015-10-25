@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.boateng.abankus.domain.BillingCollection;
 import com.boateng.abankus.domain.CustomerBilling;
 import com.boateng.abankus.domain.CustomerOrder;
 import com.boateng.abankus.domain.Employee;
@@ -29,6 +30,7 @@ import com.boateng.abankus.domain.OrderPayment;
 import com.boateng.abankus.domain.Product;
 import com.boateng.abankus.domain.factory.FactoryImpl;
 import com.boateng.abankus.exception.PlatformException;
+import com.boateng.abankus.fields.CustomerOrderFields;
 import com.boateng.abankus.fields.EmployeeFields;
 import com.boateng.abankus.processors.CustomerOrderProcessor;
 import com.boateng.abankus.processors.PaymentProcessor;
@@ -56,6 +58,24 @@ public class PaymentController {
 	@Autowired
 	private CustomerOrderProcessor customerOrderProcessor;
 	
+	private HttpSession session;
+	
+	public String submitPayment(HttpServletRequest request) throws PlatformException{
+		String status = null;
+		
+		String amount = request.getParameter("paymentAmount");
+		String orderAmount = request.getParameter("orderTotalAmount");
+		String orderNumber = request.getParameter("orderNumber");
+		String typeOfPayment = request.getParameter("paymentSchedule");
+		String formOfPayment = request.getParameter("paymentType");
+		HttpSession session = request.getSession(false);
+		
+		Employee employee = (Employee) session.getAttribute(EmployeeFields.EMPLOYEE_SESSION);
+
+		status = paymentProcessor.submitPayment(amount, orderAmount, orderNumber, formOfPayment, typeOfPayment,employee);
+		return status;
+	}
+	/**
 	@RequestMapping(value = "/submitOrderPayment", method = RequestMethod.GET,produces="application/json")
 	@ResponseBody
 	public String submitOrderPayment(@Valid OrderPayment payment,HttpServletRequest request,Model model){
@@ -89,22 +109,21 @@ public class PaymentController {
 		}
 		return status;
 	}
-	
+	***/
 	@RequestMapping(value = "/makeCustomerOrderPayment", method = RequestMethod.POST)
 	public String makeCustomerOrderPayment(HttpServletRequest request,Model model) throws NoSuchAlgorithmException, NoSuchPaddingException, PlatformException{
-		String orderNumber = request.getParameter("orderNumber");
+		String order = request.getParameter("orderNumber");
 		String customerId= request.getParameter("customerId");
-		String order = SecurityUtils.decryptOrderNumber(orderNumber);
-		CustomerOrder customerOrder = customerOrderProcessor.findCustomerOrderByOrderNumber(order);
-		List<OrderPayment> payments = customerOrderProcessor.getAllPaymentByCustomerOrder(customerOrder);
-		CustomerBilling billing = FactoryImpl.getFactory().customerBilling(customerOrder);
-		billing.setPayments(payments);
-		if(customerOrder !=null){
-			Product product = productServiceProcessor.findProductByProductCode(customerOrder.getProductCode());
+		String orderNumber = SecurityUtils.decryptOrderNumber(order);
+		session = request.getSession(false);
+		BillingCollection collection = (BillingCollection) session.getAttribute(CustomerOrderFields.BILLING_COLLECTION_SESSION);
+		if(collection !=null){
+			CustomerBilling billing = collection.getCustomerBilling(orderNumber);
+			Product product = productServiceProcessor.findProductByProductCode(billing.getClientOrderId().getProductCode());
 
 			model.addAttribute("product",product);		
 			model.addAttribute("cust",customerId);	
-			model.addAttribute("customerOrder",customerOrder);	
+			model.addAttribute("customerOrder",billing.getClientOrderId());	
 			model.addAttribute("billing", billing);
 		}
 
@@ -114,22 +133,28 @@ public class PaymentController {
 	
 	@RequestMapping(value = "/validateCustomerAuthenticate", method = RequestMethod.GET,produces="application/json")
 	@ResponseBody
-	public String validatePassword(@RequestParam(value="customerpin",required=true) String customerpin,@RequestParam(value="customerId",required=true) String customerId)
+	public String validatePassword(HttpServletRequest request,@RequestParam(value="customerpin",required=true) String customerpin,@RequestParam(value="customerId",required=true) String customerId)
 			  throws PlatformException, JsonProcessingException{
 		String status = null;
+		ObjectMapper mapper = new ObjectMapper();
 		if(StringUtils.isBlank(customerpin) || !StringUtils.isAlphanumeric(customerpin)){
 			
 			status = "{error: Customer Pin is invalid}";
 			logger.log(Level.WARNING,status);
-			return status;
+			return mapper.writeValueAsString(status);
 		}
 		
 		try{
-		boolean note = productServiceProcessor.authenticatePasscode(customerpin,customerId);
+			boolean note = paymentProcessor.authenticatePasscode(customerpin,customerId);
 			logger.info("Parsing response from Authenticating Passcode....to JSON");
-			ObjectMapper mapper = new ObjectMapper();
-			status =mapper.writeValueAsString(String.valueOf(note));
-			logger.info("Parsing Authenticating Passcode response....to JSON completed.");
+
+			status = mapper.writeValueAsString(String.valueOf(note));
+			logger.info("Parsing Authenticating Passcode response....to JSON completed. "+ mapper.writeValueAsString(String.valueOf(note)));
+			
+			if(note){
+				status = submitPayment(request);
+				status = mapper.writeValueAsString(status);
+			}
 		}catch(PlatformException ace){
 			logger.severe(ace.getMessage());
 			status = "{error: "+ace.getMessage()+"}";

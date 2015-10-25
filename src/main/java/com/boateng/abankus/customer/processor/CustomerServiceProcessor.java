@@ -264,5 +264,33 @@ public class CustomerServiceProcessor extends AbankusBaseProcessor{
 		return phoneList;
 	}
 	
+	public Customer searchForCustomer(String cust){
+		log.info("Searching for Customer Information: "+cust);
+		int customerId = 0;
+		Customer customer = null;
+		try{
+			customerId = Integer.parseInt(cust);
+		}catch(Exception e){
+			log.warn(e.getMessage());
+		}
+		if(customerId > 0){
+			log.info("Found customer information");
+			customer = findCustomerByCustomerId(customerId);
+		}
+		
+		if(customer == null){
+			//Find Customer By Email
+			if(cust.contains("@")){
+				customer =customerServiceImpl.findCustomerByEmail(cust);
+			}
+		}
+		if(customer == null){
+			String[] name = cust.split(" ");
+			if(name.length > 1){
+				customer = customerServiceImpl.findCustomerByFirstNameAndLastName(name[0], name[1]);
+			}
+		}
+		return customer;
+	}
 
 }

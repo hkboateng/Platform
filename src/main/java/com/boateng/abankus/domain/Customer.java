@@ -129,4 +129,18 @@ public class Customer implements Serializable {
 	public void setCompany_name(String company_name) {
 		this.company_name = company_name;
 	}
+	
+	public String getCustomerName(){
+		StringBuilder sbr = new StringBuilder();
+		if(getFirstname() !=null && getLastname() !=null){
+			sbr.append(getFirstname()).append(" ");
+			if(getMiddlename() != null){
+				sbr.append(getMiddlename()).append(" ");
+			}
+			sbr.append(getLastname());
+		}else{
+			sbr.append(getCompany_name());
+		}
+		return sbr.toString();
+	}
 }

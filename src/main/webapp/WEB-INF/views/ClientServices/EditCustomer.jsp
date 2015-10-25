@@ -47,11 +47,11 @@
 					<c:when test="${customerType eq 'individual' }">
 						<label>
 						First Name:</label>
-						<input type="text" name="firstname" id="firstname" class="form-control" placeholder="First Name"/>
+						<input type="text" name="firstname" id="firstname" class="form-state" placeholder="First Name"/>
 						
 						<label for="lastname">
 						Last Name:</label>
-						<input type="text" name="lastname" id="lastname" placeholder="Last Name" class="form-control"/>	
+						<input type="text" name="lastname" id="lastname" placeholder="Last Name" class="form-state"/>	
 					<div class="row">
 					<div class="col-sm-12 col-md-6">
 						<label for="state" >Gender:</label>
@@ -59,7 +59,7 @@
 					</div>
 					<div class="col-sm-12 col-md-6">
 						<label for="phoneNumber">Phone Number:</label>	
-						<input class="form-control "  id="dateOfBirth" name="dateOfBirth" type="text" placeholder="Month/day/Year">
+						<input class="form-state"  id="dateOfBirth" name="dateOfBirth" type="text" placeholder="Month/day/Year">
 					</div>					
 					</div>
 
@@ -68,7 +68,7 @@
 					<c:when test="${customerType eq 'company'}">
 						
 						<label>	Company or Organization Name:</label>
-						<input type="text" name="company_name" id="company_name" class="form-control" placeholder="Company Name"/>
+						<input type="text" name="company_name" id="company_name" class="form-state" placeholder="Company Name"/>
 						<h3> Contact Person</h3>
 						<hr/>
 						<label>	First Name:</label>

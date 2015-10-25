@@ -95,18 +95,14 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Transactional	
-	@SuppressWarnings("unchecked")
 	@Override
 	public Customer findCustomerByCustomerNumber(String customerNo){
 		Session session = getSessionFactory().getCurrentSession();
-		List<Customer> list = session.createQuery("from Customer where customerNumber =?")
+		Customer list = (Customer) session.createQuery("from Customer where customerNumber =?")
 				.setParameter(0, customerNo)
-				.list();
-		
-		if(list.size() > 0){
-			return list.get(0);
-		}
-		return null;
+				.uniqueResult();
+
+		return list;
 	}
 
 	/* (non-Javadoc)
@@ -135,7 +131,9 @@ public class CustomerServiceImpl implements CustomerService {
 	public Customer findCustomerByCustomerId(int id) {
 		 Session session = getSessionFactory().getCurrentSession();
 
-		 Customer customer = (Customer) session.createQuery("From Customer where customerId=:customerId").setParameter("customerId", id).uniqueResult();
+		 Customer customer = (Customer) session.createQuery("From Customer where customerId=:customerId")
+				 						.setParameter("customerId", id)
+				 						.uniqueResult();
 		return customer;
 	}
 
@@ -148,8 +146,8 @@ public class CustomerServiceImpl implements CustomerService {
 	public CustomerAccount findCustomerAccountByAccountNumber(String accountNumber) {
 		
 		Session session = getSessionFactory().getCurrentSession();
-		CustomerAccount customerAccount = (CustomerAccount) session.createQuery("From CustomerAccount where accountNumber =?")
-						.setParameter(0, accountNumber)
+		CustomerAccount customerAccount = (CustomerAccount) session.createQuery("From CustomerAccount where accountNumber =:accountNumber")
+						.setParameter("accountNumber", accountNumber)
 						.uniqueResult();
 						
 		return customerAccount;
@@ -286,5 +284,55 @@ public class CustomerServiceImpl implements CustomerService {
 							.setParameter("customerId", id)
 							.uniqueResult();
 		return customer;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.boateng.abankus.customer.service.CustomerService#findCustomerByEmail(java.lang.String)
+	 */
+	@Override
+	@Transactional
+	public Customer findCustomerByEmail(String email) {
+		Session session = getSessionFactory().getCurrentSession();
+		Customer customer = (Customer)session.createQuery("Select c From Email e INNER JOIN  e.customer c where e.emailAddress =:email")
+				.setParameter("email", email)
+							.uniqueResult();
+		
+		return customer;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.boateng.abankus.customer.service.CustomerService#findCustomerByFirstNameAndLastName(java.lang.String, java.lang.String)
+	 */
+	@Override
+	@Transactional
+	public Customer findCustomerByFirstNameAndLastName(String firstname,String lastname) {
+		Session session = getSessionFactory().getCurrentSession();
+		Customer customer = (Customer) session.createQuery("From Customer c where c.firstname =:firstname and c.lastname =:lastname")
+							.setParameter("firstname", firstname)
+							.setParameter("lastname", lastname)
+							.uniqueResult();
+		return customer;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	@Transactional
+	public List<Customer> findCustomerByFirstName(String firstname){
+		Session session = getSessionFactory().getCurrentSession();
+		List<Customer> customer = session.createQuery("From Customer c where c.firstname =:firstname")
+							.setParameter("firstname", firstname)
+							.list();
+		return customer;		
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	@Transactional
+	public List<Customer> findCustomerByLastName(String lastname){
+		Session session = getSessionFactory().getCurrentSession();
+		List<Customer> customer = session.createQuery("From Customer c where c.lastname =:lastname")
+							.setParameter("lastname", lastname)
+							.list();
+		return customer;		
 	}
 }

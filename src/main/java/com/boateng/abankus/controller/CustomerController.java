@@ -108,14 +108,10 @@ public class CustomerController {
 	@RequestMapping(value="/viewProfile", method=RequestMethod.GET)
 	public String viewCustomerProfile(Model model,HttpServletRequest request,RedirectAttributes redirectAttributess){
 		String customerId = request.getParameter("customerId");
-		int Id = Integer.parseInt(customerId);
-		if(customerId == null || Id < 1){
-			model.addAttribute("message", "Customer Id cannot be Null or is invalid");
-			return "ClientServices/ViewCustomerProfile";
-		}
+
 		
 		//Find Customer Object
-		Customer customer = customerServiceProcessor.findCustomerByCustomerId(Id);
+		Customer customer = customerServiceProcessor.searchForCustomer(customerId);
 		if(customer == null){
 			model.addAttribute("message", "The Customer Identification you used is Invalid.");
 			return "ClientServices/ViewCustomerProfile";

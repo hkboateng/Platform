@@ -74,4 +74,19 @@ public class PaymentServiceImpl implements PaymentService {
 		return orderPayment;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.boateng.abankus.services.PaymentService#findPaymentsByOrderId(java.lang.String)
+	 */
+	@SuppressWarnings("unchecked")
+	@Transactional
+	@Override
+	public List<OrderPayment> findPaymentsByOrderId(int customerId) {
+		Session session = getSessionFactory().getCurrentSession();
+		List<OrderPayment> orderPayment = session.createQuery("from OrderPayment o where o.clientorder.customer.customerId =:customerId")
+		.setParameter("customerId", customerId)
+		.list();
+		
+		return orderPayment;
+	}
+
 }
