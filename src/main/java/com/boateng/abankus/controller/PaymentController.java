@@ -75,41 +75,7 @@ public class PaymentController {
 		status = paymentProcessor.submitPayment(amount, orderAmount, orderNumber, formOfPayment, typeOfPayment,employee);
 		return status;
 	}
-	/**
-	@RequestMapping(value = "/submitOrderPayment", method = RequestMethod.GET,produces="application/json")
-	@ResponseBody
-	public String submitOrderPayment(@Valid OrderPayment payment,HttpServletRequest request,Model model){
-		
-		String amount = request.getParameter("paymentAmount");
-		String orderAmount = request.getParameter("orderTotalAmount");
-		String orderNumber = request.getParameter("orderNumber");
-		String typeOfPayment = request.getParameter("paymentSchedule");
-		String formOfPayment = request.getParameter("paymentType");
-		HttpSession session = request.getSession(false);
-		
-		Employee employee = (Employee) session.getAttribute(EmployeeFields.EMPLOYEE_SESSION);
-		List<String> validation = paymentProcessor.validateOrderPayment(amount, orderAmount, orderNumber, formOfPayment, typeOfPayment);
-		ObjectMapper mapper = new ObjectMapper();
-		String status = "";
 
-		
-		try {
-			if(!validation.isEmpty()){
-				status = mapper.writeValueAsString(validation);
-				return status;
-			}
-			status = paymentProcessor.submitPayment(amount, orderAmount, orderNumber, formOfPayment, typeOfPayment,employee);
-			// mapper.writeValueAsString("good");
-		} catch (JsonProcessingException e) {
-			status = e.getMessage();
-			logger.log(Level.WARNING,e.toString());
-		} catch (PlatformException e) {
-			status = e.getMessage();
-			logger.log(Level.WARNING,e.toString());
-		}
-		return status;
-	}
-	***/
 	@RequestMapping(value = "/makeCustomerOrderPayment", method = RequestMethod.POST)
 	public String makeCustomerOrderPayment(HttpServletRequest request,Model model) throws NoSuchAlgorithmException, NoSuchPaddingException, PlatformException{
 		String order = request.getParameter("orderNumber");
