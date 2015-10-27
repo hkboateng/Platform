@@ -29,6 +29,9 @@
 .dateBirth li{
 	display: inline;
 }
+.underline{
+	 text-decoration: underline !important;
+}
 label.error {
   color: #de2c3b;
     border-color: #a94442;

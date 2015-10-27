@@ -67,10 +67,10 @@
 							<tr>
 								<c:set value="${billings.key }" var="key" />
 								<td id="tableId">
-									<input type="radio" name="orderNumber" id="orderNumber${counter.count }" value="${key }"/>
+									<input type="radio" name="orderNumber" id="orderNumber${counter.count }" value="${billing.getCustomerBilling(key).encryptOrderNumber(key) }"/>
 								</td> 
-								<td id="tblOrderDate${counter.count }">${billing.getCustomerBilling(key).onvertOrderDate()}</td>
-								<td id="tblProductCode${counter.count }"> ${billing.getCustomerBilling(key).getProductCode()}</td>
+								<td id="tblOrderDate${counter.count }">${billing.getCustomerBilling(key).convertOrderDate()}</td>
+								<td id="tblProductCode${counter.count }">${billing.getCustomerBilling(key).getProductCode()}</td>
 								<td>$</td>
 								<td>$<span  id="tblTotalAmount${counter.count }">${billing.getCustomerBilling(key).totalAmountRemaining() }</span></td>
 								<td>$&nbsp;${billing.getCustomerBilling(key).getTotalOrderAmount()}</td>						

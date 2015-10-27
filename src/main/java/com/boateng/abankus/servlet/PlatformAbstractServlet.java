@@ -65,9 +65,11 @@ public abstract class PlatformAbstractServlet {
 		
 		if(session.getAttribute(EmployeeFields.EMPLOYEE_SESSION) == null){
 			logger.info("Employee: "+username+" has being loaded into session.");
+			
 			//Loading User into Session
 			Employee employee = authenticationServiceImpl.findEmployeeByUserName(username);
 			EmployeeCollection.getInstance().addEmployee(username, employee);
+			
 			//employeeCollection.addEmployee(username, employee);
 			session.setAttribute(EmployeeFields.EMPLOYEE_SESSION,employee);					
 		}
@@ -78,8 +80,8 @@ public abstract class PlatformAbstractServlet {
 	 * Loads all of Products currently in the Database to a HashMap.
 	 * 
 	 */
-	public void loadProductIntoMap(){
-		
+	public void loadProductIntoMap(HttpServletRequest request){
+		HttpSession session = request.getSession(false);
 		productServiceProcessor.loadProductIntoSession();
 	}
 	

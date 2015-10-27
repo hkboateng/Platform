@@ -63,7 +63,7 @@ public class ProductServiceProcessor {
 	}
 	public void  loadProductIntoSession(){
 		logger.log(Level.FINEST,"Product list are being loaded....");
-		productServiceImpl.getAllProducts();
+		List<Product> productList = loadProductIntoMap();
 	}
 	public List<Product> loadProductIntoMap(){
 		List<Product> productList = null;
@@ -107,19 +107,10 @@ public class ProductServiceProcessor {
 		return productList;
 	}
 	
+	
 	public Product findProductByProductCode(String productCode){
 		logger.log(Level.FINEST,"Platform is searching for Product Details using Key: {}",productCode);
-		List<Product> productList =  getAllProducts();
-		Product product = null;
-		for(Product prodt:productList){
-			if(productCode.equalsIgnoreCase(prodt.getProductCode())){
-				product = prodt;
-				logger.log(Level.INFO,"Product Code: "+productCode+" has being found ....");
-				break;
-			}
-		}
-		
-		
+		Product product = listAllProduct().get(productCode);
 		return product;
 	}
 	

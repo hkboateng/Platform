@@ -29,7 +29,7 @@
 <div class="row">
 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 <h3>Customer Account Details <c:if test="${not empty customer}"> - ${not empty customer.getCustomerName() ? customer.getCustomerName() : customer.getCompany_name()} (Account #:${customerAccount.accountNumber.toUpperCase() })</c:if></h3>
-</div>
+
 <c:choose>
 <c:when test="${not empty address}">
 <div class="col-xs-12 col-md-3">
@@ -62,7 +62,8 @@ Address Information are not available this time!!!.
 	</c:forEach>
 	
 	</c:if>	
-</div>		 	
+</div>		
+</div> 	
 	<div class="clearfix"></div>
 	<div class="col-sm-12 col-md-4 col-lg-4 main-container">
 		<%-- Side menu --%>
@@ -94,7 +95,8 @@ Address Information are not available this time!!!.
       </h4>
     </div>
     <div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
-			<ul class="list-group moveL_30">
+
+							   <ul class="list-group moveL_30">
 				  				 <c:choose>
 				  				 	<c:when test="${customerAccount.isCustomerActive()}">
 					  				 	<li class="list-group-item">
@@ -116,7 +118,8 @@ Address Information are not available this time!!!.
 				  				 	<li class="list-group-item">
 				  				 		<a href="javascript:createOrder('createCustomerOrder','document.createCustomerOrder');"><i class="fa fa-exchange moveR_20"></i>Add New Order</a>
 				  				 	</li>				
-			</ul>
+								  </ul>
+
     </div>
   </div>
   </div>
@@ -170,7 +173,15 @@ Address Information are not available this time!!!.
 	  				 </div>		  	
 	
 				</div>
-				
+						  <sf:form  name="formOrderHistroy" method="post" action="">
+						  	<input type="hidden" name="customerId" id="customerIdHdn"  value="${customer.customerId }"/>
+						  </sf:form>
+	          <sf:form name="frmUpdateAccountStatus" method="post" action="updateAccountStatus">
+	          	  <input type="hidden" value="${customer.customerNumber }" name="customerNumber"/>	          
+	          </sf:form>
+	          <sf:form name="makeCustomerPayment" method="post" action="">
+	          <input type="hidden" value="${customer.customerNumber }" name="customerNumber"/>
+	          </sf:form>
 				</c:if>
 	  </div> 
 

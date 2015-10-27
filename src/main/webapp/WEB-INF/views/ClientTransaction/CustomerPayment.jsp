@@ -40,6 +40,9 @@
 							<c:when test="${not empty customerOrder }">
 								
 									<sf:form name="customerPaymentForm" action="submitOrderPayment" method="post">
+									<div id="hidden">
+										<button>Show Order Details</button>
+									</div>
 									<div class="col-md-6" id="paymentEntry">
 										<label for="orderNumber">Order Number:</label> <input type="text"
 											name="orderNumber" id="orderNumber" class="form-state  width-75"
@@ -52,8 +55,8 @@
 							
 										</select>
 										<div id="bankInfoDiv" class="hidden moveL_30">
-											<h4>Cheque Details</h4>
-											<hr/>
+											<h4 class="underline">Cheque Details</h4>
+
 											<label for="bankName">Name of Bank:</label> <input type="text"
 												name="bankName" class="form-state width-100" id="bankName" value="" />
 											<label for="bankAccountNumber">Account Number:</label> <input type="text" id="bankAccountNumber" name="bankAccountNumber"	class="form-state  width-100" />
@@ -155,6 +158,7 @@ $(document).ready(function(){
 		e.preventDefault();
 		var custId = $("#customerPIN").val();
 		var customerId = $("#cust").val();
+		var form = $('#customerPaymentForm').serialize();
 		var data = {
 				customerId:customerId ,
 				customerpin:custId,
@@ -180,7 +184,7 @@ $(document).ready(function(){
 			});
 			$.ajax({
 				url: 'validateCustomerAuthenticate',
-				data : data,
+				data : form,
 				dataType: 'json',
 				beforeSend: function(){
 					 $("#loading").text("Validating your Pin Number");
@@ -219,7 +223,7 @@ function showMessage(message,level,messageDiv){
 }
 function submitPayment(results,messageId){
 	//document.customerPaymentForm.submit();
-
+	var form = $('#customerPaymentForm').serialize();
 	var data = {
 		orderTotalAmount : $("#orderTotalAmount").val(),
 		orderNumber : $("#orderNumber").val(),
@@ -230,7 +234,7 @@ function submitPayment(results,messageId){
 	$.ajax({
 		url: 'submitOrderPayment',
 
-		data : data,
+		data : form,
 		type: 'get',
 		dataType: 'json',
 		beforeSend: function(){

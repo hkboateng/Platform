@@ -8,10 +8,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 import org.joda.time.DateTime;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.boateng.abankus.application.interfaces.Billing;
+import com.boateng.abankus.exception.PlatformException;
+import com.boateng.abankus.processors.ProductServiceProcessor;
+import com.boateng.abankus.services.ProductService;
+import com.boateng.abankus.utils.SecurityUtils;
 
 /**
  * Collection of all customer's orders and its payments
@@ -20,6 +26,9 @@ import com.boateng.abankus.application.interfaces.Billing;
  */
 public class CustomerBilling implements Billing {
 
+	@Autowired
+	private ProductServiceProcessor productServiceProcessor;
+	
 	private String billingId;
 	
 	private Customer customer;
@@ -51,7 +60,7 @@ public class CustomerBilling implements Billing {
 			this.totalOrderAmount = clientOrderId.getTotalAmount().toString();
 			this.customer = clientOrderId.getCustomer();
 			this.productCode = clientOrderId.getProductCode();
-			this.productName = clientOrderId.getProductName();
+			//this.productName = getProductByProductCode(clientOrderId.getProductCode()).getProductName();
 		}
 	}
 
@@ -243,5 +252,20 @@ public class CustomerBilling implements Billing {
 		DateTime date = new DateTime(getOrderDate());
 
 		return date.toString("MMMM d yyyy");
+	}
+	
+	public Product getProductByProductCode(String productCode){
+		Product product = productServiceProcessor.findProductByProductCode(productCode);
+		return product;
+	}
+	
+	public String encryptOrderNumber(String orderNumber)throws PlatformException{
+		try {
+			return SecurityUtils.encryptOrderNumber(orderNumber);
+		} catch (Exception e) {
+			PlatformException ace = new PlatformException(e);
+			ace.logger(Level.SEVERE, e.getMessage(), ace);
+			throw ace;
+		}
 	}
 }

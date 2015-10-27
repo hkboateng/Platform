@@ -181,11 +181,7 @@ public class OrderController {
 			session = request.getSession(false);
 			session.setAttribute(CustomerOrderFields.BILLING_COLLECTION_SESSION, collection);
 			model.addAttribute("billing", collection);
-			/**	
-		BillingCollection collection = customerOrderProcessor.getCustomerBillings(customerId);
-		model.addAttribute("customerOrder", collection);
-		model.addAttribute("customerId", custId);
-		***/
+
 		return "ClientServices/OrderHistory";
 	}
 	
