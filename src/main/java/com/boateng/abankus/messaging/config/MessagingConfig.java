@@ -3,66 +3,55 @@
  */
 package com.boateng.abankus.messaging.config;
 
-import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
-import org.springframework.amqp.rabbit.connection.ConnectionFactory;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeoutException;
+
+
+
+
+import com.boateng.abankus.exception.PlatformException;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
 
 
 /**
  * @author hkboateng
  *
  */
-@Configuration
 public class MessagingConfig {
 
-	 /**
-	 * Default Queue
-	 */
-	private static final String EXCHANGE_NAME = "platform";
 
-	private static final String QUEUE_NAME = "platform";
-	private String queue;
+	private static final MessagingConfig rabbitmq = new MessagingConfig();
 	
-	@Bean
-	 public ConnectionFactory connectionFactory() {
-	   CachingConnectionFactory factory =   new CachingConnectionFactory("localhost");
-	   factory.setUsername("guest");
-	   factory.setPassword("guest");
-	   factory.setPort(5627);
-	     
-	     return factory;
-	 }
-	 
-	 @Bean
-	 public RabbitTemplate rabbitTemplate(){
-		 RabbitTemplate template = new RabbitTemplate(connectionFactory());
-		 template.setExchange(MessagingConfig.EXCHANGE_NAME);
-		 return template;
-	 }
-	 
-	 /**
-	  * Must set queue or else the queue will default to platform queue.
-	  * @return new Queue
-	  */
-	 @Bean
-	 public Queue getQueueName(){
-		 Queue queue = null;
-		 if(getQueue() != null){
-			queue = new Queue(getQueue());
-		 }else{
-			 queue = new Queue(MessagingConfig.QUEUE_NAME);
-		 }
-		 return queue;
-	 }
-
-	public String getQueue() {
-		return queue;
+	
+	
+	private MessagingConfig(){}
+	
+	public static MessagingConfig getInstance(){
+		return rabbitmq;
 	}
-
-	public void setQueue(String queue) {
-		this.queue = queue;
+	
+	/***
+	 * RabbitMQ Consumer Connection
+	 * @param es
+	 * @return
+	 * @throws IOException
+	 * @throws TimeoutException
+	 */
+	public Connection getConnection() throws PlatformException{
+		ConnectionFactory factory = new ConnectionFactory();
+		factory.setUsername("guest");
+		factory.setPassword("guest");
+		factory.setPort(5672);
+		Connection conn;
+		try {
+			conn = factory.newConnection();
+		} catch (Exception e) {
+			PlatformException ace = new PlatformException(e);
+			throw ace;
+		}
+		
+		return conn;
 	}
 }

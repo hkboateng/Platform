@@ -184,7 +184,7 @@ $(document).ready(function(){
 			});
 			$.ajax({
 				url: 'validateCustomerAuthenticate',
-				data : form,
+				data : data,
 				dataType: 'json',
 				beforeSend: function(){
 					 $("#loading").text("Validating your Pin Number");
@@ -234,7 +234,7 @@ function submitPayment(results,messageId){
 	$.ajax({
 		url: 'submitOrderPayment',
 
-		data : form,
+		data : data,
 		type: 'get',
 		dataType: 'json',
 		beforeSend: function(){

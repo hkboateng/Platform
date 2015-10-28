@@ -58,8 +58,6 @@ public class CustomerServiceProcessor extends AbankusBaseProcessor{
 	@Qualifier(value="authenticationServiceImpl")
 	private AuthenticationService authenticationServiceImpl;
 	
-    @Autowired
-    private volatile RabbitTemplate rabbitTemplate;
     
 	//ExecutorService executorService = Executors.newFixedThreadPool(10);
 	
@@ -170,7 +168,7 @@ public class CustomerServiceProcessor extends AbankusBaseProcessor{
 
 		Employee employee = (Employee) request.getSession(false).getAttribute(EmployeeFields.EMPLOYEE_SESSION);
 		
-		rabbitTemplate.convertAndSend(employee.toString());
+
 
 		Customer customer =  customerServiceImpl.addNewCustomer(customers,email,phone,address);
 
