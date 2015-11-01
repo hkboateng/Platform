@@ -42,11 +42,12 @@ public class MessagingUtils {
 	try {
 		connection = MessagingConfig.getInstance().getConnection();
 		channel = connection.createChannel();
-		channel.exchangeDeclare(MessagingFields.PAYMENT_CENTER_EXCHANGE_NAME, "topic", true);
+		channel.exchangeDeclare(MessagingFields.PAYMENT_CENTER_EXCHANGE_NAME, "direct", true);
 		channel.queueDeclare(MessagingFields.PAYMENT_CENTER_MAKE_PAYMENT_QUEUE, true, false, false, null);
 		channel.queueBind(MessagingFields.PAYMENT_CENTER_MAKE_PAYMENT_QUEUE, MessagingFields.PAYMENT_CENTER_EXCHANGE_NAME, MessagingFields.PAYMENT_CENTER_MAKE_PAYMENT_KEY);
 		channel.basicPublish(MessagingFields.PAYMENT_CENTER_EXCHANGE_NAME, MessagingFields.PAYMENT_CENTER_MAKE_PAYMENT_KEY,true, MessageProperties.PERSISTENT_TEXT_PLAIN, message.getBytes());
-		logger.info("Completed sending message to RabbitMq Queue: "+channel.getChannelNumber());
+	
+		logger.info("Completed sending message to RabbitMq Queue: "+channel.confirmSelect());
 	} catch (Exception e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();

@@ -21,7 +21,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
-import com.boateng.abankus.customer.service.CustomerService;
+import com.boateng.abankus.application.interfaces.CustomerService;
 import com.boateng.abankus.domain.Authenticatecustomer;
 import com.boateng.abankus.domain.Customer;
 import com.boateng.abankus.domain.Product;
@@ -134,7 +134,7 @@ public class ProductServiceProcessor {
 	}
 
 	private Product updateProductMap(Product product){
-		return productMap.replace(product.getProductCode(), product);
+		return productMap.put(product.getProductCode(), product);
 	}
 	
 	private void addProductMap(Product product){

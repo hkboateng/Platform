@@ -13,8 +13,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import com.boateng.abankus.application.interfaces.CustomerService;
 import com.boateng.abankus.customer.processor.CustomerServiceProcessor;
-import com.boateng.abankus.customer.service.CustomerService;
 import com.boateng.abankus.domain.BillingCollection;
 import com.boateng.abankus.domain.Customer;
 import com.boateng.abankus.domain.CustomerBilling;

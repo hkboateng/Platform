@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.boateng.abankus.customer.service.CustomerService;
+import com.boateng.abankus.application.interfaces.CustomerService;
 import com.boateng.abankus.domain.Address;
 import com.boateng.abankus.domain.Authenticatecustomer;
 import com.boateng.abankus.domain.Customer;

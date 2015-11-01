@@ -15,8 +15,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.boateng.abankus.application.interfaces.CustomerService;
 import com.boateng.abankus.customer.processor.CustomerServiceProcessor;
-import com.boateng.abankus.customer.service.CustomerService;
 import com.boateng.abankus.domain.Authenticatecustomer;
 import com.boateng.abankus.domain.CustomerOrder;
 import com.boateng.abankus.domain.Employee;

@@ -32,7 +32,7 @@ public class ProductCollection {
 
 	public void addProduct(String productCode, Product product){
 		if(productCode !=null && product !=null){
-			productMap.putIfAbsent(productCode, product);
+			productMap.put(productCode, product);
 		}
 	}
 	

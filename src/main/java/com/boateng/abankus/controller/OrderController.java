@@ -128,7 +128,7 @@ public class OrderController {
 		session = request.getSession(false);
 		int numberOfItems = 0;
 		if(session.getAttribute("NUMBER_OF_ITEMS_IN_CART") != null){
-			numberOfItems = (int) session.getAttribute("NUMBER_OF_ITEMS_IN_CART");
+			numberOfItems = (Integer) session.getAttribute("NUMBER_OF_ITEMS_IN_CART");
 		}
 		
 		return numberOfItems;

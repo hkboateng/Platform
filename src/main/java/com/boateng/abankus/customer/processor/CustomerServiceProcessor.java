@@ -18,8 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import com.boateng.abankus.application.interfaces.CustomerService;
 import com.boateng.abankus.controller.CustomerController;
-import com.boateng.abankus.customer.service.CustomerService;
 import com.boateng.abankus.domain.Address;
 import com.boateng.abankus.domain.Customer;
 import com.boateng.abankus.domain.CustomerAccount;

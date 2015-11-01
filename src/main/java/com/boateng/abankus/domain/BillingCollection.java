@@ -61,7 +61,7 @@ public class BillingCollection {
 			}else{
 				CustomerBilling bill = new CustomerBilling(order);
 				billing.add(bill);		
-				billingMap.putIfAbsent(order.getOrderNumber(), bill);
+				billingMap.put(order.getOrderNumber(), bill);
 			}
 			
 		}
