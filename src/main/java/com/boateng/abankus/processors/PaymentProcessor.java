@@ -62,19 +62,15 @@ public class PaymentProcessor extends PlatformAbstractServlet{
 	public PaymentProcessor(){}
 
 	public String processPayment(HttpServletRequest request){
-		String amount = request.getParameter("paymentAmount");
-		String orderAmount = request.getParameter("orderTotalAmount");
-		String orderNumber = request.getParameter("orderNumber");
-		String paymentchedule = request.getParameter("paymentSchedule");
-		String paymentType = request.getParameter("paymentType");	
+		String orderNumber = request.getParameter("orderNumber");	
 		HttpSession session = request.getSession(false);
 		
 		Employee employee = (Employee) session.getAttribute(EmployeeFields.EMPLOYEE_SESSION);
 			
 			
-			CustomerOrder order = customerOrderServiceImpl.findCustomerOrderByOrderNumber(orderNumber);	
+		CustomerOrder order = customerOrderServiceImpl.findCustomerOrderByOrderNumber(orderNumber);	
 			
-			OrderPayment orderPayment = new OrderPayment(0.00,employee,order,paymentchedule);
+			
 			
 			CustomerPaymentBuilder builder = new CustomerPaymentBuilder(request);
 			PlatformRequest paymentRequest = new PaymentRequest(builder,employee.getEmployeeId());
@@ -84,7 +80,7 @@ public class PaymentProcessor extends PlatformAbstractServlet{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+			OrderPayment orderPayment = builder.buildOrderPayment(order,employee);
 			Paymentmethod paymentMethod = builder.buildPaymentMethod();
 			
 			logger.info("Employee: "+employee.getEmployeeId()+ " is submitting a payment of: "+0.00+" for order number: "+orderNumber);

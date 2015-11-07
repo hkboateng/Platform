@@ -24,11 +24,25 @@ public class OrderPayment implements Serializable {
 
 	private Timestamp paymentDate;
 
-	private int paymentMethodId;
+	@OneToOne
+	@JoinColumn(name="paymentMethodId")
+	private Paymentmethod paymentmethod;
 
 	private String confirmationNumber;
 	
 	private String paymentSchedule;
+	
+
+	//bi-directional many-to-one association to Employee
+	@ManyToOne
+	@JoinColumn(name="employeeId")
+	private Employee employee;
+
+	//bi-directional many-to-one association to Clientorder
+	@ManyToOne
+	@JoinColumn(name="clientOrderId")
+	private CustomerOrder clientorder;
+	
 	/**
 	 * @return the confirmationNumber
 	 */
@@ -42,16 +56,6 @@ public class OrderPayment implements Serializable {
 	public void setConfirmationNumber(String confirmationNumber) {
 		this.confirmationNumber = confirmationNumber;
 	}
-
-	//bi-directional many-to-one association to Employee
-	@ManyToOne
-	@JoinColumn(name="employeeId")
-	private Employee employee;
-
-	//bi-directional many-to-one association to Clientorder
-	@ManyToOne
-	@JoinColumn(name="clientOrderId")
-	private CustomerOrder clientorder;
 
 	public OrderPayment() {
 	}
@@ -92,13 +96,6 @@ public class OrderPayment implements Serializable {
 		this.paymentDate = paymentDate;
 	}
 
-	public int getPaymentMethodId() {
-		return this.paymentMethodId;
-	}
-
-	public void setPaymentMethodId(int paymentMethodId) {
-		this.paymentMethodId = paymentMethodId;
-	}
 
 	public Employee getEmployee() {
 		return this.employee;
@@ -128,6 +125,24 @@ public class OrderPayment implements Serializable {
 	 */
 	public void setPaymentSchedule(String paymentSchedule) {
 		this.paymentSchedule = paymentSchedule;
+	}
+
+	/**
+	 * @return the paymentMethodId
+	 */
+	public Paymentmethod getPaymentMethod() {
+		return paymentmethod;
+	}
+
+	/**
+	 * @param paymentMethodId the paymentMethodId to set
+	 */
+	public void setPaymentMethod(Paymentmethod paymentMethodId) {
+		this.paymentmethod = paymentMethodId;
+	}
+	
+	public void getDate(){
+		getPaymentDate().getTime();
 	}
 
 }

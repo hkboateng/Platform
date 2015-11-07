@@ -20,4 +20,6 @@ public class EmployeeFields {
 	public static final String ALPHA_PATTERN = "^[a-zA-Z0-9]";
 	
 	public static final String EMPLOYEE_SESSION = "employee";
+	
+	public static final String EMPLOYEE_CUSTOMER_LIST = "employeeCustomerList";
 }

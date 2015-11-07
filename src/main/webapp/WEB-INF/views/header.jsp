@@ -1,4 +1,5 @@
  <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+ <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!-- Page Header -->
 <nav id="" class="navbar  navbar-default navbar-static-top bg-primary">
       <div class="container-fluid bg-primary">
@@ -14,8 +15,9 @@
         <div id="navbar" class="navbar-collapse collapse">
 
           <ul class="nav navbar-nav navbar-right">
-          <li>
-          <a href=#">Contact Administrator</a></li>
+          	<li>
+          		<a href=#">Contact Administrator</a>
+          	</li>
             <li id="">
 	            <a id="aEmployeeInfoLink" href="#" class=" dropdown-toggle header-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
 		          <i class="fa fa-user fa-md moveR_10"></i>${employee.firstname}&nbsp;${employee.lastname}
@@ -27,7 +29,7 @@
 			          <li><a href="#"><i class="fa fa-cogs fa-lg moveR_5"></i></a>Account Settings</li>
 		          </sec:authorize>
 		          <li role="separator" class="divider"></li>
-		          <li><a href="logout"><i class="fa fa-sign-out fa-lg moveR_5"></i>Logout</a></li>
+		          <li><a href="<c:url value="/platform/logout"/>"><i class="fa fa-sign-out fa-lg moveR_5"></i>Logout</a></li>
 		        </ul>
             </li>
 
@@ -36,7 +38,7 @@
         </div>
       </div>
     </nav>
-  <nav id="stickyNav" class="navbar navbar-blue navbar-static-top">
+  <nav id="stickyNav" class="navbar navbar-blue ">
   <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -48,7 +50,23 @@
           <a class="navbar-brand sr-only" href="#">Abankus Connection</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
+		<ul id="stickyMenu" class="nav navbar-nav navbar-right hidden">
+            <li id="">
+	            <a id="aEmployeeInfoLink" href="#" class=" dropdown-toggle header-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+		          <i class="fa fa-user fa-md moveR_10"></i>${employee.firstname}&nbsp;${employee.lastname}
+		          <span class="caret"></span>
+		        </a>
+	            <ul id="menu1" class="dropdown-menu" aria-labelledby="aEmployeeInfoLink">
+		          <li><a href="/abankus/employee/editEmployee?employeeId=${employee.employeeId}&jumboId=${employee.id}"><i class="fa fa-pencil-square-o fa-lg moveR_5"></i>Update your Profile</a></li>
+		          <sec:authorize access="hasRole('supervisor')">
+			          <li><a href="#"><i class="fa fa-cogs fa-lg moveR_5"></i></a>Account Settings</li>
+		          </sec:authorize>
+		          <li role="separator" class="divider"></li>
+		          <li><a href="<c:url value="/platform/logout"/>"><i class="fa fa-sign-out fa-lg moveR_5"></i>Logout</a></li>
+		        </ul>
+            </li>
 
+          </ul>
           <ul class="nav navbar-nav">
             <li>
             	<a href="/abankus/platform/dashboard"><i class="fa fa-home fa-lg moveR_10"></i>DashBoard</a>
@@ -103,7 +121,8 @@
 		          <li><a href="/abankus/customers/create"><i class="fa fa-sign-out fa-lg moveR_5"></i>Add New Customers</a></li>
 		          <li><a href="/abankus/customers/listCustomer"><i class="fa fa-sign-out fa-lg moveR_5"></i>List Customers</a></li>
 		        </ul>		                  
-            </li>         
+            </li>
+                  
           </ul>
           </div>        
   </div>
@@ -117,8 +136,10 @@ $(document).ready(function() {
 	      
 	if (scrollTop > stickyNavTop) { 
 	    $('#stickyNav').addClass('sticky');
+	    $('#stickyMenu').removeClass('hidden');
 	} else {
 	    $('#stickyNav').removeClass('sticky'); 
+	    $('#stickyMenu').addClass('hidden');
 	}
 	};
 	 
@@ -129,13 +150,3 @@ $(document).ready(function() {
 	});
 	});
 </script>
-<!-- Page Header ends 
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="#">
-        <img alt="Brand" src="...">
-      </a>
-    </div>
-  </div>
-</nav>-->

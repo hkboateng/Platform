@@ -5,6 +5,8 @@ package com.boateng.abankus.application.builders;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.boateng.abankus.domain.CustomerOrder;
+import com.boateng.abankus.domain.Employee;
 import com.boateng.abankus.domain.OrderPayment;
 import com.boateng.abankus.domain.Paymentmethod;
 
@@ -67,15 +69,16 @@ public class CustomerPaymentBuilder {
 		return paymentMethod;
 	}
 	
-	public OrderPayment buildOrderPayment(){
+	public OrderPayment buildOrderPayment(CustomerOrder order,Employee employee){
 		OrderPayment orderPayment = new OrderPayment();
 		double paidAmount = 0.0;
 		
 		paidAmount = Double.parseDouble(amount);
 		orderPayment.setAmountPaid(paidAmount);
 		orderPayment.setPaymentSchedule(paymentSchedule);
-
-		return null;
+		orderPayment.setClientorder(order);
+		orderPayment.setEmployee(employee);
+		return orderPayment;
 	}
 
 	/**

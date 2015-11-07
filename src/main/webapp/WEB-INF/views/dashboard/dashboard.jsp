@@ -36,14 +36,63 @@
 			          <!-- Customer Search -->
 			          </div>
 			          <div class="row">
-				          <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-				          	<h3>Messages</h3> <hr>
-				          </div>		
-				          <div class="col-xs-12 col-sm-6 col-md-8 col-lg-8">
-				          	<h3>Transactions</h3> <hr>
-				          </div>					          	          
+			          <div class="col-lg-12">
 			          </div>
-
+				          <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+				          	<h3>Customer Assigned</h3>
+				          	<c:if test="${not empty employeeCustomerList }">
+				          	<table class="table">
+				          		<tr>
+				          			<th>Full Name</th>
+				          			<th>Account Number</th>
+				          			<th>Account Status</th>
+				          		</tr>
+				          	
+				          		<c:forEach items="${employeeCustomerList }" var="customerList" >
+				          		<tr>
+				          			<td>${customerList.customer.getCustomerName() }</td>
+				          			<td><a href="#">${customerList.getAccountNumber() }</a></td>
+				          			<td>${customerList.getStatus() }</td>
+				          		</tr>
+				          		</c:forEach>
+				          	</table>
+				          	</c:if>
+				          	<c:if test="${empty employeeCustomerList}">				          	
+								No Customer
+								<div class="center-block">
+									<a class="btn btn-success" href="<c:url value="/customers/create"/>"> Add New Customer</a>
+								</div>	          		
+				          	</c:if>						          	
+				          </div>		
+				          <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+				          	<h3>Today's Transaction History</h3>	
+				          	<table class="table">
+				          		<tr>
+				          			<th>Confirmation Number</th>
+				          			<th>Amount</th>
+				          			<th>Type Of Payment</th>
+				          		</tr>				          		
+			          			<c:if test="${not empty transactionListToday}">
+		          					<c:forEach items="${transactionListToday }" var="history">
+		          						<tr>
+		          							<td>${history.getTransactionId()}</td>
+		          							<td>${history.getAmountPaid()}</td>
+		          							<td>${history.getPaymentType()}</td>
+		          						</tr>
+		          					</c:forEach>
+		          					<tfoot>
+		          						<tr>
+		          							<td colspan="1"><span class="bold">Total Amount:</span></td>
+		          							<td colspan="2">Total</td>
+		          						</tr>
+		          					</tfoot>
+			          			</c:if>
+			          			<c:if test="${ empty transactionListToday}">
+			          				<th> No Transaction History</th>
+			          			</c:if>
+			          			</table>
+				          </div>					          	          
+			          </div>	
 			          <div class="row">
 				          <div class="quick-stats">
 				          	<div id="quick-stats-word" class="anw"> Quick Statistics</div>
@@ -68,4 +117,13 @@
 		</div>
 	</div>
 </body>
+<script>
+	$(document).ready(function(){
+		loadEmployeeCustomers();
+	});
+	
+	function loadEmployeeCustomers(){
+		
+	}
+</script>
 </html>

@@ -42,7 +42,6 @@ public class SecurityController extends PlatformAbstractServlet {
 	 */
 	@RequestMapping(value = "/security/login", method = RequestMethod.GET)
 	public String index(HttpServletRequest request, Model model) {
-		logger.info("Welcome home! The client locale is gsfdg");
 		HttpSession session = request.getSession(false);
 		if(session != null){
 			session.invalidate();
@@ -50,26 +49,8 @@ public class SecurityController extends PlatformAbstractServlet {
 		
 		return "index";
 	}
-	
-	@RequestMapping(value = "/platform/index", method = RequestMethod.GET)
-	public String home(HttpServletRequest request, Model model) {
-		logger.info("Welcome home! The client locale is gsfdg");
 
-		
-		return "dashboard/dashboard";
-	}
 
-	
-	
-	@RequestMapping(value = "/employee/logout", method = RequestMethod.GET)
-	public String logout(HttpServletRequest request, Model model) {
-
-		HttpSession session = request.getSession(false);
-		if(!session.isNew() ){
-			session.invalidate();
-		}
-		return "home";
-	}
 	@RequestMapping(value = "/security/authenticate",method = RequestMethod.POST)
 	public String login(RedirectAttributes redirectAttributess,HttpServletRequest request) {
 		String username = request.getParameter("username");
@@ -86,23 +67,7 @@ public class SecurityController extends PlatformAbstractServlet {
 		
 		return "redirect:/abankus/dashboard";
 	}
-	
-	@RequestMapping(value = "/platform/dashboard", method = RequestMethod.GET)
-	public String dashbaord(Locale locale, Model model,HttpServletRequest request) {
-				
-		try {
-			loadUserIntoSession(request);
-			loadEmployeeIntoSessionByUsername(request);
-			loadProductIntoSession(request);
-		} catch (Exception e) {
-			PlatformException ace  = new PlatformException();
-			ace.logger(Level.WARNING,e.getMessage(), e);
 
-		}
-		
-		logger.info("User data has being saved into the current session.");
-		return "dashboard/dashboard";
-	}
 	
 	@RequestMapping(value = "/platform/logout", method =  {RequestMethod.GET,RequestMethod.POST})
 	public String logout(RedirectAttributes redirectAttributess,HttpServletRequest request,Model model) {

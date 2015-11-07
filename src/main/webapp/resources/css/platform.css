@@ -190,9 +190,10 @@ ul.progressbar-list-3 .normal{
 /****/
 
 .navbar-blue {
-  background-color: #007FFF;
-  border-color: #e7e7e7;
-  color:#ffffff !important;
+  background-color: #fff;
+  border-bottom: 1px solid  #e7e7e7;
+  color:#000;
+  
 }
 /*** Indentation***/
 .moveR_5{
@@ -626,5 +627,5 @@ input[readonly]{
     top: 0;
     z-index: 1000;
     border-top: 0;
-    background-color:#007FFF;
+    background-color:#fff;
 }

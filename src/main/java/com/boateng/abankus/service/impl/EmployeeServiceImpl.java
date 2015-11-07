@@ -1,5 +1,6 @@
 package com.boateng.abankus.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -17,6 +18,7 @@ import com.boateng.abankus.domain.Customer;
 import com.boateng.abankus.domain.CustomerAccount;
 import com.boateng.abankus.domain.Employee;
 import com.boateng.abankus.domain.EmployeeCustomerAccount;
+import com.boateng.abankus.domain.OrderPayment;
 import com.boateng.abankus.domain.Salesemployee;
 import com.boateng.abankus.domain.Team;
 import com.boateng.abankus.domain.User;
@@ -140,6 +142,30 @@ public class EmployeeServiceImpl implements EmployeeService{
 				session.save("Salesemployee", employeeSale);
 				
 				return employeeSale;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Transactional	
+	@Override
+	public List<Customer> findAllCustomerByEmployeeId(int employeeId) {
+		Session session = getSessionFactory().getCurrentSession();
+		
+		String query = "From CustomerAccount ac where ac.employee.id =:employeeId";
+		List<Customer> list =	session.createQuery(query)
+				.setParameter("employeeId", employeeId)
+				.list();
+		return list;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	@Transactional	
+	public List<OrderPayment> findAllPaymentByEmployeeAndDate(int employeeId) {
+		Session session = getSessionFactory().getCurrentSession();
+		List<OrderPayment> payments = session.createQuery("Select p From OrderPayment p where p.employee.id =:employeeId")
+						.setParameter("employeeId", employeeId)
+						.list();
+		return payments;
 	}
 
 }

@@ -54,7 +54,7 @@ public class PaymentServiceImpl implements PaymentService {
 		Session session = getSessionFactory().getCurrentSession();
 		
 		session.save(paymentMethod);
-		payment.setPaymentMethodId(paymentMethod.getPaymentMethodId());
+		payment.setPaymentMethod(paymentMethod);
 		String confirmationNo = PlatformUtils.generateConfirmationNo();
 		
 		payment.setConfirmationNumber(confirmationNo);
