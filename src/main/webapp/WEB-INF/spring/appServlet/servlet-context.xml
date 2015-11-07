@@ -70,16 +70,23 @@
     </beans:bean>
 
 
-	<!-- RabbitMQ 
-	<rabbit:connection-factory    id="connectionFactory"
-			cache-mode="CONNECTION"
-			host="localhost"
-			port="5672"
-			username="guest"
-			password="guest"/>
-	<rabbit:template id="rabbitTemplate" connection-factory="connectionFactory" exchange="abankusPlatform" routing-key="platform"/>
-	
-	<rabbit:admin id="amqpAdmin" connection-factory="connectionFactory"/>
+	<!-- RabbitMQ  -->
+   <rabbit:connection-factory id="factory"
+                               host="localhost" port="5672"
+                               username="guest" password="guest"/>
+                               
+   <beans:bean id="rabbitListenerContainerFactory"
+          class="org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory">
+        <beans:property name="connectionFactory" ref="factory"/>
+        <beans:property name="concurrentConsumers" value="3"/>
+        <beans:property name="maxConcurrentConsumers" value="10"/>
+    </beans:bean>
+    
+    <rabbit:annotation-driven container-factory="factory"/>
+    
+	<rabbit:listener-container connection-factory="factory" auto-startup="true" >
+	    <rabbit:listener id="addBillPaymentListener" queues="addBillPaymentQueue" ref="customerServiceImpl" method="handle" priority="10" />
+	</rabbit:listener-container>
 	
 	<beans:bean id="retryTemplate" class="org.springframework.retry.support.RetryTemplate">
 		<beans:property name="backOffPolicy">
@@ -89,30 +96,7 @@
 				<beans:property name="maxInterval" value="10000" />
 			</beans:bean>
 		</beans:property>
-	</beans:bean>
-	
-	<rabbit:queue name="platformCustomer"/>
-	
-    <rabbit:direct-exchange name="abankusPlatform">
-    	<rabbit:bindings>
-    		<rabbit:binding queue="platformCustomer" key="platform.data.save.customer"/>
-    	</rabbit:bindings>
-    </rabbit:direct-exchange>
-    
-    <rabbit:annotation-driven/> 
-    
-    <beans:bean id="rabbitListenerContainerFactory"
-	      class="org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory">
-	    <beans:property name="connectionFactory" ref="connectionFactory"/>
-	    <beans:property name="concurrentConsumers" value="3"/>
-	    <beans:property name="maxConcurrentConsumers" value="10"/>
-	</beans:bean>
-	
-	<rabbit:listener-container connection-factory="connectionFactory">
-	    <rabbit:listener queues="platformCustomer" ref="customerServiceProccessor" method="handle"/>
-	</rabbit:listener-container>    
-	
-	 End Spring AMPQ -->
+	</beans:bean>  	
     <!-- Controller and Entity Beans -->
     <beans:bean id="homeController" class="com.boateng.abankus.controller.HomeController"/>
     

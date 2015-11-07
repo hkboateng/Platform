@@ -28,6 +28,7 @@ public class OrderPayment implements Serializable {
 
 	private String confirmationNumber;
 	
+	private String paymentSchedule;
 	/**
 	 * @return the confirmationNumber
 	 */
@@ -60,10 +61,11 @@ public class OrderPayment implements Serializable {
 	 * @param employee
 	 * @param clientorder
 	 */
-	public OrderPayment(double amountPaid, Employee employee,CustomerOrder clientorder) {
+	public OrderPayment(double amountPaid, Employee employee,CustomerOrder clientorder,String paymentchedule ) {
 		this.amountPaid = amountPaid;
 		this.employee = employee;
 		this.clientorder = clientorder;
+		this.paymentSchedule = paymentchedule ;
 	}
 
 	public int getOrderPaymentId() {
@@ -112,6 +114,20 @@ public class OrderPayment implements Serializable {
 
 	public void setClientorder(CustomerOrder clientorder) {
 		this.clientorder = clientorder;
+	}
+
+	/**
+	 * @return the paymentSchedule
+	 */
+	public String getPaymentSchedule() {
+		return paymentSchedule;
+	}
+
+	/**
+	 * @param paymentSchedule the paymentSchedule to set
+	 */
+	public void setPaymentSchedule(String paymentSchedule) {
+		this.paymentSchedule = paymentSchedule;
 	}
 
 }

@@ -61,9 +61,11 @@ public class ProductServiceProcessor {
 	public void updateProductInfo(Product newProduct, String product){
 		updateProductMap(newProduct);
 	}
-	public void  loadProductIntoSession(){
+	public List<Product>  loadProductIntoSession(){
 		logger.log(Level.FINEST,"Product list are being loaded....");
 		List<Product> productList = loadProductIntoMap();
+		
+		return productList;
 	}
 	public List<Product> loadProductIntoMap(){
 		List<Product> productList = null;

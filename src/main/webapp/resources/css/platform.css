@@ -10,8 +10,15 @@
   height: 60px;
   background-color: #6974d1;
 }
+body{
+	background-color:#EDEDED;
+}
 .main-container{
 	margin-top:40px;	
+}
+#container{
+	background-color:#ffffff;
+	min-height:900px;
 }
 .line1{
 	border:1px solid #000;
@@ -146,54 +153,17 @@ ul.progressbar-list-3 .normal{
  */
 
 /* Hide for mobile, show later */
-.sidebar {
-  display: none;
-}
+
 @media (min-width: 768px) {
-  .sidebar {
-    position: fixed;
-    top: 51px;
-    bottom: 0;
-    left: 0;
-    z-index: 1000;
-    display: block;
-    padding-left: 0px;
-    overflow-x: hidden;
-    overflow-y: hidden; /* Scrollable contents if viewport is shorter than content. */
-
-
-  }
+.submenu {display: none;}
+.mainmenu {margin: 1px;line-height: 30px;background: #0769AD url(plus.png) left top no-repeat;}
+.mainmenu a{margin: 10px;color: #FFFFFF;text-decoration: none;padding-left:20px;}
+.submenu ul{list-style: none;margin: 0;padding: 0px;}
+.submenu li {background-color: #EEEEEE;margin:0px 0px 1px 4px;line-height: 30px;}
+.submenu li a{color: #000000;}	
  
 }
 
-@media (max-width: 1282px) {
-		#sidemenuContainer{
-		  width:1000px;	
-		  margin:auto;
-	} 
-}
-@media (max-width: 1040px) {
-		#sidemenuContainer{
-		  width:700px;	
-		  margin:auto;
-	} 
-}
-/* Sidebar navigation */
-.nav-sidebar {
-  margin-right: -21px; /* 20px padding + 1px border */
-  margin-bottom: 20px;
-  margin-left: -20px;
-}
-.nav-sidebar > li > a {
-  padding-right: 20px;
-  padding-left: 20px;
-}
-.nav-sidebar > .active > a,
-.nav-sidebar > .active > a:hover,
-.nav-sidebar > .active > a:focus {
-  color: #fff;
-  background-color: #428bca;
-}
 
 #phoneNumberBox{
 	width:230px;
@@ -218,10 +188,11 @@ ul.progressbar-list-3 .normal{
 }
 }
 /****/
-.navbar-blue{
-	background-color:blue;
-	color:black !important;
-	border-bottom:blue;
+
+.navbar-blue {
+  background-color: #007FFF;
+  border-color: #e7e7e7;
+  color:#ffffff !important;
 }
 /*** Indentation***/
 .moveR_5{
@@ -476,9 +447,7 @@ ul.progressbar-list-3 .normal{
     font-size: 100%;
     color: inherit;
 }
-#menu1{
-	width:200px;
-}
+
 .pageHeading{
 	border-bottom: 1px solid #000;
 }
@@ -646,4 +615,16 @@ input[readonly]{
   background-color: #ffffff;
   border-color: #cccccc;
   width:100%;
+}
+.pad_10{
+	padding:10px;
+}
+.sticky {
+    position: fixed;
+    width: 100%;
+    left: 0;
+    top: 0;
+    z-index: 1000;
+    border-top: 0;
+    background-color:#007FFF;
 }

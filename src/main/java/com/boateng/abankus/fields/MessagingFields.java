@@ -16,4 +16,6 @@ public class MessagingFields {
 	public static final String PAYMENT_CENTER_MAKE_PAYMENT_KEY = "paymentcenter.billing.makepayment";
 	
 	public static final String PAYMENT_CENTER_MAKE_PAYMENT_QUEUE = "addCustomerBilling_Payment_Queue";
+	
+	public static final String PAYMENT_CENTER_UPDATE_PAYMENT_QUEUE = "updateBilling_Payment_Queue";
 }

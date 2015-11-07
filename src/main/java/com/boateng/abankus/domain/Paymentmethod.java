@@ -19,15 +19,7 @@ public class Paymentmethod implements Serializable {
 
 	private String paymentType;
 
-	private String orderNumber;
 
-	public String getOrderNumber() {
-		return orderNumber;
-	}
-
-	public void setOrderNumber(String orderNumber) {
-		this.orderNumber = orderNumber;
-	}
 
 	private String bankname;
 	
@@ -36,6 +28,8 @@ public class Paymentmethod implements Serializable {
 	private String checknumber;
 	
 	private String accountnumber;
+	
+	private String nameOnAccount;
 	
 	public Paymentmethod() {
 	}
@@ -115,6 +109,14 @@ public class Paymentmethod implements Serializable {
 	 */
 	public void setAccountnumber(String accountnumber) {
 		this.accountnumber = accountnumber;
+	}
+
+	public String getNameOnAccount() {
+		return nameOnAccount;
+	}
+
+	public void setNameOnAccount(String nameOnAccount) {
+		this.nameOnAccount = nameOnAccount;
 	}
 
 	

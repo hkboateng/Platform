@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 
 import com.boateng.abankus.domain.OrderPayment;
 import com.boateng.abankus.domain.Paymentmethod;
-import com.boateng.abankus.messaging.utils.MessagingUtils;
 import com.boateng.abankus.services.PaymentService;
 import com.boateng.abankus.utils.PlatformUtils;
 
@@ -53,11 +52,11 @@ public class PaymentServiceImpl implements PaymentService {
 	@Transactional
 	public String submitPayment(OrderPayment payment,Paymentmethod paymentMethod){
 		Session session = getSessionFactory().getCurrentSession();
-		MessagingUtils msg = new MessagingUtils();
+		
 		session.save(paymentMethod);
 		payment.setPaymentMethodId(paymentMethod.getPaymentMethodId());
 		String confirmationNo = PlatformUtils.generateConfirmationNo();
-		msg.connectToQueue(confirmationNo);
+		
 		payment.setConfirmationNumber(confirmationNo);
 		session.save(payment);
 		session.flush();

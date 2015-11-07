@@ -34,10 +34,11 @@ import com.boateng.abankus.domain.Customer;
 import com.boateng.abankus.domain.CustomerAccount;
 import com.boateng.abankus.domain.Email;
 import com.boateng.abankus.domain.Phone;
+import com.boateng.abankus.servlet.PlatformAbstractServlet;
 
 @Controller
 @RequestMapping("/customers")
-public class CustomerController {
+public class CustomerController extends PlatformAbstractServlet{
 
 	private static final String CUSTOMER_TYPE = "customerType";
 
@@ -89,7 +90,6 @@ public class CustomerController {
 		try {
 			customerServiceProcessor.processNewCustomer(request);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -109,6 +109,7 @@ public class CustomerController {
 	public String viewCustomerProfile(Model model,HttpServletRequest request,RedirectAttributes redirectAttributess){
 		String customerId = request.getParameter("customerId");
 
+	
 		
 		//Find Customer Object
 		Customer customer = customerServiceProcessor.searchForCustomer(customerId);
@@ -117,6 +118,7 @@ public class CustomerController {
 			return "ClientServices/ViewCustomerProfile";
 		}
 		
+		loadCustomerIntoSession(request,customer);
 		CustomerAccount customerAccount = customerServiceProcessor.findCustomerAccountByCustomerNumber(customer.getCustomerId());
 		
 		List<Address> address = customerServiceProcessor.findAddressByCustomerId(customer.getCustomerId());
@@ -138,6 +140,7 @@ public class CustomerController {
 		log.info("Checking is Customer email is unique.");
 		boolean isUnique = false;
 		if(emailAddress != null || StringUtils.isAsciiPrintable(emailAddress)){
+			//Checks if email is unique.
 			Email customer = customerServiceProcessor.FindCustomerByEmailAddress(emailAddress);
 			if(customer != null){
 				isUnique = true;

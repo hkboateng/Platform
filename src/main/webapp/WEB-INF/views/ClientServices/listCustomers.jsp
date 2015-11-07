@@ -18,6 +18,7 @@
 <link href="<c:url value="/resources/css/datepicker.css" />" rel="stylesheet"/>
 <link href="<c:url value="/resources/css/tables/jquery.dataTables.css" />" rel="stylesheet"/>
 <script src="<c:url value="/resources/js/jquery.js" />" type="text/javascript"></script>
+<script src="<c:url value="/resources/js/platform-functions.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/bootstrap.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/application.js" />" type="text/javascript"></script>
 </head>
@@ -25,35 +26,14 @@
 <%-- Include page header --%>
 <jsp:include page="../header.jsp"/>
 <%-- End of Include page header --%>
-<div class="container">
-<div class="row">
-<div class="col-sm-3 col-md-2 sidebar" >
+<div id="container" class="container">
 
-          <ul class="nav nav-sidebar">
-            <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
-            <li><a href="#">Reports</a></li>
-            <li><a href="#">Analytics</a></li>
-            <li><a href="#">Export</a></li>
-          </ul>
-          <ul class="nav nav-sidebar">
-            <li><a href="">Nav item</a></li>
-            <li><a href="">Nav item again</a></li>
-            <li><a href="">One more nav</a></li>
-            <li><a href="">Another nav item</a></li>
-            <li><a href="">More navigation</a></li>
-          </ul>
-          <ul class="nav nav-sidebar">
-            <li><a href="">Nav item again</a></li>
-            <li><a href="">One more nav</a></li>
-            <li><a href="">Another nav item</a></li>
-            <li> <b>Last Login:</b>12:30pm</li>
-          </ul>
-        </div>
-<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+<div class="row">
+<div class="col-xs-12 col-sm-10 col-md-9">
 		
           <h1>Client Services - Prospective Customer</h1>
 			<hr>
-          <div class="row">
+          <div class="row pad_10">
 		          <div class="errors">
 			          <ul>
 			          <c:if test="${not empty errors}">
@@ -89,6 +69,20 @@
 	          <input type="hidden" value="${customer.customerNumber }" name="customerName"/>
           </div>
 </div>        
+</div>
+			<div class="hidden-sm hidden-xs col-md-3 col-lg-3" >
+			<div>
+				<h4>Notifications</h4>
+				<ul class="list-group">
+				  <li class="list-group-item">Cras justo odio</li>
+				  <li class="list-group-item">Dapibus ac facilisis in</li>
+				  <li class="list-group-item">Morbi leo risus</li>
+				  <li class="list-group-item">Porta ac consectetur ac</li>
+				  <li class="list-group-item">Vestibulum at eros</li>
+				</ul>			
+			</div>
+				<jsp:include page="../sidebar.jsp"/>
+			</div>
 </div>
 </div>
 <script src="<c:url value="/resources/js/tables/jquery.dataTables.js" />" type="text/javascript"></script>

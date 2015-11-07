@@ -20,8 +20,8 @@
 	<jsp:include page="../header.jsp"/>
 	<div class="container">
 		<div class="row">
-			<jsp:include page="../sidebar.jsp"/>
-			<div class="col-xs-12 col-sm-12 col-md-10">
+			<%--<jsp:include page="../sidebar.jsp"/> --%>
+			<div class="col-xs-12 col-sm-10 col-md-8">
 			<h1>Customer Order History</h1>
 			<hr  class="line1"/>
 			<div id="orderHistoryMessage" class="hidden" role="alert">
@@ -97,6 +97,9 @@
 			</c:if>
 
 			</div>
+			</div>
+			<div class="hidden-sm hidden-xs col-md-4 col-lg-4" >
+			<jsp:include page="../sidebar.jsp"/>
 			</div>
 		</div>
 	</div>

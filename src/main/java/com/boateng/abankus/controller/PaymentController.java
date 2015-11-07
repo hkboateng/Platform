@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.boateng.abankus.domain.BillingCollection;
+import com.boateng.abankus.domain.Customer;
 import com.boateng.abankus.domain.CustomerBilling;
 import com.boateng.abankus.domain.CustomerOrder;
 import com.boateng.abankus.domain.Employee;
@@ -30,6 +31,7 @@ import com.boateng.abankus.domain.OrderPayment;
 import com.boateng.abankus.domain.Product;
 import com.boateng.abankus.domain.factory.FactoryImpl;
 import com.boateng.abankus.exception.PlatformException;
+import com.boateng.abankus.fields.CustomerFields;
 import com.boateng.abankus.fields.CustomerOrderFields;
 import com.boateng.abankus.fields.EmployeeFields;
 import com.boateng.abankus.processors.CustomerOrderProcessor;
@@ -60,21 +62,7 @@ public class PaymentController {
 	
 	private HttpSession session;
 	
-	public String submitPayment(HttpServletRequest request) throws PlatformException{
-		String status = null;
-		
-		String amount = request.getParameter("paymentAmount");
-		String orderAmount = request.getParameter("orderTotalAmount");
-		String orderNumber = request.getParameter("orderNumber");
-		String typeOfPayment = request.getParameter("paymentSchedule");
-		String formOfPayment = request.getParameter("paymentType");
-		HttpSession session = request.getSession(false);
-		
-		Employee employee = (Employee) session.getAttribute(EmployeeFields.EMPLOYEE_SESSION);
 
-		status = paymentProcessor.submitPayment(amount, orderAmount, orderNumber, formOfPayment, typeOfPayment,employee);
-		return status;
-	}
 
 	@RequestMapping(value = "/makeCustomerOrderPayment", method = RequestMethod.POST)
 	public String makeCustomerOrderPayment(HttpServletRequest request,Model model) throws NoSuchAlgorithmException, NoSuchPaddingException, PlatformException{
@@ -82,6 +70,7 @@ public class PaymentController {
 		String customerId= request.getParameter("customerId");
 		String orderNumber = SecurityUtils.decryptOrderNumber(order);
 		session = request.getSession(false);
+		
 		BillingCollection collection = (BillingCollection) session.getAttribute(CustomerOrderFields.BILLING_COLLECTION_SESSION);
 		if(collection !=null){
 			CustomerBilling billing = collection.getCustomerBilling(orderNumber);
@@ -99,8 +88,11 @@ public class PaymentController {
 	
 	@RequestMapping(value = "/validateCustomerAuthenticate", method = RequestMethod.GET,produces="application/json")
 	@ResponseBody
-	public String validatePassword(HttpServletRequest request,@RequestParam(value="customerpin",required=true) String customerpin,@RequestParam(value="customerId",required=true) String customerId)
-			  throws PlatformException, JsonProcessingException{
+	public String validatePassword(HttpServletRequest request)  throws PlatformException, JsonProcessingException{
+		String customerpin = request.getParameter("customerpin");
+		Customer customer = (Customer) request.getSession(false).getAttribute(CustomerFields.CUSTOMER_SESSION);
+		
+		String customerId = String.valueOf(customer.getCustomerId());
 		String status = null;
 		ObjectMapper mapper = new ObjectMapper();
 		if(StringUtils.isBlank(customerpin) || !StringUtils.isAlphanumeric(customerpin)){
@@ -118,7 +110,7 @@ public class PaymentController {
 			logger.info("Parsing Authenticating Passcode response....to JSON completed. "+ mapper.writeValueAsString(String.valueOf(note)));
 			
 			if(note){
-				status = submitPayment(request);
+				status = paymentProcessor.processPayment(request);
 				status = mapper.writeValueAsString(status);
 			}
 		}catch(PlatformException ace){
@@ -129,6 +121,20 @@ public class PaymentController {
 		}
 		return status;
 	}
-	
+	private String submitPayment(HttpServletRequest request) throws PlatformException{
+		String status = null;
+		
+		String amount = request.getParameter("paymentAmount");
+		String orderAmount = request.getParameter("orderTotalAmount");
+		String orderNumber = request.getParameter("orderNumber");
+		String typeOfPayment = request.getParameter("paymentSchedule");
+		String formOfPayment = request.getParameter("paymentType");
+		HttpSession session = request.getSession(false);
+		
+		Employee employee = (Employee) session.getAttribute(EmployeeFields.EMPLOYEE_SESSION);
+		 paymentProcessor.processPayment(request);
+		status = paymentProcessor.submitPayment(amount, orderAmount, orderNumber, formOfPayment, typeOfPayment,employee);
+		return status;
+	}
 	
 }

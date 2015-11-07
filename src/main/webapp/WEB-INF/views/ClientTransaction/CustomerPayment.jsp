@@ -23,10 +23,12 @@
 <body>
 	<%-- Include page header --%>
 	<jsp:include page="../header.jsp" />
-	<div class="container">
+	<div id="container" class="container">
 		<div class="row">
-			<jsp:include page="../sidebar.jsp" />
-			<div class="col-sm-9 col-md-10 col-md-offset-2 main">
+			<div class="col-sm-12 col-md-3 col-lg-3">
+				<jsp:include page="../sidebar.jsp" />
+			</div>
+			<div class="col-sm-9 col-md-9 col-lg-9 main">
 			<h1 id="paymentHeading"> Make A Payment</h1>
 			<hr class="line1">
 						<div class="paymentContainer" id="paymentContainer">
@@ -66,6 +68,8 @@
 											<input type="text"	id="bankRoutingNumber" name="bankRoutingNumber"	class="form-state  width-100" />
 											<label for="bankCustName">Name on Bank Account:</label>
 											<input type="text" name="bankCustName"	class="form-state width-100" id="bankCustName" value="" />
+											<label for="checkNumber">Check/Cheque Number:</label>
+											<input type="text" name="checkNumber"	class="form-state width-100" id="checkNumber" value="" />											
 										</div>
 										<label for="paymentSchedule">Payment Schedule:</label>
 										<select
@@ -191,10 +195,12 @@ $(document).ready(function(){
 				},
 				success : function(result){
 					console.log(result);
-					$('#paymentContainer').html('<p>Your payment have being submitted.</p><p>Your confirmation number is: <b>'+result+'</b></p>');
+					
 					if(result == "false"){
 						showMessage("You must enter a valid Pin Number!!!","alert",messageDiv);
 						
+					}else{
+						$('#paymentContainer').html('<p>Your payment have being submitted.</p><p>Your confirmation number is: <b>'+result+'</b></p>');
 					}
 					
 				},
@@ -221,6 +227,7 @@ function showMessage(message,level,messageDiv){
 	messageDiv.html(message);
 	messageDiv.removeClass('hidden');	
 }
+<%--
 function submitPayment(results,messageId){
 	//document.customerPaymentForm.submit();
 	var form = $('#customerPaymentForm').serialize();
@@ -252,6 +259,7 @@ function submitPayment(results,messageId){
 		}
 	});
 }
+--%>
 function validatePin(custId){
 	console.log(custId)
 	var valid = false;

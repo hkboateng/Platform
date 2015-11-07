@@ -93,7 +93,7 @@ public class SecurityController extends PlatformAbstractServlet {
 		try {
 			loadUserIntoSession(request);
 			loadEmployeeIntoSessionByUsername(request);
-			loadProductIntoMap(request);
+			loadProductIntoSession(request);
 		} catch (Exception e) {
 			PlatformException ace  = new PlatformException();
 			ace.logger(Level.WARNING,e.getMessage(), e);

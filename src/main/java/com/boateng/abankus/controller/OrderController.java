@@ -24,11 +24,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.boateng.abankus.customer.processor.CustomerServiceProcessor;
 import com.boateng.abankus.domain.BillingCollection;
+import com.boateng.abankus.domain.Customer;
 import com.boateng.abankus.domain.CustomerAccount;
 import com.boateng.abankus.domain.CustomerOrder;
 import com.boateng.abankus.domain.Employee;
 import com.boateng.abankus.domain.Product;
 import com.boateng.abankus.exception.PlatformException;
+import com.boateng.abankus.fields.CustomerFields;
 import com.boateng.abankus.fields.CustomerOrderFields;
 import com.boateng.abankus.fields.EmployeeFields;
 import com.boateng.abankus.processors.CustomerOrderProcessor;
@@ -74,6 +76,7 @@ public class OrderController {
 		modelView.setViewName("ClientServices/createOrders");
 		return modelView;
 	}
+	
 	@RequestMapping(value = "/client/createCustomerOrder", method = RequestMethod.GET)
 	public String createOrder(@RequestParam(value="accountNumber",required=true) String accountNumber,Model model){
 	logger.info("Username: is viewing Create Order page.");
@@ -171,13 +174,12 @@ public class OrderController {
 	@RequestMapping(value = "/client/orderHistory", method = RequestMethod.POST)
 	public String orderHistory(HttpServletRequest request, Model model,RedirectAttributes redirectAttributess) throws PlatformException{
 		logger.info("Viewing Customer Order history page.");
-		String custId = request.getParameter("customerId");
-		int customerId = Integer.parseInt(custId);
-		
-			List<CustomerOrder> orderList = customerOrderProcessor.loadAllOrderByCustomer(customerId);
+		Customer customer = (Customer) request.getSession(false).getAttribute(CustomerFields.CUSTOMER_SESSION);
+	
+			List<CustomerOrder> orderList = customerOrderProcessor.loadAllOrderByCustomer(customer.getCustomerId());
 			model.addAttribute("customerOrder", orderList);
-			model.addAttribute("customerId", custId);
-			BillingCollection collection = customerOrderProcessor.getCustomerBillings(customerId);
+			model.addAttribute("customer",customer);
+			BillingCollection collection = customerOrderProcessor.getCustomerBillings(customer.getCustomerId());
 			session = request.getSession(false);
 			session.setAttribute(CustomerOrderFields.BILLING_COLLECTION_SESSION, collection);
 			model.addAttribute("billing", collection);

@@ -17,12 +17,12 @@
 <body>
 <%-- Include page header --%>
 <jsp:include page="../header.jsp"/>
-<div class="container">
+<div  id="container" class="container">
 <div class="row">
 
-<jsp:include page="../sidebar.jsp"/>
+
  
-		<div class="col-sm-9 col-md-10 col-md-offset-2 main">
+		<div class="col-xs-12 col-sm-10 col-md-8">
 
           <h1>Create Orders</h1>
 			<hr>
@@ -110,7 +110,10 @@
 			</div>
 
 			</sf:form>
-		</div>        
+		</div>  
+		<div class="hidden-sm hidden-xs col-md-4 col-lg-4">
+		<jsp:include page="../sidebar.jsp"/>
+		</div>      
 </div>
 </div>
 </body>

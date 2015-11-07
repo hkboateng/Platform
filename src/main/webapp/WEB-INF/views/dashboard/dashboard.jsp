@@ -16,46 +16,56 @@
 </head>
 <body>
 <!-- Page Header -->
-<%-- Include page header --%>
-<jsp:include page="../header.jsp"/>
-<!-- Page Header ends -->
-<!-- Body Begins-->
-<div class="container-fluid">
-<div class="row">
-<div class="col-sm-11 col-md-10 center-block main">
+	<%-- Include page header --%>
+	<jsp:include page="../header.jsp"/>
+	<!-- Page Header ends -->
+	<!-- Body Begins-->
+	<div id="container" class="container">
+		<div class="row">
+		
+			<div class="col-sm-11 col-md-12 col-lg-12 center-block main">
+			 	<h2>Welcome, ${employee.firstname}&nbsp;${employee.lastname}</h2>
+			         
+					  <hr>
+			          <div class="row">
+			          <c:if test="${not empty success }">
+				          <div class="alert alert-success" role="alert">
+				          	${success}
+				          </div>
+			          </c:if>
+			          <!-- Customer Search -->
+			          </div>
+			          <div class="row">
+				          <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+				          	<h3>Messages</h3> <hr>
+				          </div>		
+				          <div class="col-xs-12 col-sm-6 col-md-8 col-lg-8">
+				          	<h3>Transactions</h3> <hr>
+				          </div>					          	          
+			          </div>
 
-          <h2>Overview</h2>
-			<hr>
-          <div class="row">
-          <c:if test="${not empty success }">
-	          <div class="alert alert-success" role="alert">
-	          	${success}
-	          </div>
-          </c:if>
-          	<div class="col-xs-12 col-sm-6 col-md-4">
-          	
-          	</div>
-          	<div class="col-xs-12 col-sm-6 col-md-4">
-          	
-          	</div>
-          	<div class="col-xs-12 col-sm-6 col-md-4">
-          	
-          	</div>
-          	<div class="col-xs-12 col-sm-6 col-md-4">
-          	
-          	</div>
-          </div>
-          <div class="row">
-	          <div class="quick-stats">
-	          	<div id="quick-stats-word" class="anw"> Quick Statistics</div>
-	          </div>
-          	
-          </div>
-</div>
-<script type="text/javascript">
-
-</script>
-</div>
-</div>
+			          <div class="row">
+				          <div class="quick-stats">
+				          	<div id="quick-stats-word" class="anw"> Quick Statistics</div>
+				          </div>
+								<div class="col-xs-12 col-sm-6 col-md-4">
+					          	
+					          	</div>
+					          	<div class="col-xs-12 col-sm-6 col-md-4">
+					          	
+					          	</div>
+					          	<div class="col-xs-12 col-sm-6 col-md-4">
+					          	
+					          	</div>
+					          	<div class="col-xs-12 col-sm-6 col-md-4">
+					          	
+					          	</div>			          	
+			          </div>
+			</div>
+		<script type="text/javascript">
+		
+		</script>
+		</div>
+	</div>
 </body>
 </html>

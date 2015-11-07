@@ -18,11 +18,13 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import com.boateng.abankus.domain.Customer;
 import com.boateng.abankus.domain.Employee;
 import com.boateng.abankus.domain.Product;
 import com.boateng.abankus.domain.User;
 import com.boateng.abankus.employees.utils.EmployeeCollection;
 import com.boateng.abankus.exception.PlatformException;
+import com.boateng.abankus.fields.CustomerFields;
 import com.boateng.abankus.fields.EmployeeFields;
 import com.boateng.abankus.processors.ProductServiceProcessor;
 import com.boateng.abankus.services.AuthenticationService;
@@ -81,9 +83,36 @@ public abstract class PlatformAbstractServlet {
 	 * 
 	 */
 	public void loadProductIntoMap(HttpServletRequest request){
-		HttpSession session = request.getSession(false);
+
 		productServiceProcessor.loadProductIntoSession();
 	}
 	
-
+	/**
+	 * Loads all of Products currently in the Database to a HashMap.
+	 * 
+	 */
+	public void loadProductIntoSession(HttpServletRequest request){
+		HttpSession session = request.getSession(false);
+		Map<String,Product> productList = productServiceProcessor.listAllProduct();
+		
+		session.setAttribute("products", productList);
+	}
+	
+	public void loadCustomerIntoSession(HttpServletRequest request,Customer customer){
+		HttpSession session = request.getSession(false);
+		if(session.getAttribute(CustomerFields.CUSTOMER_SESSION) == null){
+			session.setAttribute(CustomerFields.CUSTOMER_SESSION, customer);
+		}else{
+			Customer cust = (Customer) session.getAttribute(CustomerFields.CUSTOMER_SESSION);
+			if(!cust.getCustomerNumber().equals(customer.getCustomerNumber())){
+				session.setAttribute(CustomerFields.CUSTOMER_SESSION, customer);
+			}
+		}
+	}
+	
+	public Customer getCustomerInSession(HttpServletRequest request)throws PlatformException{
+		HttpSession session = request.getSession(false);
+		Customer customer = (Customer) session.getAttribute(CustomerFields.CUSTOMER_SESSION);
+		return customer;
+	}
 }

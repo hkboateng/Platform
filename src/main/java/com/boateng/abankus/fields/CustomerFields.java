@@ -16,4 +16,6 @@ public class CustomerFields {
 	public static final String CUSTOMER_COMPANY = "company";
 	public static final String CONTACT_PERSON_NO = "No";
 	public static final String CONTACT_PERSON_YES = "Yes";
+	
+	public static final String CUSTOMER_SESSION = "customer_session";
 }
