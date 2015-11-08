@@ -25,7 +25,7 @@
 <%-- Include page header --%>
 <jsp:include page="../header.jsp"/>
 <%-- End of Include page header --%>
-<div class="container">
+<div id="container" class="container">
 <div class="row">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 	<h3><c:if test="${not empty customer}">${not empty customer.getCustomerName() ? customer.getCustomerName() : customer.getCompany_name()} (Account #:${customerAccount.accountNumber.toUpperCase() })</c:if></h3>
@@ -66,8 +66,7 @@
 	</div> 	
 	<div class="clearfix"></div>
 	<div class="col-sm-12 col-md-3 col-lg-3 main-container">
-	
-		<jsp:include page="../sidebar.jsp"/>
+		<h3>Transaction History</h3>
 	</div>
 	<div class="col-sm-12 col-md-8 col-lg-9 main-container">
 

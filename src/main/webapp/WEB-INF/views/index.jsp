@@ -35,7 +35,7 @@
 </nav>
 
 <!-- Page Header ends -->
-<div class="container">
+<div id="container" class="container">
 <div class="units-row">
 	<div class="unit-100">
 				<div class="unit-block">

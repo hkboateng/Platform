@@ -1,6 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
-
+<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -33,12 +33,18 @@
 				          	${success}
 				          </div>
 			          </c:if>
+			          
 			          <!-- Customer Search -->
 			          </div>
 			          <div class="row">
 			          <div class="col-lg-12">
+					      <c:if test="${not empty searchError }">
+						    <div class="alert alert-danger" role="alert">
+						        ${searchError }
+						    </div>
+					      </c:if>			          
 			          </div>
-				          <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+				          <div class="col-xs-12 col-sm-7 col-md-7 col-lg-7">
 				          	<h3>Customer Assigned</h3>
 				          	<c:if test="${not empty employeeCustomerList }">
 				          	<table class="table">
@@ -64,7 +70,7 @@
 								</div>	          		
 				          	</c:if>						          	
 				          </div>		
-				          <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+				          <div class="col-xs-12 col-sm-5 col-md-5 col-lg-5">
 				          	<h3>Today's Transaction History</h3>	
 				          	<table class="table">
 				          		<tr>
@@ -88,9 +94,40 @@
 		          					</tfoot>
 			          			</c:if>
 			          			<c:if test="${ empty transactionListToday}">
-			          				<th> No Transaction History</th>
+			          				<td colspan="3" style="text-align:center;"> No Transaction History</td>
 			          			</c:if>
 			          			</table>
+			          			
+			          		<div>
+
+					    		<sf:form action="/abankus/platform/searchDashboard" method="post">
+									<label>Quick Search</label>
+									<div class="spaceBelow_10">
+										<label class="radio-inline">
+										  <input type="radio" name="searchBill" id="customerId" value="customerIdDiv" checked> Customer Id:
+										</label>
+										<label class="radio-inline">
+										  <input type="radio" name="searchBill" id="customerName" value="customerNameDiv"> First and Last Name
+										</label>
+										<label class="radio-inline">
+										  <input type="radio" name="searchBill" id="customerOrder" value="customerOrderDiv"> Order Number:
+										</label>
+									</div>
+										<div id="customerIdDiv" class="">
+											<label>Customer Id:</label><input type="text" name="customerId" class="form-state"/>
+											
+										</div>
+										<div id="customerNameDiv" class="hidden">
+											<label>First Name:</label><input type="text" name="firstname" class="form-state">
+											<label>Last Name:</label><input type="text" name="lastname" class="form-state">
+										</div>
+										<div class="hidden" id="customerOrderDiv">
+											<label>Order Number:</label><input type="text" name="OrderNumber" class="form-state">
+										</div>
+										<input type="hidden" name="searchType" id="searchType" value="customerId">
+										<button type="submit" class="btn btn-success btn-sm btn-block"><span class="glyphicon glyphicon-search moveR_20"></span>Search</button>
+								</sf:form>
+			          		</div>
 				          </div>					          	          
 			          </div>	
 			          <div class="row">
@@ -120,10 +157,41 @@
 <script>
 	$(document).ready(function(){
 		loadEmployeeCustomers();
+		
+		$('#customerId').on('click',function(){
+			$('#searchType').val("customerId");
+			$("#customerIdDiv").removeClass('hidden');
+			$('#customerNameDiv').addClass('hidden');
+			$('#customerOrderDiv').addClass('hidden');
+		});
+		$('#customerName').on('click',function(){
+			$('#searchType').val("customerName");
+			$('#customerNameDiv').removeClass('hidden');
+			$("#customerIdDiv").addClass('hidden');
+			$('#customerOrderDiv').addClass('hidden');
+		});
+		$('#customerOrder').on('click',function(){
+			$('#searchType').val("customerId");
+			$('#customerOrderDiv').removeClass('hidden');
+			$("#customerIdDiv").addClass('hidden');
+			$('#customerNameDiv').addClass('hidden')
+			
+		});
+		<%--- 
+		$('input[type=radio]').on('click',function(){
+			var id = $(this).val();
+			$("#"+id).removeClass('hidden');
+		});
+		$('input[type=radio]').off('click',function(){
+			var id = $(this).val();
+			$("#"+id).addClass('hidden');
+		});	---%>	
 	});
 	
 	function loadEmployeeCustomers(){
 		
 	}
+	
+	
 </script>
 </html>

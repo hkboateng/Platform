@@ -20,6 +20,5 @@
 		<class>com.boateng.abankus.domain.Salesemployee</class>
 		<class>com.boateng.abankus.domain.Authenticatecustomer</class>
 		<class>com.boateng.abankus.domain.OrderPayment</class>
-		<class>com.boateng.abankus.domain.Orderpayment</class>
 	</persistence-unit>
 </persistence>

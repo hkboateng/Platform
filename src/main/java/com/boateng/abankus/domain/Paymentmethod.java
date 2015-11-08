@@ -17,20 +17,22 @@ public class Paymentmethod implements Serializable {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int paymentMethodId;
 
-	private String paymentType;
-
-
+	private String accountnumber;
 
 	private String bankname;
-	
+
 	private String banknumber;
-	
+
 	private String checknumber;
-	
-	private String accountnumber;
-	
+
 	private String nameOnAccount;
-	
+
+	private String paymentType;
+
+	//bi-directional one-to-one association to Orderpayment
+	@OneToOne(mappedBy="paymentmethod")
+	private OrderPayment orderpayment;
+
 	public Paymentmethod() {
 	}
 
@@ -42,6 +44,46 @@ public class Paymentmethod implements Serializable {
 		this.paymentMethodId = paymentMethodId;
 	}
 
+	public String getAccountnumber() {
+		return this.accountnumber;
+	}
+
+	public void setAccountnumber(String accountnumber) {
+		this.accountnumber = accountnumber;
+	}
+
+	public String getBankname() {
+		return this.bankname;
+	}
+
+	public void setBankname(String bankname) {
+		this.bankname = bankname;
+	}
+
+	public String getBanknumber() {
+		return this.banknumber;
+	}
+
+	public void setBanknumber(String banknumber) {
+		this.banknumber = banknumber;
+	}
+
+	public String getChecknumber() {
+		return this.checknumber;
+	}
+
+	public void setChecknumber(String checknumber) {
+		this.checknumber = checknumber;
+	}
+
+	public String getNameOnAccount() {
+		return this.nameOnAccount;
+	}
+
+	public void setNameOnAccount(String nameOnAccount) {
+		this.nameOnAccount = nameOnAccount;
+	}
+
 	public String getPaymentType() {
 		return this.paymentType;
 	}
@@ -50,75 +92,12 @@ public class Paymentmethod implements Serializable {
 		this.paymentType = paymentType;
 	}
 
-
-	public boolean isPaymentTypeCash(){
-		return getPaymentType() == "Cash" ? true : false;
+	public OrderPayment getOrderpayment() {
+		return this.orderpayment;
 	}
 
-	/**
-	 * @return the bankname
-	 */
-	public String getBankname() {
-		return bankname;
+	public void setOrderpayment(OrderPayment orderpayment) {
+		this.orderpayment = orderpayment;
 	}
 
-	/**
-	 * @param bankname the bankname to set
-	 */
-	public void setBankname(String bankname) {
-		this.bankname = bankname;
-	}
-
-	/**
-	 * @return the banknumber
-	 */
-	public String getBanknumber() {
-		return banknumber;
-	}
-
-	/**
-	 * @param banknumber the banknumber to set
-	 */
-	public void setBanknumber(String banknumber) {
-		this.banknumber = banknumber;
-	}
-
-	/**
-	 * @return the checknumber
-	 */
-	public String getChecknumber() {
-		return checknumber;
-	}
-
-	/**
-	 * @param checknumber the checknumber to set
-	 */
-	public void setChecknumber(String checknumber) {
-		this.checknumber = checknumber;
-	}
-
-	/**
-	 * @return the accountnumber
-	 */
-	public String getAccountnumber() {
-		return accountnumber;
-	}
-
-	/**
-	 * @param accountnumber the accountnumber to set
-	 */
-	public void setAccountnumber(String accountnumber) {
-		this.accountnumber = accountnumber;
-	}
-
-	public String getNameOnAccount() {
-		return nameOnAccount;
-	}
-
-	public void setNameOnAccount(String nameOnAccount) {
-		this.nameOnAccount = nameOnAccount;
-	}
-
-	
-	
 }

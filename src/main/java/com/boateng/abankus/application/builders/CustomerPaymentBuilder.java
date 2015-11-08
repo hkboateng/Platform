@@ -59,7 +59,7 @@ public class CustomerPaymentBuilder {
 
 		
 		paymentMethod.setPaymentType(typeOfPayment);
-		if(typeOfPayment.equalsIgnoreCase("bank")){
+		if(typeOfPayment.equalsIgnoreCase("check")){
 			paymentMethod.setAccountnumber(bankAccountNumber);
 			paymentMethod.setBankname(bankName);
 			paymentMethod.setBanknumber(bankRoutingNumber);

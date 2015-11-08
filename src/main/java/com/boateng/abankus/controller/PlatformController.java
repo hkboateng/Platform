@@ -23,11 +23,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.boateng.abankus.customer.processor.CustomerServiceProcessor;
+import com.boateng.abankus.domain.Address;
 import com.boateng.abankus.domain.Customer;
+import com.boateng.abankus.domain.CustomerAccount;
 import com.boateng.abankus.domain.CustomerTransaction;
+import com.boateng.abankus.domain.Email;
 import com.boateng.abankus.domain.Employee;
 import com.boateng.abankus.domain.OrderPayment;
+import com.boateng.abankus.domain.Phone;
 import com.boateng.abankus.exception.PlatformException;
 import com.boateng.abankus.fields.EmployeeFields;
 import com.boateng.abankus.services.EmployeeService;
@@ -49,6 +55,9 @@ public class PlatformController  extends PlatformAbstractServlet {
 	@Autowired(required=true)
 	@Qualifier(value="paymentServiceImpl")
 	private PaymentService paymentServiceImpl;	
+	
+	@Autowired(required=true)
+	private CustomerServiceProcessor customerServiceProcessor;
 	
 	private static final Logger logger = LoggerFactory.getLogger(PlatformController.class);
 	
@@ -109,5 +118,41 @@ public class PlatformController  extends PlatformAbstractServlet {
 		
 	}
 	
+	@RequestMapping(value = "/platform/searchDashboard", method = RequestMethod.POST)
+	public String searchDashBoard(HttpServletRequest request,Model model,RedirectAttributes redirectAttributess){
+		String customerId = request.getParameter("customerId");
+		String firstname = request.getParameter("firstname");
+		String lastname = request.getParameter("lastname");
+		String orderNumber = request.getParameter("orderNumber");
+		String searchType=request.getParameter("searchType");
+		HttpSession session = request.getSession(false);
+		
+		Customer customer = null;
+		if(searchType.equals("customerId")){
+			customer = customerServiceProcessor.searchForCustomer(customerId);
+		}else if(searchType.equals("customerName")){
+			customer = customerServiceProcessor.searchForCustomerByFirstAndLastName(firstname, lastname);
+		}else if(searchType.equals("order")){
+			
+		}
+		if(customer == null){
+			session.setAttribute("searchError", "No information was found, Try again.");
+			return "redirect:/platform/dashboard";
+		}
+		CustomerAccount customerAccount = customerServiceProcessor.findCustomerAccountByCustomerNumber(customer.getCustomerId());
+		
+		List<Address> address = customerServiceProcessor.findAddressByCustomerId(customer.getCustomerId());
+		
+		List<Phone> phone = customerServiceProcessor.findCustomerPhoneByCustomerId(customer.getCustomerId());
+		
+		List<Email> email = customerServiceProcessor.findCustomerEmailByCustomerId(customer.getCustomerId());
+		model.addAttribute("address",address);
+		model.addAttribute("customerAccount",customerAccount);
+		model.addAttribute("customer",customer);
+		model.addAttribute("phone",phone);
+		model.addAttribute("email",email);
+		
+		return "ClientServices/ViewCustomerProfile";
+	}
 	
 }

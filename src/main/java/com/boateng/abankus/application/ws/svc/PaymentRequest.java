@@ -3,6 +3,8 @@
  */
 package com.boateng.abankus.application.ws.svc;
 
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 
@@ -38,6 +40,7 @@ public class PaymentRequest implements PlatformRequest{
 	public void sendRequest(){
 		try {
 			JAXBContext jaxbContext = JAXBContext.newInstance(PaymentRequest.class);
+			Client client = ClientBuilder.newClient();
 		} catch (JAXBException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

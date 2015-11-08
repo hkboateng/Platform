@@ -290,5 +290,19 @@ public class CustomerServiceProcessor extends AbankusBaseProcessor{
 		}
 		return customer;
 	}
+	
+	public Customer searchForCustomerByFirstAndLastName(String first, String last){
+		Customer customer = null;
+		if(first ==null || last == null){
+			return customer;
+		}
+		if(!StringUtils.isAlpha(first) && !StringUtils.isAlpha(last)){
+			return customer;
+		}
+		
+		customer = customerServiceImpl.findCustomerByFirstNameAndLastName(first, last);
+		return customer;
+	}
 
+	
 }

@@ -1,4 +1,5 @@
  <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+ <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
  <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!-- Page Header -->
 <nav id="" class="navbar  navbar-default navbar-static-top bg-primary">
@@ -15,9 +16,6 @@
         <div id="navbar" class="navbar-collapse collapse">
 
           <ul class="nav navbar-nav navbar-right">
-          	<li>
-          		<a href=#">Contact Administrator</a>
-          	</li>
             <li id="">
 	            <a id="aEmployeeInfoLink" href="#" class=" dropdown-toggle header-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
 		          <i class="fa fa-user fa-md moveR_10"></i>${employee.firstname}&nbsp;${employee.lastname}
@@ -106,7 +104,8 @@
 				<ul id="menu1" class="dropdown-menu" aria-labelledby="aEmployeeInfoLink">
 		          <li><a href="/abankus/registration/employee"><i class="fa fa-pencil-square-o fa-lg moveR_5"></i>Accept Payment</a></li>
 		          <li role="separator" class="divider"></li>
-		          <li><a href="/abankus/employee/listEmployee"><i class="fa fa-sign-out fa-lg moveR_5"></i>List Employees</a></li>
+		          <li><a href="/abankus/employee/listEmployee"><i class="fa fa-sign-out fa-lg moveR_5"></i>Search for Transaction</a></li>
+		          
 		        </ul>            
             </li>			
 			</sec:authorize>			

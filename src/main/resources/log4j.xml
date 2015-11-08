@@ -12,7 +12,7 @@
 	
 	<!-- Application Loggers -->
 	<logger name="com.boateng.abankus">
-		<level value="info,warn,error" />
+		<level value="severe,info,warn,error" />
 	</logger>
 	
 	<!-- 3rdparty Loggers -->
