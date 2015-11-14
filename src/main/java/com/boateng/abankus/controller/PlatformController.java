@@ -3,6 +3,7 @@
  */
 package com.boateng.abankus.controller;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -42,6 +43,7 @@ import com.boateng.abankus.fields.EmployeeFields;
 import com.boateng.abankus.services.EmployeeService;
 import com.boateng.abankus.services.PaymentService;
 import com.boateng.abankus.servlet.PlatformAbstractServlet;
+import com.boateng.abankus.utils.PlatformConverter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -85,16 +87,18 @@ public class PlatformController  extends PlatformAbstractServlet {
 			ace.logger(Level.WARNING,e.getMessage(), e);
 
 		}
-		loadDashBoardInformation(request);
+		
 		return "dashboard/dashboard";
 	}	
-	
-	private void loadDashBoardInformation(HttpServletRequest request){
+
+	@RequestMapping(value = "/platform/loadTodayTransactionHistory", method = RequestMethod.GET,produces="application/json")
+	@ResponseBody
+	public String loadTransactionHistory(HttpServletRequest request) {
 		HttpSession session = request.getSession(false);
 		Employee employee = (Employee) session.getAttribute(EmployeeFields.EMPLOYEE_SESSION);
 		int employeeId = employee.getId();
-		List<Customer> customerList = employeeServiceImpl.findAllCustomerByEmployeeId(employeeId);
-		session.setAttribute(EmployeeFields.EMPLOYEE_CUSTOMER_LIST, customerList);
+		//List<Customer> customerList = employeeServiceImpl.findAllCustomerByEmployeeId(employeeId);
+		//session.setAttribute(EmployeeFields.EMPLOYEE_CUSTOMER_LIST, customerList);
 		
 		
 		
@@ -106,8 +110,9 @@ public class PlatformController  extends PlatformAbstractServlet {
 		dateTime.equals(d);
 	
 		List<OrderPayment> payments = employeeServiceImpl.findAllPaymentByEmployeeAndDate(employeeId);
+		List<CustomerTransaction> transactionList = null;
 		if(payments !=null && !payments.isEmpty()){
-			List<CustomerTransaction> transactionList = new ArrayList<CustomerTransaction>();
+			transactionList = new ArrayList<CustomerTransaction>();
 			CustomerTransaction transaction = null;
 			for(OrderPayment p: payments){
 				d.format(p.getPaymentDate());
@@ -117,11 +122,21 @@ public class PlatformController  extends PlatformAbstractServlet {
 				}
 
 			}
-			session.setAttribute("transactionListToday", transactionList);
+			
+		}
+		String results = null;
+		try {
+			results = PlatformConverter.convertTransactionToString(transactionList);
+		} catch (IOException e) {
+			PlatformException ace = new  PlatformException(e);
+			
 		}
 		
 		
+		return results;
+		
 	}
+
 	
 	@RequestMapping(value = "/platform/searchDashboard", method = RequestMethod.POST)
 	public String searchDashBoard(HttpServletRequest request,Model model,RedirectAttributes redirectAttributess){
@@ -195,4 +210,37 @@ public class PlatformController  extends PlatformAbstractServlet {
 		}
 		return status;
 	}
+	
+	@RequestMapping(value = "/platform/loadYearTransactionHistory", method = RequestMethod.GET,produces="application/json")
+	@ResponseBody
+	public String loadYearlyTransactionHistry(){
+		DateTime dateTime = new DateTime();
+		String year = String.valueOf(dateTime.getYear());
+		List<PaymentTransaction> payments = paymentServiceImpl.findAllYearPaymentByYear(year);
+		ObjectMapper mapper = new ObjectMapper();
+		String status = null;
+		try {
+			status = mapper.writeValueAsString(payments);
+		} catch (JsonProcessingException e) {
+			logger.error(e.getMessage());
+		}
+		return status;
+	}	
+	@RequestMapping(value = "/platform/viewTransactionDetail", method = RequestMethod.POST)
+	public String transactionDetails(HttpServletRequest request,Model model){
+		String transactionId = request.getParameter("transactionId");
+		
+		PaymentTransaction payment = paymentServiceImpl.findPaymentTransactionByTransactionId(transactionId);
+		model.addAttribute("transaction", payment);
+		return "ClientTransaction/TransactionDetails";
+	}
+	
+	@RequestMapping(value = "/platform/viewTransactionHistory", method = RequestMethod.POST)
+	public String transactionHistory(HttpServletRequest request,Model model){
+		String customerNumber = request.getParameter("customerNumber");
+		
+		PaymentTransaction payment = paymentServiceImpl.findPaymentTransactionByTransactionId(customerNumber);
+		model.addAttribute("transaction", payment);
+		return "ClientTransaction/TransactionHistory";
+	}	
 }

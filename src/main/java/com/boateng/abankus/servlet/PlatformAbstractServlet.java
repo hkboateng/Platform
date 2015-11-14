@@ -84,7 +84,7 @@ public abstract class PlatformAbstractServlet {
 	 */
 	public void loadProductIntoMap(HttpServletRequest request){
 
-		productServiceProcessor.loadProductIntoSession();
+		//productServiceProcessor.loadProductIntoSession();
 	}
 	
 	/**

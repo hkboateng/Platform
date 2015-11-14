@@ -60,36 +60,34 @@
 		          			<td>${customer.firstname }</td>
 		          			<td>${customer.lastname}</td>
 		          			<td>${customer.company_name }</td>
-		          			<td><a class="btn btn-success" href="<c:url value="viewProfile?customerId=${customer.customerId }"/>"><i class="fa fa-eye moveR_10"></i>Select</a></td>
+		          			<td><a class="btn btn-success" href="javascript:submitCustomerURL('${customer.getCustomerNumber()}',document.customerSearchForm);"><i class="fa fa-eye moveR_10"></i>Select</a></td>
 		          		</tr>
 		          	</c:forEach>
 		          		</tbody>
 		          		</table>
-	          <input type="hidden" value="${customer.customerId }" name="customerId"/>
-	          <input type="hidden" value="${customer.customerNumber }" name="customerName"/>
+		       <sf:form name="customerSearchForm" method="post" action="viewProfile">
+			      <input type="hidden" name="searchType" value="customerNumber">
+		          <input type="hidden" value="" name="customerNumber"/>	
+		               
+		       </sf:form>
+
           </div>
 </div>        
 </div>
-			<div class="hidden-sm hidden-xs col-md-3 col-lg-3" >
-			<div>
-				<h4>Notifications</h4>
-				<ul class="list-group">
-				  <li class="list-group-item">Cras justo odio</li>
-				  <li class="list-group-item">Dapibus ac facilisis in</li>
-				  <li class="list-group-item">Morbi leo risus</li>
-				  <li class="list-group-item">Porta ac consectetur ac</li>
-				  <li class="list-group-item">Vestibulum at eros</li>
-				</ul>			
-			</div>
-				<jsp:include page="../sidebar.jsp"/>
-			</div>
 </div>
 </div>
 <script src="<c:url value="/resources/js/tables/jquery.dataTables.js" />" type="text/javascript"></script>
 <script>
 $(document).ready(function(){
 	 $('#customerList').DataTable();
-})
+	 
+});
+function submitCustomerURL(url,form){
+	if(url){
+		form.customerNumber.value = url;
+	}
+	form.submit();
+}
 </script>
 
 </body>

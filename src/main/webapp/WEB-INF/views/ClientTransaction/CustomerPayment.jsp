@@ -202,7 +202,6 @@ $(document).ready(function(){
 			$(document).ajaxComplete(function() {
 				 $("#loading").hide();
 			});
-			console.log(form);
 			$.ajax({
 				url: 'validateCustomerAuthenticate',
 				data : form,

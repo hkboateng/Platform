@@ -48,7 +48,7 @@
 						<h3 class="underline-div">News and Messages</h3>			          
 			          </div>
 			           <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 spaceBelow_20">
-					    		<sf:form action="/abankus/customers/viewProfile" method="get">
+					    		<sf:form action="/abankus/customers/viewProfile" method="post">
 									<label>Quick Search</label>
 									<div class="spaceBelow_10">
 										<label class="radio-inline">
@@ -77,7 +77,7 @@
 								</sf:form>
 			           </div>
 			           <div class="clearfix"></div>
-				          <div class="col-xs-12 col-sm-7 col-md-7 col-lg-7">
+				          <div class="hidden col-xs-12 col-sm-7 col-md-7 col-lg-7">
 				          	<h3>Customer Assigned</h3>
 				          	<c:if test="${not empty employeeCustomerList }">
 				          	<table class="table">
@@ -104,34 +104,30 @@
 				          	</c:if>						          	
 				          </div>		
 				          <div class="col-xs-12 col-sm-5 col-md-5 col-lg-5">
-				          	<h3>Today's Transaction History</h3>	
-				          	<table class="table">
-				          		<tr>
-				          			<th>Confirmation Number</th>
-				          			<th>Amount</th>
-				          			<th>Type Of Payment</th>
-				          		</tr>				          		
-			          			<c:if test="${not empty transactionListToday}">
-		          					<c:forEach items="${transactionListToday }" var="history">
-		          						<tr>
-		          							<td><a href="#">${history.getTransactionId()}</a></td>
-		          							<td>${history.getAmountPaid()}</td>
-		          							<td>${history.getPaymentType()}</td>
-		          						</tr>
-		          					</c:forEach>
-		          					<tfoot>
-		          						<tr>
-		          							<td colspan="1"><span class="bold">Total Amount:</span></td>
-		          							<td colspan="2">Total</td>
-		          						</tr>
-		          					</tfoot>
-			          			</c:if>
-			          			<c:if test="${ empty transactionListToday}">
-			          				<td colspan="3" style="text-align:center;"> No Transaction History</td>
-			          			</c:if>
-			          			</table>
-			          			
-			          		<div>
+				          <h3> Transaction History</h3>
+							<div class="btn-group btn-group-justified" role="group" aria-label="...">
+								
+							  <div class="btn-group" role="group">
+							    <button type="button" id="" class="btn btn-success">Today</button>
+							  </div>
+							  <div class="btn-group" role="group">
+							    <button type="button" class="btn btn-default">6 months</button>
+							  </div>
+							  <div class="btn-group" role="group">
+							    <button type="button" class="btn btn-default">Year-To-Date</button>
+							  </div>
+							  <div class="btn-group" role="group">
+							    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true">Define your search <span class="caret"></span></button>
+							  </div>					
+ <ul class="dropdown-menu">
+    <li><a href="#">Action</a></li>
+    <li><a href="#">Another action</a></li>
+    <li><a href="#">Something else here</a></li>
+    <li role="separator" class="divider"></li>
+    <li><a href="#">Separated link</a></li>
+  </ul>							  		  
+							</div>	
+			          	  <div>
 
 
 			          		</div>
@@ -164,6 +160,7 @@
 <script>
 	$(document).ready(function(){
 		loadEmployeeCustomers();
+		loadYearPayments()
 		loadPayment();
 		loadMonthPayments();
 		$('#customerId').on('click',function(){
@@ -184,20 +181,24 @@
 			$("#customerIdDiv").addClass('hidden');
 			$('#customerNameDiv').addClass('hidden')
 			
-		});
-		<%--- 
-		$('input[type=radio]').on('click',function(){
-			var id = $(this).val();
-			$("#"+id).removeClass('hidden');
-		});
-		$('input[type=radio]').off('click',function(){
-			var id = $(this).val();
-			$("#"+id).addClass('hidden');
-		});	---%>	
+		});	
 	});
 	
 	function loadEmployeeCustomers(){
 		
+	}
+	function loadYearPayments(){
+		$.ajax({
+			url: 'loadYearTransactionHistory',
+			method: 'get',
+			dataType: 'json',
+			success: function(result){
+				console.log(result);
+			},
+			error : function(err){
+				console.log(err.responseText);
+			}
+		});				
 	}
 	function loadMonthPayments(){
 		var thisMonth= new Date().getMonth()+1;

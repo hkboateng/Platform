@@ -44,4 +44,14 @@ public interface PaymentService {
 	 * @return
 	 */
 	List<PaymentTransaction> findAllMonthPaymentByYearAndMonth(String year, String month);
+
+	/**
+	 * @param year
+	 * @return
+	 */
+	List<PaymentTransaction> findAllYearPaymentByYear(String year);
+	
+	PaymentTransaction findPaymentTransactionByTransactionId(String transactionId);
+	
+	List<PaymentTransaction> findPaymentTransactionByCustomerNumber(String customerNumber);
 }

@@ -131,4 +131,39 @@ public class PaymentServiceImpl implements PaymentService {
 		
 		return orderPayment;			
 	}
+	@Override
+	@Transactional
+	@SuppressWarnings("unchecked")
+	public List<PaymentTransaction> findAllYearPaymentByYear(String year){
+		Session session = getSessionFactory().getCurrentSession();
+		List<PaymentTransaction> orderPayment = session.createQuery("from PaymentTransaction t where t.paymentYear =:year")
+									.setParameter("year", year)
+									.list();
+		
+		return orderPayment;			
+	}
+
+	@Override
+	@Transactional
+	public PaymentTransaction findPaymentTransactionByTransactionId(String transactionId) {
+		Session session = getSessionFactory().getCurrentSession();
+		PaymentTransaction payment = (PaymentTransaction) session.createQuery("From PaymentTransaction t where t.transactionId =:transactionId")
+									.setParameter("transactionId", transactionId)
+									.uniqueResult();
+		return payment;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.boateng.abankus.services.PaymentService#findPaymentTransactionByCustomerNumber(java.lang.String)
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	@Transactional
+	public List<PaymentTransaction> findPaymentTransactionByCustomerNumber(String customerNumber) {
+		Session session = getSessionFactory().getCurrentSession();
+		List<PaymentTransaction> payment = session.createQuery("From PaymentTransaction t where t.customerNumber =:customerNumber")
+									.setParameter("customerNumber", customerNumber)
+									.list();
+		return payment;
+	}	
 }

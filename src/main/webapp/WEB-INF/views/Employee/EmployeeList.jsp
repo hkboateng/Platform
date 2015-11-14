@@ -18,10 +18,10 @@
 <%-- Include page header --%>
 <jsp:include page="../header.jsp"/>
 
-<div class="container">
+<div id="container" class="container">
 	<div class="row">
 		<div class="col-sm-12 col-md-3 col-lg-3">
-			<jsp:include page="../sidebar.jsp"/>
+			
 		</div>	
 		<div class="col-sm-9 col-md-9">
 			<div class="row">

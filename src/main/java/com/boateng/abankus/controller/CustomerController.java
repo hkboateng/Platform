@@ -105,12 +105,14 @@ public class CustomerController extends PlatformAbstractServlet{
 		return "ClientServices/listCustomers";
 	}
 	
-	@RequestMapping(value="/viewProfile", method=RequestMethod.GET)
-	public String viewCustomerProfile(Model model,HttpServletRequest request,RedirectAttributes redirectAttributess){
+	@RequestMapping(value="/viewProfile", method={RequestMethod.GET,RequestMethod.POST})
+	public String viewCustomerProfile(Model model,HttpServletRequest request){
+		HttpSession session = request.getSession(false);
 		String customerId = request.getParameter("customerId");
 		String firstname = request.getParameter("firstname");
 		String lastname = request.getParameter("lastname");
 		String orderNumber = request.getParameter("orderNumber");
+		String customerNumber = request.getParameter("customerNumber");
 		String searchType=request.getParameter("searchType");
 		
 		
@@ -121,11 +123,13 @@ public class CustomerController extends PlatformAbstractServlet{
 			customer = customerServiceProcessor.searchForCustomerByFirstAndLastName(firstname, lastname);
 		}else if(searchType.equals("order")){
 			//search by order number, confirmation number or transaction Id
+		}else if(!customerNumber.isEmpty() && searchType.equals("customerNumber")){
+			customer = customerServiceProcessor.findCustomerByCustomerNumber(customerNumber);
 		}
 
 		if(customer == null){
-			model.addAttribute("message", "The Customer Identification you used is Invalid.");
-			return "ClientServices/ViewCustomerProfile";
+			request.setAttribute("searchError", "Your Search did not return any results.");
+			return "redirect:/platform/index";
 		}
 		
 		loadCustomerIntoSession(request,customer);
