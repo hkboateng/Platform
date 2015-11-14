@@ -38,3 +38,10 @@ function isAlphaNumericAndDash(str){
 	var alphanumeric = /^[a-zA-Z0-9-]+$/i;
 	return alphanumeric.test(str);
 }
+function submitCustomerURL(url,form){
+	if(isEmpty(url) || !isAlphaNumeric(url)){
+		return false;
+	}	
+	form.action = "/abankus/customer/"+url;
+	form.submit();		
+}

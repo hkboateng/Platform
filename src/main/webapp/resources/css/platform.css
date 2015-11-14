@@ -23,6 +23,12 @@ body{
 .line1{
 	border:1px solid #000;
 }
+.underline-div{
+	border-bottom:1px solid #000;
+	width:98%;
+	margin-left:auto;
+	margin-right:auto;
+}
 .header-link{
 	min-width:160px;
 }

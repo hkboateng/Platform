@@ -60,7 +60,6 @@ public class CustomerBilling implements Billing {
 			this.totalOrderAmount = clientOrderId.getTotalAmount().toString();
 			this.customer = clientOrderId.getCustomer();
 			this.productCode = clientOrderId.getProductCode();
-			//this.productName = getProductByProductCode(clientOrderId.getProductCode()).getProductName();
 		}
 	}
 

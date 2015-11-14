@@ -24,10 +24,6 @@
 	<%-- Include page header --%>
 	<jsp:include page="../header.jsp" />
 	<div id="container" class="container">
-		<div class="row">
-			<div class="col-sm-12 col-md-3 col-lg-3">
-				<jsp:include page="../sidebar.jsp" />
-			</div>
 			<div class="col-sm-9 col-md-9 col-lg-9 main">
 			<h1 id="paymentHeading"> Make A Payment</h1>
 			<hr class="line1">
@@ -42,9 +38,6 @@
 							<c:when test="${not empty customerOrder }">
 								
 									<sf:form name="customerPaymentForm" action="submitOrderPayment" method="post">
-									<div id="hidden">
-										<button>Show Order Details</button>
-									</div>
 									<div class="col-md-6" id="paymentEntry">
 										<label for="orderNumber">Order Number:</label> <input type="text"
 											name="orderNumber" id="orderNumber" class="form-state  width-75"
@@ -54,7 +47,7 @@
 											onchange="javascript:showBankInfoDiv(this);">
 											<option value="cash">Cash</option>
 											<option value="check">Bank Draft (Check)</option>
-							
+											<option value="card">Credit/Debit Card</option>
 										</select>
 										<div id="bankInfoDiv" class="hidden moveL_30">
 											<h4 class="underline">Cheque Details</h4>
@@ -70,6 +63,20 @@
 											<input type="text" name="bankCustName"	class="form-state width-100" id="bankCustName" value="" />
 											<label for="checkNumber">Check/Cheque Number:</label>
 											<input type="text" name="checkNumber"	class="form-state width-100" id="checkNumber" value="" />											
+										</div>
+										<div id="cardInfoDiv" class="hidden moveL_30">
+											<h4 class="underline">Credit Card Payment</h4>
+											<label>Name on Card:</label>
+											<input type="text" name="nameOnCard" class="form-state">
+											<label>Card Number:</label>
+											<input type="text" name="nameOnCard" class="form-state">
+											<label>Expiration Date:</label>
+											  <div class="col-xs-1">
+											    <input type="text" class="form-state " placeholder=".col-xs-2">
+											  </div>
+											  <div class="col-xs-1">
+											    <input type="text" class="form-state " placeholder=".col-xs-3">
+											  </div>																				
 										</div>
 										<label for="paymentSchedule">Payment Schedule:</label>
 										<select
@@ -88,13 +95,19 @@
 										 <input type="text"	name="paymentAmount" class="form-state  width-75" id="paymentAmount" value="${amountLeft}" onblur="javascript:checkAmountPaid(this.value)" />
 											<p>
 												<button name="paymentSubmitBtn" id="paymentSubmitBtn" onclick="javascript:customerPaymentConfirmation(document.paymentForm);return false;" class="btn btn-success">Continue with Payment</button>
+												<a href="#" class="moveL_20">Cancel</a>
 											</p>	
 																			
 											<input type="hidden" name="pId" value="${orderNumber }" id="pId"/>	
 											<input type="hidden" name="orderTotalAmount" id="orderTotalAmount" value="${customerOrder.getTotalAmount()}">	
 											<input type="hidden" name="cust" id="cust" value="${cust}">
 											<input type="hidden" name="amountleft" id="amountleft" value="${amountLeft}"/>
-											</div>		
+											</div>	
+											<div class="col-md-6">
+												<label>Product Name:</label>
+												<span>${product.getProductName()}</span>
+												<label>Purchase Date:</label><span>${customerOrder.convertOrderDate()}</span>
+											</div>	
 												<!-- Review and Submit Customer Payment -->
 												<div class="hidden col-md-6" id="paymentSummary">
 													<p><label for="paymentDateSummary">Payment Date:&nbsp;</label>
@@ -112,7 +125,7 @@
 														</div>	
 														<hr>
 														<input type="button" class="btn btn-success" id="submitBtn" value="Submit Buttom" />		
-														<a href="cancel" class="btn btn-default moveL_20">Cancel Payment</a>										
+														<a href="cancel" id="cancelPayment" class="btn btn-default moveL_20">Cancel Payment</a>										
 												</div>		
 												<!-- End Review and Submit Customer Payment -->																
 									</sf:form>
@@ -156,13 +169,16 @@ $(document).ready(function(){
 		$(this).mask('000,000.00', {reverse: true});
 	});	
 
-
+	$("#cancelPayment").on('click',function(){
+		$('#paymentSummary').hide();
+		$('#paymentEntry').show();
+	});
 		
 	$('#submitBtn').click(function(e){
 		e.preventDefault();
 		var custId = $("#customerPIN").val();
 		var customerId = $("#cust").val();
-		var form = $('#customerPaymentForm').serialize();
+		var form = $('form').serialize();
 		var data = {
 				customerId:customerId ,
 				customerpin:custId,
@@ -186,9 +202,10 @@ $(document).ready(function(){
 			$(document).ajaxComplete(function() {
 				 $("#loading").hide();
 			});
+			console.log(form);
 			$.ajax({
 				url: 'validateCustomerAuthenticate',
-				data : data,
+				data : form,
 				dataType: 'json',
 				beforeSend: function(){
 					 $("#loading").text("Validating your Pin Number");

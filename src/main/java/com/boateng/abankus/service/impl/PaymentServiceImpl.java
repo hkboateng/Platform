@@ -9,14 +9,12 @@ import java.util.logging.Logger;
 
 import javax.transaction.Transactional;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import com.boateng.abankus.domain.OrderPayment;
+import com.boateng.abankus.domain.PaymentTransaction;
 import com.boateng.abankus.domain.Paymentmethod;
 import com.boateng.abankus.services.PaymentService;
 import com.boateng.abankus.utils.PlatformUtils;
@@ -58,13 +56,17 @@ public class PaymentServiceImpl implements PaymentService {
 		String confirmationNo = PlatformUtils.generateConfirmationNo();
 		
 		payment.setConfirmationNumber(confirmationNo);
-		session.save(payment);
+		Serializable i = session.save(payment);
+		OrderPayment p = (OrderPayment) session.get(OrderPayment.class, i);
+		submtPaymentTransaction(session,p);
 		session.flush();
-		
-		
 		return confirmationNo;
 	}
 	
+	public void submtPaymentTransaction(Session session,OrderPayment payment){
+		PaymentTransaction transaction = new PaymentTransaction(payment);
+		session.save(transaction);
+	}
 	@SuppressWarnings("unchecked")
 	@Transactional
 	@Override
@@ -91,5 +93,42 @@ public class PaymentServiceImpl implements PaymentService {
 		
 		return orderPayment;
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional
+	@Override
+	public List<OrderPayment> findAllPaymentsByFromAndToDate(String from,String to){
+		Session session = getSessionFactory().getCurrentSession();
+		List<OrderPayment> orderPayment = session.createQuery("from PaymentTransaction t where t.paymentDate >=:from and t.paymentDate <=:to")
+									.setParameter("from", from)
+									.setParameter("to", to)
+									.list();
+		
+		return orderPayment;		
+	}
 
+	@SuppressWarnings("unchecked")
+	@Transactional
+	@Override
+	public List<PaymentTransaction> findAllPaymentsByDate(String date){
+		Session session = getSessionFactory().getCurrentSession();
+		List<PaymentTransaction> orderPayment = session.createQuery("from PaymentTransaction t where t.paymentDate =:date")
+									.setParameter("date", date)
+									.list();
+		
+		return orderPayment;		
+	}	
+	
+	@Override
+	@Transactional
+	@SuppressWarnings("unchecked")
+	public List<PaymentTransaction> findAllMonthPaymentByYearAndMonth(String year, String month){
+		Session session = getSessionFactory().getCurrentSession();
+		List<PaymentTransaction> orderPayment = session.createQuery("from PaymentTransaction t where t.paymentMonth =:month and t.paymentYear =:year")
+									.setParameter("month", month)
+									.setParameter("year", year)
+									.list();
+		
+		return orderPayment;			
+	}
 }

@@ -55,7 +55,7 @@ public class CustomerOrder implements Client, Serializable{
 		this.productName = productName;
 	}
 
-	@Transient
+
 	private String productName;
 
 	private String productCode;
@@ -193,7 +193,7 @@ public class CustomerOrder implements Client, Serializable{
 	public  String convertOrderDate(){
 		DateTime date = new DateTime(getOrderDate());
 
-		return date.toString("MMMM d yyyy");
+		return date.toString("MMMM d, yyyy");
 	}
 	
 	

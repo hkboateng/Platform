@@ -44,6 +44,39 @@
 						    </div>
 					      </c:if>			          
 			          </div>
+			          <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 spaceBelow_20">
+						<h3 class="underline-div">News and Messages</h3>			          
+			          </div>
+			           <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 spaceBelow_20">
+					    		<sf:form action="/abankus/customers/viewProfile" method="get">
+									<label>Quick Search</label>
+									<div class="spaceBelow_10">
+										<label class="radio-inline">
+										  <input type="radio" name="searchBill" id="customerId" value="customerIdDiv" checked> Customer Id:
+										</label>
+										<label class="radio-inline">
+										  <input type="radio" name="searchBill" id="customerName" value="customerNameDiv"> Customer Name
+										</label>
+										<label class="radio-inline">
+										  <input type="radio" name="searchBill" id="customerOrder" value="customerOrderDiv"> Order #:
+										</label>
+									</div>
+										<div id="customerIdDiv" class="">
+											<label>Customer Id:</label><input type="text" name="customerId" class="form-state"/>
+											
+										</div>
+										<div id="customerNameDiv" class="hidden">
+											<label>First Name:</label><input type="text" name="firstname" class="form-state">
+											<label>Last Name:</label><input type="text" name="lastname" class="form-state">
+										</div>
+										<div class="hidden" id="customerOrderDiv">
+											<label>Order Number:</label><input type="text" name="OrderNumber" class="form-state">
+										</div>
+										<input type="hidden" name="searchType" id="searchType" value="customerId">
+										<button type="submit" class="btn btn-success btn-sm btn-block"><span class="glyphicon glyphicon-search moveR_20"></span>Search</button>
+								</sf:form>
+			           </div>
+			           <div class="clearfix"></div>
 				          <div class="col-xs-12 col-sm-7 col-md-7 col-lg-7">
 				          	<h3>Customer Assigned</h3>
 				          	<c:if test="${not empty employeeCustomerList }">
@@ -81,7 +114,7 @@
 			          			<c:if test="${not empty transactionListToday}">
 		          					<c:forEach items="${transactionListToday }" var="history">
 		          						<tr>
-		          							<td>${history.getTransactionId()}</td>
+		          							<td><a href="#">${history.getTransactionId()}</a></td>
 		          							<td>${history.getAmountPaid()}</td>
 		          							<td>${history.getPaymentType()}</td>
 		          						</tr>
@@ -100,33 +133,7 @@
 			          			
 			          		<div>
 
-					    		<sf:form action="/abankus/platform/searchDashboard" method="post">
-									<label>Quick Search</label>
-									<div class="spaceBelow_10">
-										<label class="radio-inline">
-										  <input type="radio" name="searchBill" id="customerId" value="customerIdDiv" checked> Customer Id:
-										</label>
-										<label class="radio-inline">
-										  <input type="radio" name="searchBill" id="customerName" value="customerNameDiv"> First and Last Name
-										</label>
-										<label class="radio-inline">
-										  <input type="radio" name="searchBill" id="customerOrder" value="customerOrderDiv"> Order Number:
-										</label>
-									</div>
-										<div id="customerIdDiv" class="">
-											<label>Customer Id:</label><input type="text" name="customerId" class="form-state"/>
-											
-										</div>
-										<div id="customerNameDiv" class="hidden">
-											<label>First Name:</label><input type="text" name="firstname" class="form-state">
-											<label>Last Name:</label><input type="text" name="lastname" class="form-state">
-										</div>
-										<div class="hidden" id="customerOrderDiv">
-											<label>Order Number:</label><input type="text" name="OrderNumber" class="form-state">
-										</div>
-										<input type="hidden" name="searchType" id="searchType" value="customerId">
-										<button type="submit" class="btn btn-success btn-sm btn-block"><span class="glyphicon glyphicon-search moveR_20"></span>Search</button>
-								</sf:form>
+
 			          		</div>
 				          </div>					          	          
 			          </div>	
@@ -134,7 +141,7 @@
 				          <div class="quick-stats">
 				          	<div id="quick-stats-word" class="anw"> Quick Statistics</div>
 				          </div>
-								<div class="col-xs-12 col-sm-6 col-md-4">
+								<div id="totalPaymentDiv" class="col-xs-12 col-sm-6 col-md-4">
 					          	
 					          	</div>
 					          	<div class="col-xs-12 col-sm-6 col-md-4">
@@ -157,7 +164,8 @@
 <script>
 	$(document).ready(function(){
 		loadEmployeeCustomers();
-		
+		loadPayment();
+		loadMonthPayments();
 		$('#customerId').on('click',function(){
 			$('#searchType').val("customerId");
 			$("#customerIdDiv").removeClass('hidden');
@@ -191,7 +199,56 @@
 	function loadEmployeeCustomers(){
 		
 	}
-	
+	function loadMonthPayments(){
+		var thisMonth= new Date().getMonth()+1;
+		var year = new Date().getFullYear();
+		$.ajax({
+			url: 'loadMonthPayments',
+			method: 'get',
+			data: {
+				month: thisMonth,
+				year:year
+			},
+			dataType: 'json',
+			success: function(result){
+				console.log(result);
+			},
+			error : function(err){
+				console.log(err.responseText);
+			}
+		});		
+	}
+	function loadPayment(){
+		var now = new Date();
+		var day = now.getDate();
+		if(day <10){
+			day = "0"+day;
+		}
+		var month = now.getMonth()+1;
+		if(month < 10){
+			month = "0"+month;
+		}
+		var year = now.getFullYear();
+		
+		var date = month+"/"+day+"/"+year;
+		var fromDate = new Date().toLocaleDateString("en-US");
+		
+		var toDate = new Date().toLocaleDateString("en-US");
+		$.ajax({
+			url: 'loadPayments',
+			method: 'get',
+			data: {
+				date: date
+			},
+			dataType: 'json',
+			success: function(result){
+				console.log(result);
+			},
+			error : function(err){
+				console.log(err.responseText);
+			}
+		});
+	}
 	
 </script>
 </html>

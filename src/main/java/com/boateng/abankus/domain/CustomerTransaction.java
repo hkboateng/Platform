@@ -20,17 +20,29 @@ public class CustomerTransaction implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Same as confirmation number
+	 */
 	private String transactionId;
 	
 	private String customerNumber;
 	
+	//Cash, Check or Charge Card
 	private String paymentType;
 	
 	private String orderNumber;
 	
 	private String amountPaid;
 	
-	private Map<String,List<OrderPayment>> orderPaymentMap;
+	private String payment_year;
+	
+	private String payment_month;
+	
+	private String payment_day;
+	
+	//24-hr time
+	private String payment_time;
+	
 	
 	public CustomerTransaction(OrderPayment payment){
 		this.amountPaid = String.valueOf(payment.getAmountPaid());
@@ -38,19 +50,11 @@ public class CustomerTransaction implements Serializable{
 		this.customerNumber = payment.getClientorder().getCustomer().getCustomerNumber();
 		this.transactionId = payment.getConfirmationNumber();
 		this.paymentType = payment.getPaymentMethod().getPaymentType();
-
+		this.payment_year = String.valueOf(payment.getPaymentDate().toLocalDateTime().getYear());
+		this.payment_month = String.valueOf(payment.getPaymentDate().toLocalDateTime().getMonth().getValue());
+		this.payment_day = String.valueOf(payment.getPaymentDate().toLocalDateTime().getDayOfMonth());
+		this.payment_time = String.valueOf(payment.getPaymentDate().toLocalDateTime().toLocalTime());
 	}
-
-	
-	public Map<String,List<OrderPayment>> getOrderPayment(){
-		return orderPaymentMap;
-	}
-	public List<OrderPayment> getOrderPayment(String orderNumber){
-		return getOrderPayment().get(orderNumber);
-	}
-
-	
-
 
 	/**
 	 * @return the transactionId
@@ -126,6 +130,62 @@ public class CustomerTransaction implements Serializable{
 	 */
 	public void setAmountPaid(String amountPaid) {
 		this.amountPaid = amountPaid;
+	}
+
+	/**
+	 * @return the payment_year
+	 */
+	public String getPayment_year() {
+		return payment_year;
+	}
+
+	/**
+	 * @param payment_year the payment_year to set
+	 */
+	public void setPayment_year(String payment_year) {
+		this.payment_year = payment_year;
+	}
+
+	/**
+	 * @return the payment_month
+	 */
+	public String getPayment_month() {
+		return payment_month;
+	}
+
+	/**
+	 * @param payment_month the payment_month to set
+	 */
+	public void setPayment_month(String payment_month) {
+		this.payment_month = payment_month;
+	}
+
+	/**
+	 * @return the payment_day
+	 */
+	public String getPayment_day() {
+		return payment_day;
+	}
+
+	/**
+	 * @param payment_day the payment_day to set
+	 */
+	public void setPayment_day(String payment_day) {
+		this.payment_day = payment_day;
+	}
+
+	/**
+	 * @return the payment_time
+	 */
+	public String getPayment_time() {
+		return payment_time;
+	}
+
+	/**
+	 * @param payment_time the payment_time to set
+	 */
+	public void setPayment_time(String payment_time) {
+		this.payment_time = payment_time;
 	}
 	
 	

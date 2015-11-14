@@ -108,11 +108,21 @@ public class CustomerController extends PlatformAbstractServlet{
 	@RequestMapping(value="/viewProfile", method=RequestMethod.GET)
 	public String viewCustomerProfile(Model model,HttpServletRequest request,RedirectAttributes redirectAttributess){
 		String customerId = request.getParameter("customerId");
-
-	
+		String firstname = request.getParameter("firstname");
+		String lastname = request.getParameter("lastname");
+		String orderNumber = request.getParameter("orderNumber");
+		String searchType=request.getParameter("searchType");
 		
-		//Find Customer Object
-		Customer customer = customerServiceProcessor.searchForCustomer(customerId);
+		
+		Customer customer = null;
+		if(searchType.equals("customerId")){
+			customer = customerServiceProcessor.searchForCustomer(customerId);
+		}else if(searchType.equals("customerName")){
+			customer = customerServiceProcessor.searchForCustomerByFirstAndLastName(firstname, lastname);
+		}else if(searchType.equals("order")){
+			//search by order number, confirmation number or transaction Id
+		}
+
 		if(customer == null){
 			model.addAttribute("message", "The Customer Identification you used is Invalid.");
 			return "ClientServices/ViewCustomerProfile";

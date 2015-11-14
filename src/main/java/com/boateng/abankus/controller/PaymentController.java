@@ -89,7 +89,7 @@ public class PaymentController {
 	@RequestMapping(value = "/validateCustomerAuthenticate", method = RequestMethod.GET,produces="application/json")
 	@ResponseBody
 	public String validatePassword(HttpServletRequest request)  throws PlatformException, JsonProcessingException{
-		String customerpin = request.getParameter("customerpin");
+		String customerpin = request.getParameter("customerPIN");
 		Customer customer = (Customer) request.getSession(false).getAttribute(CustomerFields.CUSTOMER_SESSION);
 		
 		String customerId = String.valueOf(customer.getCustomerId());

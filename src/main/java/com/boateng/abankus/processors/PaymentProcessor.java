@@ -207,7 +207,7 @@ public class PaymentProcessor extends PlatformAbstractServlet{
 		String checkNumber = request.getParameter("checkNumber");
 		
 		paymentMethod.setPaymentType(typeOfPayment);
-		if(typeOfPayment.equalsIgnoreCase("bank")){
+		if(typeOfPayment.equalsIgnoreCase("check")){
 			paymentMethod.setAccountnumber(bankAccountNumber);
 			paymentMethod.setBankname(bankName);
 			paymentMethod.setBanknumber(bankRoutingNumber);

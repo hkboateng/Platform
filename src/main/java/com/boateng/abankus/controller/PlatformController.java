@@ -21,8 +21,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.boateng.abankus.customer.processor.CustomerServiceProcessor;
@@ -33,12 +35,15 @@ import com.boateng.abankus.domain.CustomerTransaction;
 import com.boateng.abankus.domain.Email;
 import com.boateng.abankus.domain.Employee;
 import com.boateng.abankus.domain.OrderPayment;
+import com.boateng.abankus.domain.PaymentTransaction;
 import com.boateng.abankus.domain.Phone;
 import com.boateng.abankus.exception.PlatformException;
 import com.boateng.abankus.fields.EmployeeFields;
 import com.boateng.abankus.services.EmployeeService;
 import com.boateng.abankus.services.PaymentService;
 import com.boateng.abankus.servlet.PlatformAbstractServlet;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * @author hkboateng
@@ -133,12 +138,15 @@ public class PlatformController  extends PlatformAbstractServlet {
 		}else if(searchType.equals("customerName")){
 			customer = customerServiceProcessor.searchForCustomerByFirstAndLastName(firstname, lastname);
 		}else if(searchType.equals("order")){
-			
+			//search by order number, confirmation number or transaction Id
 		}
 		if(customer == null){
 			session.setAttribute("searchError", "No information was found, Try again.");
 			return "redirect:/platform/dashboard";
 		}
+
+				
+		loadCustomerIntoSession(request,customer);
 		CustomerAccount customerAccount = customerServiceProcessor.findCustomerAccountByCustomerNumber(customer.getCustomerId());
 		
 		List<Address> address = customerServiceProcessor.findAddressByCustomerId(customer.getCustomerId());
@@ -155,4 +163,36 @@ public class PlatformController  extends PlatformAbstractServlet {
 		return "ClientServices/ViewCustomerProfile";
 	}
 	
+	@RequestMapping(value = "/platform/loadPayments", method = RequestMethod.GET,produces="application/json")
+	@ResponseBody
+	public String loadPayments(HttpServletRequest request){
+		String date = request.getParameter("date");
+		
+		ObjectMapper mapper = new ObjectMapper();
+		
+		List<PaymentTransaction> payments = paymentServiceImpl.findAllPaymentsByDate(date);
+		String status = null;
+		try {
+			status = mapper.writeValueAsString(payments);
+		} catch (JsonProcessingException e) {
+			logger.error(e.getMessage());
+		}
+		return status;
+	}
+	@RequestMapping(value = "/platform/loadMonthPayments", method = RequestMethod.GET,produces="application/json")
+	@ResponseBody
+	public String loadMonthPayments(HttpServletRequest request){
+		String month = request.getParameter("month");
+		String year = request.getParameter("year");
+		ObjectMapper mapper = new ObjectMapper();
+		
+		List<PaymentTransaction> payments = paymentServiceImpl.findAllMonthPaymentByYearAndMonth(year, month);
+		String status = null;
+		try {
+			status = mapper.writeValueAsString(payments);
+		} catch (JsonProcessingException e) {
+			logger.error(e.getMessage());
+		}
+		return status;
+	}
 }

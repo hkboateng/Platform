@@ -5,6 +5,8 @@ package com.boateng.abankus.application.ws.svc;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 
@@ -41,6 +43,7 @@ public class PaymentRequest implements PlatformRequest{
 		try {
 			JAXBContext jaxbContext = JAXBContext.newInstance(PaymentRequest.class);
 			Client client = ClientBuilder.newClient();
+			//WebTarget webTarget = client.target("http://localhost:8080/ws/paymentServices").path("savePayment").request(MediaType.APPLICATION_JSON).;
 		} catch (JAXBException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

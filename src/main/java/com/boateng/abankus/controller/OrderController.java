@@ -66,7 +66,7 @@ public class OrderController {
 		
 	}
 	
-	@RequestMapping(value = "/client/createOrders", method = RequestMethod.GET)
+	@RequestMapping(value = "/customer/createOrders", method = RequestMethod.GET)
 	public ModelAndView createOrder(){
 		ModelAndView modelView = new ModelAndView();
 		
@@ -171,7 +171,7 @@ public class OrderController {
 		return "redirect:/client/createOrders";
 	}
 	
-	@RequestMapping(value = "/client/orderHistory", method = RequestMethod.POST)
+	@RequestMapping(value = "/customer/orderHistory", method = RequestMethod.POST)
 	public String orderHistory(HttpServletRequest request, Model model,RedirectAttributes redirectAttributess) throws PlatformException{
 		logger.info("Viewing Customer Order history page.");
 		Customer customer = (Customer) request.getSession(false).getAttribute(CustomerFields.CUSTOMER_SESSION);

@@ -23,10 +23,10 @@
 						<a href="javascript:makePayment('makePayment',document.makeCustomerPayment);" class=""><i class="fa fa-money moveR_20"></i>Make A Payment</a>  				 	
 					   </li>	
 					   <li>
-						 <a href="javascript:orderHistory('orderHistory',document.formOrderHistroy);" ><i class="fa fa-exchange moveR_20"></i>View Customer Order History</a>
+						 <a href="javascript:submitCustomerURL('orderHistory',document.formOrderHistroy);" ><i class="fa fa-exchange moveR_20"></i>View Customer Order History</a>
 					   </li>
 					   <li>
-						  <a href="javascript:createOrder('createCustomerOrder','document.createCustomerOrder');"><i class="fa fa-exchange moveR_20"></i>Add New Order</a>
+						  <a href="javascript:submitURL('createCustomerOrder','document.createCustomerOrder');"><i class="fa fa-exchange moveR_20"></i>Add New Order</a>
 						</li>	
 				     </ul>
 				</div>
@@ -79,7 +79,7 @@
 			<label>Quick Search</label>
 			<div class="spaceBelow_10">
 			<label class="radio-inline">
-			  <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> Name
+			  <input type="radio" name="customerId" id="customerId" value="customerIdDiv"> Customer Id
 			</label>
 			<label class="radio-inline">
 			  <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> Account No.
@@ -89,6 +89,7 @@
 			</label>
 			</div>
 			<input type="text" name="customerId" class="form-state"/>
+			<input type="hidden" name="searchType" id="searchType" value="customerId">
 			<button type="submit" class="btn btn-success btn-sm btn-block"><span class="glyphicon glyphicon-search moveR_20"></span>Search</button>
 		</sf:form>
 	</div>
@@ -105,6 +106,7 @@
 				}
 			});
 		});
+
 
 	function makePayment(url,form){
 		if(isEmpty(url) || !isAlphaNumeric(url)){

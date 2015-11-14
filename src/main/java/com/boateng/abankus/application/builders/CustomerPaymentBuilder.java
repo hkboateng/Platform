@@ -3,7 +3,14 @@
  */
 package com.boateng.abankus.application.builders;
 
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
+
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
 
 import com.boateng.abankus.domain.CustomerOrder;
 import com.boateng.abankus.domain.Employee;
@@ -42,7 +49,7 @@ public class CustomerPaymentBuilder {
 		/**
 		 * Whether payment is made in cash or CC or Bank
 		 */
-		typeOfPayment = request.getParameter("paymentType");
+		typeOfPayment = request.getParameter("paymentForm");
 		bankName = request.getParameter("bankName");
 		bankRoutingNumber = request.getParameter("bankRoutingNumber");
 		bankCustomerName = request.getParameter("bankCustName");
@@ -72,12 +79,15 @@ public class CustomerPaymentBuilder {
 	public OrderPayment buildOrderPayment(CustomerOrder order,Employee employee){
 		OrderPayment orderPayment = new OrderPayment();
 		double paidAmount = 0.0;
-		
+		SimpleDateFormat dateFormatter = new SimpleDateFormat("MM/dd/yyyy");
+		Date dateTime = new Date();
 		paidAmount = Double.parseDouble(amount);
 		orderPayment.setAmountPaid(paidAmount);
 		orderPayment.setPaymentSchedule(paymentSchedule);
 		orderPayment.setClientorder(order);
 		orderPayment.setEmployee(employee);
+		
+		orderPayment.setDatePaid(dateFormatter.format(dateTime).toString());
 		return orderPayment;
 	}
 

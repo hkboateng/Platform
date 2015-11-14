@@ -27,7 +27,7 @@
 <%-- End of Include page header --%>
 <div id="container" class="container">
 <div class="row">
-	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	<div class="col-sm-9 col-md-9 col-lg-9">
 	<h3><c:if test="${not empty customer}">${not empty customer.getCustomerName() ? customer.getCustomerName() : customer.getCompany_name()} (Account #:${customerAccount.accountNumber.toUpperCase() })</c:if></h3>
 	
 	<c:choose>
@@ -64,19 +64,47 @@
 			</c:if>	
 		</div>		
 	</div> 	
-	<div class="clearfix"></div>
-	<div class="col-sm-12 col-md-3 col-lg-3 main-container">
-		<h3>Transaction History</h3>
+	<div class="col-lg-3">
+		<div class="pad_10">
+			<sf:form action="/abankus/customers/viewProfile" method="get">
+				<label>Quick Search</label>
+					<div class="spaceBelow_10">
+					<label class="radio-inline">
+					  <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> Name
+					</label>
+					<label class="radio-inline">
+					  <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> Account No.
+					</label>
+					<label class="radio-inline">
+					  <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3"> Email
+					</label>
+					</div>
+				<input type="text" name="customerId" class="form-state"/>
+				<button type="submit" class="btn btn-success btn-sm btn-block"><span class="glyphicon glyphicon-search moveR_20"></span>Search</button>
+			</sf:form>
+		</div>	
 	</div>
-	<div class="col-sm-12 col-md-8 col-lg-9 main-container">
+	<div class="clearfix underline-div"></div>
+	<%-- Account Details Information --%>
+	<div class="col-sm-12 col-md-12 col-lg-12 main-container">
+		<h3>Account Details</h3>
+		<div>
+			<label class="bold">Account Number:</label>
+			<span>${customerAccount.getAccountNumber() }</span>
+		</div>
+		<div>
+			<label class="bold">Contact Person:</label>
+			<span>${customer.getContactPerson() ? customer.getContactPerson() : '<a href="#"><span class="glyphicon glyphicon-pencil"></span>Add Contact Person</a>'}</span>
+		</div>
+		<div>
+			<label class="bold">Account Status:</label>
+			<span>${customerAccount.getStatus()}</span>
+		</div>		
+	</div>	
+	<div class="col-sm-12 col-md-9 col-lg-9 main-container">
+		<h3 class="underline-div">Transaction History</h3>
+	</div>
 
-	          <div class="row">
-	          <c:if test="${not empty message}">
-		          <div class="alert alert-danger" role="alert">
-				      ${message}
-				   </div>         
-	          </c:if>
-	          </div>
 	          <%--
 			 <c:if test="${not empty customer}">
 			  	<div id="" class="row ">
@@ -129,7 +157,10 @@
 	          </sf:form>
 				</c:if>
 				 --%>
-	  </div> 
+
+			<div class="hidden-sm hidden-xs col-md-3 col-lg-3" >
+				
+			</div>
 </div>
 </div>
   

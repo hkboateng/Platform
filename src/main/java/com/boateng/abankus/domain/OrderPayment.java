@@ -3,7 +3,6 @@ package com.boateng.abankus.domain;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.math.BigDecimal;
 
 
 /**
@@ -32,7 +31,7 @@ public class OrderPayment implements Serializable {
 	
 	private String paymentSchedule;
 	
-
+	private String datePaid;
 	//bi-directional many-to-one association to Employee
 	@ManyToOne
 	@JoinColumn(name="employeeId")
@@ -143,6 +142,14 @@ public class OrderPayment implements Serializable {
 	
 	public void getDate(){
 		getPaymentDate().getTime();
+	}
+
+	public String getDatePaid() {
+		return datePaid;
+	}
+
+	public void setDatePaid(String datePaid) {
+		this.datePaid = datePaid;
 	}
 
 }

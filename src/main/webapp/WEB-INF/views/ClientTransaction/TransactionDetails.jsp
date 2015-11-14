@@ -6,7 +6,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-		<title>Abankus Corporation - Transaction History</title>
+		<title>Abankus Corporation - Transaction Details</title>
 		<link href="<c:url value="/resources/css/bootstrap.css" />" rel="stylesheet" />
 		<link href="<c:url value="/resources/css/platform.css" />"	rel="stylesheet" />
 		<script src="<c:url value="/resources/js/jquery.js" />"	type="text/javascript"></script>
@@ -23,10 +23,10 @@
 	<div class="container">
 		<div class="row">
 			
-			<div class="col-sm-9 col-md-9 col-lg-9">
+			<div class="col-sm-9 col-md-9">
 			<h2 class="underline">Transaction Details</h2>
 			</div>
-			<div class="col-sm-9 col-md-3 col-md-3">
+			<div class="col-sm-9 col-md-2">
 				<jsp:include page="../sidebar.jsp" />
 			</div>			
 		</div>

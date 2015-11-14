@@ -25,44 +25,49 @@
 <body>
 	<%-- Include page header --%>
 	<jsp:include page="../header.jsp" />
-	<div class="container">
+	<div id="container" class="container">
 		<div class="row">
-			<jsp:include page="../sidebar.jsp" />
-			<div class="col-sm-9 col-md-10 col-md-offset-2 main">
+			<div class="col-sm-9 col-md-10 center-block">
 				<h2>Search for Customer</h2>
 				<hr class="line1" />
-				<div>
+				<div class="col-md-5">
+					<label>Find By Customer Name</label>
 					<div class="platform-form-group">
+					
 					<input type="radio" name="searchCustomer" id="searchCustomer" class="moveR_20"/>
-						<label for="firstname">Customer First Name:</label> <input class="platform_form"
-							type="text" name="firstname" id="firstname">
+						
+						<label for="firstname">Customer First Name:</label>
+						 <input class="form-state" type="text" name="firstname" id="firstname">
 						<label	for="lastname">Customer Last Name:</label> 
-						<input type="text"	name="lastname" id="lastname" class="platform_form">
+						<input type="text"	name="lastname" id="lastname" class="form-state">
 					</div>
 					<div class="platform-form-group">
 					<input type="radio" name="searchCustomer" id="searchCustomer" class="moveR_20"/>
-						<label for="accountnumber">Account Number:</label> <input class="platform_form"
+						<label for="accountnumber">Account Number:</label> <input class="form-state"
 							type="text" name="accountnumber" id="accountnumber">
-					</div>
-					<div class="platform-form-group">
-					<input type="radio" name="searchCustomer" id="searchCustomer" class="moveR_20"/>
-						<label for="customernumber">Customer Number:</label> <input class="platform_form"
-							type="text" name="customernumber" id="customernumber">
-					</div>			
-					<div class="platform-form-group">
-					<input type="radio" name="searchCustomer" id="searchCustomer" class="moveR_20"/>
-						<label for="emailaddress">Email Address:</label> <input class="platform_form"
-							type="text" name="emailaddress" id="emailaddress">			
-					</div>		
-					<div class="platform-form-group">
-					<input type="radio" name="searchCustomer" id="searchCustomer" class="moveR_20"/>
-						<label for="phonenumber">Phone Number:</label> <input class="platform_form"
-							type="text" name="phonenumber" id="phonenumber">			
 					</div>		
 					<div class="platform-form-group">							
 						<input type="submit" value="Search" class="btn btn-success"/>
 					</div>														
 				</div>
+				<div class="col-md-5">
+					<div class="platform-form-group">
+					<input type="radio" name="searchCustomer" id="searchCustomer" class="moveR_20"/>
+						<label for="customernumber">Customer Number:</label> <input class="form-state"
+							type="text" name="customernumber" id="customernumber">
+					</div>			
+					<div class="platform-form-group">
+					<input type="radio" name="searchCustomer" id="searchCustomer" class="moveR_20"/>
+						<label for="emailaddress">Email Address:</label> <input class="form-state"
+							type="text" name="emailaddress" id="emailaddress">			
+					</div>		
+					<div class="platform-form-group">
+					<input type="radio" name="searchCustomer" id="searchCustomer" class="moveR_20"/>
+						<label for="phonenumber">Phone Number:</label>
+							<input class="form-state" type="text" name="phonenumber" id="phonenumber" placeholder="XXX-XXX-XXXX">			
+					</div>				
+				</div>
+				<div class="clearfix"></div>
 				<div id="resultHeading" class="resultHeading">
 					<div id="resultHeading-word" class="anw">Search Results</div>
 				</div>

@@ -57,14 +57,9 @@
 				 </div>			
 			<c:set var="formState" value="${not empty account ? '' : 'hidden' }"/>	
 			<sf:form class="forms ${formState}" method="post"  action="" name="customerOrderForm" id="customerOrderForm">
-			<div class="panel panel-success">
-			<div class="panel-heading">Customer Order  <span id="customerName" class="bold"></span>
-				<span class="pull-right">
-					<span class=" bold ">Cart:</span> 
-					<span id="noOfItems"></span>
-				</span>
-			</div>
-			  <div class="panel-body">
+			<div class="">
+
+			  <div class="row">
 					<div id="clientName">
 						<p><b>Client Name:</b><span id="clientFullName">${account.customer.firstname}&nbsp;${account.customer.lastname}</span></p>
 					</div>
@@ -72,18 +67,16 @@
 						<label>Account Status:</label><span id="accountStatus">${account.status }</span>
 					</div>
 					<c:if test="${not empty productList}" >
-						<div class="row">
-						<div class="col-xs-4">
+
 							<label for="product">Product/Services:</label><span id="product-error" class="help-text-inline-error"></span>
 							
-							<select name="product" id="product" class="form-control"  onchange="javascript:getProductCode(this);" onblur="javascript:getProductCode(this);">
+							<select name="product" id="product" class="form-state"  onchange="javascript:getProductCode(this);" onblur="javascript:getProductCode(this);">
 								<option value=" ">Select Product/Service </option>
 								<c:forEach items="${productList}" var="products" varStatus="list">
 									<option value="${products.productCode }" title="${products.description }">${products.productName }</option>
 								</c:forEach>
 							</select>
-						</div>						
-						</div>
+	
 						<div>
 						<p>
 							<b>Product Description:</b>&nbsp;<span id="productDescription"></span>
@@ -92,7 +85,7 @@
 							<b>Product Cost (Unit Cost):</b>&nbsp;<span id="unitCost"></span>
 						</p>
 						<p>
-						<label class="bold">Quantity:</label><input type="number" name="quantity" id="productQuantity" maxLength="1" min="1" max="100" value="1"/>
+						<label class="bold">Quantity:</label><input type="number" name="quantity" id="productQuantity" maxLength="3" min="1" max="100" value="1"/>
 						</p>
 						</div>					
 						</c:if>
