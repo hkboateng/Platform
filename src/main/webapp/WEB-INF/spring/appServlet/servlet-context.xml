@@ -98,7 +98,6 @@
 		</beans:property>
 	</beans:bean>  	
     <!-- Controller and Entity Beans -->
-    <beans:bean id="homeController" class="com.boateng.abankus.controller.HomeController"/>
     
     <beans:bean id="productController" class="com.boateng.abankus.controller.ProductController" />
     

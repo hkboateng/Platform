@@ -30,10 +30,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.boateng.abankus.application.interfaces.CustomerService;
 import com.boateng.abankus.customer.processor.CustomerServiceProcessor;
 import com.boateng.abankus.domain.Address;
+import com.boateng.abankus.domain.BillingCollection;
 import com.boateng.abankus.domain.Customer;
 import com.boateng.abankus.domain.CustomerAccount;
+import com.boateng.abankus.domain.CustomerOrder;
 import com.boateng.abankus.domain.Email;
 import com.boateng.abankus.domain.Phone;
+import com.boateng.abankus.exception.PlatformException;
+import com.boateng.abankus.fields.CustomerOrderFields;
+import com.boateng.abankus.processors.CustomerOrderProcessor;
 import com.boateng.abankus.servlet.PlatformAbstractServlet;
 
 @Controller
@@ -54,6 +59,9 @@ public class CustomerController extends PlatformAbstractServlet{
 
 	@Autowired(required=true)
 	private CustomerServiceProcessor customerServiceProcessor;
+	
+	@Autowired(required=true)
+	private CustomerOrderProcessor customerOrderProcessor;
 	
 	@PreAuthorize("isFullyAuthenticated")
 	@RequestMapping(value="/create", method=RequestMethod.GET)
@@ -106,7 +114,7 @@ public class CustomerController extends PlatformAbstractServlet{
 	}
 	
 	@RequestMapping(value="/viewProfile", method={RequestMethod.GET,RequestMethod.POST})
-	public String viewCustomerProfile(Model model,HttpServletRequest request){
+	public String viewCustomerProfile(Model model,HttpServletRequest request) throws PlatformException{
 		HttpSession session = request.getSession(false);
 		String customerId = request.getParameter("customerId");
 		String firstname = request.getParameter("firstname");
@@ -133,6 +141,7 @@ public class CustomerController extends PlatformAbstractServlet{
 		}
 		
 		loadCustomerIntoSession(request,customer);
+		loadCustomerOrderHistory(model,customer.getCustomerId(),request);
 		CustomerAccount customerAccount = customerServiceProcessor.findCustomerAccountByCustomerNumber(customer.getCustomerId());
 		
 		List<Address> address = customerServiceProcessor.findAddressByCustomerId(customer.getCustomerId());
@@ -148,6 +157,16 @@ public class CustomerController extends PlatformAbstractServlet{
 		return "ClientServices/ViewCustomerProfile";
 	}
 	
+	private void loadCustomerOrderHistory(Model model,int customerId,HttpServletRequest request) throws PlatformException{
+		HttpSession session = request.getSession(false);
+		List<CustomerOrder> orderList = customerOrderProcessor.loadAllOrderByCustomer(customerId);
+		model.addAttribute("customerOrder", orderList);
+
+		BillingCollection collection = customerOrderProcessor.getCustomerBillings(customerId);
+
+		session.setAttribute(CustomerOrderFields.BILLING_COLLECTION_SESSION, collection);
+		model.addAttribute("billing", collection);		
+	}
 	@RequestMapping(value="/isCustomerEmailUnique", method=RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public boolean isEmailUnique(@RequestParam(value="emailAddress",required=true) String emailAddress){

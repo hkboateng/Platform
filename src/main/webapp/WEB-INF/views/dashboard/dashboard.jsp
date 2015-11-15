@@ -103,35 +103,73 @@
 								</div>	          		
 				          	</c:if>						          	
 				          </div>		
-				          <div class="col-xs-12 col-sm-5 col-md-5 col-lg-5">
-				          <h3> Transaction History</h3>
+				          <div class="col-xs-12 col-sm-5 col-md-6 col-lg-6">
+				          <h3 class="underline-div"> Transaction History</h3>		
+				          	<c:choose>		          		
+			          			<c:when test="${not empty transactionListToday}">
+					          		<table class="table">
+					          		<tr>
+					          			<th>Confirmation Number</th>
+					          			<th>Amount</th>
+					          			<th>Type Of Payment</th>
+					          		</tr>			          			
+		          					<c:forEach items="${transactionListToday }" var="history">
+		          						<tr>
+		          							<td><a href="#">${history.getTransactionId()}</a></td>
+		          							<td>${history.getAmountPaid()}</td>
+		          							<td>${history.getPaymentType()}</td>
+		          						</tr>
+		          					</c:forEach>
+		          					<tfoot>
+		          						<tr>
+		          							<td colspan="1"><span class="bold">Total Amount:</span></td>
+		          							<td colspan="2">Total</td>
+		          						</tr>
+		          					</tfoot>
+		          					</table>
+			          			</c:when>
+			          			<c:otherwise>
+			          				<div style="text-align:center;"> No Transaction History</div>
+			          			</c:otherwise>
+			          			</c:choose>
+			          				
+				          </div>
+				          <div class="col-xs-12 col-sm-5 col-md-6 col-lg-6">
 							<div class="btn-group btn-group-justified" role="group" aria-label="...">
 								
 							  <div class="btn-group" role="group">
-							    <button type="button" id="" class="btn btn-success">Today</button>
+							    <button type="button" id="todayDiv" class="btn btn-success">Today</button>
 							  </div>
 							  <div class="btn-group" role="group">
-							    <button type="button" class="btn btn-default">6 months</button>
+							    <button type="button" id="monthDiv" class="btn btn-default">Monthly</button>
 							  </div>
 							  <div class="btn-group" role="group">
 							    <button type="button" class="btn btn-default">Year-To-Date</button>
 							  </div>
 							  <div class="btn-group" role="group">
-							    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true">Define your search <span class="caret"></span></button>
-							  </div>					
- <ul class="dropdown-menu">
-    <li><a href="#">Action</a></li>
-    <li><a href="#">Another action</a></li>
-    <li><a href="#">Something else here</a></li>
-    <li role="separator" class="divider"></li>
-    <li><a href="#">Separated link</a></li>
-  </ul>							  		  
-							</div>	
-			          	  <div>
-
-
-			          		</div>
-				          </div>					          	          
+							    <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							    	Filter
+							    <span class="sr-only">Toggle Dropdown</span>
+							     <span class="caret"></span>
+							    </button>
+								  <ul class="dropdown-menu">
+								    <li><a href="#">Action</a></li>
+								    <li><a href="#">Another action</a></li>
+								    <li><a href="#">Something else here</a></li>
+								    <li role="separator" class="divider"></li>
+								    <li><a href="#">Separated link</a></li>
+								  </ul>							    
+							  </div>							  
+							  </div>	
+							  <div>
+							  	<div id="todayDivContainer" class="hidden">
+							  		<h4>Today's Transaction</h4>
+							  	</div>
+							  	<div id="monthlyDivContainer" class="hidden">
+							  		<h4>Today's Transaction</h4>
+							  	</div>							  	
+							  </div>				          
+				         	</div>					          	          
 			          </div>	
 			          <div class="row">
 				          <div class="quick-stats">
@@ -236,14 +274,16 @@
 		
 		var toDate = new Date().toLocaleDateString("en-US");
 		$.ajax({
-			url: 'loadPayments',
+			url: "http://localhost:8080/PaymentHub/ws/paymentServices/findAllPaymentsByDate",
 			method: 'get',
 			data: {
 				date: date
 			},
 			dataType: 'json',
 			success: function(result){
-				console.log(result);
+				$.each(result,function(key,value){
+					console.log(value.customerNumber)
+				});
 			},
 			error : function(err){
 				console.log(err.responseText);
