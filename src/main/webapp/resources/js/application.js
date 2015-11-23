@@ -42,7 +42,7 @@ function genderList(){
 /*jQuery time*/
 $(document).ready(function(){
 	
-	$("#btnSarchCustomer").click(function(){
+	$("#btnSearchCustomer").click(function(){
 		$("#customerOrderForm").addClass("hidden");
 		var accountNo = $("#accountNumber").val();
 		if(isCharacter(accountNo )){
@@ -82,8 +82,8 @@ function populateOrderForm(results){
 	$("#resultHeading").removeClass("hidden");
 	$("#customerOrderForm").removeClass("hidden");
 	$.each(results,function(index,row){
-		$("#customerName").text(results.customer.firstname+" "+results.customer.lastname);
-		$("#clientFullName").text(results.accountNumber);
+		$("#clientFullName").text(results.customer.firstname+" "+results.customer.lastname);
+		//$("#clientFullName").text(results.accountNumber);
 		$("#accountStatus").text(results.status);
 		$("#customerId").val(results.customer.customerId);
 	});

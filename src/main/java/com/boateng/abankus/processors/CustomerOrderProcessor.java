@@ -204,4 +204,20 @@ public class CustomerOrderProcessor implements OrderService{
 		}
 		return orderPayment;
 	}
+
+	@Override
+	public List<OrderPayment> findAllPaymentByOrderNumber(String orderNumber) {
+		if(orderNumber== null || orderNumber.isEmpty()){
+			return null;
+		}
+		CustomerOrder customerOrder = findCustomerOrderByOrderNumber(orderNumber);
+		
+		List<OrderPayment> orderPayment =  null;
+		if(customerOrder != null){
+			
+			orderPayment = getAllPaymentByCustomerOrder(customerOrder);
+		}
+		
+		return orderPayment;
+	}
 }

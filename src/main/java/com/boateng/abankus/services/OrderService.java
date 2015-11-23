@@ -32,4 +32,6 @@ public interface OrderService {
 	 * @return
 	 */
 	List<OrderPayment> getAllPaymentByCustomerOrder(int customerId);
+	
+	List<OrderPayment> findAllPaymentByOrderNumber(String orderNumber);
 }

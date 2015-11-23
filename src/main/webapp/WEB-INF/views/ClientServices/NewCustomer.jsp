@@ -28,15 +28,11 @@
 
 <div  id="container" class="container">
 <div class="row">
-<div class="col-md-3">
-<jsp:include page="../sidebar.jsp"/>
-</div>
-<div class="col-sm-9 col-md-9 col-md-9">
+<div>
 		
           <h1>Client Services - Prospective Customer</h1>
 			<hr>
-          <div class="row">
-          <div class="col-md-7">
+          <div class="col-sm-12 col-md-8 col-md-8">
           <div class="errors">
 	          <ul>
 		          <c:if test="${not empty errors}">
@@ -165,7 +161,6 @@
 		
 			</sf:form>
           </div>
-                    </div>
 </div>        
 </div>
 </div>

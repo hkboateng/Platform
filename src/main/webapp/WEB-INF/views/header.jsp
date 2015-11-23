@@ -110,9 +110,6 @@
 						<a href="javascript:makePayment('makePayment',document.makeCustomerPayment);" class=""><i class="fa fa-money moveR_20"></i>Make A Payment</a>  				 	
 				  </li>	
 				  <li>
-						 <a href="javascript:submitCustomerURL('orderHistory',document.formOrderHistroy);" ><i class="fa fa-exchange moveR_20"></i>View Customer Order History</a>
-				  </li>
-				  <li>
 						  <a href="javascript:submitCustomerURL('createCustomerOrder','document.createCustomerOrder');"><i class="fa fa-exchange moveR_20"></i>Add New Order</a>
 				  </li>	
 		        </ul>   

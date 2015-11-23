@@ -1,9 +1,4 @@
-<%
-	
-	String customerType = request.getParameter("customerType");
-	String employeeInfo = (String)session.getAttribute("employeeInfo");
-	pageContext.setAttribute("customerType", customerType);
-%>
+
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -27,66 +22,50 @@
 <%-- End of Include page header --%>
 <div id="container" class="container">
 <div class="row">
-	<div class="col-sm-9 col-md-9 col-lg-9">
-	<h3><c:if test="${not empty customer}">${not empty customer.getCustomerName() ? customer.getCustomerName() : customer.getCompany_name()} (Account #:${customerAccount.accountNumber.toUpperCase() })</c:if></h3>
-	
-	<c:choose>
-		<c:when test="${not empty address}">
-			<div class="col-xs-12 col-md-3">
-				<c:forEach items="${address}" var="addressList">
-					<span class="bold">${addressList.addressType.toUpperCase()} Address:</span><br>
-					${addressList.address1 }&nbsp;${addressList.address2 }
-					${addressList.city }&nbsp;${addressList.region }&nbsp;${addressList.zipcode }<br>
-				</c:forEach>	
-			</div>
-		</c:when>	 
-		<c:otherwise>
-			Address Information are not available this time!!!.
-		</c:otherwise>	
-	</c:choose>
-		<div class="col-xs-12 col-md-3">
-			<!-- Phone Number's -->
-			<c:if test="${not empty phone}">
-				<div class="bold">Phone Number(s):</div>
-				<c:forEach items="${phone }" var="phone" varStatus="counter">
-					<div>${phone.phoneNumber }&nbsp; </div>
-				</c:forEach>
-			</c:if>
-		</div>		
-		<div class="col-xs-12 col-md-3">
-			<!-- Customer Email Address -->
-			<c:if test="${not empty email}">
-				<div class="bold">EmailAddress:</div>
-				<c:forEach items="${email }" var="email" varStatus="counter">
-					<div>${email.emailAddress} &nbsp; </div>
-				</c:forEach>
+<div class="col-sm-9 col-md-9 col-lg-9">
+	<h3>
+		<c:if test="${not empty customer}">
+		${not empty customer.getCustomerName() ? customer.getCustomerName() : customer.getCompany_name()} (Account #:${customerAccount.customer.customerNumber.toUpperCase() })
+		</c:if>
+	</h3>
+		<c:choose>
+			<c:when test="${not empty address}">
+				<div class="col-xs-12 col-md-4">
+					<c:forEach items="${address}" var="addressList">
+						<div class="bold">${addressList.addressType.toUpperCase()} Address:</div>
+						<div>${addressList.address1 }&nbsp;${addressList.address2 }</div>
+						<div>${addressList.city }&nbsp;${addressList.region }&nbsp;${addressList.zipcode }</div>
+					</c:forEach>	
+				</div>
+			</c:when>	 
+			<c:otherwise>
+				Address Information are not available this time!!!.
+			</c:otherwise>	
+		</c:choose>
+	<div class="col-xs-12 col-md-4">
+		<!-- Phone Number's -->
+		<c:if test="${not empty phone}">
+			<div class="bold">Phone Number(s):</div>
+			<c:forEach items="${phone }" var="phone" varStatus="counter">
+				<div><label>${phone.getPhoneType() ? 'Primary Phone:' :phone.phoneType()  }:&nbsp;</label>${phone.getPhoneNumber() }</div>
+			</c:forEach>
+		</c:if>
+	</div>		
+	<div class="col-xs-12 col-md-4">
+		<!-- Customer Email Address -->
+		<c:if test="${not empty email}">
+			<div class="bold">EmailAddress:</div>
+			<c:forEach items="${email }" var="email" varStatus="counter">
+				<div>${email.emailAddress} &nbsp; </div>
+			</c:forEach>
 			
-			</c:if>	
-		</div>		
-	</div> 	
-	<div class="col-lg-3">
-		<div class="pad_10">
-			<sf:form action="/abankus/customers/viewProfile" method="get">
-				<label>Quick Search</label>
-					<div class="spaceBelow_10">
-					<label class="radio-inline">
-					  <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> Name
-					</label>
-					<label class="radio-inline">
-					  <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> Account No.
-					</label>
-					<label class="radio-inline">
-					  <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3"> Email
-					</label>
-					</div>
-				<input type="text" name="customerId" class="form-state"/>
-				<button type="submit" class="btn btn-success btn-sm btn-block"><span class="glyphicon glyphicon-search moveR_20"></span>Search</button>
-			</sf:form>
-		</div>	
-	</div>
-	<div class="clearfix underline-div"></div>
+		</c:if>	
+	</div>		
+</div> 	
+	
+<div class="clearfix underline-div"></div>
 	<%-- Account Details Information --%>
-	<div class="col-sm-12 col-md-12 col-lg-12 main-container">
+<div class="col-sm-12 col-md-8 col-lg-8 main-container">
 		<h3>Account Details</h3>
 		<div>
 			<label class="bold">Account Number:</label>
@@ -100,77 +79,94 @@
 			<label class="bold">Account Status:</label>
 			<span>${customerAccount.getStatus()}</span>
 		</div>		
-	</div>	
-	<div class="col-sm-12 col-md-6 col-lg-6 main-container">
-		<h3 class="underline-div">Transaction History</h3>
 
-<div id="orderSummary">
+		<h3 class="underline-div">Transaction History - Open Orders</h3>
+
+		<div id="orderSummary">
 			<c:if test="${not empty customerOrder }">
 			<table id='orderHistoryTable' class="table">
 				<thead>
 					<tr>
-						<th></th>
-						<th>Date:</th>
-						<th>Product Code</th>
-						<th>Total Amount Remaining</th>
+						<th>Order Date:</th>
+						<th>Balance</th>
 						<th>Total Amount:</th>
+						<th>View Detail</th>
+						<th>Action</th>
 					</tr>
 				</thead>
 				<tbody>
-				<%-- 
-				<c:forEach items="${customerOrder }" var="customerOrderList" varStatus="counter">
-					<tr>
-						<td id="tableId">
-						  <label for="tableId">
-						  <c:set value="${customerOrderList.getOrderNumber()}" var="orderNumber"/>
-						  	<% String t = (String)pageContext.getAttribute("orderNumber"); %>
-						    <input type="radio" name="orderNumber" id="orderNumberRd${counter.count }" value="<%=SecurityUtils.encryptOrderNumber(t) %>">
-						  </label>
-						</td>
-						<td id="tblOrderDate${counter.count }">${customerOrderList.convertOrderDate()}</td>
-						<td id="tblProductCode${counter.count }">${customerOrderList.getProductCode()}</td>
-						<td>${customerOrderList.isOrderPending()}</td>
-						<td>$<span  id="tblTotalAmount${counter.count }"> ${customerOrderList.getTotalAmount()}</span></td>
-						<td></td>
-					</tr>
-				</c:forEach>	
-				--%>
 				<c:forEach items="${billing.getBillingMap() }" var="billings" varStatus="counter">
 					<c:set value="${billings.key }" var="key" />
+					<c:set value="${billing.getCustomerBilling(key).encryptOrderNumber(key) }" var="keySec" />
 						<c:if test="${billing.getCustomerBilling(key).totalAmountRemaining() gt 0}">
 							<tr>
 								<c:set value="${billings.key }" var="key" />
-								<td id="tableId">
-									<input type="radio" name="orderNumber" id="orderNumber${counter.count }" value="${billing.getCustomerBilling(key).encryptOrderNumber(key) }"/>
-								</td> 
 								<td id="tblOrderDate${counter.count }">${billing.getCustomerBilling(key).convertOrderDate()}</td>
-								<td id="tblProductCode${counter.count }">${billing.getCustomerBilling(key).getProductCode()}</td>
 								<td>$<span  id="tblTotalAmount${counter.count }">${billing.getCustomerBilling(key).totalAmountRemaining() }</span></td>
-								<td>$&nbsp;${billing.getCustomerBilling(key).getTotalOrderAmount()}</td>						
+								<td>$&nbsp;${billing.getCustomerBilling(key).getTotalOrderAmount()}</td>		
+								<td id="tblProductCode${counter.count }"><a onclick="javascript:submitURLForm(document.viewTransactionDetail,'${keySec }')" href="#">View Order</a></td>
+								<td><button type="button" id="makePaymentBtn" onclick="javascript:submitCustomerPayment('${keySec }','${billing.getCustomerBilling(key).getTotalOrderAmount()}');"  class="btn btn-primary btn-sm">Make Payment</button></td>				
 							</tr>						
 						</c:if>
 
 				</c:forEach>			
-				</tbody>			
-				<tfoot>
-					<tr>
-					<td colspan="6">
-						<button type="button" id="makePaymentBtn" class="btn btn-primary">Make Payment</button>
-					</td>
-			</tr>
-				</tfoot>
+				</tbody>	
 			</table>
 			</c:if>
 			<c:if test="${empty customerOrder }">
 			<div class="alert alert-success" role="alert">
 				<p class="bold"><i class="fa fa-info moveR_20"></i>No Order History for Customer</p>
 			</div>
-				
 				<button type="button" class="btn btn-success center-block " onclick="javascript:pushToURL('clients/createOrder')">Add Order for Customer<i class="fa fa-chevron-right moveL_30"></i></button>
 			</c:if>
-
 			</div>
-				</div>
+			<h3 class="underline-div"> Closed or Paid Orders</h3>
+			<div>
+				<c:if test="${not empty customerOrder }">
+				<table id='orderHistoryClosed' class="table">
+					<thead>
+						<tr>
+							<th></th>
+							<th>Order Date:</th>
+							<th>Order Number</th>
+							<th>Total Amount Remaining</th>
+							<th>Total Amount</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody>
+					<c:forEach items="${billing.getBillingMap() }" var="billings" varStatus="counter">
+						<c:set value="${billings.key }" var="key" />
+							<c:if test="${billing.getCustomerBilling(key).finishPaying()}">
+								<tr>
+									<c:set value="${billings.key }" var="key" />
+									<td id="tableId">
+										<input type="radio" name="orderNumber" id="orderNumber${counter.count }" value="${billing.getCustomerBilling(key).encryptOrderNumber(key) }"/>
+									</td> 
+									<td id="tblOrderDate${counter.count }">${billing.getCustomerBilling(key).convertOrderDate()}</td>
+									<td id="tblProductCode${counter.count }">${billing.getCustomerBilling(key).getProductCode()}</td>
+									<td>$<span  id="tblTotalAmount${counter.count }">${billing.getCustomerBilling(key).totalAmountRemaining() }</span></td>
+									<td>$&nbsp;${billing.getCustomerBilling(key).getTotalOrderAmount()}</td>	
+									<td><button type="button" class="btn btn-success center-block " onclick="javascript:pushToURL('clients/createOrder')">Add Order for Customer<i class="fa fa-chevron-right moveL_30"></i></button></td>					
+								</tr>						
+							</c:if>
+	
+					</c:forEach>			
+					</tbody>
+				</table>
+				</c:if>	
+			<c:if test="${empty customerOrder }">
+			<div class="alert alert-success" role="alert">
+				<p class="bold"><i class="fa fa-info moveR_20"></i>No Order History for Customer</p>
+			</div>
+				
+				<button type="button" class="btn btn-success center-block " onclick="javascript:pushToURL('clients/createOrder')">Add Order for Customer<i class="fa fa-chevron-right moveL_30"></i></button>
+			</c:if>						
+			</div>
+</div>
+<div class="col-sm-12 col-md-4 col-lg-4 main-container">
+<jsp:include page="../sidebar.jsp"/>
+</div>	
 	          <%--
 			 <c:if test="${not empty customer}">
 			  	<div id="" class="row ">
@@ -223,6 +219,9 @@
 	          </sf:form>
 				</c:if>
 				 --%>
+	<sf:form name="viewTransactionDetail" method="post" action="/abankus/platform/viewTransactionDetail">
+		<input type="hidden" value="" name="orderNumber"/>	          
+	</sf:form>				 
 	<sf:form action="/abankus/Payments/makeCustomerOrderPayment" name="makeCustomerOrderPayment" method="post">
 		<input type="hidden" name="orderNumber" id="orderNumberHdn" value=""/>
 		<input type="hidden" name="totalAmount" id="totalAmountHdn"  value=""/>
@@ -239,23 +238,8 @@
 <script>
 $(document).ready(function(){
 	// $('#orderHistoryTable').DataTable();
-	$("#makePaymentBtn").click(function(){
-		var orderNo = $("input:radio[name=orderNumber]:checked").val();
-		if(validSubmit(orderNo)){
-			var amount= $("#tblTotalAmount").text();
-			var form = document.makeCustomerOrderPayment;
-			form.orderNumber.value = orderNo;
-			form.totalAmount.value = amount;
-			form.orderDate.value = $("#tblOrderDate").text();
-			form.productCode.value = $("#tblProductCode").text();
-			form.submit();			
-		}else{
-			$('#orderHistoryMessage').removeClass('hidden');
-			$('#orderHistoryMessage').addClass('alert alert-danger');
-			$('#orderHistoryMessage').html('You must select at least one option from the list of Order');
-		}
 
-	});
+	
 });
 
 function validSubmit(radio){
@@ -263,6 +247,17 @@ function validSubmit(radio){
 		return false;
 	}
 	return true;
+}
+
+function submitCustomerPayment(orderNo,amount){
+	var form = document.makeCustomerOrderPayment;
+	form.orderNumber.value = orderNo;
+	form.totalAmount.value = amount;
+	form.submit();	
+}
+function submitURLForm(form,val){
+	form.orderNumber.value = val;
+	form.submit();
 }
 </script>
 </html>

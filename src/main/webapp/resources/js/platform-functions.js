@@ -38,6 +38,11 @@ function isAlphaNumericAndDash(str){
 	var alphanumeric = /^[a-zA-Z0-9-]+$/i;
 	return alphanumeric.test(str);
 }
+function toTitleCase(str) {
+    return str.replace(/(?:^|\s)\w/g, function(match) {
+        return match.toUpperCase();
+    });
+}
 function submitCustomerURL(url,form){
 	if(isEmpty(url) || !isAlphaNumeric(url)){
 		return false;

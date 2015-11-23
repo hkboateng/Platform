@@ -54,4 +54,16 @@ public interface PaymentService {
 	PaymentTransaction findPaymentTransactionByTransactionId(String transactionId);
 	
 	List<PaymentTransaction> findPaymentTransactionByCustomerNumber(String customerNumber);
+
+	/**
+	 * @param orderNumber
+	 * @return
+	 */
+	List<PaymentTransaction> findPaymentTransactionByOrderNumber(String orderNumber);
+
+	/**
+	 * @param orderNumber
+	 * @return
+	 */
+	List<OrderPayment> findPaymentsByOrderNumber(String orderNumber);
 }

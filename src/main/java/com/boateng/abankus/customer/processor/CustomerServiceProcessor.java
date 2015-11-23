@@ -38,7 +38,7 @@ import com.boateng.abankus.services.AuthenticationService;
 import com.boateng.abankus.services.EmployeeService;
 import com.boateng.abankus.utils.SecurityUtils;
 
-@Service
+
 public class CustomerServiceProcessor extends AbankusBaseProcessor{
 	private static final Log log = LogFactory.getLog(CustomerServiceProcessor.class);
 

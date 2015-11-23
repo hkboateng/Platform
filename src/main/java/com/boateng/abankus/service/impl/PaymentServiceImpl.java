@@ -153,6 +153,7 @@ public class PaymentServiceImpl implements PaymentService {
 		return payment;
 	}
 
+	
 	/* (non-Javadoc)
 	 * @see com.boateng.abankus.services.PaymentService#findPaymentTransactionByCustomerNumber(java.lang.String)
 	 */
@@ -166,4 +167,27 @@ public class PaymentServiceImpl implements PaymentService {
 									.list();
 		return payment;
 	}	
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public List<PaymentTransaction> findPaymentTransactionByOrderNumber(String orderNumber) {
+		Session session = getSessionFactory().getCurrentSession();
+		List<PaymentTransaction> payment = session.createQuery("From PaymentTransaction t where t.orderNumber =:orderNumber")
+									.setParameter("orderNumber", orderNumber)
+									.list();
+		return payment;
+	}	
+	
+	@SuppressWarnings("unchecked")
+	@Transactional
+	@Override
+	public List<OrderPayment> findPaymentsByOrderNumber(String orderNumber) {
+		Session session = getSessionFactory().getCurrentSession();
+		List<OrderPayment> orderPayment = session.createQuery("from OrderPayment o where o.clientorder.orderNumber =:orderNumber")
+		.setParameter("orderNumber", orderNumber)
+		.list();
+		
+		return orderPayment;
+	}
 }

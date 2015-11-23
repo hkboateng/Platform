@@ -72,8 +72,10 @@ public class OrderController {
 		
 		logger.info("Username: is viewing Create Order page.");
 		List<Product> productList = productServiceProcessor.getAllProducts();
+		
 		modelView.addObject("productList", productList);
 		modelView.setViewName("ClientServices/createOrders");
+		
 		return modelView;
 	}
 	
@@ -90,7 +92,7 @@ public class OrderController {
 		model.addAttribute("account",account);
 		return "ClientServices/createOrders";
 	}	
-	@RequestMapping(value = "/client/findCustomer", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/customer/findCustomer", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public String findCustomer(@RequestParam(value="accountNumber",required=true) String accountNumber,HttpServletRequest request) throws IOException{
 		
@@ -150,7 +152,7 @@ public class OrderController {
 		return modelView;
 	}
 	
-	@RequestMapping(value = "/client/getProductDetails", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/customer/getProductDetails", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public String getProductDetails(@RequestParam(value="productCode",required=true) String productCode) throws JsonProcessingException{
 		Product product = productServiceProcessor.findProductByProductCode(productCode);

@@ -44,6 +44,7 @@ import com.boateng.abankus.services.EmployeeService;
 import com.boateng.abankus.services.PaymentService;
 import com.boateng.abankus.servlet.PlatformAbstractServlet;
 import com.boateng.abankus.utils.PlatformConverter;
+import com.boateng.abankus.utils.SecurityUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -226,14 +227,7 @@ public class PlatformController  extends PlatformAbstractServlet {
 		}
 		return status;
 	}	
-	@RequestMapping(value = "/platform/viewTransactionDetail", method = RequestMethod.POST)
-	public String transactionDetails(HttpServletRequest request,Model model){
-		String transactionId = request.getParameter("transactionId");
-		
-		PaymentTransaction payment = paymentServiceImpl.findPaymentTransactionByTransactionId(transactionId);
-		model.addAttribute("transaction", payment);
-		return "ClientTransaction/TransactionDetails";
-	}
+
 	
 	@RequestMapping(value = "/platform/viewTransactionHistory", method = RequestMethod.POST)
 	public String transactionHistory(HttpServletRequest request,Model model){

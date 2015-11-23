@@ -45,13 +45,12 @@
 					<span>Search:</span>
 					<label for="customerAccount" class="sr-only">Customer Account Number:</label>
 					<input type="text" name="accountNumber" id="accountNumber" class="custom-text" placeholder="Enter Account Number, Customer Number"/>
-					<button  id="btnSarchCustomer" class="btn btn-success" title="Search for Customer using Customer AccountNumber" ><i class="fa fa-search"></i></button>								
+					<button  id="btnSearchCustomer" class="btn btn-success" title="Search for Customer using Customer AccountNumber" ><i class="fa fa-search"></i></button>								
 				</div>
-				<div class="row">
 				  <div id="resultHeading" class="resultHeading hidden">
 		          	<div id="resultHeading-word" class="anw">Search Results</div>
 		          </div>	
-		         </div>			
+	
 				 <div id="pending">	
 		          		
 				 </div>			
@@ -59,47 +58,45 @@
 			<sf:form class="forms ${formState}" method="post"  action="" name="customerOrderForm" id="customerOrderForm">
 			<div class="">
 
-			  <div class="row">
+			  <div  class="col-xs-4">
 					<div id="clientName">
-						<p><b>Client Name:</b><span id="clientFullName">${account.customer.firstname}&nbsp;${account.customer.lastname}</span></p>
+						<label class="bold">Client Name:</label><div id="clientFullName">${account.customer.firstname}&nbsp;${account.customer.lastname}</div>
 					</div>
 					<div id="clinetAccountStatus">
-						<label>Account Status:</label><span id="accountStatus">${account.status }</span>
+						<label class="bold">Account Status:</label>
+						<div id="accountStatus">${account.status }</div>
 					</div>
-					<c:if test="${not empty productList}" >
-
+						<c:if test="${not empty productList}" >
 							<label for="product">Product/Services:</label><span id="product-error" class="help-text-inline-error"></span>
 							
-							<select name="product" id="product" class="form-state"  onchange="javascript:getProductCode(this);" onblur="javascript:getProductCode(this);">
-								<option value=" ">Select Product/Service </option>
-								<c:forEach items="${productList}" var="products" varStatus="list">
-									<option value="${products.productCode }" title="${products.description }">${products.productName }</option>
-								</c:forEach>
-							</select>
-	
-						<div>
-						<p>
-							<b>Product Description:</b>&nbsp;<span id="productDescription"></span>
-						</p>
-						<p>
-							<b>Product Cost (Unit Cost):</b>&nbsp;<span id="unitCost"></span>
-						</p>
-						<p>
-						<label class="bold">Quantity:</label><input type="number" name="quantity" id="productQuantity" maxLength="3" min="1" max="100" value="1"/>
-						</p>
-						</div>					
+								<select name="product" id="product" class="form-state col-sm-6"  onchange="javascript:getProductCode(this);" onblur="javascript:getProductCode(this);">
+									<option value=" ">Select Product/Service </option>
+									<c:forEach items="${productList}" var="products" varStatus="list">
+										<option value="${products.productCode }" title="${products.description }">${products.productName }</option>
+									</c:forEach>
+								</select>
+							
+							<p>
+								<label class="bold">Product Description:</label>&nbsp;<span id="productDescription"></span>
+							</p>
+							<p>
+								<label class="bold">Product Cost (Unit Cost):</label>&nbsp;<span id="unitCost"></span>
+							</p>
+							<p>
+							<label class="bold">Quantity:</label><input type="number" name="quantity" id="productQuantity" maxLength="3" min="1" max="100" value="1"/>
+							</p>				
 						</c:if>
-				
-			<hr />
-			<p>
-
-			<input type="hidden" name="xUnitCost" value="" id="xUnitCost"/>		
-			<input type="hidden" name="customerId" value="${account.customer.customerId }" id="customerId"/>
-			<a href="/abankus/platform/dashboard" class="btn btn-primary moveR_20">Cancel Transaction</a>	
-			<button type="button"  class="btn btn-success" id="showOrderSummary" >Continue to payment</button>
 			
-			</p>					
-			  </div>
+			</div>
+			
+						<div  class="col-xs-12">
+						<hr />
+							<input type="hidden" name="xUnitCost" value="" id="xUnitCost"/>		
+							<input type="hidden" name="customerId" value="${account.customer.customerId }" id="customerId"/>
+							<a href="/abankus/platform/dashboard" class="btn btn-primary moveR_20">Cancel Transaction</a>	
+							<button type="button"  class="btn btn-success" id="showOrderSummary" >Continue to payment</button>
+						</div>					
+			
 			</div>
 
 			</sf:form>
@@ -147,7 +144,7 @@ function submitForm(form,action){
 }
 $(document).ready(function(){
 	var noOfItems = $("#noOfItems").text();
-	getChartItemNumber();
+
  	$("#showOrderSummary").click(function(){
  		showOrderSummary();
  	});
@@ -252,42 +249,9 @@ function validQuantity(value){
 
 }
 
-function addProductToChart(){
-	var noOfItems = $("#noOfItems").text();
 
-	var productCode = $("#productCode").val();
-	
-	var customerAccount = $("#customerAccount").val();
-	console.log(productCode);
-	$.ajax({
-		url: 'addProductToCart',
-		data: {
-			productCode:productCode, customerAccount:customerAccount
-		},
-		dataType: "json",
-		success: function(results){
-			populateCart(results);
-		},
-		error :function(data){
-			console.log(data.responseText);
-		}
-	});			
-}
 
-function getChartItemNumber(){
-	$.ajax({
-		url: 'getNumberInChart',
-		dataType: "json",
-		cache: false,
-		type: 'GET',
-		success: function(results){
-			populateCart(results);
-		},
-		error :function(data){
-			console.log(data.responseText);
-		}
-	});			
-}
+
 function populateCart(results){
 	$("#noOfItems").text(results);
 }

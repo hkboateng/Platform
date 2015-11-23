@@ -13,6 +13,8 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 
 /**
  * The persistent class for the employee database table.
@@ -29,40 +31,38 @@ public class Employee implements Serializable {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int id;
 
-	@NotNull
 	private String address1;
 
 	private String address2;
 	
-	@NotNull
+
 	private String cellphone;
 	
-	@NotNull
+
 	private String city;
 
-	@NotNull 
+
 	private String dateOfBirth;
 
-	@NotEmpty @Email
+
 	private String email;
 
-	@Size(min=2, max=30)
 	private String firstname;
 
-	@NotNull
+
 	private String gender;
 
 	private String homephone;
 
-	@Size(min=2, max=30)
+
 	private String lastname;
 
 	private String middlename;
 
-	@NotNull
+
 	private String state;
 
-	@NotNull
+
 	private String zipcode;
 
 	private String  employeeId;
@@ -74,6 +74,7 @@ public class Employee implements Serializable {
 	/**
 	 * @return the employeeId
 	 */
+
 	public String getEmployeeId() {
 		return employeeId;
 	}
@@ -143,6 +144,7 @@ public class Employee implements Serializable {
 		this.email = email;
 	}
 
+
 	public String getFirstname() {
 		return this.firstname;
 	}
@@ -167,6 +169,7 @@ public class Employee implements Serializable {
 		this.homephone = homephone;
 	}
 
+	@JsonValue
 	public String getLastname() {
 		return this.lastname;
 	}

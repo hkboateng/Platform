@@ -1,12 +1,9 @@
 package com.boateng.abankus.domain;
 
 import java.io.Serializable;
-import java.time.format.DateTimeFormatter;
-
 import javax.persistence.*;
 
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
 
 
 /**
@@ -20,11 +17,15 @@ public class PaymentTransaction implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	private int paymentTrasactionId;
+	private int paymentTransactionId;
 
 	private String amountPaid;
 
 	private String customerNumber;
+
+	private String employeeName;
+
+	private String employeeNumber;
 
 	private String orderNumber;
 
@@ -42,6 +43,9 @@ public class PaymentTransaction implements Serializable {
 
 	private String transactionNumber;
 
+@Transient
+	private String orderAmount;
+	
 	public PaymentTransaction() {
 	}
 	public PaymentTransaction(OrderPayment payment){
@@ -55,13 +59,22 @@ public class PaymentTransaction implements Serializable {
 		this.paymentMonth = String.valueOf(DateTime.now().getMonthOfYear());
 		this.paymentYear = String.valueOf(DateTime.now().getYear());
 		this.paymentDate = payment.getDatePaid().toString();
+		this.employeeNumber = payment.getEmployee().getEmployeeId();
+		this.setOrderAmount(payment.getClientorder().getTotalAmount().toString());
+		if(this.employeeNumber != null){
+			StringBuilder sbr = new StringBuilder();
+			sbr.append(payment.getEmployee().getFirstname());
+			sbr.append(" ");
+			sbr.append(payment.getEmployee().getLastname());
+			this.setEmployeeName(sbr.toString());
+		}
 	}
-	public int getPaymentTrasactionId() {
-		return this.paymentTrasactionId;
+	public int getPaymentTransactionId() {
+		return this.paymentTransactionId;
 	}
 
-	public void setPaymentTrasactionId(int paymentTrasactionId) {
-		this.paymentTrasactionId = paymentTrasactionId;
+	public void setPaymentTransactionId(int paymentTransactionId) {
+		this.paymentTransactionId = paymentTransactionId;
 	}
 
 	public String getAmountPaid() {
@@ -78,6 +91,22 @@ public class PaymentTransaction implements Serializable {
 
 	public void setCustomerNumber(String customerNumber) {
 		this.customerNumber = customerNumber;
+	}
+
+	public String getEmployeeName() {
+		return this.employeeName;
+	}
+
+	public void setEmployeeName(String employeeName) {
+		this.employeeName = employeeName;
+	}
+
+	public String getEmployeeNumber() {
+		return this.employeeNumber;
+	}
+
+	public void setEmployeeNumber(String employeeNumber) {
+		this.employeeNumber = employeeNumber;
 	}
 
 	public String getOrderNumber() {
@@ -142,6 +171,12 @@ public class PaymentTransaction implements Serializable {
 
 	public void setTransactionNumber(String transactionNumber) {
 		this.transactionNumber = transactionNumber;
+	}
+	public String getOrderAmount() {
+		return orderAmount;
+	}
+	public void setOrderAmount(String orderAmount) {
+		this.orderAmount = orderAmount;
 	}
 
 }

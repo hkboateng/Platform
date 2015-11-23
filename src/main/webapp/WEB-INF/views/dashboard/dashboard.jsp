@@ -9,10 +9,15 @@
 <link href="<c:url value="/resources/css/bootstrap.css" />" rel="stylesheet"/>
 <link href="<c:url value="/resources/css/platform.css" />" rel="stylesheet"/>
 <link href="<c:url value="/resources/css/fonts-awesome/font-awesome.css" />" rel="stylesheet"/>
+<link href="<c:url value="/resources/css/tables/jquery.dataTables.css" />" rel="stylesheet"/>
 <script src="<c:url value="/resources/js/jquery.js" />" type="text/javascript"></script>
-<script src="<c:url value="/resources/js/bootstrap.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/visualization/d3.js" />" type="text/javascript"></script>
+<script src="<c:url value="/resources/js/bootstrap.js" />" type="text/javascript"></script>
+<script src="<c:url value="/resources/js/platform-functions.js" />" type="text/javascript"></script>
+
+
 <script src="<c:url value="/resources/js/application.js" />" type="text/javascript"></script>
+
 </head>
 <body>
 <!-- Page Header -->
@@ -22,21 +27,14 @@
 	<!-- Body Begins-->
 	<div id="container" class="container">
 		<div class="row">
-		
-			<div class="col-sm-11 col-md-12 col-lg-12 center-block main">
+			<div class="col-sm-12 col-md-12 col-lg-12 center-block main">
 			 	<h2>Welcome, ${employee.firstname}&nbsp;${employee.lastname}</h2>
-			         
 					  <hr>
-			          <div class="row">
 			          <c:if test="${not empty success }">
 				          <div class="alert alert-success" role="alert">
 				          	${success}
 				          </div>
 			          </c:if>
-			          
-			          <!-- Customer Search -->
-			          </div>
-			          <div class="row">
 			          <div class="col-lg-12">
 					      <c:if test="${not empty searchError }">
 						    <div class="alert alert-danger" role="alert">
@@ -44,40 +42,8 @@
 						    </div>
 					      </c:if>			          
 			          </div>
-			          <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 spaceBelow_20">
-						<h3 class="underline-div">News and Messages</h3>			          
-			          </div>
-			           <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 spaceBelow_20">
-					    		<sf:form action="/abankus/customers/viewProfile" method="post">
-									<label>Quick Search</label>
-									<div class="spaceBelow_10">
-										<label class="radio-inline">
-										  <input type="radio" name="searchBill" id="customerId" value="customerIdDiv" checked> Customer Id:
-										</label>
-										<label class="radio-inline">
-										  <input type="radio" name="searchBill" id="customerName" value="customerNameDiv"> Customer Name
-										</label>
-										<label class="radio-inline">
-										  <input type="radio" name="searchBill" id="customerOrder" value="customerOrderDiv"> Order #:
-										</label>
-									</div>
-										<div id="customerIdDiv" class="">
-											<label>Customer Id:</label><input type="text" name="customerId" class="form-state"/>
-											
-										</div>
-										<div id="customerNameDiv" class="hidden">
-											<label>First Name:</label><input type="text" name="firstname" class="form-state">
-											<label>Last Name:</label><input type="text" name="lastname" class="form-state">
-										</div>
-										<div class="hidden" id="customerOrderDiv">
-											<label>Order Number:</label><input type="text" name="OrderNumber" class="form-state">
-										</div>
-										<input type="hidden" name="searchType" id="searchType" value="customerId">
-										<button type="submit" class="btn btn-success btn-sm btn-block"><span class="glyphicon glyphicon-search moveR_20"></span>Search</button>
-								</sf:form>
-			           </div>
 			           <div class="clearfix"></div>
-				          <div class="hidden col-xs-12 col-sm-7 col-md-7 col-lg-7">
+				          <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
 				          	<h3>Customer Assigned</h3>
 				          	<c:if test="${not empty employeeCustomerList }">
 				          	<table class="table">
@@ -102,105 +68,76 @@
 									<a class="btn btn-success" href="<c:url value="/customers/create"/>"> Add New Customer</a>
 								</div>	          		
 				          	</c:if>						          	
-				          </div>		
-				          <div class="col-xs-12 col-sm-5 col-md-6 col-lg-6">
 				          <h3 class="underline-div"> Transaction History</h3>		
-				          	<c:choose>		          		
-			          			<c:when test="${not empty transactionListToday}">
-					          		<table class="table">
-					          		<tr>
-					          			<th>Confirmation Number</th>
-					          			<th>Amount</th>
-					          			<th>Type Of Payment</th>
-					          		</tr>			          			
-		          					<c:forEach items="${transactionListToday }" var="history">
-		          						<tr>
-		          							<td><a href="#">${history.getTransactionId()}</a></td>
-		          							<td>${history.getAmountPaid()}</td>
-		          							<td>${history.getPaymentType()}</td>
-		          						</tr>
-		          					</c:forEach>
-		          					<tfoot>
-		          						<tr>
-		          							<td colspan="1"><span class="bold">Total Amount:</span></td>
-		          							<td colspan="2">Total</td>
-		          						</tr>
-		          					</tfoot>
-		          					</table>
-			          			</c:when>
-			          			<c:otherwise>
-			          				<div style="text-align:center;"> No Transaction History</div>
-			          			</c:otherwise>
-			          			</c:choose>
-			          				
-				          </div>
-				          <div class="col-xs-12 col-sm-5 col-md-6 col-lg-6">
-							<div class="btn-group btn-group-justified" role="group" aria-label="...">
-								
-							  <div class="btn-group" role="group">
-							    <button type="button" id="todayDiv" class="btn btn-success">Today</button>
-							  </div>
-							  <div class="btn-group" role="group">
-							    <button type="button" id="monthDiv" class="btn btn-default">Monthly</button>
-							  </div>
-							  <div class="btn-group" role="group">
-							    <button type="button" class="btn btn-default">Year-To-Date</button>
-							  </div>
-							  <div class="btn-group" role="group">
-							    <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							    	Filter
-							    <span class="sr-only">Toggle Dropdown</span>
-							     <span class="caret"></span>
-							    </button>
-								  <ul class="dropdown-menu">
-								    <li><a href="#">Action</a></li>
-								    <li><a href="#">Another action</a></li>
-								    <li><a href="#">Something else here</a></li>
-								    <li role="separator" class="divider"></li>
-								    <li><a href="#">Separated link</a></li>
-								  </ul>							    
-							  </div>							  
-							  </div>	
-							  <div>
-							  	<div id="todayDivContainer" class="hidden">
-							  		<h4>Today's Transaction</h4>
-							  	</div>
-							  	<div id="monthlyDivContainer" class="hidden">
-							  		<h4>Today's Transaction</h4>
-							  	</div>							  	
-							  </div>				          
-				         	</div>					          	          
-			          </div>	
-			          <div class="row">
-				          <div class="quick-stats">
-				          	<div id="quick-stats-word" class="anw"> Quick Statistics</div>
-				          </div>
-								<div id="totalPaymentDiv" class="col-xs-12 col-sm-6 col-md-4">
-					          	
-					          	</div>
-					          	<div class="col-xs-12 col-sm-6 col-md-4">
-					          	
-					          	</div>
-					          	<div class="col-xs-12 col-sm-6 col-md-4">
-					          	
-					          	</div>
-					          	<div class="col-xs-12 col-sm-6 col-md-4">
-					          	
-					          	</div>			          	
-			          </div>
+					        <table id="transactionHistory" class="table">
+					        	<thead>
+						          	<tr>
+							          	<th>Date</th>
+							          	<th>Amount</th>
+							          	<th>Type Of Payment</th>
+							          	<th>Action</th>
+						          	</tr>		
+					          	</thead>	
+					          	<tbody id="transactionBody">
+												          	
+					          	</tbody>  
+		          				<tfoot>
+		          					<tr>
+		          						<td colspan="1"><span class="bold">Total Amount:</span></td>
+		          						<td colspan="2">Total</td>
+		          						<td></td>
+		          					</tr>
+		          				</tfoot>
+		          			</table>
+				          <h3 class="underline-div"> Transaction History</h3>				          
+							  <div class="btn-group btn-group-justified" role="group" >
+								  <div class="btn-group" role="group">
+								    <a aria-controls="todayDivContainer" role="tab" data-toggle="tab" id="todayDiv" href="#todayDivContainer"  class="btn btn-success">Today</a>
+								  </div>
+								  <div class="btn-group" role="group">
+								    <a aria-controls="monthlyDivContainer" role="tab" data-toggle="tab" href="#monthlyDivContainer" class="btn btn-default">Monthly</a>
+								  </div>
+								  <div class="btn-group" role="group">
+								    <a aria-controls="monthlyDivContainer" role="tab" data-toggle="tab" href="#YTDDivContainer"  class="btn btn-default">Year-To-Date</a>
+								  </div>
+								  <div class="btn-group" role="group">
+								    <a aria-controls="monthlyDivContainer" role="tab" data-toggle="tab" href="#FilterDivContainer"  class="btn btn-default">
+								    	Filter
+								    </a>						    
+								  </div>							  
+							   </div>	
+								  <div class="tab-content">
+								  	<div  role="tabpanel" class="tab-pane active" id="todayDivContainer">
+								  		<h4>Today's Transaction</h4>
+								  	</div>
+								  	<div  role="tabpanel" class="tab-pane" id="monthlyDivContainer">
+								  		<h4>Monthly Transaction</h4>
+								  		
+								  	</div>		
+								  	<div  role="tabpanel" class="tab-pane" id="YTDDivContainer">
+								  		<h4>Year-To-Date Transaction</h4>
+								  	</div>
+								  	<div  role="tabpanel" class="tab-pane" id="FilterDivContainer">
+								  		<h4>Filter Transaction</h4>
+								  	</div>								  						  	
+								  </div>				          
+				         	</div>		
+					<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 spaceBelow_20">
+	<jsp:include page="../sidebar.jsp"/>
+			           </div>			          	
 			</div>
-		<script type="text/javascript">
-		
-		</script>
 		</div>
 	</div>
 </body>
+<script src="<c:url value="/resources/js/tables/jquery.dataTables.js" />" type="text/javascript"></script>
 <script>
 	$(document).ready(function(){
 		loadEmployeeCustomers();
 		loadYearPayments()
-		loadPayment();
-		loadMonthPayments();
+		loadTodayPayment();
+		loadMonthAndYearPayments();
+		$('#transactionHistory').DataTable();
+		
 		$('#customerId').on('click',function(){
 			$('#searchType').val("customerId");
 			$("#customerIdDiv").removeClass('hidden');
@@ -238,7 +175,7 @@
 			}
 		});				
 	}
-	function loadMonthPayments(){
+	function loadMonthAndYearPayments(){
 		var thisMonth= new Date().getMonth()+1;
 		var year = new Date().getFullYear();
 		$.ajax({
@@ -250,14 +187,23 @@
 			},
 			dataType: 'json',
 			success: function(result){
-				console.log(result);
+				var table = "";
+				$.each(result,function(key,value){
+					table +="<tr>";
+					table +="<td>"+value.paymentDate+"</td>";
+					table +="<td>"+value.amountPaid+"</td>";
+					table +="<td>"+toTitleCase(value.paymentType)+"</td>";
+					table +="<td><a class='btn btn-primary' href='#' role='button' onclick=''>Action</a>";
+					table +="</tr>";
+				});
+				$('#transactionBody').html(table);
 			},
 			error : function(err){
-				console.log(err.responseText);
+				$('#transactionBody').html("No Transaction");
 			}
 		});		
 	}
-	function loadPayment(){
+	function loadTodayPayment(){
 		var now = new Date();
 		var day = now.getDate();
 		if(day <10){
@@ -274,7 +220,7 @@
 		
 		var toDate = new Date().toLocaleDateString("en-US");
 		$.ajax({
-			url: "http://localhost:8080/PaymentHub/ws/paymentServices/findAllPaymentsByDate",
+			url: "loadPayments",
 			method: 'get',
 			data: {
 				date: date

@@ -26,6 +26,7 @@ import com.boateng.abankus.employees.utils.EmployeeCollection;
 import com.boateng.abankus.exception.PlatformException;
 import com.boateng.abankus.fields.CustomerFields;
 import com.boateng.abankus.fields.EmployeeFields;
+import com.boateng.abankus.fields.PlatformFields;
 import com.boateng.abankus.processors.ProductServiceProcessor;
 import com.boateng.abankus.services.AuthenticationService;
 import com.boateng.abankus.services.ProductService;
@@ -93,9 +94,11 @@ public abstract class PlatformAbstractServlet {
 	 */
 	public void loadProductIntoSession(HttpServletRequest request){
 		HttpSession session = request.getSession(false);
-		Map<String,Product> productList = productServiceProcessor.listAllProduct();
-		
-		session.setAttribute("products", productList);
+		if(session.getAttribute(PlatformFields.PRODUCT_LIST_SESSION) == null){
+			Map<String,Product> productList = productServiceProcessor.listAllProduct();
+			session.setAttribute(PlatformFields.PRODUCT_LIST_SESSION, productList);			
+		}
+
 	}
 	
 	public void loadCustomerIntoSession(HttpServletRequest request,Customer customer){

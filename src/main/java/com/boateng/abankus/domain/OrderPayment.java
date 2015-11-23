@@ -2,6 +2,9 @@ package com.boateng.abankus.domain;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.sql.Timestamp;
 
 
@@ -94,7 +97,6 @@ public class OrderPayment implements Serializable {
 	public void setPaymentDate(Timestamp paymentDate) {
 		this.paymentDate = paymentDate;
 	}
-
 
 	public Employee getEmployee() {
 		return this.employee;

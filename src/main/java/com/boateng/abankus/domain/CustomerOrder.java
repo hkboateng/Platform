@@ -183,7 +183,6 @@ public class CustomerOrder implements Client, Serializable{
 		if (!now.isAfter(sdt.getMillis())){
 			if(now.isAfter(dt.getMillis()) && now.isBefore(sdt.getMillis())){
 				isPending = true;
-				System.out.println(isPending);
 			}
 		}
 
@@ -192,7 +191,6 @@ public class CustomerOrder implements Client, Serializable{
 	
 	public  String convertOrderDate(){
 		DateTime date = new DateTime(getOrderDate());
-
 		return date.toString("MMMM d, yyyy");
 	}
 	

@@ -29,6 +29,8 @@ public class Phone implements Serializable {
 
 	private String phoneType;
 
+	private boolean primaryPhone;
+	
 	//bi-directional many-to-one association to Customer
 	@ManyToOne
 	@JoinColumn(name="customerId")
@@ -84,4 +86,23 @@ public class Phone implements Serializable {
 		this.phoneNumber = phoneNumber;
 	}
 
+	public String phoneType(){
+		StringBuilder sbr = new StringBuilder();
+		if(getPhoneType() != null && getPhoneType().equals("home_phone")){
+			sbr.append("Home Phone");
+		}else if(getPhoneType() != null && getPhoneType().equals("cell_phone")){
+			sbr.append("Cell/Mobile Phone");
+		} else {
+			sbr.append("Other Phone");
+		}
+		return sbr.toString();
+	}
+
+	public boolean isPrimaryPhone() {
+		return primaryPhone;
+	}
+
+	public void setPrimaryPhone(boolean primaryPhone) {
+		this.primaryPhone = primaryPhone;
+	}
 }
