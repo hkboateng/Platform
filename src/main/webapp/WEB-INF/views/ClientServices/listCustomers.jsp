@@ -16,7 +16,9 @@
 <link href="<c:url value="/resources/css/platform.css" />" rel="stylesheet"/>
 <link href="<c:url value="/resources/css/datepicker.css" />" rel="stylesheet"/>
 <link href="<c:url value="/resources/css/tables/jquery.dataTables.css" />" rel="stylesheet"/>
+
 <script src="<c:url value="/resources/js/jquery.js" />" type="text/javascript"></script>
+
 <script src="<c:url value="/resources/js/platform-functions.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/bootstrap.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/application.js" />" type="text/javascript"></script>
@@ -53,15 +55,15 @@
 							</tr>
 						</thead>
 						<tbody>		          
-		          	<c:forEach varStatus="count" items="${customers}" var="customer" >
-		          		<tr>
-		          			<td>${count.count }</td>
-		          			<td>${customer.firstname }</td>
-		          			<td>${customer.lastname}</td>
-		          			<td>${customer.company_name }</td>
-		          			<td><a class="btn btn-success" href="javascript:submitCustomerURL('${customer.getCustomerNumber()}',document.customerSearchForm);"><i class="fa fa-eye moveR_10"></i>Select</a></td>
-		          		</tr>
-		          	</c:forEach>
+		          		<c:forEach varStatus="count" items="${customers}" var="customer" >
+			          		<tr>
+			          			<td>${count.count }</td>
+			          			<td>${customer.firstname }</td>
+			          			<td>${customer.lastname}</td>
+			          			<td>${customer.company_name }</td>
+			          			<td><a class="btn btn-success" href="javascript:submitCustomerURL('${customer.getCustomerNumber()}',document.customerSearchForm);"><i class="fa fa-eye moveR_10"></i>Select</a></td>
+			          		</tr>
+		          		</c:forEach>
 		          		</tbody>
 		          		</table>
 		       <sf:form name="customerSearchForm" method="post" action="viewProfile">
@@ -76,6 +78,7 @@
 </div>
 </div>
 <script src="<c:url value="/resources/js/tables/jquery.dataTables.js" />" type="text/javascript"></script>
+<script src="https://cdn.datatables.net/1.10.10/js/dataTables.bootstrap.min.js" type="text/javascript"></script>
 <script>
 $(document).ready(function(){
 	 $('#customerList').DataTable();

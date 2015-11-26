@@ -9,9 +9,8 @@
 <link href="<c:url value="/resources/css/bootstrap.css" />" rel="stylesheet"/>
 <link href="<c:url value="/resources/css/platform.css" />" rel="stylesheet"/>
 <link href="<c:url value="/resources/css/fonts-awesome/font-awesome.css" />" rel="stylesheet"/>
-<link href="<c:url value="/resources/css/tables/jquery.dataTables.css" />" rel="stylesheet"/>
+
 <script src="<c:url value="/resources/js/jquery.js" />" type="text/javascript"></script>
-<script src="<c:url value="/resources/js/visualization/d3.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/bootstrap.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/platform-functions.js" />" type="text/javascript"></script>
 
@@ -44,6 +43,7 @@
 			          </div>
 			           <div class="clearfix"></div>
 				          <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+				          	<%--
 				          	<h3>Customer Assigned</h3>
 				          	<c:if test="${not empty employeeCustomerList }">
 				          	<table class="table">
@@ -67,28 +67,8 @@
 								<div class="center-block">
 									<a class="btn btn-success" href="<c:url value="/customers/create"/>"> Add New Customer</a>
 								</div>	          		
-				          	</c:if>						          	
-				          <h3 class="underline-div"> Transaction History</h3>		
-					        <table id="transactionHistory" class="table">
-					        	<thead>
-						          	<tr>
-							          	<th>Date</th>
-							          	<th>Amount</th>
-							          	<th>Type Of Payment</th>
-							          	<th>Action</th>
-						          	</tr>		
-					          	</thead>	
-					          	<tbody id="transactionBody">
-												          	
-					          	</tbody>  
-		          				<tfoot>
-		          					<tr>
-		          						<td colspan="1"><span class="bold">Total Amount:</span></td>
-		          						<td colspan="2">Total</td>
-		          						<td></td>
-		          					</tr>
-		          				</tfoot>
-		          			</table>
+				          	</c:if>		 --%>				          	
+
 				          <h3 class="underline-div"> Transaction History</h3>				          
 							  <div class="btn-group btn-group-justified" role="group" >
 								  <div class="btn-group" role="group">
@@ -107,15 +87,66 @@
 								  </div>							  
 							   </div>	
 								  <div class="tab-content">
-								  	<div  role="tabpanel" class="tab-pane active" id="todayDivContainer">
-								  		<h4>Today's Transaction</h4>
-								  	</div>
+								  <div class="spaceBelow_10"></div>
+								  	<div  role="tabpanel" class="tab-pane active" id="todayDivContainer">								  		
+									        <table id="transactionTodayTbl" class="table table-striped transactionTable">
+									        	<thead>
+										          	<tr>
+											          	<th>Date</th>
+											          	<th>Amount</th>
+											          	<th>Type Of Payment</th>
+											          	<th>Action</th>
+										          	</tr>		
+									          	</thead>	
+									          	<tbody id="transactionToday">
+																          	
+									          	</tbody>  
+						          				<tfoot>
+						          					<tr>
+						          						<td colspan="1"><span class="bold">Total Amount:</span></td>
+						          						<td colspan="2">Total</td>
+						          						<td></td>
+						          					</tr>
+						          				</tfoot>
+						          			</table>								  		
+								  		</div>
+
 								  	<div  role="tabpanel" class="tab-pane" id="monthlyDivContainer">
-								  		<h4>Monthly Transaction</h4>
-								  		
+									        <table id="transactionMonthTbl" class="table table-striped transactionTable">
+									        	<thead>
+										          	<tr>
+											          	<th>Date</th>
+											          	<th>Amount</th>
+											          	<th>Type Of Payment</th>
+											          	<th>Action</th>
+										          	</tr>		
+									          	</thead>	
+									          	<tbody id="transactionMonth">
+																          	
+									          	</tbody>  
+						          			</table>								  		
 								  	</div>		
 								  	<div  role="tabpanel" class="tab-pane" id="YTDDivContainer">
-								  		<h4>Year-To-Date Transaction</h4>
+									        <table id="transactionYTDTbl" class="table transactionTable">
+									        	<thead>
+										          	<tr>
+											          	<th>Date</th>
+											          	<th>Amount</th>
+											          	<th>Type Of Payment</th>
+											          	<th>Action</th>
+										          	</tr>		
+									          	</thead>	
+									          	<tbody id="transactionYTD">
+																          	
+									          	</tbody>  
+						          				<tfoot>
+						          					<tr>
+						          						<td colspan="1"><span class="bold">Total Amount:</span></td>
+						          						<td colspan="2">Total</td>
+						          						<td></td>
+						          					</tr>
+						          				</tfoot>
+						          			</table>								  		
 								  	</div>
 								  	<div  role="tabpanel" class="tab-pane" id="FilterDivContainer">
 								  		<h4>Filter Transaction</h4>
@@ -124,20 +155,47 @@
 				         	</div>		
 					<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 spaceBelow_20">
 	<jsp:include page="../sidebar.jsp"/>
+								<sf:form action="/abankus/customers/viewProfile" method="post">
+									<label>Quick Search</label>
+										<div class="spaceBelow_10">
+											<label class="radio-inline">
+											  <input type="radio" name="searchBill" id="customerId" value="customerIdDiv" checked> Customer Id:
+											</label>
+											<label class="radio-inline">
+											  <input type="radio" name="searchBill" id="customerName" value="customerNameDiv"> Customer Name
+											</label>
+											<label class="radio-inline">
+											  <input type="radio" name="searchBill" id="customerOrder" value="customerOrderDiv"> Order #:
+											</label>
+										</div>
+										<div id="customerIdDiv" class="">
+											<label>Customer Id:</label><input type="text" name="customerId" class="form-state"/>
+											
+										</div>
+										<div id="customerNameDiv" class="hidden">
+											<label>First Name:</label><input type="text" name="firstname" class="form-state">
+											<label>Last Name:</label><input type="text" name="lastname" class="form-state">
+										</div>
+										<div class="hidden" id="customerOrderDiv">
+											<label>Order Number:</label><input type="text" name="OrderNumber" class="form-state">
+										</div>
+										<input type="hidden" name="searchType" id="searchType" value="customerId">
+										<button type="submit" class="btn btn-success btn-sm btn-block"><span class="glyphicon glyphicon-search moveR_20"></span>Search</button>
+								</sf:form>	
 			           </div>			          	
 			</div>
 		</div>
 	</div>
 </body>
 <script src="<c:url value="/resources/js/tables/jquery.dataTables.js" />" type="text/javascript"></script>
+<script src="https://cdn.datatables.net/1.10.10/js/dataTables.bootstrap.min.js" type="text/javascript"></script>
 <script>
 	$(document).ready(function(){
 		loadEmployeeCustomers();
 		loadYearPayments()
 		loadTodayPayment();
 		loadMonthAndYearPayments();
-		$('#transactionHistory').DataTable();
-		
+		$('table.transactionTable').DataTable();
 		$('#customerId').on('click',function(){
 			$('#searchType').val("customerId");
 			$("#customerIdDiv").removeClass('hidden');
@@ -187,19 +245,24 @@
 			},
 			dataType: 'json',
 			success: function(result){
-				var table = "";
-				$.each(result,function(key,value){
-					table +="<tr>";
-					table +="<td>"+value.paymentDate+"</td>";
-					table +="<td>"+value.amountPaid+"</td>";
-					table +="<td>"+toTitleCase(value.paymentType)+"</td>";
-					table +="<td><a class='btn btn-primary' href='#' role='button' onclick=''>Action</a>";
-					table +="</tr>";
-				});
-				$('#transactionBody').html(table);
+				if(result.length > 0){
+					$('table.transactionTable').DataTable();
+					$.each(result,function(key,value){
+						table +="<tr>";
+						table +="<td>"+value.paymentDate+"</td>";
+						table +="<td>"+value.amountPaid+"</td>";
+						table +="<td>"+toTitleCase(value.paymentType)+"</td>";
+						table +="<td><a class='btn btn-primary' href='#' role='button' onclick=''>Action</a>";
+						table +="</tr>";
+					});
+					$('#transactionMonth').html(table);					
+				}else{
+					
+				}
+
 			},
 			error : function(err){
-				$('#transactionBody').html("No Transaction");
+				$('#transactionMonth').html("No Transaction");
 			}
 		});		
 	}
@@ -227,9 +290,19 @@
 			},
 			dataType: 'json',
 			success: function(result){
+				console.log(result);
+				var table = "";
 				$.each(result,function(key,value){
-					console.log(value.customerNumber)
+					console.log(value);
+					table +="<tr>";
+					table +="<td>"+value.paymentDate+"</td>";
+					table +="<td>"+value.amountPaid+"</td>";
+					table +="<td>"+toTitleCase(value.paymentType)+"</td>";
+					table +="<td><a class='btn btn-primary' href='#' role='button' onclick=''>Action</a>";
+					table +="</tr>";
 				});
+				$('#transactionToday').html(table);
+			
 			},
 			error : function(err){
 				console.log(err.responseText);

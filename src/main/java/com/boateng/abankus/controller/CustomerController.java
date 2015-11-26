@@ -42,6 +42,7 @@ import com.boateng.abankus.domain.OrderPayment;
 import com.boateng.abankus.domain.PaymentTransaction;
 import com.boateng.abankus.domain.Phone;
 import com.boateng.abankus.exception.PlatformException;
+import com.boateng.abankus.fields.CustomerFields;
 import com.boateng.abankus.fields.CustomerOrderFields;
 import com.boateng.abankus.processors.CustomerOrderProcessor;
 import com.boateng.abankus.services.PaymentService;
@@ -93,6 +94,12 @@ public class CustomerController extends PlatformAbstractServlet{
 		return model;
 	}
 	
+	@RequestMapping(value="/customers/addCustomerContactPerson", method=RequestMethod.GET)
+	public String addCustomerContactPerson(HttpServletRequest request) throws PlatformException{
+		Customer customer = getCustomerInSession(request);
+		
+		return "ClientServices/AddCustomerContactPerson";
+	}	
 	
 	@PreAuthorize("isFullyAuthenticated")
 	@RequestMapping(value="/customers/create/company", method=RequestMethod.GET)
@@ -128,8 +135,8 @@ public class CustomerController extends PlatformAbstractServlet{
 	
 	@RequestMapping(value="/customers/viewProfile", method={RequestMethod.GET,RequestMethod.POST})
 	public String viewCustomerProfile(Model model,HttpServletRequest request) throws PlatformException{
-		Customer customer = null;
-		customer = getCustomerInSession(request);
+			Customer customer = null;
+			customer = getCustomerInSession(request);
 
 			HttpSession session = request.getSession(false);
 			String customerId = request.getParameter("customerId");
