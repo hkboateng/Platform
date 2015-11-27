@@ -30,10 +30,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.boateng.abankus.application.builders.ContactPersonBuilder;
 import com.boateng.abankus.application.interfaces.CustomerService;
 import com.boateng.abankus.customer.processor.CustomerServiceProcessor;
 import com.boateng.abankus.domain.Address;
 import com.boateng.abankus.domain.BillingCollection;
+import com.boateng.abankus.domain.ContactPerson;
 import com.boateng.abankus.domain.Customer;
 import com.boateng.abankus.domain.CustomerAccount;
 import com.boateng.abankus.domain.CustomerOrder;
@@ -97,10 +99,28 @@ public class CustomerController extends PlatformAbstractServlet{
 	@RequestMapping(value="/customers/addCustomerContactPerson", method=RequestMethod.GET)
 	public String addCustomerContactPerson(HttpServletRequest request) throws PlatformException{
 		Customer customer = getCustomerInSession(request);
-		
+		int customerId = customer.getCustomerId();
+	
 		return "ClientServices/AddCustomerContactPerson";
 	}	
 	
+	@RequestMapping(value="/customers/updateContactPerson", method=RequestMethod.POST)
+	public String updateCustomerContactPerson(HttpServletRequest request) throws PlatformException{
+		Customer customer = getCustomerInSession(request);
+		if(customer == null){
+			
+			return "redirect:/platform/dashboard";
+		}
+		
+		ContactPersonBuilder contactBuilder = new ContactPersonBuilder(request);
+		ContactPerson person = contactBuilder.buildContactPerson();
+		int customerId = customer.getCustomerId();
+		
+		customerServiceImpl.updateCustomerContactPerson(person, customerId);
+		
+		
+		return "redirect:/customers/viewProfile";
+	}		
 	@PreAuthorize("isFullyAuthenticated")
 	@RequestMapping(value="/customers/create/company", method=RequestMethod.GET)
 	public ModelAndView addCompanyCustomer(){
@@ -136,8 +156,7 @@ public class CustomerController extends PlatformAbstractServlet{
 	@RequestMapping(value="/customers/viewProfile", method={RequestMethod.GET,RequestMethod.POST})
 	public String viewCustomerProfile(Model model,HttpServletRequest request) throws PlatformException{
 			Customer customer = null;
-			customer = getCustomerInSession(request);
-
+		
 			HttpSession session = request.getSession(false);
 			String customerId = request.getParameter("customerId");
 			String firstname = request.getParameter("firstname");
@@ -145,6 +164,7 @@ public class CustomerController extends PlatformAbstractServlet{
 			String orderNumber = request.getParameter("orderNumber");
 			String customerNumber = request.getParameter("customerNumber");
 			String searchType=request.getParameter("searchType");
+			
 			
 			if(searchType != null && searchType.equals("customerId")){
 				customer = customerServiceProcessor.searchForCustomer(customerId);
@@ -161,22 +181,24 @@ public class CustomerController extends PlatformAbstractServlet{
 				return "redirect:/platform/index";
 			}
 			
+			int custID = customer.getCustomerId();
 			loadCustomerIntoSession(request,customer);
 			loadCustomerOrderHistory(model,customer.getCustomerId(),request);
-			CustomerAccount customerAccount = customerServiceProcessor.findCustomerAccountByCustomerNumber(customer.getCustomerId());
+			CustomerAccount customerAccount = customerServiceProcessor.findCustomerAccountByCustomerNumber(custID);
 			
-			List<Address> address = customerServiceProcessor.findAddressByCustomerId(customer.getCustomerId());
+			List<Address> address = customerServiceProcessor.findAddressByCustomerId(custID);
 			
-			List<Phone> phone = customerServiceProcessor.findCustomerPhoneByCustomerId(customer.getCustomerId());
+			List<Phone> phone = customerServiceProcessor.findCustomerPhoneByCustomerId(custID);
 			
-			List<Email> email = customerServiceProcessor.findCustomerEmailByCustomerId(customer.getCustomerId());
+			List<Email> email = customerServiceProcessor.findCustomerEmailByCustomerId(custID);
 			
+			ContactPerson person = customerServiceProcessor.findCustomerContactPersonByCustomerId(custID);
 			session.setAttribute("address",address);
 			session.setAttribute("customerAccount",customerAccount);
 			model.addAttribute("customer",customer);
 			model.addAttribute("phone",phone);
 			model.addAttribute("email",email);
-
+			model.addAttribute("person",person);
 		return "ClientServices/ViewCustomerProfile";
 	}
 	

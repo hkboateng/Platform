@@ -10,12 +10,12 @@
 		<link href="<c:url value="/resources/css/bootstrap.css" />" rel="stylesheet" />
 		<link href="<c:url value="/resources/css/platform.css" />"	rel="stylesheet" />
 		<script src="<c:url value="/resources/js/jquery.js" />"	type="text/javascript"></script>
-		<script src="<c:url value="/resources/js/platform-functions.js" />" type="text/javascript"></script>
+
 		<script	src="<c:url value="/resources/js/validation/jquery.validation.js" />" type="text/javascript"></script>
 		<script src="<c:url value="/resources/js/bootstrap.js" />" 	type="text/javascript"></script>
 		<script src="<c:url value="/resources/js/application.js" />" type="text/javascript"></script>
 		<script src="<c:url value="/resources/js/accounting/accounting.js" />" 	type="text/javascript"></script>
-		<script src="<c:url value="/resources/js/jquery-masked.js" />" type="text/javascript"></script>
+				<script src="<c:url value="/resources/js/platform-functions.js" />" type="text/javascript"></script>
 	</head>
 <body>
 	<%-- Include page header --%>
@@ -27,6 +27,7 @@
 				<div class="center-block">
 				<h2>Update Contact Person for Customer</h2>
 				<hr>
+				<sf:form method="post" action="updateContactPerson" id="updateContactPersonForm" name="updateContactPersonForm">
 				<div class="col-xs-12 col-sm-6 col-md-5 col-lg-6">
 					<label for="firstname">First Name:
 					</label>	
@@ -48,29 +49,71 @@
 				</div>
 				<div class="col-xs-12 col-sm-6 col-md-5 col-lg-6">
 					<label for="association">How Associated:</label>
-					<select class="form-state">
+					<select class="form-state" name="association">
 						<option value="">Select</option>
 						<option value="employee">Staff</option>
 					</select>
 				</div>	
 				<div class="clearfix"></div>
 				<hr>
+				</sf:form>
 				<div>
-					<input type="submit" value="Submit Update" class="btn btn-success moveR_20"/>
+					<button id="submitBtn" class="btn btn-success moveR_20">Submit Update</button>
 					<a href="<c:url value="viewProfile"/>" >Cancel</a>
 				</div>
+				
 			</div>
-			<form method="post" >
 			
-			</form>
+			
+			
 			</div>		
 		</div>
 	</div>
 
 	<script>
 	$(document).ready(function(){
+		$('#submitBtn').on('click',function(){
+			if(validateContact()){
+				submitForm();
+			}			
+		});
 
 	});
+	function submitForm(){
+		var form = document.updateContactPersonForm;
+		form.submit();
+	}
+	var validateContact = function(){
+		$("#updateContactPersonForm").validate({
+			onsubmit:false,
+			rules : {
+				firstname: {
+					required :true
+				},
+				lastname: {
+					required :true
+				},
+				emailAddress: {
+					required :true,
+					email:true
+				},
+				phonenumber: {
+					required :true,
+					digits: true
+				},
+				association: {
+					required :true
+				}
+			}
+		});
+		if(!$('#updateContactPersonForm').valid())
+			 return false;
+		 return true;				
+	}
+	function validatePhone(number){
+		var reg = "\d{3}-\d{3}-\d{4}|\d{10}";
+		return reg.test(nubmer);
+	}
 	</script>
 	</body>
 	</html>

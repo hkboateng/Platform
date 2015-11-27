@@ -62,7 +62,9 @@
 						</label>
 						 <label>Password:
 						  <input type="password" name="password"	placeholder="Password" class="width-100" />
-
+						</label>
+						<input type="hidden" name="${_csrf.parameterName}"
+							value="${_csrf.token}" />
 						<button type="submit" class="btn btn-blue width-100">Log in</button>
 					</form>
 					<p>Can't login?  <a href="">Contact your Administrator</a> </p>

@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import com.boateng.abankus.application.interfaces.CustomerService;
 import com.boateng.abankus.controller.CustomerController;
 import com.boateng.abankus.domain.Address;
+import com.boateng.abankus.domain.ContactPerson;
 import com.boateng.abankus.domain.Customer;
 import com.boateng.abankus.domain.CustomerAccount;
 import com.boateng.abankus.domain.Email;
@@ -103,12 +104,7 @@ public class CustomerServiceProcessor extends AbankusBaseProcessor{
 		customer.setCompany_name(companyName);
 		customer.setMiddlename(middlename);
 		customer.setGender(gender);
-		if(customerType.equalsIgnoreCase(CustomerFields.CUSTOMER_INDIVIDUAL)){
-			customer.setContactPerson(CustomerFields.CONTACT_PERSON_NO);
-		}
-		if(customerType.equalsIgnoreCase(CustomerFields.CUSTOMER_COMPANY) && (firstname != null && lastname != null)){
-			customer.setContactPerson(CustomerFields.CONTACT_PERSON_YES);
-		}		
+	
 		return customer;
 	}
 	
@@ -249,6 +245,13 @@ public class CustomerServiceProcessor extends AbankusBaseProcessor{
 		return emailList;
 	}
 	
+	public ContactPerson findCustomerContactPersonByCustomerId(int customerId){
+		
+		ContactPerson contactPerson = null;
+		contactPerson = customerServiceImpl.findCustomerContactByCustomerId(customerId);
+		
+		return contactPerson;
+	}
 	public List<Phone> findCustomerPhoneByCustomerId(int customerId){
 		List<Phone> phoneList = null;
 		if(!(customerId < 0)){

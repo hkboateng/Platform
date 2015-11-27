@@ -5,6 +5,7 @@
   <a href="<c:url value="/customers/create"/>" class="list-group-item">Add Customer<i class="glyphicon glyphicon-chevron-right pull-right"></i></a>
   <a href="<c:url value="/customer/createOrders"/>" class="list-group-item">New Order<i class="glyphicon glyphicon-chevron-right pull-right"></i></a>
   <a href="javascript:makePayment('makePayment',document.makeCustomerPayment);" class="list-group-item">Make A Payment<i class="glyphicon glyphicon-chevron-right pull-right"></i></a>
+  <a href="<c:url value="/customers/contactCustomer"/>" class="list-group-item">Send Email Message<i class="glyphicon glyphicon-chevron-right pull-right"></i></a>
   <button type="button" class="list-group-item">View Invoice<i class="glyphicon glyphicon-chevron-right pull-right"></i></button>
   <button type="button" class="list-group-item">Print Invoice<i class="glyphicon glyphicon-chevron-right pull-right"></i></button>
   <div class="list-group-item">

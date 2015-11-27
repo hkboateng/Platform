@@ -6,6 +6,7 @@ import org.hibernate.Session;
 
 import com.boateng.abankus.domain.Address;
 import com.boateng.abankus.domain.Authenticatecustomer;
+import com.boateng.abankus.domain.ContactPerson;
 import com.boateng.abankus.domain.Customer;
 import com.boateng.abankus.domain.CustomerAccount;
 import com.boateng.abankus.domain.Email;
@@ -109,4 +110,12 @@ public interface CustomerService {
 	 * @return
 	 */
 	List<Customer> findCustomerByFirstName(String firstname);
+	
+	void updateCustomerContactPerson(ContactPerson person,int customerId);
+
+	/**
+	 * @param customerId
+	 * @return
+	 */
+	ContactPerson findCustomerContactByCustomerId(int customerId);
 }

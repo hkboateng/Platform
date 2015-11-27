@@ -2,15 +2,16 @@ package com.boateng.abankus.domain;
 
 import java.io.Serializable;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.NamedQuery;
 
 import org.hibernate.annotations.DynamicUpdate;
 
-import com.boateng.abankus.utils.SecurityUtils;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
-import java.util.List;
+import com.sun.istack.Nullable;
 
 
 /**
@@ -29,7 +30,6 @@ public class Customer implements Serializable {
 
 	private String company_name;
 
-	private String contactPerson;
 
 	private String customerType;
 
@@ -65,14 +65,6 @@ public class Customer implements Serializable {
 		this.customerId = customerId;
 	}
 
-
-	public String getContactPerson() {
-		return this.contactPerson;
-	}
-
-	public void setContactPerson(String contactPerson) {
-		this.contactPerson = contactPerson;
-	}
 
 	public String getCustomerType() {
 		return this.customerType;
@@ -129,6 +121,10 @@ public class Customer implements Serializable {
 	public void setCompany_name(String company_name) {
 		this.company_name = company_name;
 	}
+
+	/**
+	 * @param contactPerson the contactPerson to set
+	 */
 	
 	public String getCustomerName(){
 		StringBuilder sbr = new StringBuilder();

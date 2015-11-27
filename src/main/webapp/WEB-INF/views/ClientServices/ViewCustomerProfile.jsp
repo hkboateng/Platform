@@ -73,7 +73,7 @@
 		</div>
 		<div>
 			<label class="bold">Contact Person:</label>
-			<span>${customer.getContactPerson() ? customer.getContactPerson() : '<a href="/abankus/customers/addCustomerContactPerson"><span class="glyphicon glyphicon-pencil"></span>Add Contact Person</a>'}</span>
+			<span>${(person != null)? person : '<a href="/abankus/customers/addCustomerContactPerson"><span class="glyphicon glyphicon-pencil"></span>Add Contact Person</a>'}</span>
 		</div>
 		<div>
 			<label class="bold">Account Status:</label>

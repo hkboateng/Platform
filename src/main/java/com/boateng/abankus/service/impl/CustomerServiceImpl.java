@@ -8,6 +8,7 @@ import javax.persistence.Cacheable;
 import org.apache.log4j.Logger;
 import org.hibernate.CacheMode;
 import org.hibernate.LockMode;
+import org.hibernate.LockOptions;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.boateng.abankus.application.interfaces.CustomerService;
 import com.boateng.abankus.domain.Address;
 import com.boateng.abankus.domain.Authenticatecustomer;
+import com.boateng.abankus.domain.ContactPerson;
 import com.boateng.abankus.domain.Customer;
 import com.boateng.abankus.domain.CustomerAccount;
 import com.boateng.abankus.domain.Email;
@@ -55,6 +57,7 @@ public class CustomerServiceImpl implements CustomerService {
 	 * @param customers
 	 * @return 
 	 */
+
 	@Transactional
 	@Override
 	
@@ -334,5 +337,27 @@ public class CustomerServiceImpl implements CustomerService {
 							.setParameter("lastname", lastname)
 							.list();
 		return customer;		
+	}
+
+	/* (non-Javadoc)
+	 * @see com.boateng.abankus.application.interfaces.CustomerService#updateCustomerContactPerson(com.boateng.abankus.domain.ContactPerson)
+	 */
+	@Override
+	@Transactional
+	public void updateCustomerContactPerson(ContactPerson person,int customerId) {
+		Session session = getSessionFactory().getCurrentSession();
+		Customer customer = (Customer) session.get(Customer.class, customerId,LockOptions.READ);
+		person.setCustomer(customer);
+		session.save(person);
+	}
+
+	@Override
+	@Transactional
+	public ContactPerson findCustomerContactByCustomerId(int customerId) {
+		Session session = getSessionFactory().getCurrentSession();
+		ContactPerson contactPerson = (ContactPerson) session.createQuery("from ContactPerson cp where cp.customer.customerId =:customerId")
+				.setParameter("customerId", customerId)
+				.uniqueResult();
+		return contactPerson;
 	}
 }
