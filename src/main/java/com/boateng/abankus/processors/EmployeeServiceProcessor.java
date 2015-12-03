@@ -85,12 +85,13 @@ public class EmployeeServiceProcessor {
 		employee.setState(state);
 		employee.setZipcode(zipcode);
 		employee.setDateOfBirth(sbr.toString());
+		sbr = null;
 		return employee;
 	}
 
 
 	public User saveEmployeeLogin(User user,Employee employee){
-		//EmployeeProcessor.getInstance()
+		
 		if(user !=null && employee != null){
 			user.setEmailAddress(employee.getEmail());
 			
@@ -99,7 +100,8 @@ public class EmployeeServiceProcessor {
 		String hashPassword = SecurityUtils.generateStorngPasswordHash(user.getPassword());
 		
 		user.setPassword(hashPassword);
-		user.setEnabled(true);		
+		user.setEnabled(true);	
+		hashPassword = null;
 		return user;
 	}
 	

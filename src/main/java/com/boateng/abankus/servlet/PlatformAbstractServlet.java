@@ -110,6 +110,7 @@ public abstract class PlatformAbstractServlet {
 			if(!cust.getCustomerNumber().equals(customer.getCustomerNumber())){
 				session.setAttribute(CustomerFields.CUSTOMER_SESSION, customer);
 			}
+			cust = null;
 		}
 	}
 	

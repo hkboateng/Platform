@@ -69,19 +69,18 @@
             <li>
             	<a href="/abankus/platform/dashboard"><i class="fa fa-home fa-lg moveR_10"></i>DashBoard</a>
             </li>
-            <sec:authorize access="hasRole('sales-manager')">
+            
             <li>
 	            <a id="aEmployeeInfoLink" href="#" class=" dropdown-toggle header-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-		          <i class="fa fa-user fa-md moveR_10"></i>Employee Services
+		          <i class="fa fa-user fa-md moveR_10"></i>Products/Services
 		          <span class="caret"></span>
 		        </a> 
 				<ul id="menu1" class="dropdown-menu" aria-labelledby="aEmployeeInfoLink">
-		          <li><a href="/abankus/registration/employee"><i class="fa fa-pencil-square-o fa-lg moveR_5"></i>New Employee</a></li>
+		          <li><a href="/abankus/products/createProduct"><i class="fa fa-pencil-square-o fa-lg moveR_5"></i>Add Product</a></li>
 		          <li role="separator" class="divider"></li>
-		          <li><a href="/abankus/employee/listEmployee"><i class="fa fa-sign-out fa-lg moveR_5"></i>List Employees</a></li>
+		          <li><a href="/abankus/employee/listEmployee"><i class="fa fa-sign-out fa-lg moveR_5"></i>List Products</a></li>
 		        </ul>            
             </li>            
-            </sec:authorize>
 			<sec:authorize access="hasRole('sales-manager')">
             <li>
 	            <a id="aEmployeeInfoLink" href="#" class=" dropdown-toggle header-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -129,7 +128,7 @@
 		          <span class="caret"></span>
 		        </a> 
 				<ul id="menu1" class="dropdown-menu" aria-labelledby="aClientInfoLink">
-		          <li><a href="/abankus/client/createOrders"><i class="fa fa-pencil-square-o fa-lg moveR_5"></i>Create Orders</a></li>
+		          <li><a href="/abankus/customer/createOrders"><i class="fa fa-pencil-square-o fa-lg moveR_5"></i>Create Orders</a></li>
 		          <li role="separator" class="divider"></li>
 		          <li><a href="/abankus/customers/create"><i class="fa fa-sign-out fa-lg moveR_5"></i>Add New Customers</a></li>
 		          <li><a href="/abankus/customers/listCustomer"><i class="fa fa-sign-out fa-lg moveR_5"></i>List Customers</a></li>

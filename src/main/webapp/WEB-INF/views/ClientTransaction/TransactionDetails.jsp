@@ -23,15 +23,16 @@
 	<jsp:include page="../header.jsp" />
 	<div id="container" class="container">
 		<div class="row">
-			<div class="col-sm-12 col-md-8">
+			<div class="col-sm-12 col-md-7">
 				<h2  class="underline">Transaction Details</h2>
 				<div class="orderDetails">
-					<p><label>Order Date:</label><span>${customerOrder.convertOrderDate() }</span></p>
-					<p><label>Order Number:</label> ${customerOrder.getOrderNumber() }</p>
-					<p><label>Product Name:</label>${customerOrder.getProductCode() }</p>
-					<p><label>Total Amount:</label> <fmt:formatNumber value="${customerOrder.getTotalAmount() }" type="currency"/></p>
-					<p><label>Balance:</label>${customerOrder.getTotalAmount() }</p>
-					<input type="hidden" value="${orderNumber }" id="orderNumber"/>
+					<c:set var="orderNumber" value="${billing.getClientOrderId().getOrderNumber() }"/>
+					<p><label>Order Date:</label><span>${billing.getClientOrderId().convertOrderDate() }</span></p>
+					<p><label>Order Number:</label> ${orderNumber}</p>
+					<p><label>Product Name:</label>${billing.getClientOrderId().getProductCode() }</p>
+					<p><label>Total Amount:</label> <fmt:formatNumber value="${billing.getTotalOrderAmount()}" type="currency"/></p>
+					<p><label>Amount Remaining:</label> <fmt:formatNumber value="${billing.totalAmountRemaining() }" type="currency"/></p>
+					<input type="hidden" value="${viewTransactionDetailsOrderNumber}" id="orderNumber"/>
 				</div>
 				<h3>Payment History</h3>
 					<table class="table">
@@ -41,7 +42,6 @@
 							<th>Amount</th>
 							<th>Payment Type</th>
 							<th>Staff Name</th>
-							<th>Action</th>
 						</tr>
 						<tbody id="transactionBody">
 						<c:choose>
@@ -53,20 +53,19 @@
 										<td>${payments.amountPaid }</td>
 										<td>${payments.paymentType }</td>
 										<td>${payments.getEmployeeName()}</td>
-										<td></td>
 									</tr>
 								</c:forEach>
 							</c:when>
 							<c:otherwise>
 								<tr>
-									<td>No Payment Details where found.</td>
+									<td colspan="45" style="text-align:center;">No Payment Details where found.</td>
 								</tr>
 							</c:otherwise>
 						</c:choose>
 						</tbody>
 					</table>				
 			</div>
-			<div class="col-sm-12 col-md-4 col-lg-4 main-container">
+			<div class="col-sm-12 col-md-5 col-lg-5 main-container">
 				<jsp:include page="../sidebar.jsp" />
 			</div>			
 				<div class="col-sm-12 col-md-7">
@@ -79,8 +78,13 @@
 				</div>
 			
 		</div>
+		<c:set var="cust" value="${billing.getCustomer().getCustomerNumber()}"/>
+		<a href="javascript:document.viewCustomerProfileBckBtn.submit()">Back to Customer Profile Page</a>
 	</div>
-
+	<sf:form name="viewCustomerProfileBckBtn" action="/abankus/customers/viewProfile" method="post">
+		<input type="hidden" name="searchType" id="searchType" value="customerNumber">
+		<input type="hidden"  name="customerNumber" value="${cust}"/>	          
+	</sf:form>	
 	<script>
 	$(document).ready(function(){
 		var orderNumber = $('#orderNumber').val();
@@ -143,7 +147,7 @@
 		      	.attr("class", "arc");
 
 		  g.append("path")
-		      .attr("d", arc)
+		      .attr("d", arc).transition()
 		      .style("fill", function(d) { return color(d.data.amountPaid); });
 
 

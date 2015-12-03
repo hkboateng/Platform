@@ -122,7 +122,8 @@
 			</div>
 			<h3 class="underline-div"> Closed or Paid Orders</h3>
 			<div>
-				<c:if test="${not empty customerOrder }">
+				<c:choose>
+				<c:when test="${not empty customerOrder }">
 				<table id='orderHistoryClosed' class="table">
 					<thead>
 						<tr>
@@ -154,19 +155,26 @@
 					</c:forEach>			
 					</tbody>
 				</table>
-				</c:if>	
-			<c:if test="${empty customerOrder }">
+				</c:when>	
+				<c:otherwise>
 			<div class="alert alert-success" role="alert">
 				<p class="bold"><i class="fa fa-info moveR_20"></i>No Order History for Customer</p>
 			</div>
 				
 				<button type="button" class="btn btn-success center-block " onclick="javascript:pushToURL('clients/createOrder')">Add Order for Customer<i class="fa fa-chevron-right moveL_30"></i></button>
-			</c:if>						
+			</c:otherwise>					
+			</c:choose>	
 			</div>
 </div>
 <div class="col-sm-12 col-md-4 col-lg-4 main-container">
+<div class="list-group">
+<a href="javascript:document.createOrderForm.submit();" class="list-group-item">Create New Order<i class="glyphicon glyphicon-chevron-right pull-right"></i></a>
+</div>
 <jsp:include page="../sidebar.jsp"/>
 </div>	
+<sf:form name="createOrderForm" method="post" action="/abankus/customer/createOrders">
+	<input type="hidden" name="accountNumber" value="${customerAccount.getAccountNumber() }"/>
+</sf:form>
 	          <%--
 			 <c:if test="${not empty customer}">
 			  	<div id="" class="row ">

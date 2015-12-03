@@ -3,10 +3,15 @@
  */
 package com.boateng.abankus.application.ws.svc;
 
+import java.util.concurrent.Future;
+
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Invocation.Builder;
+import javax.ws.rs.client.InvocationCallback;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 
@@ -14,6 +19,8 @@ import org.joda.time.DateTime;
 
 import com.boateng.abankus.application.builders.CustomerPaymentBuilder;
 import com.boateng.abankus.application.interfaces.PlatformRequest;
+import com.boateng.abankus.domain.PaymentTransaction;
+import com.boateng.abankus.exception.PlatformException;
 
 /**
  * This POJO is used to create a request class that is sent to the
@@ -39,15 +46,12 @@ public class PaymentRequest implements PlatformRequest{
 	}
 	
 	@Override
-	public void sendRequest(){
-		try {
-			JAXBContext jaxbContext = JAXBContext.newInstance(PaymentRequest.class);
-			Client client = ClientBuilder.newClient();
-			//WebTarget webTarget = client.target("http://localhost:8080/ws/paymentServices").path("savePayment").request(MediaType.APPLICATION_JSON).;
-		} catch (JAXBException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public void sendRequest() throws PlatformException{
+		Client client = ClientBuilder.newClient();
+		WebTarget target = client.target("http://localhost:8080/rs/paymentservice");
+		WebTarget path = target.path("/savePaymentTransaction");
+		
+		
 	}
 	
 	public PaymentRequest(CustomerPaymentBuilder builder,String employeeNumber){

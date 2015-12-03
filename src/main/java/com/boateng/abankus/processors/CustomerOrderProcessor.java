@@ -66,7 +66,7 @@ public class CustomerOrderProcessor implements OrderService{
 		logger.info("Validating Customer Order.....");
 		CustomerOrderUtils customerOrderUtils = new CustomerOrderUtils(request);
 		List<String> validation = customerOrderUtils.validateOrder();
-
+		customerOrderUtils = null;
 		return validation;
 	}
 	
@@ -83,6 +83,8 @@ public class CustomerOrderProcessor implements OrderService{
 		}else{
 			validation.add("Error occured while try to process your order.");	
 		}
+		customerOrder = null;
+		customerOrderUtils = null;
 		return validation;
 	}
 	/* (non-Javadoc)

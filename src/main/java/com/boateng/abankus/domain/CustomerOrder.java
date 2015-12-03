@@ -4,7 +4,9 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.DynamicUpdate;
 import org.joda.time.DateTime;
 
 import com.boateng.abankus.customer.service.Client;
@@ -18,6 +20,7 @@ import java.util.List;
  */
 @Entity
 @Table(name="clientorder")
+@DynamicUpdate(value=true)
 @NamedQuery(name="ClientOrder.findAll", query="SELECT c FROM CustomerOrder c")
 public class CustomerOrder implements Client, Serializable{
 	private static final long serialVersionUID = 1L;
@@ -28,6 +31,7 @@ public class CustomerOrder implements Client, Serializable{
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private long clientOrderId;
 
+	@NotNull
 	private long orderDate;
 
 	private int quantity;
@@ -37,30 +41,24 @@ public class CustomerOrder implements Client, Serializable{
 	@JoinColumn(name="customerId", referencedColumnName="customerId")
 	private Customer customer;
 
+	
 	private String orderNumber;
 
-	private String unitCost;
+	@NotNull
+	private String paymentStatus;
 
-	/**
-	 * @return the productName
-	 */
-	public String getProductName() {
-		return productName;
-	}
-
-	/**
-	 * @param productName the productName to set
-	 */
-	public void setProductName(String productName) {
-		this.productName = productName;
-	}
-
-
-	private String productName;
-
+	
 	private String productCode;
 
+	@NotNull
 	private BigDecimal totalAmount;
+	
+	private String nextPaymentDate;
+	
+	/**
+	 * Whether payment is daily, monthly,bi-weekly, yearly etc.
+	 */
+	private String paymentFrequency;
 	
 	//bi-directional many-to-one association to Orderpayment
 	@OneToMany(mappedBy="clientorder", fetch=FetchType.EAGER)
@@ -68,23 +66,6 @@ public class CustomerOrder implements Client, Serializable{
 	
 	public CustomerOrder() {
 	}
-	
-	/**
-	 * @return the unitCost
-	 */
-	public String getUnitCost() {
-		return unitCost;
-	}
-
-
-
-	/**
-	 * @param unitCost the unitCost to set
-	 */
-	public void setUnitCost(String unitCost) {
-		this.unitCost = unitCost;
-	}
-
 
 	public long getClientOrderId() {
 		return this.clientOrderId;
@@ -157,7 +138,25 @@ public class CustomerOrder implements Client, Serializable{
 	public List<OrderPayment> getOrderpayments() {
 		return this.orderpayments;
 	}
+
 	
+	
+	public String getPaymentStatus() {
+		return paymentStatus;
+	}
+
+	public void setPaymentStatus(String paymentStatus) {
+		if(amountRemaining() == 0.0){
+			this.paymentStatus = "paid";
+		}else{
+			this.paymentStatus = paymentStatus;
+		}
+	}
+
+	public void setOrderpayments(List<OrderPayment> orderpayments) {
+		this.orderpayments = orderpayments;
+	}
+
 	public OrderPayment addOrderpayment(OrderPayment orderpayment) {
 		getOrderpayments().add(orderpayment);
 		orderpayment.setClientorder(this);
@@ -192,6 +191,31 @@ public class CustomerOrder implements Client, Serializable{
 	public  String convertOrderDate(){
 		DateTime date = new DateTime(getOrderDate());
 		return date.toString("MMMM d, yyyy");
+	}
+	
+	public double amountRemaining(){
+		double total = 0.0;
+		for(OrderPayment o: getOrderpayments()){
+			total +=o.getAmountPaid();
+		}
+		return total;
+		
+	}
+
+	public String getNextPaymentDate() {
+		return nextPaymentDate;
+	}
+
+	public void setNextPaymentDate(String nextPaymentDate) {
+		this.nextPaymentDate = nextPaymentDate;
+	}
+
+	public String getPaymentFrequency() {
+		return paymentFrequency;
+	}
+
+	public void setPaymentFrequency(String paymentFrequency) {
+		this.paymentFrequency = paymentFrequency;
 	}
 	
 	

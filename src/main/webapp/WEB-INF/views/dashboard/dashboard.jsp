@@ -153,36 +153,9 @@
 								  	</div>								  						  	
 								  </div>				          
 				         	</div>		
-					<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 spaceBelow_20">
-	<jsp:include page="../sidebar.jsp"/>
-								<sf:form action="/abankus/customers/viewProfile" method="post">
-									<label>Quick Search</label>
-										<div class="spaceBelow_10">
-											<label class="radio-inline">
-											  <input type="radio" name="searchBill" id="customerId" value="customerIdDiv" checked> Customer Id:
-											</label>
-											<label class="radio-inline">
-											  <input type="radio" name="searchBill" id="customerName" value="customerNameDiv"> Customer Name
-											</label>
-											<label class="radio-inline">
-											  <input type="radio" name="searchBill" id="customerOrder" value="customerOrderDiv"> Order #:
-											</label>
-										</div>
-										<div id="customerIdDiv" class="">
-											<label>Customer Id:</label><input type="text" name="customerId" class="form-state"/>
-											
-										</div>
-										<div id="customerNameDiv" class="hidden">
-											<label>First Name:</label><input type="text" name="firstname" class="form-state">
-											<label>Last Name:</label><input type="text" name="lastname" class="form-state">
-										</div>
-										<div class="hidden" id="customerOrderDiv">
-											<label>Order Number:</label><input type="text" name="OrderNumber" class="form-state">
-										</div>
-										<input type="hidden" name="searchType" id="searchType" value="customerId">
-										<button type="submit" class="btn btn-success btn-sm btn-block"><span class="glyphicon glyphicon-search moveR_20"></span>Search</button>
-								</sf:form>	
-			           </div>			          	
+							<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 spaceBelow_20">
+								<jsp:include page="../sidebar.jsp"/>
+			          	 	</div>			          	
 			</div>
 		</div>
 	</div>
@@ -196,25 +169,7 @@
 		loadTodayPayment();
 		loadMonthAndYearPayments();
 		$('table.transactionTable').DataTable();
-		$('#customerId').on('click',function(){
-			$('#searchType').val("customerId");
-			$("#customerIdDiv").removeClass('hidden');
-			$('#customerNameDiv').addClass('hidden');
-			$('#customerOrderDiv').addClass('hidden');
-		});
-		$('#customerName').on('click',function(){
-			$('#searchType').val("customerName");
-			$('#customerNameDiv').removeClass('hidden');
-			$("#customerIdDiv").addClass('hidden');
-			$('#customerOrderDiv').addClass('hidden');
-		});
-		$('#customerOrder').on('click',function(){
-			$('#searchType').val("customerId");
-			$('#customerOrderDiv').removeClass('hidden');
-			$("#customerIdDiv").addClass('hidden');
-			$('#customerNameDiv').addClass('hidden')
-			
-		});	
+		
 	});
 	
 	function loadEmployeeCustomers(){
@@ -237,7 +192,7 @@
 		var thisMonth= new Date().getMonth()+1;
 		var year = new Date().getFullYear();
 		$.ajax({
-			url: 'loadMonthPayments',
+			url: 'http://localhost:8080/paymenthub/rs/paymentservice/findPaymentTransactionByMonthAndYear',
 			method: 'get',
 			data: {
 				month: thisMonth,
@@ -257,7 +212,7 @@
 					});
 					$('#transactionMonth').html(table);					
 				}else{
-					
+					$('#transactionMonth').html("No Data");		
 				}
 
 			},

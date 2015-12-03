@@ -55,7 +55,7 @@ public class ProductServiceProcessor {
 		product.setProductNumber(productNumber);
 		
 		product = productServiceImpl.saveProduct(product);
-		addProductMap(product);
+		updateProductMap(product);
 	}
 	
 	public void updateProductInfo(Product newProduct, String product){

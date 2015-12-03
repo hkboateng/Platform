@@ -47,14 +47,16 @@
 					<input type="text" name="accountNumber" id="accountNumber" class="custom-text" placeholder="Enter Account Number, Customer Number"/>
 					<button  id="btnSearchCustomer" class="btn btn-success" title="Search for Customer using Customer AccountNumber" ><i class="fa fa-search"></i></button>								
 				</div>
-				  <div id="resultHeading" class="resultHeading hidden">
+				
+				<c:set var="formState" value="${not empty account ? '' : 'hidden' }"/>	
+				  <div id="resultHeading" class="resultHeading ${formState}">
 		          	<div id="resultHeading-word" class="anw">Search Results</div>
 		          </div>	
 	
 				 <div id="pending">	
 		          		
 				 </div>			
-			<c:set var="formState" value="${not empty account ? '' : 'hidden' }"/>	
+			
 			<sf:form class="forms ${formState}" method="post"  action="" name="customerOrderForm" id="customerOrderForm">
 			<div class="">
 

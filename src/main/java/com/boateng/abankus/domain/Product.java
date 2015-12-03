@@ -41,12 +41,13 @@ public class Product implements Serializable {
 	@NotNull(message="Product Name cannot be null or empty.")
 	private String productName;
 	
-
 	private String productNumber;
 
 	@NotNull
 	private float unitCost;
 	
+	@NotNull(message="Select whether the item is a Product or a Service.")
+	private String category;
 	/**
 	 * @return the unitCost
 	 */
@@ -183,6 +184,22 @@ public class Product implements Serializable {
 			return false;
 		}
 		return true;
+	}
+
+
+	/**
+	 * @return the category
+	 */
+	public String getCategory() {
+		return category;
+	}
+
+
+	/**
+	 * @param category the category to set
+	 */
+	public void setCategory(String category) {
+		this.category = category;
 	}
 	
 	

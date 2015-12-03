@@ -22,64 +22,9 @@
 <jsp:include page="../header.jsp"/>
 <div class="container" >
 	<div class="row">
-				<div  class="col-sm-3 col-md-3 sidebar">
-			    <div id="accordian">
-				<ul>
-					<li>
-						<h3><span class="fa fa-tachometer fa-2x"></span>Dashboard</h3>
-						<ul>
-							<li><a href="#">Reports</a></li>
-							<li><a href="#">Search</a></li>
-							<li><a href="#">Graphs</a></li>
-							<li><a href="#">Settings</a></li>
-						</ul>
-					</li>
-					<!-- we will keep this LI open by default -->
-					<li class="active">
-						<h3><span class="icon-tasks"></span>Tasks</h3>
-						<ul>
-							<li><a href="#">Today's tasks</a></li>
-							<li><a href="#">Urgent</a></li>
-							<li><a href="#">Overdues</a></li>
-							<li><a href="#">Recurring</a></li>
-							<li><a href="#">Settings</a></li>
-						</ul>
-					</li>
-					<li>
-						<h3><span class="icon-calendar"></span>Calendar</h3>
-						<ul>
-							<li><a href="#">Current Month</a></li>
-							<li><a href="#">Current Week</a></li>
-							<li><a href="#">Previous Month</a></li>
-							<li><a href="#">Previous Week</a></li>
-							<li><a href="#">Next Month</a></li>
-							<li><a href="#">Next Week</a></li>
-							<li><a href="#">Team Calendar</a></li>
-							<li><a href="#">Private Calendar</a></li>
-							<li><a href="#">Settings</a></li>
-						</ul>
-					</li>
-					<li>
-						<h3><span class="fa fa-sign-out"></span>Favourites</h3>
-						<ul>
-							<li><a href="#">Global favs</a></li>
-							<li><a href="#">My favs</a></li>
-							<li><a href="#">Team favs</a></li>
-							<li><a href="#">Settings</a></li>
-						</ul>
-					</li>
-					<li>
-						<h3><span class="fa fa-sign-out fa-lg"></span> Sign Out</h3>
-				
-					</li>
-				</ul>
-			</div>
-	    </div>
-<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+<div class="col-sm-9 col-sm-offset-3 col-md-8 col-md-offset-2 main">
           <h1>Client Services - Prospective Customer</h1>
 			<hr>
-          <div class="row">
-          <div class="col-md-7">
 			<%-- Error or Information --%>
 			<div class="info_header">
 				<c:if test="${info != null }">
@@ -95,17 +40,25 @@
 					</div>
 				</c:if>
 			</div>
-			 
-			<div class="col-xs-12 col-sm-12 col-md-8">
+			 <div class="col-md-6">
 				<form name="createProductForm" action="/abankus/products/addProduct" method="post">
 
 					<label for="productname">Product Name:</label>
-					<input type="text" class="form-control" id="productname" name="productName"/>
+					<input type="text" class="form-state" id="productname" name="productName"/>
 					<label for="productcode">Product Code:</label><span id="helpBlock" class="help-text-inline">Maximum length is 8 charaters.</span>	
-					<input type="text" class="form-control" id="productcode" name="productCode" maxLength="8"/>
+					<input type="text" class="form-state" id="productcode" name="productCode" maxLength="8"/>
 					<sf:errors path="*"/>	
+					
+						<label for="category">Category:</label>
+						<select class="form-state" name="category">
+							<option value="">Select a Category</option>
+							<option value="services">Services</option>
+							<option value="product">Product</option>
+						</select>					
+					
+
 					<label for="productDesc">Product Description:</label>
-					<textarea rows="5" cols="50" class="form-control" name="description"></textarea>
+					<textarea rows="5" cols="50" class="form-state" name="description"></textarea>
  					<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
 					<p>
 						<input type="submit" id="btnCreateProduct" value=" Add Product" class="btn btn-success">
@@ -113,9 +66,7 @@
 						<a href="#"> Cancel </a>
 					</p>
 				</form>
-			</div>
-		</div>
-	</div>
+				</div>
 	</div>
 
 </div>

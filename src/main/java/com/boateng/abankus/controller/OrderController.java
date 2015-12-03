@@ -66,15 +66,25 @@ public class OrderController {
 		
 	}
 	
-	@RequestMapping(value = "/customer/createOrders", method = RequestMethod.GET)
-	public ModelAndView createOrder(){
-		ModelAndView modelView = new ModelAndView();
-		
+	@RequestMapping(value = "/customer/createOrders", method = {RequestMethod.GET,RequestMethod.POST})
+	public ModelAndView createOrder(HttpServletRequest request){
 		logger.info("Username: is viewing Create Order page.");
+		
+		String accountNumber = request.getParameter("accountNumber");
+		ModelAndView modelView = new ModelAndView();
+		CustomerAccount account = null;
+		
+		if(accountNumber != null){
+			account = customerServiceProcessor.findCustomerAccountByAccountNumber(accountNumber);
+		}
 		List<Product> productList = productServiceProcessor.getAllProducts();
 		
+		modelView.addObject("account", account);
 		modelView.addObject("productList", productList);
 		modelView.setViewName("ClientServices/createOrders");
+		
+		account = null;
+		productList =  null;
 		
 		return modelView;
 	}

@@ -30,8 +30,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.boateng.abankus.customer.processor.CustomerServiceProcessor;
 import com.boateng.abankus.domain.Address;
+import com.boateng.abankus.domain.BillingCollection;
 import com.boateng.abankus.domain.Customer;
 import com.boateng.abankus.domain.CustomerAccount;
+import com.boateng.abankus.domain.CustomerBilling;
+import com.boateng.abankus.domain.CustomerOrder;
 import com.boateng.abankus.domain.CustomerTransaction;
 import com.boateng.abankus.domain.Email;
 import com.boateng.abankus.domain.Employee;
@@ -39,7 +42,9 @@ import com.boateng.abankus.domain.OrderPayment;
 import com.boateng.abankus.domain.PaymentTransaction;
 import com.boateng.abankus.domain.Phone;
 import com.boateng.abankus.exception.PlatformException;
+import com.boateng.abankus.fields.CustomerOrderFields;
 import com.boateng.abankus.fields.EmployeeFields;
+import com.boateng.abankus.fields.PlatformFields;
 import com.boateng.abankus.services.EmployeeService;
 import com.boateng.abankus.services.PaymentService;
 import com.boateng.abankus.servlet.PlatformAbstractServlet;
@@ -94,14 +99,15 @@ public class PlatformController  extends PlatformAbstractServlet {
 
 	@RequestMapping(value = "/platform/loadTodayTransactionHistory", method = RequestMethod.GET,produces="application/json")
 	@ResponseBody
-	public String loadTransactionHistory(HttpServletRequest request) {
+	public String loadTransactionHistory(HttpServletRequest request) throws PlatformException {
 		HttpSession session = request.getSession(false);
 		Employee employee = (Employee) session.getAttribute(EmployeeFields.EMPLOYEE_SESSION);
 		int employeeId = employee.getId();
+		
 		//List<Customer> customerList = employeeServiceImpl.findAllCustomerByEmployeeId(employeeId);
 		//session.setAttribute(EmployeeFields.EMPLOYEE_CUSTOMER_LIST, customerList);
 		
-		
+
 		
 		DateTime dateTime = new DateTime();
 		LocalDate localDate = dateTime.toLocalDate();
@@ -237,4 +243,44 @@ public class PlatformController  extends PlatformAbstractServlet {
 		model.addAttribute("transaction", payment);
 		return "ClientTransaction/TransactionHistory";
 	}	
+	
+	@RequestMapping(value = "/platform/viewTransactionDetail", method = RequestMethod.POST)
+	public String transactionDetails(HttpServletRequest request,Model model) throws PlatformException{
+		String orderNumber = request.getParameter("orderNumber");
+		HttpSession session = request.getSession(false);
+		
+		orderNumber = SecurityUtils.decryptOrderNumber(orderNumber);
+		BillingCollection collection = (BillingCollection) session.getAttribute(CustomerOrderFields.BILLING_COLLECTION_SESSION);
+		List<PaymentTransaction> payment = null;
+		CustomerBilling billing = null;
+		List<OrderPayment> orderPayment = null;
+		if(collection != null){
+			billing = collection.getCustomerBilling(orderNumber);
+			orderPayment = collection.getCustomerBillingPayment(orderNumber);
+				
+		}	
+		if(orderPayment !=null){
+			payment = buildPaymentTransactionList(orderPayment); 
+			model.addAttribute("paymentList", payment);
+		}
+		model.addAttribute(PlatformFields.VIEW_TRANSACTION_DETAILS_ORDER_NUMBER, orderNumber);
+		model.addAttribute("billing", billing);
+		
+		payment = null;
+		billing = null;	
+		orderPayment = null;
+		
+		return "ClientTransaction/TransactionDetails";
+	}
+	private List<PaymentTransaction> buildPaymentTransactionList(List<OrderPayment> orderPayment){
+		
+		ArrayList<PaymentTransaction> payments = new ArrayList<PaymentTransaction>();
+		PaymentTransaction transaction = null;
+		for(OrderPayment list: orderPayment){
+			transaction = new PaymentTransaction(list);
+			payments.add(transaction);
+		}
+		transaction = null;
+		return payments;
+	}
 }

@@ -153,6 +153,9 @@ public class CustomerController extends PlatformAbstractServlet{
 		return "ClientServices/listCustomers";
 	}
 	
+	private void getCustomerDetails(){
+		
+	}
 	@RequestMapping(value="/customers/viewProfile", method={RequestMethod.GET,RequestMethod.POST})
 	public String viewCustomerProfile(Model model,HttpServletRequest request) throws PlatformException{
 			Customer customer = null;
@@ -184,6 +187,7 @@ public class CustomerController extends PlatformAbstractServlet{
 			int custID = customer.getCustomerId();
 			loadCustomerIntoSession(request,customer);
 			loadCustomerOrderHistory(model,customer.getCustomerId(),request);
+			
 			CustomerAccount customerAccount = customerServiceProcessor.findCustomerAccountByCustomerNumber(custID);
 			
 			List<Address> address = customerServiceProcessor.findAddressByCustomerId(custID);
@@ -193,12 +197,19 @@ public class CustomerController extends PlatformAbstractServlet{
 			List<Email> email = customerServiceProcessor.findCustomerEmailByCustomerId(custID);
 			
 			ContactPerson person = customerServiceProcessor.findCustomerContactPersonByCustomerId(custID);
-			session.setAttribute("address",address);
-			session.setAttribute("customerAccount",customerAccount);
+			
+			model.addAttribute("address",address);
+			model.addAttribute("customerAccount",customerAccount);
 			model.addAttribute("customer",customer);
 			model.addAttribute("phone",phone);
 			model.addAttribute("email",email);
 			model.addAttribute("person",person);
+			
+			customer = null;
+			customerAccount = null; 
+			address= null;
+			phone = null;
+			email = null;
 		return "ClientServices/ViewCustomerProfile";
 	}
 	
@@ -210,7 +221,9 @@ public class CustomerController extends PlatformAbstractServlet{
 		BillingCollection collection = customerOrderProcessor.getCustomerBillings(customerId);
 
 		session.setAttribute(CustomerOrderFields.BILLING_COLLECTION_SESSION, collection);
-		model.addAttribute("billing", collection);		
+		model.addAttribute("billing", collection);	
+		orderList = null;
+		collection = null;
 	}
 	@RequestMapping(value="/customers/isCustomerEmailUnique", method=RequestMethod.GET, produces = "application/json")
 	@ResponseBody
@@ -248,22 +261,7 @@ public class CustomerController extends PlatformAbstractServlet{
 		return "ClientTransaction/CustomerPaymentSearch";
 	}		
 	
-	@RequestMapping(value = "/platform/viewTransactionDetail", method = RequestMethod.POST)
-	public String transactionDetails(HttpServletRequest request,Model model) throws PlatformException{
-		String transactionId = request.getParameter("orderNumber");
-		
-		String orderNumber = SecurityUtils.decryptOrderNumber(transactionId);
-		
-		CustomerOrder order = customerOrderProcessor.findCustomerOrderByOrderNumber(orderNumber);
-		
-		List<OrderPayment> orderPayment = paymentServiceImpl.findPaymentsByOrderNumber(orderNumber);
-		List<PaymentTransaction> payment = buildPaymentTransactionList(orderPayment);		
-		
-		model.addAttribute("customerOrder", order);
-		model.addAttribute("orderNumber", orderNumber);
-		model.addAttribute("paymentList", payment);
-		return "ClientTransaction/TransactionDetails";
-	}
+
 	
 	@RequestMapping(value = "/platform/loadPaymentsByOrderNumber", method = RequestMethod.GET, produces="application/json")
 	@ResponseBody

@@ -70,7 +70,6 @@ public class FactoryImpl extends Factory {
 		customerOrder.setProductCode(productCode);
 		customerOrder.setQuantity(Integer.parseInt(quantity));
 		customerOrder.setOrderNumber(orderNumber);
-		customerOrder.setUnitCost(unitCost);
 		BigDecimal totalCost = CustomerOrderUtils.calculateTotalCost(unitCost, quantity);
 		customerOrder.setTotalAmount(totalCost);
 		//Date of Order
