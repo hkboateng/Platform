@@ -54,7 +54,8 @@
 
 											<label for="bankName">Name of Bank:</label> <input type="text"
 												name="bankName" class="form-state width-100" id="bankName" value="" />
-											<label for="bankAccountNumber">Account Number:</label> <input type="text" id="bankAccountNumber" name="bankAccountNumber"	class="form-state  width-100" />
+											<label for="bankAccountNumber">Account Number:</label>
+											<input type="text" id="bankAccountNumber" name="bankAccountNumber"	class="form-state  width-100" />
 											<div class="help-text bold">Confirm Account Number</div>
 											<input type="text" id="confirmAccountNumber" name="confirmAccountNumber" class="form-state  width-100" />
 											<label for="bankRoutingNumber">Routing Number:</label>
@@ -92,7 +93,7 @@
 										</div><%--<fmt:formatNumber value="${customerOrder.getTotalAmount()} --%>
 										<c:set var="amountLeft" value="${billing.totalAmountRemaining() }"/>
 										<label for="paymentAmount">Payment Amount:</label>
-										 <input type="text"	name="paymentAmount" class="form-state  width-75" id="paymentAmount" value="${amountLeft}" onblur="javascript:checkAmountPaid(this.value)" />
+										 <input type="text"	name="paymentAmount" class="form-state  width-75" id="paymentAmount" value="${amountLeft}" onblur="javascript:checkAmountPaid(this.value)" placeholder="Amount"/>
 											<p>
 												<button name="paymentSubmitBtn" id="paymentSubmitBtn" onclick="javascript:customerPaymentConfirmation(document.paymentForm);return false;" class="btn btn-success">Continue with Payment</button>
 												<a href="#" class="moveL_20">Cancel</a>
@@ -103,29 +104,23 @@
 											<input type="hidden" name="cust" id="cust" value="${cust}">
 											<input type="hidden" name="amountleft" id="amountleft" value="${amountLeft}"/>
 											</div>	
-											<div class="col-md-6">
-												<label>Product Name:</label>
-												<span>${product.getProductName()}</span>
-												<label>Purchase Date:</label><span>${customerOrder.convertOrderDate()}</span>
-											</div>	
 												<!-- Review and Submit Customer Payment -->
-												<div class="hidden col-md-6" id="paymentSummary">
-													<p><label for="paymentDateSummary">Payment Date:&nbsp;</label>
-													<span id="paymentDateSummary"><fmt:formatDate value="${date}" type="both" timeStyle="long" dateStyle="long" />  </span></p>
-													<p><label for="paymentamountSummary">Payment Amount:&nbsp;</label><span id="paymentamountSummary"></span></p>
-													<p><label for="paymentFormSummary">Payment Type:&nbsp;</label><span id="paymentFormSummary"></span></p>	
-													<p><label for="paymentscheduleSummary">Payment Schedule:&nbsp;</label><span id="paymentscheduleSummary"></span></p>	
-													<p><label>Product Information:</label><span id="summaryProductInfo">${product.getProductName()}</span></p>								
+												<div class="hidden col-md-10" id="paymentSummary">
+													<p class="lead">By entering your Pin  Code, you are agreeing to pay $<span id="paymentamountSummary"></span> today <fmt:formatDate value="${date}" type="both" timeStyle="long" dateStyle="long" /> with payment in the form of <span id="paymentFormSummary"></span> for the items ${product.getProductName()}.
+														
+													<div>
 														<label for="customerPin">Customer PIN Number:</label>									
-															<div id="customerPin-error" class="help-text-inline-error">
-															</div>	
-														<input type="password" name="customerPIN" id="customerPIN" onchange="" class="form-state width-50"  />
+														<div id="customerPin-error" class="help-text-inline-error">
+															
+														</div>	
+														<input type="password" name="customerPIN" id="customerPIN" onchange="" class="form-state width-50"  />													
+													</div>
 														<div class="help-text-inline inlineBlock">
 															Click only once because clicking more than once will submit the payment more than once.
 														</div>	
 														<hr>
 														<input type="button" class="btn btn-success" id="submitBtn" value="Submit Buttom" />		
-														<a href="cancel" id="cancelPayment" class="btn btn-default moveL_20">Cancel Payment</a>										
+														<a href="#" id="cancelPayment" class="btn btn-default moveL_20">Cancel Payment</a>										
 												</div>		
 												<!-- End Review and Submit Customer Payment -->																
 									</sf:form>
@@ -150,7 +145,7 @@
 						</div>						
 			</div>
 		</div>
-	</div>
+
 	<%--- Confirmation Page --%>
 
 <script>
@@ -172,6 +167,7 @@ $(document).ready(function(){
 	$("#cancelPayment").on('click',function(){
 		$('#paymentSummary').hide();
 		$('#paymentEntry').show();
+		$("#paymentHeading").html("Make A Payment");
 	});
 		
 	$('#submitBtn').click(function(e){
@@ -209,14 +205,12 @@ $(document).ready(function(){
 				beforeSend: function(){
 					 $("#loading").text("Validating your Pin Number");
 				},
-				success : function(result){
-					console.log(result);
-					
+				success : function(result){					
 					if(result == "false"){
 						showMessage("You must enter a valid Pin Number!!!","alert",messageDiv);
 						
 					}else{
-						$('#paymentContainer').html('<p>Your payment have being submitted.</p><p>Your confirmation number is: <b>'+result+'</b></p>');
+						$('#paymentContainer').html('<h3>Your payment have being submitted.</h3><p>Your confirmation number is: <b>'+result+'</b></p>');
 					}
 					
 				},
@@ -277,7 +271,6 @@ function submitPayment(results,messageId){
 }
 --%>
 function validatePin(custId){
-	console.log(custId)
 	var valid = false;
 	if(!isEmpty(custId) || isAlphaNumeric(custId)){
 		valid = true;
@@ -309,6 +302,34 @@ function checkAmountPaid(amount){
 
 function compare(a,b){
 	return (a > b);
+}
+/**
+ * Shows the Summary of Order Payment and pops up the Modal window.
+ */
+function customerPaymentConfirmation(form){
+	
+	var accountnumber = $("#orderNumber").val() ;
+	var paymentamount = $("#paymentAmount").val();
+	var paymenttype = $("#paymentType").val();
+	var paymentschedule = $("#paymentSchedule").val();
+	
+	if(isEmpty(paymentamount)){
+		$("#paymentMessage").addClass('platform-alert-caution');
+		getElementById("paymentMessage").innerHTML = "Payment Amount cannot by empty.";
+	}else{
+		getElementById("paymentMessage").innerHTML = "";
+		$("#paymentMessage").removeClass('platform-alert-caution');
+		$("#paymentHeading").html("Review and Confirm Payment");
+		$("#accountNumberSummary").html(accountnumber);
+		$("#paymentamountSummary").html(paymentamount);
+		$("#paymentFormSummary").html(paymenttype.toUpperCase());
+		$("#paymentscheduleSummary").html(paymentschedule.toUpperCase());
+		// Openning Modal
+		$('#paymentEntry').hide();
+		$("#paymentSummary").removeClass("hidden");
+		$("#paymentSummary").show();
+	}
+
 }
 </script>
 	</body>

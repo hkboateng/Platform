@@ -76,18 +76,37 @@ public class PlatformController  extends PlatformAbstractServlet {
 	
 	@RequestMapping(value = "/platform/index", method = RequestMethod.GET)
 	public String home(HttpServletRequest request, Model model) {
-		
-		
-		return "dashboard/dashboard";
-	}
-	
-	@RequestMapping(value = "/platform/dashboard", method = RequestMethod.GET)
-	public String dashbaord(Locale locale, Model model,HttpServletRequest request) {
-				
 		try {
 			loadUserIntoSession(request);
 			loadEmployeeIntoSessionByUsername(request);
+		} catch (Exception e) {
+			PlatformException ace  = new PlatformException();
+			ace.logger(Level.WARNING,e.getMessage(), e);
+
+		}
+		return "dashboard/dashboard";
+	}
+	@RequestMapping(value = "/platform/settings", method = RequestMethod.GET)
+	public String settings() {
+
+		return "dashboard/Settings";
+	}	
+	@RequestMapping(value = "/platform/dashboard", method = RequestMethod.GET)
+	public String dashbaord(Locale locale, Model model,HttpServletRequest request) {
+		HttpSession session = request.getSession(false);
+		
+				
+		try {
+				
+			loadUserIntoSession(request);
+			loadEmployeeIntoSessionByUsername(request);
+			Employee employee = (Employee) session.getAttribute(EmployeeFields.EMPLOYEE_SESSION);
+			int employeeId = employee.getId();	
 			loadProductIntoSession(request);
+			employee = null;
+			List<Customer> customerList = employeeServiceImpl.findAllCustomerByEmployeeId(employeeId);
+			model.addAttribute(EmployeeFields.EMPLOYEE_CUSTOMER_LIST, customerList);
+			customerList = null;
 		} catch (Exception e) {
 			PlatformException ace  = new PlatformException();
 			ace.logger(Level.WARNING,e.getMessage(), e);
@@ -103,12 +122,6 @@ public class PlatformController  extends PlatformAbstractServlet {
 		HttpSession session = request.getSession(false);
 		Employee employee = (Employee) session.getAttribute(EmployeeFields.EMPLOYEE_SESSION);
 		int employeeId = employee.getId();
-		
-		//List<Customer> customerList = employeeServiceImpl.findAllCustomerByEmployeeId(employeeId);
-		//session.setAttribute(EmployeeFields.EMPLOYEE_CUSTOMER_LIST, customerList);
-		
-
-		
 		DateTime dateTime = new DateTime();
 		LocalDate localDate = dateTime.toLocalDate();
 		
@@ -129,14 +142,17 @@ public class PlatformController  extends PlatformAbstractServlet {
 				}
 
 			}
-			
+			transaction = null;
 		}
 		String results = null;
 		try {
 			results = PlatformConverter.convertTransactionToString(transactionList);
+			
 		} catch (IOException e) {
 			PlatformException ace = new  PlatformException(e);
 			
+		}finally{
+			transactionList = null;
 		}
 		
 		
@@ -251,6 +267,7 @@ public class PlatformController  extends PlatformAbstractServlet {
 		
 		orderNumber = SecurityUtils.decryptOrderNumber(orderNumber);
 		BillingCollection collection = (BillingCollection) session.getAttribute(CustomerOrderFields.BILLING_COLLECTION_SESSION);
+		
 		List<PaymentTransaction> payment = null;
 		CustomerBilling billing = null;
 		List<OrderPayment> orderPayment = null;
@@ -261,8 +278,9 @@ public class PlatformController  extends PlatformAbstractServlet {
 		}	
 		if(orderPayment !=null){
 			payment = buildPaymentTransactionList(orderPayment); 
-			model.addAttribute("paymentList", payment);
+			
 		}
+		model.addAttribute("paymentList", payment);
 		model.addAttribute(PlatformFields.VIEW_TRANSACTION_DETAILS_ORDER_NUMBER, orderNumber);
 		model.addAttribute("billing", billing);
 		
@@ -283,4 +301,5 @@ public class PlatformController  extends PlatformAbstractServlet {
 		transaction = null;
 		return payments;
 	}
+
 }

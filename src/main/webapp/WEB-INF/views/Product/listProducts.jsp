@@ -6,50 +6,26 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Abankus Corporation - Sales Connection : List Products</title>
 <link href="<c:url value="/resources/css/bootstrap.css" />" rel="stylesheet"/>
+<link href="<c:url value="/resources/css/tables/jquery.dataTables.css" />" rel="stylesheet"/>
 <link href="<c:url value="/resources/css/platform.css" />" rel="stylesheet"/>
-<link href="<c:url value="/resources/css/datepicker.css" />" rel="stylesheet"/>
-	<script src="<c:url value='/resources/js/jquery.js' />" type="text/javascript"></script>
+<script src="<c:url value='/resources/js/jquery.js' />" type="text/javascript"></script>
 
 <script src="<c:url value="/resources/js/bootstrap.js" />" type="text/javascript"></script>
-<script src="<c:url value="/resources/js/angular.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/application.js" />" type="text/javascript"></script>
+<script src="<c:url value="/resources/js/tables/jquery.dataTables.js" />" type="text/javascript"></script>
 </head>
-<body ng-app="platformApp">
+<body>
 
 <!-- Page Header -->
 <%-- Include page header --%>
 <jsp:include page="../header.jsp"/>
 <%-- End of Include page header --%>
 <!-- Page Header ends -->
-<div class="container"  ng-controller="ProductController">
+<div id="container" class="container">
 	<div class="row">
-	<div class="col-sm-3 col-md-2 sidebar">
-
-          <ul class="nav nav-sidebar">
-            <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
-            <li><a href="#">Reports</a></li>
-            <li><a href="#">Analytics</a></li>
-            <li><a href="#">Export</a></li>
-          </ul>
-          <ul class="nav nav-sidebar">
-            <li><a href="">Nav item</a></li>
-            <li><a href="">Nav item again</a></li>
-            <li><a href="">One more nav</a></li>
-            <li><a href="">Another nav item</a></li>
-            <li><a href="">More navigation</a></li>
-          </ul>
-          <ul class="nav nav-sidebar">
-            <li><a href="">Nav item again</a></li>
-            <li><a href="">One more nav</a></li>
-            <li><a href="">Another nav item</a></li>
-            <li> <b>Last Login:</b>12:30pm</li>
-          </ul>
-        </div>
-<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+<div class="col-sm-9 col-md-12 col-lg-12">
           <h1>Products/ Service List</h1>
-			<hr>
-          <div class="row">
-          <div class="col-md-12">
+		  <hr>
 			<%-- Error or Information --%>
 			<div class="info_header">
 				<c:if test="${info != null }">
@@ -65,12 +41,9 @@
 					</div>
 				</c:if>
 			</div>
-			 
-			<div class="col-xs-12 col-sm-12 col-md-12">
-				<table class="table table-bordered table-hover">
-					<thead class="bg-primary">
+				<table id="product" class="table table-bordered table-hover">
+					<thead>
 						<tr>
-						<th> No.</th>
 							<th>Product Name</th>
 							<th>Product Code</th>
 							<th>Description</th>
@@ -80,21 +53,26 @@
 					<tbody>
 							<c:forEach items="${productList}" var="list" varStatus="theCount">
 							<tr>
-								<td>${theCount.count }</td>
-								<td>${list.productName} </td>
+								<td>${list.productName}</td>
 								<td>${list.productCode }</td>
 								<td>${list.description }</td>
-								<td><a class="btn btn-success" href="<c:url value="viewProducts/${list.productId}"/>">Select </a></td>
+								<td><a class="btn btn-success" href="<c:url value="viewProduct/${list.getProductCode()}"/>">Select </a></td>
 							<tr>
 							</c:forEach>
 					</tbody>
 				</table>
-			</div>
 		</div>
-	</div>
-	</div>
 
 </div>
 </div>
+
+
 </body>
+<script type="text/javascript">
+$(document).ready(function(){
+	$('#product').DataTable({
+		
+	});
+});
+</script>
 </html>

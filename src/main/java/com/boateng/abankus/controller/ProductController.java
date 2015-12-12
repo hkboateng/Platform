@@ -6,6 +6,7 @@ package com.boateng.abankus.controller;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -71,11 +73,18 @@ public class ProductController {
 		return "Product/editProduct";
 	}
 
+	@RequestMapping(value="/viewProduct/{productCode}", method=RequestMethod.GET)
+	public String viewProduct(@PathVariable String productCode,Model model){
+		Product product = productServiceProcessor.findProductByProductCode(productCode);
+		model.addAttribute("product", product);
+		return "Product/ViewProductDetail";
+	}
+	
 	@RequestMapping(value="/updateProducts", method=RequestMethod.POST)
-	public String updateProduct(@Valid Product product,BindingResult bindingResult,Model model){
+	public String updateProduct(HttpServletRequest request,BindingResult bindingResult,Model model){
 		if(bindingResult.hasErrors()){
 			model.addAttribute("error", bindingResult.getFieldErrors());
-			return "Product/createProduct"; 
+			return "Product/ViewProductDetail"; 
 		}		
 		
 		model.addAttribute("info", null);

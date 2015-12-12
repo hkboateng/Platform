@@ -20,10 +20,12 @@
 <body>
 	<%-- Include page header --%>
 	<jsp:include page="../header.jsp" />
-	<div class="container">
+	<div id="container" class="container-fluid">
 		<div class="row">
-			<jsp:include page="../sidebar.jsp" />
-			<div class="col-sm-9 col-md-10 col-md-offset-2 main">
+			<div class="col-sm-9 col-md-2 col-lg-2">
+				<jsp:include page="../sidebar.jsp" />
+			</div>
+			<div class="col-sm-9 col-md-10 main">
 			<h1> Make A Payment</h1>
 			<hr class="line1">
 						<div class="paymentContainer">

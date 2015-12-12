@@ -11,7 +11,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Abankus Connection</a>
+          <a class="navbar-brand" href="/abankus/platform/index">Abankus Connection</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
 
@@ -45,7 +45,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand sr-only" href="#">Abankus Connection</a>
+          <a class="navbar-brand sr-only" href="index">Abankus Connection</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
 		<ul id="stickyMenu" class="nav navbar-nav navbar-right hidden">
@@ -78,7 +78,7 @@
 				<ul id="menu1" class="dropdown-menu" aria-labelledby="aEmployeeInfoLink">
 		          <li><a href="/abankus/products/createProduct"><i class="fa fa-pencil-square-o fa-lg moveR_5"></i>Add Product</a></li>
 		          <li role="separator" class="divider"></li>
-		          <li><a href="/abankus/employee/listEmployee"><i class="fa fa-sign-out fa-lg moveR_5"></i>List Products</a></li>
+		          <li><a href="/abankus/products/listProduct"><i class="fa fa-sign-out fa-lg moveR_5"></i>List Products</a></li>
 		        </ul>            
             </li>            
 			<sec:authorize access="hasRole('sales-manager')">
@@ -135,7 +135,18 @@
 		          <li><a href="/abankus/customers/searchForCustomer">Search for Customers</a></li>
 		        </ul>		                  
             </li>
-                  
+          <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Search<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Action</a></li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">Separated link</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">One more separated link</a></li>
+          </ul>
+        </li>        
           </ul>
           </div>        
   </div>

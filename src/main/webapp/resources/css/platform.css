@@ -3,12 +3,11 @@
 /*CSS file for fontawesome - an iconfont we will be using. This CSS file imported contains the font-face declaration. More info: http://fortawesome.github.io/Font-Awesome/ */
 @import url(fonts-awesome/font-awesome.css);
 .footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  /* Set the fixed height of the footer here */
-  height: 60px;
-  background-color: #6974d1;
+    position: absolute;
+    bottom: 10;
+    width: 100%;
+    height: 60px;
+    background-color: #f5f5f5;
 }
 body{
 	background-color:#EDEDED;
@@ -207,6 +206,12 @@ ul.progressbar-list-3 .normal{
 }
 .moveR_20{
 	margin-right:20px !important;
+}
+.moveR_30{
+	margin-right:30px !important;
+}
+.moveR_40{
+	margin-right:40px !important;
 }
 .moveR_50{
 	margin-right:50px !important;
@@ -535,8 +540,20 @@ letter-spacing:2px;
   outline: none;
   margin-bottom:20px;
   letter-spacing:2px;	
-  display:block;	
-  width:100%;
+  display:block;
+}
+.form-state-inline{
+  font-family:"Raleway","Helvetica Neue", Helvetica, Tahoma, sans-serif;
+  font-size: 1em;
+  box-shadow: none;
+  padding: 0.3em 0.35em;
+  line-height: 1.5em;
+  border-radius: 0;
+    height: 34px;
+  outline: none;
+  margin-bottom:20px;
+  letter-spacing:2px;	
+  display:inline-block;	
 }
 .form-state.error{
 	 margin-bottom:0px;
@@ -576,6 +593,9 @@ label{
 }
 .width-50{
 	width:48%;
+}
+.width-20{
+	width:18%;
 }
 .width-30{
 	width:28%;
@@ -631,4 +651,22 @@ input[readonly]{
     z-index: 1000;
     border-top: 0;
     background-color:#fff;
+}
+.labelLength_10{
+	width:10em !important;
+}
+.labelLength_20{
+	width:20em !important;
+}
+.labelLength_30{
+	width:30em !important;
+}
+.labelLength_40{
+	width:40em !important;
+}
+.boxHeight_10{
+	line-height:10em;
+}
+.boxHeight_15{
+	line-height:15em;
 }

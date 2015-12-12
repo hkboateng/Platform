@@ -14,8 +14,10 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.boateng.abankus.domain.Customer;
 import com.boateng.abankus.domain.CustomerOrder;
 import com.boateng.abankus.services.CustomerOrderService;
+
 
 /**
  * @author hkboateng
@@ -37,9 +39,12 @@ public class CustomerOrderServiceImpl implements CustomerOrderService{
 	
 	@Transactional
 	@Override
-	public CustomerOrder saveCustomerOrder(CustomerOrder order){
+	public CustomerOrder saveCustomerOrder(CustomerOrder order,Integer customerId){
 		Session session = sessionFactory.getCurrentSession();
+		Customer customer = (Customer) session.get(Customer.class,customerId);
+		order.setCustomer(customer);
 		session.save("clientorder", order);
+		customer = null;
 		return order;
 	}
 	/* (non-Javadoc)

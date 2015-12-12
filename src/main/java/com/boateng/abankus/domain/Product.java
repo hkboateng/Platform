@@ -191,7 +191,13 @@ public class Product implements Serializable {
 	 * @return the category
 	 */
 	public String getCategory() {
-		return category;
+		StringBuilder sbr = new StringBuilder();
+		if(category.equals("product")){
+			sbr.append("Product");
+		}else if(category.equals("services")){
+			sbr.append("Service");
+		}
+		return sbr.toString();
 	}
 
 

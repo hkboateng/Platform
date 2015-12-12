@@ -44,7 +44,6 @@ public class CustomerOrder implements Client, Serializable{
 	
 	private String orderNumber;
 
-	@NotNull
 	private String paymentStatus;
 
 	
@@ -142,15 +141,34 @@ public class CustomerOrder implements Client, Serializable{
 	
 	
 	public String getPaymentStatus() {
-		return paymentStatus;
+		if(paymentStatus == null || paymentStatus.isEmpty()){
+			return paymentStatus;
+		}else{
+			return PaymentStatus.valueOf(paymentStatus.toUpperCase()).name();
+		}
 	}
 
+	public double amountPaid(){
+		double total = 0.0;
+		if( getOrderpayments() != null){
+			for(OrderPayment o: getOrderpayments()){
+				total +=o.getAmountPaid();
+			}
+		}		
+		return total;
+	}
+	
+	/**
+	 * Default value for paymentStatus is "Repayment"
+	 * @param paymentStatus
+	 */
 	public void setPaymentStatus(String paymentStatus) {
-		if(amountRemaining() == 0.0){
-			this.paymentStatus = "paid";
-		}else{
+		if(paymentStatus !=null){
 			this.paymentStatus = paymentStatus;
-		}
+		}else{
+			this.paymentStatus = "repayment";
+		}		
+
 	}
 
 	public void setOrderpayments(List<OrderPayment> orderpayments) {
@@ -193,11 +211,10 @@ public class CustomerOrder implements Client, Serializable{
 		return date.toString("MMMM d, yyyy");
 	}
 	
-	public double amountRemaining(){
-		double total = 0.0;
-		for(OrderPayment o: getOrderpayments()){
-			total +=o.getAmountPaid();
-		}
+	public BigDecimal amountRemaining(){
+		BigDecimal total = null;
+		BigDecimal amtRemaining = BigDecimal.valueOf(amountPaid());
+		total = getTotalAmount() != null ? getTotalAmount().subtract(amtRemaining) : null; 
 		return total;
 		
 	}

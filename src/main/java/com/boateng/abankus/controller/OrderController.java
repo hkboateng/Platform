@@ -172,15 +172,18 @@ public class OrderController {
 		return productDetails;
 	}
 
-	@RequestMapping(value = "/client/submitCustomerOrder", method = RequestMethod.POST)
+	@RequestMapping(value = "/order/submitCustomerOrder", method = RequestMethod.POST)
 	public String orderSummary(HttpServletRequest request, Model model,RedirectAttributes redirectAttributess){
+		HttpSession session = request.getSession(false);
+		session.setAttribute("successMessageList", null);
 		List<String> validation = customerOrderProcessor.processClientOrder(request);
 		if(validation.size() > 0){
-			redirectAttributess.addAttribute("validation", validation);
-			return "redirect:/client/createOrders" ;
+			session.setAttribute("successMessageList", validation);
+			return "redirect:/customer/createOrders" ;
 		}
-		//customerOrderProcessor.processClientOrder(request);
-		return "redirect:/client/createOrders";
+		
+		session.setAttribute("successMessageList", validation);
+		return "redirect:/customer/createOrders";
 	}
 	
 	@RequestMapping(value = "/customer/orderHistory", method = RequestMethod.POST)
@@ -231,4 +234,14 @@ public class OrderController {
 		return view;
 	}
 
+	
+	@RequestMapping(value = "/order/updateOrderDetails", method = RequestMethod.POST)
+	public String updateOrderDetails(HttpServletRequest request,Model model) throws PlatformException{
+		return "";
+	}	
+	
+	@RequestMapping(value = "/order/editOrderDetails", method = RequestMethod.POST)
+	public String editOrderDetails(HttpServletRequest request,Model model) throws PlatformException{
+		return "";
+	}	
 }

@@ -19,88 +19,101 @@
 <body>
 <%-- Include page header --%>
 <jsp:include page="../header.jsp"/>
-<div class="container" >
+<div id="container" class="container" >
 	<div class="row">
-				<div  class="col-sm-3 col-md-3 sidebar">
-			    <div id="accordian">
-				<ul>
-					<li>
-						<h3><span class="fa fa-tachometer fa-2x"></span>Dashboard</h3>
-						<ul>
-							<li><a href="#">Reports</a></li>
-							<li><a href="#">Search</a></li>
-							<li><a href="#">Graphs</a></li>
-							<li><a href="#">Settings</a></li>
-						</ul>
-					</li>
-					<!-- we will keep this LI open by default -->
-					<li class="active">
-						<h3><span class="icon-tasks"></span>Tasks</h3>
-						<ul>
-							<li><a href="#">Today's tasks</a></li>
-							<li><a href="#">Urgent</a></li>
-							<li><a href="#">Overdues</a></li>
-							<li><a href="#">Recurring</a></li>
-							<li><a href="#">Settings</a></li>
-						</ul>
-					</li>
-					<li>
-						<h3><span class="icon-calendar"></span>Calendar</h3>
-						<ul>
-							<li><a href="#">Current Month</a></li>
-							<li><a href="#">Current Week</a></li>
-							<li><a href="#">Previous Month</a></li>
-							<li><a href="#">Previous Week</a></li>
-							<li><a href="#">Next Month</a></li>
-							<li><a href="#">Next Week</a></li>
-							<li><a href="#">Team Calendar</a></li>
-							<li><a href="#">Private Calendar</a></li>
-							<li><a href="#">Settings</a></li>
-						</ul>
-					</li>
-					<li>
-						<h3><span class="fa fa-sign-out"></span>Favourites</h3>
-						<ul>
-							<li><a href="#">Global favs</a></li>
-							<li><a href="#">My favs</a></li>
-							<li><a href="#">Team favs</a></li>
-							<li><a href="#">Settings</a></li>
-						</ul>
-					</li>
-					<li>
-						<h3><span class="fa fa-sign-out fa-lg"></span> Sign Out</h3>
-				
-					</li>
-				</ul>
+		<div class="col-sm-9 col-md-9 main">
+		<h1 id="productTitle" class="page-header">Product Detail</h1>
+		<div id="editContainer">
+			<div>
+				<label class="bold labelLength_20">Product Name:</label>
+				${product.getProductName()}
 			</div>
-	    </div>
-		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-		<h1>Product List</h1>
-		<div>
-			<table class="table table-bordered">
-				<thead>
-					<tr>
-						<th> No.</th>
-						<th> Product Code</th>
-						<th> Product Name </th>
-						<th>Product Description</th>
-					</tr>
-				</thead>
-				<tbody>
-					<c:forEach items="${productList}" var="product" varStatus="counter">
-						<tr>
-							<td>${counter.count}</td>
-							<td>${product.productCode }</td>
-							<td>${product.productName }</td>
-							<td>${product.description }</td>
-						</tr>
-					</c:forEach>	
-				</tbody>		
-			</table>
-
+			<div>
+				<label class="bold labelLength_20">Product Code:</label>
+				${product.getProductCode()}
+			</div>
+			<div>
+				<label class="bold labelLength_20">Sales Price:</label>
+				<span id="pUnitCost">${product.getUnitCost()}</span>
+			</div>	
+			<div>
+				<label class="bold labelLength_20">Category:</label>
+				<span id="pCategory">${product.getCategory()}</span>
+			</div>								
+			<div>
+				<label class="bold labelLength_20">Description:</label>
+				<span id="pDescription">${product.getDescription()}</span>
+			</div>
+			<hr>	
+		<button  id="editProductBtn"  class="btn btn-success">Edit Product</button>
+		<button  id="removeProductBtn"  class="btn btn-danger">Delete Product</button>					
 		</div>
+		
+		<div id="updateContainer" class="center-block">
+		<sf:form name="updateProduct" id="updateProductCommand" method="post" action="/abankus/products/updateProducts">
+			<div>
+				<label class="bold labelLength_20">Product Name:</label>
+				${product.getProductName()}
+			</div>
+			<div class="spaceBelow_10">
+				<label class="bold labelLength_20">Product Code:</label>
+				${product.getProductCode()}
+			</div>
+			<div>
+				<label class="bold labelLength_20">Sales Price:</label>
+				<input type="text" value="${product.getUnitCost()}" name="unitCost" class="form-state width-30" id="updateCost">
+			</div>	
+			<div>
+				<label class="bold labelLength_20">Category:</label>
+				<input type="text" value="${product.getCategory()}" name="category" class="form-state width-30" id="updateCategory">
+			</div>								
+			<div>
+				<label class="bold labelLength_20">Description:</label>
+				<textarea rows="5" cols="5"  class="form-state width-50" name="description" id="updateDesc">${product.getDescription()}</textarea>
+				
+			</div>	
+			</sf:form>
+			<hr>	
+			<button  id="updateProductBtn"  class="btn btn-success">Update Product</button>
+			<button  id="cancelProductBtn"  class="btn btn-default">Cancel</button>				
+		</div>		
+		
 		</div>
-
+		<div class="col-lg-3">
+			<div class="list-group">
+  				<a href="<c:url value="/products/listProduct" />" class="list-group-item">Back to Product List <i class="glyphicon glyphicon-chevron-right pull-right"></i></a>
+  			</div>
+		</div>
 </div>
 </div>
+
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+	$('#updateContainer').hide();
+	$('#editProductBtn').on('click',function(){
+		$('#editContainer').hide();
+		$('#updateContainer').show();
+	});
+	
+	$('#removeProductBtn').on('click',function(){
+		
+	});	
+	
+	$('#cancelProductBtn').on('click',function(){
+		$('#editContainer').show();
+		$('#updateContainer').hide();		
+	});	
+	
+	$('#updateProductBtn').on('click',function(){
+		var price = $('#updateCost').val();
+		var category = $('#updateCategory').val();
+		var desc = $('#updateDesc').val();
+		
+		document.updateProduct.submit();
+		
+	});
+});
+</script>
 </body>

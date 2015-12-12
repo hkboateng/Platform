@@ -3,6 +3,9 @@
  */
 package com.boateng.abankus.processors;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +15,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
 
 import com.boateng.abankus.application.interfaces.CustomerService;
 import com.boateng.abankus.customer.processor.CustomerServiceProcessor;
@@ -76,7 +85,13 @@ public class CustomerOrderProcessor implements OrderService{
 		if(validation.size() > 0){
 			return validation;
 		}
-		CustomerOrder customerOrder = orderService(request,"customerOrder");
+		CustomerOrder customerOrder = null;
+		try {
+			customerOrder = orderService(request,"customerOrder");
+		} catch (PlatformException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		if(customerOrder != null){
 			validation.add("Customer Order has being saved successfully.");		
 			employeeSales(request,customerOrder);
@@ -91,20 +106,30 @@ public class CustomerOrderProcessor implements OrderService{
 	 * @see com.boateng.abankus.services.OrderService#orderService(com.boateng.abankus.domain.CustomerOrder)
 	*/
 	@Override
-	public CustomerOrder orderService(HttpServletRequest request, String action) {
+	public CustomerOrder orderService(HttpServletRequest request, String action) throws PlatformException {
 
 		CustomerOrder customerOrder = (CustomerOrder) FactoryImpl.getFactory().construct(action, request);
-		try{
-		Integer custId= 0;
-		custId = Integer.valueOf(request.getParameter("customerId"));
-		Customer customer = customerServiceProcessor.findCustomerByCustomerId(custId);
-		customerOrder.setCustomer(customer);
+		Integer customerId = 0;
 		
+		try{
+			customerId = Integer.valueOf(request.getParameter("customerId"));
 		}catch(NumberFormatException e){
-			throw e;
-			//return validation;
+			PlatformException ace = new PlatformException(e);
+			throw ace;
 		}
-		customerOrder = customerOrderServiceImpl.saveCustomerOrder(customerOrder);
+		RestTemplate rest = new RestTemplate();
+		
+		try {
+			
+			ResponseEntity<CustomerOrder> custOrder = rest.postForEntity("http://localhost:8080/paymenthub/orderservice/saveCustomerOrder?customerId="+customerId, customerOrder,CustomerOrder.class);
+			if(custOrder.getStatusCode().value() == 200){
+				customerOrder = custOrder.getBody();
+			}
+		} catch (RestClientException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		};
+		//customerOrder = customerOrderServiceImpl.saveCustomerOrder(customerOrder,customerId);
 		
 		return customerOrder;
 	}
@@ -117,7 +142,7 @@ public class CustomerOrderProcessor implements OrderService{
 			employeeSale.setEmployee(emp);
 			employeeSale.setClientOrder(customerOrder.getClientOrderId());;
 			employeeSale = employeeServiceImpl.saveEmployeeSales(employeeSale);
-			
+			emp = null;
 			return employeeSale;
 		}
 		return null;

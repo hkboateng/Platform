@@ -118,4 +118,6 @@ public interface CustomerService {
 	 * @return
 	 */
 	ContactPerson findCustomerContactByCustomerId(int customerId);
+	
+	Customer findCustomerByAccountNumber(String accountNumber);
 }

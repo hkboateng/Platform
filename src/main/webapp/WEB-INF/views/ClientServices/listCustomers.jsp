@@ -14,7 +14,6 @@
 <title>Abankus Corporation - Sales Connection</title>
 <link href="<c:url value="/resources/css/bootstrap.css" />" rel="stylesheet"/>
 <link href="<c:url value="/resources/css/platform.css" />" rel="stylesheet"/>
-<link href="<c:url value="/resources/css/datepicker.css" />" rel="stylesheet"/>
 <link href="<c:url value="/resources/css/tables/jquery.dataTables.css" />" rel="stylesheet"/>
 
 <script src="<c:url value="/resources/js/jquery.js" />" type="text/javascript"></script>
@@ -27,31 +26,34 @@
 <%-- Include page header --%>
 <jsp:include page="../header.jsp"/>
 <%-- End of Include page header --%>
-<div id="container" class="container">
+<div id="container" class="container-fluid">
 
 <div class="row">
-<div class="col-xs-12 col-sm-10 col-md-9">
-		
-          <h1>Client Services - Prospective Customer</h1>
-			<hr>
-          <div class="row pad_10">
-		          <div class="errors">
+<div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
+<jsp:include page="../sidebar.jsp"/>
+</div>
+<div class="col-xs-12 col-sm-10 col-md-10 col-lg-10">
+		  <div class="col-lg-12 page-header">
+		   	<span class="lead">Customers</span>
+		   	<a href="create" class="btn btn-success pull-right"><span class="glyphicon glyphicon-plus moveR_20"></span>Add Customer</a>
+		  </div>         
+		         <div class="errors">
 			          <ul>
 			          <c:if test="${not empty errors}">
 			          	<li>${errors }</li>
 			          </c:if>
 			          </ul>
 		          </div>
-		          <div class="">
+		          <div>
 
 					<table id="customerList" class="table table-striped">
 						<thead>
 							<tr>
 								<th>#</th>
-								<th>Full Name</th>
-								<th>Address</th>
+								<th>First Name</th>
+								<th>Last Name</th>
 								<th>Contact Information</th>
-								<th>View Profile</th>
+								<th>Action</th>
 							</tr>
 						</thead>
 						<tbody>		          
@@ -61,36 +63,58 @@
 			          			<td>${customer.firstname }</td>
 			          			<td>${customer.lastname}</td>
 			          			<td>${customer.company_name }</td>
-			          			<td><a class="btn btn-success" href="javascript:submitCustomerURL('${customer.getCustomerNumber()}',document.customerSearchForm);"><i class="fa fa-eye moveR_10"></i>Select</a></td>
+			          			<td>
+				          			<!-- Split button -->
+										<div class="btn-group">
+										  <button type="button" class="btn btn-success">Action</button>
+										  <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+										    <span class="caret"></span>
+										    <span class="sr-only">Toggle Dropdown</span>
+										  </button>
+										  <ul class="dropdown-menu">
+										    <li><a href="javascript:submitCustomerURL(document.customerViewProfileForm,'${customer.customerNumber}')">View Customer Details</a></li>
+										    <li><a href="#">Transaction History</a></li>
+										    <li role="separator" class="divider"></li>
+										    <li><a href="#">Quick Payment</a></li>
+										  </ul>
+										</div>			          			
 			          		</tr>
 		          		</c:forEach>
 		          		</tbody>
 		          		</table>
-		       <sf:form name="customerSearchForm" method="post" action="viewProfile">
-			      <input type="hidden" name="searchType" value="customerNumber">
-		          <input type="hidden" value="" name="customerNumber"/>	
-		               
-		       </sf:form>
 
+<sf:form action="/abankus/customers/viewProfile" method="post" name="customerViewProfileForm">
+<input type="hidden" name="searchType" id="searchType" value="customerNumber">
+<input type="hidden" name="customerNumber" id="customerNumber" value="">
+</sf:form>
           </div>
-</div>        
+       
 </div>
 </div>
 </div>
+	<sf:form name="viewCustomerProfileBckBtn" action="/abankus/customers/viewProfile" method="post">
+		<input type="hidden" name="searchType" id="searchType" value="customerNumber">
+		<input type="hidden"  name="customerNumber" value="${cust}"/>	          
+	</sf:form>	
 <script src="<c:url value="/resources/js/tables/jquery.dataTables.js" />" type="text/javascript"></script>
-<script src="https://cdn.datatables.net/1.10.10/js/dataTables.bootstrap.min.js" type="text/javascript"></script>
 <script>
 $(document).ready(function(){
 	 $('#customerList').DataTable();
 	 
 });
-function submitCustomerURL(url,form){
-	if(url){
-		form.customerNumber.value = url;
+
+function submitCustomerURL(form,value){
+	if( value !== undefined){
+		form.customerNumber.value = value;
 	}
 	form.submit();
+	
 }
 </script>
-
+	<footer class="footer">
+		<div class="container">
+			<p>Copyright &copy; 2015</p>
+		</div>		
+	</footer>
 </body>
 </html>

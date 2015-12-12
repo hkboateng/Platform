@@ -63,10 +63,11 @@ public class PaymentServiceImpl implements PaymentService {
 		return confirmationNo;
 	}
 	
-	public void submtPaymentTransaction(Session session,OrderPayment payment){
+	private void submtPaymentTransaction(Session session,OrderPayment payment){
 		PaymentTransaction transaction = new PaymentTransaction(payment);
 		session.save(transaction);
 	}
+	
 	@SuppressWarnings("unchecked")
 	@Transactional
 	@Override

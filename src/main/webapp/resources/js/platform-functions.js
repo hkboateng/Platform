@@ -50,3 +50,9 @@ function submitCustomerURL(url,form){
 	form.action = "/abankus/customer/"+url;
 	form.submit();		
 }
+function commaSeparateNumber(val){
+    while (/(\d+)(\d{3})/.test(val.toString())){
+      val = val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+    return val;
+  }

@@ -10,6 +10,7 @@
 <script src="<c:url value='/resources/js/jquery.js' />" type="text/javascript"></script>
 <link href="<c:url value="/resources/css/bootstrap.css" />" rel="stylesheet"/>
 <link href="<c:url value="/resources/css/platform.css" />" rel="stylesheet"/>
+<link href="<c:url value="/resources/css/tables/jquery.dataTables.css" />" rel="stylesheet"/>
 <script src="<c:url value="/resources/js/jquery.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/platform-functions.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/bootstrap.js" />" type="text/javascript"></script>
@@ -28,6 +29,7 @@
 		${not empty customer.getCustomerName() ? customer.getCustomerName() : customer.getCompany_name()} (Account #:${customerAccount.customer.customerNumber.toUpperCase() })
 		</c:if>
 	</h3>
+	<%---
 		<c:choose>
 			<c:when test="${not empty address}">
 				<div class="col-xs-12 col-md-4">
@@ -61,11 +63,12 @@
 			
 		</c:if>	
 	</div>		
+	---%>
 </div> 	
 	
 <div class="clearfix underline-div"></div>
 	<%-- Account Details Information --%>
-<div class="col-sm-12 col-md-8 col-lg-8 main-container">
+<div class="col-sm-12 col-md-9 col-lg-9main-container">
 		<h3>Account Details</h3>
 		<div>
 			<label class="bold">Account Number:</label>
@@ -73,24 +76,40 @@
 		</div>
 		<div>
 			<label class="bold">Contact Person:</label>
-			<span>${(person != null)? person : '<a href="/abankus/customers/addCustomerContactPerson"><span class="glyphicon glyphicon-pencil"></span>Add Contact Person</a>'}</span>
+			<address>
+			<c:choose>
+				<c:when test="${not empty person}">
+					<address>
+						<strong>${person}</strong><br>
+						${person.getEmail()} | ${person.getPhoneNumber()}
+					</address>
+				</c:when>
+				<c:otherwise>
+					<a href="/abankus/customers/addCustomerContactPerson"><span class="glyphicon glyphicon-pencil"></span>Add Contact Person</a>
+				</c:otherwise>
+			</c:choose>			
+			</address>
+
+			
+			
 		</div>
 		<div>
 			<label class="bold">Account Status:</label>
 			<span>${customerAccount.getStatus()}</span>
 		</div>		
 
-		<h3 class="underline-div">Transaction History - Open Orders</h3>
+		<h3 class="underline-div">Transaction History</h3>
 
 		<div id="orderSummary">
 			<c:if test="${not empty customerOrder }">
-			<table id='orderHistoryTable' class="table">
+			<table id='orderHistoryTable' class="table table-condensed">
 				<thead>
 					<tr>
 						<th>Order Date:</th>
-						<th>Balance</th>
 						<th>Total Amount:</th>
-						<th>View Detail</th>
+						<th>Remaining Balance</th>
+						<th>Payment Status</th>
+						<th>Payment Date</th>
 						<th>Action</th>
 					</tr>
 				</thead>
@@ -102,10 +121,27 @@
 							<tr>
 								<c:set value="${billings.key }" var="key" />
 								<td id="tblOrderDate${counter.count }">${billing.getCustomerBilling(key).convertOrderDate()}</td>
-								<td>$<span  id="tblTotalAmount${counter.count }">${billing.getCustomerBilling(key).totalAmountRemaining() }</span></td>
-								<td>$&nbsp;${billing.getCustomerBilling(key).getTotalOrderAmount()}</td>		
-								<td id="tblProductCode${counter.count }"><a onclick="javascript:submitURLForm(document.viewTransactionDetail,'${keySec }')" href="#">View Order</a></td>
-								<td><button type="button" id="makePaymentBtn" onclick="javascript:submitCustomerPayment('${keySec }','${billing.getCustomerBilling(key).getTotalOrderAmount()}');"  class="btn btn-primary btn-sm">Make Payment</button></td>				
+								<td><fmt:formatNumber value="${billing.getCustomerBilling(key).getClientOrderId().getTotalAmount() }" type="currency"/></td>	
+								<td><fmt:formatNumber value="${billing.getCustomerBilling(key).totalAmountRemaining() }" type="currency"/></td>	
+								<td>${billing.getCustomerBilling(key).getClientOrderId().getPaymentStatus()}</td>
+								<td>${billing.getCustomerBilling(key).getClientOrderId().getNextPaymentDate()}</td>
+								<td>
+									<!-- Split button -->
+									<div class="btn-group">
+									  <button type="button" class="btn btn-success">Select</button>
+									  <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									    <span class="caret"></span>
+									    <span class="sr-only">Toggle Dropdown</span>
+									  </button>
+									  <ul class="dropdown-menu">
+									    <li><a href="#" id="makePaymentBtn" onclick="javascript:submitCustomerPayment('${keySec }','${billing.getCustomerBilling(key).getTotalOrderAmount()}');" >Make Payment</a></li>
+									    <li role="separator" class="divider"></li>
+									    <li><a onclick="javascript:submitURLForm(document.viewTransactionDetail,'${keySec }')" href="#">View Order</a></li>
+									  </ul>
+									</div>						
+								<%--		
+								<button type="button" id="makePaymentBtn" onclick="javascript:submitCustomerPayment('${keySec }','${billing.getCustomerBilling(key).getTotalOrderAmount()}');"  class="btn btn-primary btn-sm">Make Payment</button></td>				
+							 --%>
 							</tr>						
 						</c:if>
 
@@ -120,7 +156,8 @@
 				<button type="button" class="btn btn-success center-block " onclick="javascript:pushToURL('clients/createOrder')">Add Order for Customer<i class="fa fa-chevron-right moveL_30"></i></button>
 			</c:if>
 			</div>
-			<h3 class="underline-div"> Closed or Paid Orders</h3>
+			
+			<h3 class="underline-div">Activity Logs</h3>
 			<div>
 				<c:choose>
 				<c:when test="${not empty customerOrder }">
@@ -146,7 +183,7 @@
 									</td> 
 									<td id="tblOrderDate${counter.count }">${billing.getCustomerBilling(key).convertOrderDate()}</td>
 									<td id="tblProductCode${counter.count }">${billing.getCustomerBilling(key).getProductCode()}</td>
-									<td>$<span  id="tblTotalAmount${counter.count }">${billing.getCustomerBilling(key).totalAmountRemaining() }</span></td>
+									<td>$ ${billing.getCustomerBilling(key).totalAmountRemaining() }</td>
 									<td>$&nbsp;${billing.getCustomerBilling(key).getTotalOrderAmount()}</td>	
 									<td><button type="button" class="btn btn-success center-block " onclick="javascript:pushToURL('clients/createOrder')">Add Order for Customer<i class="fa fa-chevron-right moveL_30"></i></button></td>					
 								</tr>						
@@ -166,12 +203,15 @@
 			</c:choose>	
 			</div>
 </div>
-<div class="col-sm-12 col-md-4 col-lg-4 main-container">
-<div class="list-group">
-<a href="javascript:document.createOrderForm.submit();" class="list-group-item">Create New Order<i class="glyphicon glyphicon-chevron-right pull-right"></i></a>
-</div>
-<jsp:include page="../sidebar.jsp"/>
-</div>	
+			<div class="col-sm-12 col-md-3 col-lg-3 main-container">
+				<div class="list-group">
+					<a href="javascript:document.createOrderForm.submit();" class="list-group-item">Create New Order<i class="glyphicon glyphicon-chevron-right pull-right"></i></a>
+					<a href="#" class="list-group-item">Update Customer Information<i class="glyphicon glyphicon-cog pull-right"></i></a>
+				</div>
+				<%--
+				<jsp:include page="../sidebar.jsp"/>
+				 --%>
+			</div>	
 <sf:form name="createOrderForm" method="post" action="/abankus/customer/createOrders">
 	<input type="hidden" name="accountNumber" value="${customerAccount.getAccountNumber() }"/>
 </sf:form>
@@ -245,7 +285,7 @@
 </body>
 <script>
 $(document).ready(function(){
-	// $('#orderHistoryTable').DataTable();
+	$('#orderHistoryTable').DataTable();
 
 	
 });

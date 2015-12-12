@@ -63,6 +63,10 @@ public class PaymentController {
 	private HttpSession session;
 	
 
+	@RequestMapping(value = "/receivePayment", method = RequestMethod.GET)
+	public String payment(){
+		return "ClientTransaction/CustomerPaymentSearch";
+	}
 
 	@RequestMapping(value = "/makeCustomerOrderPayment", method = RequestMethod.POST)
 	public String makeCustomerOrderPayment(HttpServletRequest request,Model model) throws NoSuchAlgorithmException, NoSuchPaddingException, PlatformException{

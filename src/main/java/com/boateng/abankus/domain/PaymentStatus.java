@@ -14,13 +14,11 @@ public enum PaymentStatus {
 	
 	PAID("paid");
 	
-	private String paymentStatus;
+	String paymentStatus;
 	
 	PaymentStatus(String status){
 		this.paymentStatus = status;
 	}
-	
-	public String getPaymentStatus(){
-		return this.paymentStatus;
-	}
+
+
 }

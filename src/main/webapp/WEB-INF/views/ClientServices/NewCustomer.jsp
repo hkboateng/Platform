@@ -53,12 +53,12 @@
 						<div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
 						<label>
 						First Name:</label>
-						<input type="text" name="firstname" id="firstname" class="form-state" placeholder="First Name"/>
+						<input type="text" name="firstname" id="firstname" class="form-state width-100" placeholder="First Name"/>
 						</div>
 						<div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
 						<label for="lastname">
 						Last Name:</label>
-						<input type="text" name="lastname" id="lastname" placeholder="Last Name" class="form-state"/>	
+						<input type="text" name="lastname" id="lastname" placeholder="Last Name" class="form-state width-100"/>	
 						</div>
 						</div>
 					<div class="row">
@@ -71,25 +71,25 @@
 						<script>typeOfIdentification();</script>
 						<div class="clear"></div>
 						<label for="IdNumber" >Identification Number:</label>	
-						<input type="text" name="IdNumber" id="IdNumber" placeholder="Id Number" class="form-state"/>			
+						<input type="text" name="IdNumber" id="IdNumber" placeholder="Id Number" class="form-state width-100"/>			
 					</div>					
 					</div>
 					<div class="row">	
 					<div class="col-sm-12 col-md-12">			
 					<label>	Company or Organization Name: (Optional)</label>
-					<input type="text" name="company_name" id="company_name" class=" form-state" placeholder="Company Name"/>	
+					<input type="text" name="company_name" id="company_name" class=" form-state width-100" placeholder="Company Name"/>	
 					</div>				
 					<div class="col-sm-12 col-md-12">
 					<label for="address1">Address 1:</label>
-					<input type="text" name="address1" id="address1" placeholder="Postal Address"  class="form-state"/>
+					<input type="text" name="address1" id="address1" placeholder="Postal Address"  class="form-state width-100"/>
 					</div>
 					<div class="col-sm-12 col-md-12">
 					<label for="address2"> Address 2:</label>
-					<input type="text" name="address2" placeholder="Optional" class=" form-state" id="address2"/>				
+					<input type="text" name="address2" placeholder="Optional" class=" form-state width-100" id="address2"/>				
 					</div>					
 					<div class="col-sm-12 col-md-4">
 						<label for="city" >City:</label>
-						<input type="text" class="form-state" id="city" name="city">					
+						<input type="text" class="form-state width-100" id="city" name="city">					
 					</div>
 					<div class="col-sm-12 col-md-4">
 						<label for="state" >State:</label>
@@ -97,11 +97,11 @@
 					</div>
 					<div class="col-xs-6 col-sm-6 col-md-4">
 						<label for="zip" >Zip Code:</label>
-						<input type="text" class="form-state" id="zipcode" name="zipcode" size="6" maxlength="5">				
+						<input type="text" class="form-state width-100" id="zipcode" name="zipcode" size="6" maxlength="5">				
 					</div>
 					<div class="col-xs-6 col-sm-6 col-md-6">
 						<label for="phoneNumber">Phone Number:</label>	
-						<input class="form-state "  id="phoneNumber" name="phoneNumber" type="text" placeholder="(Area Code)XXX-XXXX">
+						<input class="form-state width-100"  id="phoneNumber" name="phoneNumber" type="text" placeholder="(Area Code)XXX-XXXX">
 					<div class="spaceBelow_10">
 						<label>
 							<input type="radio" name="phoneType" id="homePhone" value="homePhone" checked/> Home Phone
@@ -115,7 +115,7 @@
 
 				  <div class="col-xs-6 col-sm-6">
 				  	<label for="emailAddress">Email Address:</label><span id="email-error" class="help-text-inline"></span>
-				   	<input type="email" id="emailAddress" name="emailAddress" class="form-state" placeholder="Email Address"  onblur="javascript:isEmailUnique(this.value);">						
+				   	<input type="email" id="emailAddress" name="emailAddress" class="form-state width-100" placeholder="Email Address"  onblur="javascript:isEmailUnique(this.value);">						
 								  
 				  </div>
 					</div>	
@@ -145,7 +145,7 @@
 						</div>
 						<div class="col-xs-12 col-sm-12 col-md-12">
 						<label for="customerNotes">Notes:</label>
-						<textarea name="notes" id="customerNotes" rows="4" class="form-state"></textarea>
+						<textarea name="notes" id="customerNotes" rows="4" class="form-state width-100"></textarea>
 						</div>					
 
 

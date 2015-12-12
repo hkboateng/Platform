@@ -2,6 +2,8 @@ package com.boateng.abankus.service.impl;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import javax.persistence.Cacheable;
 
@@ -359,5 +361,19 @@ public class CustomerServiceImpl implements CustomerService {
 				.setParameter("customerId", customerId)
 				.uniqueResult();
 		return contactPerson;
+	}
+
+	private Lock lock = new ReentrantLock();
+	/* (non-Javadoc)
+	 * @see com.boateng.abankus.application.interfaces.CustomerService#findCustomerByAccountNumber(java.lang.String)
+	 */
+	@Override
+	@Transactional
+	public Customer findCustomerByAccountNumber(String accountNumber) {
+		Session session = getSessionFactory().getCurrentSession();
+		CustomerAccount customerAccount =	(CustomerAccount) session.createQuery("from CustomerAccount ca where ca.accountNumber =:accountNumber")
+				.setParameter("accountNumber", accountNumber).uniqueResult();
+		Customer customer = (Customer) session.get(Customer.class, customerAccount.getCustomer().getCustomerId());
+		return customer;
 	}
 }

@@ -164,7 +164,6 @@ public class CustomerController extends PlatformAbstractServlet{
 			String customerId = request.getParameter("customerId");
 			String firstname = request.getParameter("firstname");
 			String lastname = request.getParameter("lastname");
-			String orderNumber = request.getParameter("orderNumber");
 			String customerNumber = request.getParameter("customerNumber");
 			String searchType=request.getParameter("searchType");
 			

@@ -9,12 +9,10 @@
 <link href="<c:url value="/resources/css/bootstrap.css" />" rel="stylesheet"/>
 <link href="<c:url value="/resources/css/platform.css" />" rel="stylesheet"/>
 <link href="<c:url value="/resources/css/fonts-awesome/font-awesome.css" />" rel="stylesheet"/>
-
+<link href="<c:url value="/resources/css/tables/jquery.dataTables.css" />" rel="stylesheet"/>
 <script src="<c:url value="/resources/js/jquery.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/bootstrap.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/platform-functions.js" />" type="text/javascript"></script>
-
-
 <script src="<c:url value="/resources/js/application.js" />" type="text/javascript"></script>
 
 </head>
@@ -24,11 +22,15 @@
 	<jsp:include page="../header.jsp"/>
 	<!-- Page Header ends -->
 	<!-- Body Begins-->
-	<div id="container" class="container">
+	<div id="container" class="container-fluid">
 		<div class="row">
-			<div class="col-sm-12 col-md-12 col-lg-12 center-block main">
-			 	<h2>Welcome, ${employee.firstname}&nbsp;${employee.lastname}</h2>
-					  <hr>
+		 	<div class=" spaceBelow_20"></div>
+			<div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+				<jsp:include page="../sidebar.jsp"/>
+			</div>	
+			<div class="col-sm-12 col-md-10 col-lg-10 center-block main">
+			<h2 class="page-header">Welcome, ${employee.firstname}&nbsp;${employee.lastname}</h2>
+			<!-- Messages -->
 			          <c:if test="${not empty success }">
 				          <div class="alert alert-success" role="alert">
 				          	${success}
@@ -40,26 +42,47 @@
 						        ${searchError }
 						    </div>
 					      </c:if>			          
-			          </div>
-			           <div class="clearfix"></div>
+			          </div>					 	
+					 <div class="clear"></div>
+
+			           
+			       <%--
 				          <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
-				          	<%--
-				          	<h3>Customer Assigned</h3>
-				          	<c:if test="${not empty employeeCustomerList }">
-				          	<table class="table">
-				          		<tr>
-				          			<th>Full Name</th>
-				          			<th>Account Number</th>
-				          			<th>Account Status</th>
-				          		</tr>
 				          	
+				          	<h3>My Customer(s)</h3>
+				          	<c:if test="${not empty employeeCustomerList }">
+				          	<table id="assignedCustomerList" class="table">
+				          		<thead>
+				          		<tr>
+				          			<th>Customer Name</th>
+				          			<th>Account Status</th>
+				          			<th>Action</th>
+				          		</tr>
+				          		</thead>
+				          		<tbody>
 				          		<c:forEach items="${employeeCustomerList }" var="customerList" >
 				          		<tr>
 				          			<td>${customerList.customer.getCustomerName() }</td>
-				          			<td><a href="#">${customerList.getAccountNumber() }</a></td>
 				          			<td>${customerList.getStatus() }</td>
+				          			<td>
+				          			<!-- Split button -->
+										<div class="btn-group">
+										  <button type="button" class="btn btn-success">Action</button>
+										  <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+										    <span class="caret"></span>
+										    <span class="sr-only">Toggle Dropdown</span>
+										  </button>
+										  <ul class="dropdown-menu">
+										    <li><a href="javascript:submitCustomerURL(document.customerViewProfileForm,'${customerList.getCustomer().getCustomerNumber()}')">View Customer Details</a></li>
+										    <li><a href="#">Transaction History</a></li>
+										    <li role="separator" class="divider"></li>
+										    <li><a href="#">Separated link</a></li>
+										  </ul>
+										</div>
+				          			</td>
 				          		</tr>
 				          		</c:forEach>
+				          		</tbody>
 				          	</table>
 				          	</c:if>
 				          	<c:if test="${empty employeeCustomerList}">				          	
@@ -67,7 +90,7 @@
 								<div class="center-block">
 									<a class="btn btn-success" href="<c:url value="/customers/create"/>"> Add New Customer</a>
 								</div>	          		
-				          	</c:if>		 --%>				          	
+				          	</c:if>		 	          	
 
 				          <h3 class="underline-div"> Transaction History</h3>				          
 							  <div class="btn-group btn-group-justified" role="group" >
@@ -104,7 +127,7 @@
 						          				<tfoot>
 						          					<tr>
 						          						<td colspan="1"><span class="bold">Total Amount:</span></td>
-						          						<td colspan="2">Total</td>
+						          						<td colspan="2" id="todayTotal"></td>
 						          						<td></td>
 						          					</tr>
 						          				</tfoot>
@@ -146,29 +169,41 @@
 						          						<td></td>
 						          					</tr>
 						          				</tfoot>
-						          			</table>								  		
+						          			</table>
+						          			<div>
+						          				<a href="transactionList">Transaction List</a>
+						          			</div>								  		
 								  	</div>
 								  	<div  role="tabpanel" class="tab-pane" id="FilterDivContainer">
 								  		<h4>Filter Transaction</h4>
 								  	</div>								  						  	
 								  </div>				          
 				         	</div>		
-							<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 spaceBelow_20">
-								<jsp:include page="../sidebar.jsp"/>
-			          	 	</div>			          	
+							--%>		          	
 			</div>
+			
 		</div>
+
 	</div>
+	<footer class="footer">
+		<div class="container">
+			<p>Copyright &copy; 2015</p>
+		</div>		
+	</footer>
+<sf:form action="/abankus/customers/viewProfile" method="post" name="customerViewProfileForm">
+<input type="hidden" name="searchType" id="searchType" value="customerNumber">
+<input type="hidden" name="customerNumber" id="customerNumber" value="">
+</sf:form>
 </body>
+
 <script src="<c:url value="/resources/js/tables/jquery.dataTables.js" />" type="text/javascript"></script>
-<script src="https://cdn.datatables.net/1.10.10/js/dataTables.bootstrap.min.js" type="text/javascript"></script>
 <script>
 	$(document).ready(function(){
-		loadEmployeeCustomers();
-		loadYearPayments()
-		loadTodayPayment();
-		loadMonthAndYearPayments();
-		$('table.transactionTable').DataTable();
+		//loadEmployeeCustomers();
+		//loadYearPayments()
+		//loadTodayPayment();
+		//loadMonthAndYearPayments();
+		//$('#assignedCustomerList').DataTable({});
 		
 	});
 	
@@ -176,12 +211,30 @@
 		
 	}
 	function loadYearPayments(){
+		var year = new Date().getFullYear();
 		$.ajax({
-			url: 'loadYearTransactionHistory',
+			url: 'http://localhost:8080/paymenthub/rs/paymentservice/loadYearTransactionHistory',
 			method: 'get',
+			data : {
+				year : year
+			},
 			dataType: 'json',
 			success: function(result){
 				console.log(result);
+				if(result.length > 0){
+					var table = "";
+				$.each(result,function(key,value){
+					table +="<tr>";
+					table +="<td>"+value.paymentDate+"</td>";
+					table +="<td>"+value.amountPaid+"</td>";
+					table +="<td>"+toTitleCase(value.paymentType)+"</td>";
+					table +="<td><a class='btn btn-primary' href='#' role='button' onclick=''>Action</a>";
+					table +="</tr>";
+				});
+				$('#transactionYTD').html(table);					
+			}else{
+				$('#transactionYTD').html("No Data");		
+			}
 			},
 			error : function(err){
 				console.log(err.responseText);
@@ -200,8 +253,8 @@
 			},
 			dataType: 'json',
 			success: function(result){
+				
 				if(result.length > 0){
-					$('table.transactionTable').DataTable();
 					$.each(result,function(key,value){
 						table +="<tr>";
 						table +="<td>"+value.paymentDate+"</td>";
@@ -245,25 +298,33 @@
 			},
 			dataType: 'json',
 			success: function(result){
-				console.log(result);
+				
 				var table = "";
+				var total = 0;
 				$.each(result,function(key,value){
-					console.log(value);
 					table +="<tr>";
 					table +="<td>"+value.paymentDate+"</td>";
 					table +="<td>"+value.amountPaid+"</td>";
 					table +="<td>"+toTitleCase(value.paymentType)+"</td>";
 					table +="<td><a class='btn btn-primary' href='#' role='button' onclick=''>Action</a>";
 					table +="</tr>";
+					total  += Number(value.amountPaid);
 				});
 				$('#transactionToday').html(table);
-			
+				console.log(total);
+				$('#todayTotal').html(total.toFixed(2));
 			},
 			error : function(err){
 				console.log(err.responseText);
 			}
 		});
 	}
-	
+	function calculateTotalAmount(amount){
+		var r = 0;
+		r+= amount;
+		return r;
+		
+	}
+
 </script>
 </html>

@@ -9,13 +9,11 @@
 		<title>Abankus Corporation - Transaction History</title>
 		<link href="<c:url value="/resources/css/bootstrap.css" />" rel="stylesheet" />
 		<link href="<c:url value="/resources/css/platform.css" />"	rel="stylesheet" />
+		<link href="<c:url value="/resources/css/tables/jquery.dataTables.css" />" rel="stylesheet"/>
 		<script src="<c:url value="/resources/js/jquery.js" />"	type="text/javascript"></script>
 		<script src="<c:url value="/resources/js/platform-functions.js" />" type="text/javascript"></script>
-		<script	src="<c:url value="/resources/js/validation/jquery.validation.js" />" type="text/javascript"></script>
 		<script src="<c:url value="/resources/js/bootstrap.js" />" 	type="text/javascript"></script>
 		<script src="<c:url value="/resources/js/application.js" />" type="text/javascript"></script>
-		<script src="<c:url value="/resources/js/accounting/accounting.js" />" 	type="text/javascript"></script>
-		<script src="<c:url value="/resources/js/jquery-masked.js" />" type="text/javascript"></script>
 	</head>
 <body>
 	<%-- Include page header --%>
@@ -31,10 +29,10 @@
 			</div>			
 		</div>
 	</div>
-
+	<script src="<c:url value="/resources/js/tables/jquery.dataTables.js" />" type="text/javascript"></script>
 	<script>
 	$(document).ready(function(){
-
+		
 	});
 	</script>
 	</body>

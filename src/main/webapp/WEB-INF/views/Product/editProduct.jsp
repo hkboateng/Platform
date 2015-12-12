@@ -38,7 +38,7 @@
 					<label for="productname">Product Name:</label>
 					<input type="text" class="form-control" id="productname" name="productName"/>
 					<label for="productcode">Product Code:</label><span id="helpBlock" class="help-text-inline">Maximum length is 8 charaters.</span>	
-					<input type="text" class="form-control" id="productcode" name="productCode" maxLength="8" disabled/>
+					<input type="text" class="form-control width-20" id="productcode" name="productCode" maxLength="8" disabled/>
 					<sf:errors path="*"/>	
 					<label for="productDesc">Product Description:</label>
 					<textarea rows="5" cols="50" class="form-control" name="description"></textarea>

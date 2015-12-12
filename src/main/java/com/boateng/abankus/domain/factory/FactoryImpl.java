@@ -4,6 +4,7 @@
 package com.boateng.abankus.domain.factory;
 
 import java.math.BigDecimal;
+import java.time.format.DateTimeFormatter;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,6 +15,7 @@ import com.boateng.abankus.customer.service.Client;
 import com.boateng.abankus.domain.CustomerOrder;
 import com.boateng.abankus.domain.CustomerBilling;
 import com.boateng.abankus.domain.Email;
+import com.boateng.abankus.domain.PaymentStatus;
 import com.boateng.abankus.entity.validation.CustomerOrderUtils;
 import com.boateng.abankus.fields.EmailFields;
 import com.boateng.abankus.utils.PlatformUtils;
@@ -63,18 +65,46 @@ public class FactoryImpl extends Factory {
 		String productCode = request.getParameter("product");
 		String unitCost = request.getParameter("xUnitCost");
 		String quantity = request.getParameter("quantity");
-		//customerId = request.getParameter("customerId");
 		String orderNumber = PlatformUtils.getClientOrderNumber();
-
+		String paymentSchedule = request.getParameter("paymentSchedule");
+		String category = request.getParameter("productCategory");
+		String nextPaymentDate = null;
+		String paymentStatus = request.getParameter("paymentStatus");
 		CustomerOrder customerOrder = new CustomerOrder();
 		customerOrder.setProductCode(productCode);
-		customerOrder.setQuantity(Integer.parseInt(quantity));
+		
+		if(paymentStatus == null){
+			customerOrder.setPaymentStatus(PaymentStatus.REPAYMENT.name());
+		}
+		if(category == "Product"){
+			if(quantity != null){
+				customerOrder.setQuantity(Integer.parseInt(quantity));
+			}	
+			if(quantity != null && unitCost != null){
+				BigDecimal totalCost = CustomerOrderUtils.calculateTotalCost(unitCost, quantity);
+				customerOrder.setTotalAmount(totalCost);
+			}			
+		}
+		if(quantity != null){
+			customerOrder.setQuantity(Integer.parseInt(quantity));
+		}	
+		if(quantity != null && unitCost != null){
+			BigDecimal totalCost = CustomerOrderUtils.calculateTotalCost(unitCost, quantity);
+			customerOrder.setTotalAmount(totalCost);
+		}
 		customerOrder.setOrderNumber(orderNumber);
-		BigDecimal totalCost = CustomerOrderUtils.calculateTotalCost(unitCost, quantity);
-		customerOrder.setTotalAmount(totalCost);
+		if(paymentSchedule != null){
+			customerOrder.setPaymentFrequency(paymentSchedule);
+		}
+		nextPaymentDate=calculateNextPaymentDate(paymentSchedule);
+		customerOrder.setNextPaymentDate(nextPaymentDate);
+		
+
 		//Date of Order
 		Long dateInSecs = DateTime.now().getMillis();
 		customerOrder.setOrderDate(dateInSecs);
+		
+
 		return customerOrder;
 	}
 
@@ -90,4 +120,22 @@ public class FactoryImpl extends Factory {
 		return client;
 	}
 
+	private String calculateNextPaymentDate(String paymentSchedule){
+		DateTime dateTime = new DateTime();
+		String nextPaymentDate = null;
+		if(paymentSchedule != null){
+			if(paymentSchedule.equals("daily")){
+				dateTime = dateTime.plusDays(1);
+			}else if(paymentSchedule.equals("monthly")){
+				dateTime = dateTime.plusDays(30);
+			}else if(paymentSchedule.equals("fullPayment")){
+				dateTime = dateTime.plusDays(0);
+			}
+		}else{
+			//If paymentSchedule is null, payment is due in the next 30 days
+			dateTime = dateTime.plusDays(30);			
+		}
+		nextPaymentDate = dateTime.toString("MM/dd/yyyy");
+		return nextPaymentDate;
+	}
 }

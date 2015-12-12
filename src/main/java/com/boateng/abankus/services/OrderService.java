@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.boateng.abankus.domain.CustomerOrder;
 import com.boateng.abankus.domain.OrderPayment;
 import com.boateng.abankus.domain.Salesemployee;
+import com.boateng.abankus.exception.PlatformException;
 
 /**
  * @author hkboateng
@@ -17,7 +18,7 @@ import com.boateng.abankus.domain.Salesemployee;
  */
 public interface OrderService {
 
-	CustomerOrder orderService(HttpServletRequest request, String action);
+	CustomerOrder orderService(HttpServletRequest request, String action) throws PlatformException;
 	
 	Salesemployee employeeSales(HttpServletRequest request,CustomerOrder customerOrder);
 

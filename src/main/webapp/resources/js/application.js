@@ -119,33 +119,7 @@ function paymentConfirmation(form){
 		$("#paymentMessage").removeClass('platform-alert-caution');
 	}
 }
-/**
- * Shows the Summary of Order Payment and pops up the Modal window.
- */
-function customerPaymentConfirmation(form){
-	
-	var accountnumber = $("#orderNumber").val() ;
-	var paymentamount = $("#paymentAmount").val();
-	var paymenttype = $("#paymentType").val();
-	var paymentschedule = $("#paymentSchedule").val();
-	
-	if(isEmpty(paymentamount)){
-		$("#paymentMessage").addClass('platform-alert-caution');
-		getElementById("paymentMessage").innerHTML = "Payment Amount cannot by empty.";
-	}else{
-		getElementById("paymentMessage").innerHTML = "";
-		$("#paymentMessage").removeClass('platform-alert-caution');
-		$("#paymentHeading").html("Review and Confirm Payment");
-		$("#accountNumberSummary").html(accountnumber);
-		$("#paymentamountSummary").html(paymentamount);
-		$("#paymentFormSummary").html(paymenttype.toUpperCase());
-		$("#paymentscheduleSummary").html(paymentschedule.toUpperCase());
-		// Openning Modal
-		$('#paymentEntry').hide();
-		$("#paymentSummary").removeClass("hidden");
-	}
 
-}
 function showPaymentDetails(select){
 	if(select.value == "installmentPayment"){
 		$("#paymentDetails").removeClass('hidden');
@@ -181,4 +155,11 @@ function showBankInfoDiv(select){
 	}else{
 		$("#bankInfoDiv").addClass('hidden');
 	}
+}
+function submitCustomerURL(form,value){
+	if( value !== undefined){
+		form.customerNumber.value = value;
+	}
+	form.submit();
+	
 }

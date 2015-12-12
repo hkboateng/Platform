@@ -22,7 +22,10 @@ public class Company implements Serializable {
 	@Id
 	private int id;
 	
-	private Long companyId;
+	/**
+	 * Unique Id for Company
+	 */
+	private String companyUId;
 	
 	private String company_name;
 	
@@ -45,6 +48,7 @@ public class Company implements Serializable {
 	
 	private String email;
 	
+	private Contact contact;
 	@Null
 	private URI webAddress;
 	
@@ -73,15 +77,15 @@ public class Company implements Serializable {
 	/**
 	 * @return the compnayId
 	 */
-	public Long getCompanyId() {
-		return companyId;
+	public String getCompanyUId() {
+		return companyUId;
 	}
 
 	/**
 	 * @param compnayId the compnayId to set
 	 */
-	public void setCompanyId(Long companyId) {
-		this.companyId = companyId;
+	public void setCompanyId(String companyId) {
+		this.companyUId = companyId;
 	}
 
 	/**
