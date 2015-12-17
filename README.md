@@ -1,2 +1,2 @@
-# Platform - Sales application 
+# Platform - Payment application 
 
