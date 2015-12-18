@@ -28,7 +28,7 @@ import com.boateng.abankus.exception.PlatformException;
  * @author hkboateng
  *
  */
-public class PaymentRequest implements PlatformRequest{
+public class PaymentRequests implements PlatformRequest{
 
 	
 	private CustomerPaymentBuilder builder;
@@ -54,7 +54,7 @@ public class PaymentRequest implements PlatformRequest{
 		
 	}
 	
-	public PaymentRequest(CustomerPaymentBuilder builder,String employeeNumber){
+	public PaymentRequests(CustomerPaymentBuilder builder,String employeeNumber){
 		this.builder = builder;
 		if(employeeNumber !=null){
 			this.employeeId = employeeNumber;

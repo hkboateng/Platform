@@ -14,7 +14,20 @@
 <script src="<c:url value="/resources/js/bootstrap.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/platform-functions.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/application.js" />" type="text/javascript"></script>
+<script src="<c:url value="/resources/js/visualization/d3.js" />" type="text/javascript"  charset="utf-8"></script>
+<style>
 
+ .axis {
+   font: 10px sans-serif;
+ }
+
+ .axis path,
+ .axis line {
+   fill: none;
+   stroke: #000;
+   shape-rendering: crispEdges;
+ }
+</style>
 </head>
 <body>
 <!-- Page Header -->
@@ -44,7 +57,9 @@
 					      </c:if>			          
 			          </div>					 	
 					 <div class="clear"></div>
-
+					<div id="barChart">
+					
+					</div>
 			           
 			       <%--
 				          <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
@@ -204,7 +219,7 @@
 		//loadTodayPayment();
 		//loadMonthAndYearPayments();
 		//$('#assignedCustomerList').DataTable({});
-		
+		//graph();
 	});
 	
 	function loadEmployeeCustomers(){
@@ -324,6 +339,81 @@
 		r+= amount;
 		return r;
 		
+	}
+	
+	function graph(){
+		var margin = {top: 20, right: 20, bottom: 70, left: 40},
+	    width = 900 - margin.left - margin.right,
+	    height = 600 - margin.top - margin.bottom;
+	var year = new Date().getFullYear();
+	// Parse the date / time
+	var parseDate = d3.time.format("%m").parse;
+
+	var x = d3.scale.ordinal().rangeRoundBands([0, width], 0.05);
+
+	var y = d3.scale.linear().range([height, 0]);
+
+	var xAxis = d3.svg.axis()
+	    .scale(x)
+	    .orient("bottom")
+	    .tickFormat(d3.time.format("%B"));
+
+	var yAxis = d3.svg.axis()
+	    .scale(y)
+	    .orient("left")
+	    .ticks(10);
+	
+	var color = d3.scale.category10();
+	
+	var svg = d3.select("#barChart").append("svg")
+	    .attr("width", width + margin.left + margin.right)
+	    .attr("height", height + margin.top + margin.bottom)
+	  .append("g")
+	    .attr("transform", 
+	          "translate(" + margin.left + "," + margin.top + ")");
+
+	d3.json("http://localhost:8080/abankus/platform/loadYearTransactionHistory", function(error, data) {
+		console.log(data);
+	    data.forEach(function(d) {
+	        d.date = parseDate(d.paymentMonth);
+	        d.value = +d.amountPaid;
+	    });
+	 
+	  x.domain(data.map(function(d) { return d.date; }));
+	  y.domain([0, d3.max(data, function(d) { return d.value; })]);
+
+	  svg.append("g")
+	      .attr("class", "x axis")
+	      .attr("transform", "translate(0," + height + ")")
+	      .call(xAxis)
+	    .selectAll("text")
+	      .style("text-anchor", "end")
+	      .attr("dx", "1em")
+	      .attr("dy", "1.55em")
+	      .attr("transform", "rotate(-0)" );
+
+	  svg.append("g")
+	      .attr("class", "y axis")
+	      .call(yAxis)
+	    .append("text")
+	      .attr("transform", "rotate(-90)")
+	      .attr("y", 6)
+	      .attr("dy", ".71em")
+	      .style("text-anchor", "end")
+	      .text("Revenue ($)");
+
+	  svg.selectAll("bar")
+	      .data(data)
+	    .enter().append("rect")
+	      .style("fill", function(d, i) { 
+              return color(d.date);
+          })
+	      .attr("x", function(d) { return x(d.date); })
+	      .attr("width", x.rangeBand()-300)
+	      .attr("y", function(d) { return y(d.value); })
+	      .attr("height", function(d) { return height - y(d.value); });
+
+	});		
 	}
 
 </script>

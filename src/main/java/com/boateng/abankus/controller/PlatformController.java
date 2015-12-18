@@ -10,14 +10,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -45,6 +44,7 @@ import com.boateng.abankus.exception.PlatformException;
 import com.boateng.abankus.fields.CustomerOrderFields;
 import com.boateng.abankus.fields.EmployeeFields;
 import com.boateng.abankus.fields.PlatformFields;
+import com.boateng.abankus.services.CustomerOrderService;
 import com.boateng.abankus.services.EmployeeService;
 import com.boateng.abankus.services.PaymentService;
 import com.boateng.abankus.servlet.PlatformAbstractServlet;
@@ -66,13 +66,16 @@ public class PlatformController  extends PlatformAbstractServlet {
 	private EmployeeService employeeServiceImpl;	
 
 	@Autowired(required=true)
+	private CustomerOrderService customerOrderServiceImpl;	
+	
+	@Autowired(required=true)
 	@Qualifier(value="paymentServiceImpl")
 	private PaymentService paymentServiceImpl;	
 	
 	@Autowired(required=true)
 	private CustomerServiceProcessor customerServiceProcessor;
 	
-	private static final Logger logger = LoggerFactory.getLogger(PlatformController.class);
+	private static final Logger logger = Logger.getLogger(PlatformController.class.getName());
 	
 	@RequestMapping(value = "/platform/index", method = RequestMethod.GET)
 	public String home(HttpServletRequest request, Model model) {
@@ -213,7 +216,7 @@ public class PlatformController  extends PlatformAbstractServlet {
 		try {
 			status = mapper.writeValueAsString(payments);
 		} catch (JsonProcessingException e) {
-			logger.error(e.getMessage());
+			logger.warning(e.getMessage());
 		}
 		return status;
 	}
@@ -229,7 +232,7 @@ public class PlatformController  extends PlatformAbstractServlet {
 		try {
 			status = mapper.writeValueAsString(payments);
 		} catch (JsonProcessingException e) {
-			logger.error(e.getMessage());
+			logger.warning(e.getMessage());
 		}
 		return status;
 	}
@@ -245,7 +248,7 @@ public class PlatformController  extends PlatformAbstractServlet {
 		try {
 			status = mapper.writeValueAsString(payments);
 		} catch (JsonProcessingException e) {
-			logger.error(e.getMessage());
+			logger.warning(e.getMessage());
 		}
 		return status;
 	}	
@@ -301,5 +304,24 @@ public class PlatformController  extends PlatformAbstractServlet {
 		transaction = null;
 		return payments;
 	}
+	
 
+	
+	@RequestMapping(value = "/platform/loadCustomerOrderByOrderNumber", method = RequestMethod.GET, produces="application/json")
+	@ResponseBody
+	public String loadPaymentsByOrderNumber(HttpServletRequest request){
+		String orderNumber = request.getParameter("orderNumber");
+		ObjectMapper mapper = new ObjectMapper();
+		CustomerOrder customerOrder = customerOrderServiceImpl.findCustomerOrderByOrderNumber(orderNumber);
+		
+		String payments = null;
+		try {
+			mapper.writeValue(System.out,customerOrder);
+			payments = mapper.writeValueAsString(customerOrder);
+		} catch (IOException e) {
+			payments = "error";
+			logger.log(Level.WARNING,e.getMessage(),e);
+		}
+		return payments;
+	}
 }

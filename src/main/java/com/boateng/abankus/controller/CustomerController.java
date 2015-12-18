@@ -259,27 +259,7 @@ public class CustomerController extends PlatformAbstractServlet{
 	public String makePaymentSearch(){
 		return "ClientTransaction/CustomerPaymentSearch";
 	}		
-	
 
-	
-	@RequestMapping(value = "/platform/loadPaymentsByOrderNumber", method = RequestMethod.GET, produces="application/json")
-	@ResponseBody
-	public String loadPaymentsByOrderNumber(HttpServletRequest request){
-		String orderNumber = request.getParameter("orderNumber");
-		ObjectMapper mapper = new ObjectMapper();
-		List<OrderPayment> orderPayment = paymentServiceImpl.findPaymentsByOrderNumber(orderNumber);
-		List<PaymentTransaction> payment = buildPaymentTransactionList(orderPayment);
-		
-		String payments = null;
-		try {
-			mapper.writeValue(System.out, payment);
-			payments = mapper.writeValueAsString(payment);
-		} catch (IOException e) {
-			payments = "error";
-			e.printStackTrace();
-		}
-		return payments;
-	}
 	
 	private List<PaymentTransaction> buildPaymentTransactionList(List<OrderPayment> orderPayment){
 		

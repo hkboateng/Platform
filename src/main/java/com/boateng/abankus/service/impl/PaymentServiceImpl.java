@@ -13,6 +13,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.boateng.abankus.domain.BankInformation;
 import com.boateng.abankus.domain.OrderPayment;
 import com.boateng.abankus.domain.PaymentTransaction;
 import com.boateng.abankus.domain.Paymentmethod;
@@ -45,16 +46,26 @@ public class PaymentServiceImpl implements PaymentService {
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
-	
+
+	@Transactional
+	public void saveBankInformation(BankInformation bank,Session session){
+		if(session.isOpen()){
+			session.save(bank);
+		}
+	}
 	@Override
 	@Transactional
-	public String submitPayment(OrderPayment payment,Paymentmethod paymentMethod){
+	public String submitPayment(OrderPayment payment,Paymentmethod paymentMethod,BankInformation bank){
 		Session session = getSessionFactory().getCurrentSession();
-		
-		session.save(paymentMethod);
-		payment.setPaymentMethod(paymentMethod);
 		String confirmationNo = PlatformUtils.generateConfirmationNo();
+		session.save(paymentMethod);
+		if(bank != null){
+			bank.setPaymentmethod(paymentMethod);
+			saveBankInformation(bank,session);
+		}
 		
+		
+		payment.setPaymentMethod(paymentMethod);
 		payment.setConfirmationNumber(confirmationNo);
 		Serializable i = session.save(payment);
 		OrderPayment p = (OrderPayment) session.get(OrderPayment.class, i);

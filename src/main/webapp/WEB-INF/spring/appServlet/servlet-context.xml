@@ -70,7 +70,7 @@
     </beans:bean>
 
 
-	<!-- RabbitMQ  -->
+	<!-- RabbitMQ 
    <rabbit:connection-factory id="factory"
                                host="localhost" port="5672"
                                username="guest" password="guest"/>
@@ -97,6 +97,7 @@
 			</beans:bean>
 		</beans:property>
 	</beans:bean>  	
+	 -->
     <!-- Controller and Entity Beans -->
     
     <beans:bean id="productController" class="com.boateng.abankus.controller.ProductController" />

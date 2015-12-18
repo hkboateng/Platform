@@ -5,6 +5,7 @@ package com.boateng.abankus.services;
 
 import java.util.List;
 
+import com.boateng.abankus.domain.BankInformation;
 import com.boateng.abankus.domain.OrderPayment;
 import com.boateng.abankus.domain.PaymentTransaction;
 import com.boateng.abankus.domain.Paymentmethod;
@@ -15,7 +16,7 @@ import com.boateng.abankus.domain.Paymentmethod;
  */
 public interface PaymentService {
 
-	String submitPayment(OrderPayment payment, Paymentmethod paymentMethod);
+	String submitPayment(OrderPayment payment, Paymentmethod paymentMethod, BankInformation bank);
 	
 	List<OrderPayment> findPaymentsByOrderId(long customerOrderId);
 

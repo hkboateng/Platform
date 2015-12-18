@@ -118,7 +118,7 @@ public class CustomerOrderProcessor implements OrderService{
 			throw ace;
 		}
 		RestTemplate rest = new RestTemplate();
-		
+		/**
 		try {
 			
 			ResponseEntity<CustomerOrder> custOrder = rest.postForEntity("http://localhost:8080/paymenthub/orderservice/saveCustomerOrder?customerId="+customerId, customerOrder,CustomerOrder.class);
@@ -128,8 +128,8 @@ public class CustomerOrderProcessor implements OrderService{
 		} catch (RestClientException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		};
-		//customerOrder = customerOrderServiceImpl.saveCustomerOrder(customerOrder,customerId);
+		};**/
+		customerOrder = customerOrderServiceImpl.saveCustomerOrder(customerOrder,customerId);
 		
 		return customerOrder;
 	}

@@ -41,7 +41,15 @@
 				<jsp:include page="../sidebar.jsp"/>
 			</div>		
 			<div class="col-sm-10 col-md-10 col-lg-10">
-				<h2  class="page-header">Transaction Details</h2>
+				<div class="page-header col-sm-12 col-md-12 col-lg-12">
+					<span class="lead">Transaction Details </span>
+					<div class="pull-right">
+						<c:set var="cust" value="${billing.getCustomer().getCustomerNumber()}"/>
+						<c:set var="customerId" value="${billing.getCustomer().getCustomerId()}"/>
+						<a href="javascript:document.viewCustomerProfileBckBtn.submit()" class="">Back to Profile Page</a>
+					</div>				
+				</div>
+				<div class="col-sm-12 col-md-10 col-lg-10">
 				<div class="orderDetails">
 					<c:set var="orderNumber" value="${viewTransactionDetailsOrderNumber}"/>
 					<p><label class="labelLength_20">Order Date:</label><span>${billing.getClientOrderId().convertOrderDate() }</span></p>
@@ -53,6 +61,18 @@
 					<p><label class="labelLength_20">Next Payment Date:</label>${billing.getClientOrderId().getNextPaymentDate()}</p>
 					<input type="hidden" value="${orderNumber}" id="orderNumber"/>
 				</div>
+				</div>
+				<div class="col-sm-12 col-md-2 col-lg-2">
+					<div class="list-group">
+					
+					<c:set value="${billing.encryptOrderNumber(orderNumber) }" var="keySec" />
+						<a href="javascript:submitCustomerPayment('${keySec}','${billing.getTotalOrderAmount()}');" class="btn btn-success list-group-item">Make Payment</a>
+					</div>
+					<div class="list-group">
+						<a href="" class="btn btn-primary list-group-item">Print Statement</a>
+					</div>	
+				</div>	
+				<div class="clearfix"></div>		
 		<h3 class="page-header">Payment History</h3>
 			<div class="col-sm-12 col-md-8 col-lg-8">
 				
@@ -89,18 +109,24 @@
 						</c:choose>
 						</tbody>
 					</table>	
+					
 					</div>
 				<div class="col-sm-12 col-md-4">
 					<div id="transactionChart">
 					
 					</div>
 				</div>						
-					</div>
+			</div>
 				
 			</div>
-
-		
 	</div>
+	<sf:form action="/abankus/Payments/makeCustomerOrderPayment" name="makeCustomerOrderPayment" method="post">
+		<input type="hidden" name="orderNumber" id="orderNumberHdn" value=""/>
+		<input type="hidden" name="totalAmount" id="totalAmountHdn"  value=""/>
+		<input type="hidden" name="orderDate" id="OrderDateHdn"  value=""/>
+		<input type="hidden" name="productCode" id="productCodeHdn"  value=""/>
+		<input type="hidden" name="customerId" id="customerIdHdn"  value="${customerId }"/>
+	</sf:form>
 	<sf:form name="viewCustomerProfileBckBtn" action="/abankus/customers/viewProfile" method="post">
 		<input type="hidden" name="searchType" id="searchType" value="customerNumber">
 		<input type="hidden"  name="customerNumber" value="${cust}"/>	          
@@ -165,7 +191,7 @@
 		
        
         
-		var color = d3.scale.category20();
+		var color = d3.scale.category10();
 
 		var pie = d3.layout.pie()
 	    .value(function(d) { return d.amountPaid; })
@@ -186,14 +212,7 @@
         .attr('class', 'paymentType');                   // NEW
 
         
-		d3.json("/abankus/platform/loadPaymentsByOrderNumber?orderNumber="+tr, function(error, data) {
-			var total = d3.sum(data.map(function(d) {                
-              return d.amountPaid;                                           // NEW
-            }));
-			var orderAmount = data.orderAmount;
-			data.forEach(function(d) {                             // NEW
-				d.amountPaid =+  d.amountPaid;  
-				});	
+		d3.json("/abankus/platform/loadCustomerOrderByOrderNumber?orderNumber="+tr, function(error, data) {
 			
 			
 			var path = svg.selectAll('path')
@@ -202,14 +221,11 @@
             .append('path')
             .attr('d', arc)
             .attr('fill', function(d, i) { 
-              return color(d.data.amountPaid);
+              return color(d.amountPaid);
             });
 
 				path.on('mouseover', function(d) {
-				  var total = d3.sum(data.map(function(d) {
-				    return d.amountPaid;
-				  }));
-				 
+			 
 				  tooltip.select('.paymentDate').html("<b>Payment Date: </b>"+d.data.paymentDate);
 				  tooltip.select('.paymentType').html("<b>Payment Type: </b>"+d.data.paymentType); 
 				  tooltip.style('display', 'block');
@@ -249,7 +265,7 @@
 	      .attr("dy", "0em")
 	      .style("text-anchor", "middle")
 	      .attr("class", "bold")
-	      .text(function(d) { return "Amount Paid: $"+total; });
+	      .text(function(d) { return "Amount Paid: $"+d.orderAmount; });
           
           svg.append("text")
           .data(data)
@@ -257,7 +273,7 @@
 	      .attr("dx", "-5em")
 	      .style("text-anchor", "bottom")
 	      .attr("class", "bold")
-	      .text(function(d) { return "Amount Left: $"+(d.orderAmount - total).toFixed(2); });
+	      .text(function(d) { return "Amount Left: $"+(d.amountRemaining).toFixed(2); });
        
 			});		
         
@@ -268,8 +284,11 @@
 
 	}
 	
-	function calculatePercentage(total,amountPaid){
-		
+	function submitCustomerPayment(orderNo,amount){
+		var form = document.makeCustomerOrderPayment;
+		form.orderNumber.value = orderNo;
+		form.totalAmount.value = amount;
+		form.submit();	
 	}
 	</script>
 	

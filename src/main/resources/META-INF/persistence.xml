@@ -22,5 +22,7 @@
 		<class>com.boateng.abankus.domain.OrderPayment</class>
 		<class>com.boateng.abankus.domain.PaymentTransaction</class>
 		<class>com.boateng.abankus.domain.ContactPerson</class>
+		<class>com.boateng.abankus.domain.BankInformation</class>
+		<class>com.boateng.abankus.domain.Debitcardinformation</class>
 	</persistence-unit>
 </persistence>

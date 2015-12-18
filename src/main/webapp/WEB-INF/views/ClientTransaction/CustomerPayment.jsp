@@ -43,8 +43,8 @@
 											name="orderNumber" id="orderNumber" class="form-state  width-75"
 											value="${billing.getClientOrderId().getOrderNumber() }" /> 
 											<label for="paymentType">Select Payment
-											Type:</label> <select name="paymentForm" id="paymentType" class="form-state"
-											onchange="javascript:showBankInfoDiv(this);">
+											Type:</label> <select name="paymentType" id="paymentType" class="form-state"
+											onchange="javascript:showBankCardInfoDiv(this);">
 											<option value="cash">Cash</option>
 											<option value="check">Bank Draft (Check)</option>
 											<option value="card">Credit/Debit Card</option>

@@ -5,10 +5,13 @@
 						<div class="list-group bg-primary">
 							<a href="/abankus/platform/dashboard" class="list-group-item"><i class="fa fa-home fa-lg moveR_20"></i>DashBoard</a>
 							<a href="<c:url value="/customers/listCustomer" />" class="list-group-item">
-							<i class="fa fa-users moveR_20"></i>Customers
-							  </a>
-							  <a href="<c:url value="/Payments/receivePayment"/>" class="list-group-item"><i class="fa fa-money moveR_20"></i>Payments</a>
-							  <a href="#" class="list-group-item">Morbi leo risus</a>
+								<i class="fa fa-users moveR_20"></i>Customers
+							</a>
+							<a href="<c:url value="/Payments/QuickPayment"/>" class="list-group-item">
+								<i class="fa fa-money moveR_20"></i>Payments
+							</a>
+							<a href="<c:url value="/products/listProduct"/>" class="list-group-item"><i class="glyphicon glyphicon-th-list moveR_20"></i>Prodcuts/Services</a>
+							  <a href="<c:url value="/Reports/index"/>" class="list-group-item">Reports</a>
 							  <a href="#" class="list-group-item">Porta ac consectetur ac</a>
 							  <a href="#" class="list-group-item">Vestibulum at eros</a>					
 						</div>

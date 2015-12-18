@@ -99,10 +99,27 @@ function displayErrorMessage(error){
 	$("#pending").html("<p class='alert alert-danger'><span class='glyphicon glyphicon-info-sign  moveR_10'></span>"+error+"</p>");
 }
 
+function formatAmount(elementId,input){
+	if(isMoney(input.value)){
+		var amount = 0.00;
+		amount = parseFloat(input.value).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+		if(amount === 'NaN'){
+			amount = 'InValid';
+		}
+		$('#'+elementId).val(amount);
+	}else{
+		
+	}
+	
+	
+}
 function isCharacter(word){
 	return $.isNumeric(word);
 }
 
+function isMoney(str){
+	return str.replace(/^\d+$/);
+}
 function isEmpty(str){
     return !str.replace(/^\s+/g, '').length; // boolean (`true` if field is empty)
 }
@@ -149,11 +166,16 @@ function validateCustomerCredential(customer,customerId){
 	
 	return valid;
 }
-function showBankInfoDiv(select){
+function showBankCardInfoDiv(select){
 	if(select.value === "check"){
 		$("#bankInfoDiv").removeClass('hidden');
+		("#cardInfoDiv").addClass('hidden');
+	}if(select.value === "card"){
+		$("#cardInfoDiv").removeClass('hidden');
+		$("#bankInfoDiv").addClass('hidden');
 	}else{
 		$("#bankInfoDiv").addClass('hidden');
+		$("#cardInfoDiv").addClass('hidden');
 	}
 }
 function submitCustomerURL(form,value){

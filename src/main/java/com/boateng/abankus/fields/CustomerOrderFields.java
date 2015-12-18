@@ -9,4 +9,6 @@ package com.boateng.abankus.fields;
  */
 public class CustomerOrderFields {
 	public static final String BILLING_COLLECTION_SESSION = "billingCollection";
+	
+	
 }

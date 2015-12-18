@@ -56,6 +56,8 @@ public class CustomerAccount implements Serializable {
 	@JoinColumn(name="customerId", referencedColumnName="customerId")
 	private Customer customer;
 
+	private String lastActivityDate;
+	
 	public CustomerAccount() {
 	}
 
@@ -171,5 +173,13 @@ public class CustomerAccount implements Serializable {
 	 */
 	public void setEmployee(Employee employee) {
 		this.employee = employee;
+	}
+
+	public String getLastActivityDate() {
+		return lastActivityDate;
+	}
+
+	public void setLastActivityDate(String lastActivityDate) {
+		this.lastActivityDate = lastActivityDate;
 	}
 }

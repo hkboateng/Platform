@@ -1,9 +1,3 @@
-<%
-	
-	String customerType = request.getParameter("customerType");
-	String employeeInfo = (String)session.getAttribute("employeeInfo");
-	pageContext.setAttribute("customerType", customerType);
-%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 
@@ -83,12 +77,11 @@
 		          		</tbody>
 		          		</table>
 
-<sf:form action="/abankus/customers/viewProfile" method="post" name="customerViewProfileForm">
-<input type="hidden" name="searchType" id="searchType" value="customerNumber">
-<input type="hidden" name="customerNumber" id="customerNumber" value="">
-</sf:form>
-          </div>
-       
+						<sf:form action="/abankus/customers/viewProfile" method="post" name="customerViewProfileForm">
+						<input type="hidden" name="searchType" id="searchType" value="customerNumber">
+						<input type="hidden" name="customerNumber" id="customerNumber" value="">
+						</sf:form>
+</div>
 </div>
 </div>
 </div>

@@ -117,7 +117,7 @@
 				<c:forEach items="${billing.getBillingMap() }" var="billings" varStatus="counter">
 					<c:set value="${billings.key }" var="key" />
 					<c:set value="${billing.getCustomerBilling(key).encryptOrderNumber(key) }" var="keySec" />
-						<c:if test="${billing.getCustomerBilling(key).totalAmountRemaining() gt 0}">
+						
 							<tr>
 								<c:set value="${billings.key }" var="key" />
 								<td id="tblOrderDate${counter.count }">${billing.getCustomerBilling(key).convertOrderDate()}</td>
@@ -142,8 +142,7 @@
 								<%--		
 								<button type="button" id="makePaymentBtn" onclick="javascript:submitCustomerPayment('${keySec }','${billing.getCustomerBilling(key).getTotalOrderAmount()}');"  class="btn btn-primary btn-sm">Make Payment</button></td>				
 							 --%>
-							</tr>						
-						</c:if>
+							</tr>	
 
 				</c:forEach>			
 				</tbody>	

@@ -12,7 +12,7 @@
 
 <script src="<c:url value="/resources/js/bootstrap.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/application.js" />" type="text/javascript"></script>
-<script src="<c:url value="/resources/js/tables/jquery.dataTables.js" />" type="text/javascript"></script>
+
 </head>
 <body>
 
@@ -21,10 +21,13 @@
 <jsp:include page="../header.jsp"/>
 <%-- End of Include page header --%>
 <!-- Page Header ends -->
-<div id="container" class="container">
+<div id="container" class="container-fluid">
 	<div class="row">
-<div class="col-sm-9 col-md-12 col-lg-12">
-          <h1>Products/ Service List</h1>
+			<div class="col-sm-2 col-md-2 col-lg-2">
+				<jsp:include page="../sidebar.jsp" />
+			</div>	
+<div class="col-sm-9 col-md-10 col-lg-10">
+          <h1>Products/Service List</h1>
 		  <hr>
 			<%-- Error or Information --%>
 			<div class="info_header">
@@ -41,22 +44,38 @@
 					</div>
 				</c:if>
 			</div>
-				<table id="product" class="table table-bordered table-hover">
+				<table id="products" class="table  table-striped">
 					<thead>
 						<tr>
+							<th></th>
 							<th>Product Name</th>
 							<th>Product Code</th>
 							<th>Description</th>
-							<th>View Product</th>
+							<th>Action</th>
 						</tr>
 					</thead>
 					<tbody>
 							<c:forEach items="${productList}" var="list" varStatus="theCount">
 							<tr>
+								<td>${theCount.count }</td>
 								<td>${list.productName}</td>
 								<td>${list.productCode }</td>
 								<td>${list.description }</td>
-								<td><a class="btn btn-success" href="<c:url value="viewProduct/${list.getProductCode()}"/>">Select </a></td>
+								<td>
+									<!-- Split button -->
+									<div class="btn-group">
+									  <button type="button" class="btn btn-danger">Action</button>
+									  <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									    <span class="caret"></span>
+									    <span class="sr-only">Select</span>
+									  </button>
+									  <ul class="dropdown-menu">
+									    <li><a href="#">Make Sale</a></li>
+									    <li role="separator" class="divider"></li>
+									    <li><a href="#">View Details</a></li>
+									  </ul>
+									</div>								
+								</td>
 							<tr>
 							</c:forEach>
 					</tbody>
@@ -66,13 +85,11 @@
 </div>
 </div>
 
-
+<script src="<c:url value="/resources/js/tables/jquery.dataTables.js" />" type="text/javascript"></script>
 </body>
 <script type="text/javascript">
 $(document).ready(function(){
-	$('#product').DataTable({
-		
-	});
+	$('#product').DataTable();
 });
 </script>
 </html>

@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 
+import com.boateng.abankus.domain.BankInformation;
 import com.boateng.abankus.domain.CustomerOrder;
 import com.boateng.abankus.domain.Employee;
 import com.boateng.abankus.domain.OrderPayment;
@@ -66,16 +67,24 @@ public class CustomerPaymentBuilder {
 
 		
 		paymentMethod.setPaymentType(typeOfPayment);
-		if(typeOfPayment.equalsIgnoreCase("check")){
-			paymentMethod.setAccountnumber(bankAccountNumber);
-			paymentMethod.setBankname(bankName);
-			paymentMethod.setBanknumber(bankRoutingNumber);
-			paymentMethod.setChecknumber(checkNumber);
-			paymentMethod.setNameOnAccount(bankCustomerName);
-		}		
+		
 		return paymentMethod;
 	}
 	
+	/**
+	 * 
+	 */
+	public BankInformation buildBankInformation() {
+		BankInformation bank = new BankInformation();
+		bank.setAccountNumber(bankAccountNumber);
+		bank.setBankName(bankName);
+		bank.setBankNumber(bankRoutingNumber);
+		bank.setCheckNumber(checkNumber);
+		bank.setNameOnAccount(bankCustomerName);
+		bank.setPaymentmethod(buildPaymentMethod());
+		return bank;
+	}
+
 	public OrderPayment buildOrderPayment(CustomerOrder order,Employee employee){
 		OrderPayment orderPayment = new OrderPayment();
 		double paidAmount = 0.0;

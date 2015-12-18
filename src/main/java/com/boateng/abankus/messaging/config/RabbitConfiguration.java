@@ -22,7 +22,7 @@ import com.boateng.abankus.fields.MessagingFields;
  * @author hkboateng
  *
  */
-@Configuration
+//@Configuration
 public class RabbitConfiguration {
 
 	@Autowired

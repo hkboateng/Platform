@@ -7,6 +7,7 @@ package com.boateng.abankus.service.impl;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.hibernate.LockOptions;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.boateng.abankus.domain.Customer;
+import com.boateng.abankus.domain.CustomerAccount;
 import com.boateng.abankus.domain.CustomerOrder;
 import com.boateng.abankus.services.CustomerOrderService;
 
@@ -41,10 +43,16 @@ public class CustomerOrderServiceImpl implements CustomerOrderService{
 	@Override
 	public CustomerOrder saveCustomerOrder(CustomerOrder order,Integer customerId){
 		Session session = sessionFactory.getCurrentSession();
-		Customer customer = (Customer) session.get(Customer.class,customerId);
-		order.setCustomer(customer);
+		
+		CustomerAccount account = (CustomerAccount) session.createQuery("from CustomerAccount ca where ca.customer.customerId =:customer")
+						.setParameter("customer", customerId)
+						.setLockOptions(LockOptions.READ)
+						.uniqueResult();
+		account.setLastActivityDate(order.convertOrderDate());
+		session.update(account);
+		order.setCustomer(account.getCustomer());
 		session.save("clientorder", order);
-		customer = null;
+		account = null;
 		return order;
 	}
 	/* (non-Javadoc)

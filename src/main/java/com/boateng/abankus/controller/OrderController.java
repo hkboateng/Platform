@@ -230,7 +230,6 @@ public class OrderController {
 		
 		view.addObject("orderList", orderList);
 		view.setViewName("ClientTransaction/CustomerPaymentSearch");
-		//getOrderByOrderNumber(model,orderList);
 		return view;
 	}
 

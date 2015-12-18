@@ -10,6 +10,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.joda.time.DateTime;
 
 import com.boateng.abankus.customer.service.Client;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.List;
 
@@ -54,12 +55,17 @@ public class CustomerOrder implements Client, Serializable{
 	
 	private String nextPaymentDate;
 	
+	private BigDecimal amountRemaining;
+	
+	private BigDecimal amountPaid;
+	
+	
 	/**
 	 * Whether payment is daily, monthly,bi-weekly, yearly etc.
 	 */
 	private String paymentFrequency;
 	
-	//bi-directional many-to-one association to Orderpayment
+	@JsonIgnore
 	@OneToMany(mappedBy="clientorder", fetch=FetchType.EAGER)
 	private List<OrderPayment> orderpayments;
 	
@@ -141,11 +147,14 @@ public class CustomerOrder implements Client, Serializable{
 	
 	
 	public String getPaymentStatus() {
-		if(paymentStatus == null || paymentStatus.isEmpty()){
-			return paymentStatus;
+		if(amountRemaining().doubleValue() <=0.00){
+			return PaymentStatus.valueOf("paid".toUpperCase()).name();
 		}else{
-			return PaymentStatus.valueOf(paymentStatus.toUpperCase()).name();
-		}
+			return PaymentStatus.valueOf("repayment".toUpperCase()).name();					
+		}		
+
+			
+
 	}
 
 	public double amountPaid(){
@@ -163,11 +172,19 @@ public class CustomerOrder implements Client, Serializable{
 	 * @param paymentStatus
 	 */
 	public void setPaymentStatus(String paymentStatus) {
-		if(paymentStatus !=null){
-			this.paymentStatus = paymentStatus;
+		if(amountRemaining() != null){
+			if(amountRemaining().doubleValue() <=0.00){
+				this.paymentStatus = "paid";
+			}else{
+				if(paymentStatus !=null){
+					this.paymentStatus = paymentStatus;
+				}else{
+					this.paymentStatus = "repayment";
+				}					
+			}
 		}else{
 			this.paymentStatus = "repayment";
-		}		
+		}
 
 	}
 
@@ -234,6 +251,23 @@ public class CustomerOrder implements Client, Serializable{
 	public void setPaymentFrequency(String paymentFrequency) {
 		this.paymentFrequency = paymentFrequency;
 	}
-	
+
+	public BigDecimal getAmountRemaining() {
+		return amountRemaining();
+	}
+
+	public void setAmountRemaining(BigDecimal amountRemaining) {
+		this.amountRemaining = amountRemaining;
+	}
+
+	public BigDecimal getAmountPaid() {
+		return new BigDecimal(amountPaid());
+	}
+
+	/*
+	public void setAmountPaid(BigDecimal amountPaid) {
+		this.amountPaid = amountPaid;
+	}
+	*/
 	
 }

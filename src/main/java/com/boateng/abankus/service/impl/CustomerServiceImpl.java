@@ -371,9 +371,12 @@ public class CustomerServiceImpl implements CustomerService {
 	@Transactional
 	public Customer findCustomerByAccountNumber(String accountNumber) {
 		Session session = getSessionFactory().getCurrentSession();
+		Customer customer = null;
 		CustomerAccount customerAccount =	(CustomerAccount) session.createQuery("from CustomerAccount ca where ca.accountNumber =:accountNumber")
 				.setParameter("accountNumber", accountNumber).uniqueResult();
-		Customer customer = (Customer) session.get(Customer.class, customerAccount.getCustomer().getCustomerId());
+		if(customerAccount != null){
+			customer = (Customer) session.get(Customer.class, customerAccount.getCustomer().getCustomerId());
+		}
 		return customer;
 	}
 }
