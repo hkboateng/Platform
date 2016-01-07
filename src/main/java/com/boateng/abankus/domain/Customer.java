@@ -1,17 +1,7 @@
 package com.boateng.abankus.domain;
 
 import java.io.Serializable;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.NamedQuery;
-
-import org.hibernate.annotations.DynamicUpdate;
-
-import com.sun.istack.Nullable;
+import javax.persistence.*;
 
 
 /**
@@ -19,7 +9,6 @@ import com.sun.istack.Nullable;
  * 
  */
 @Entity
-@DynamicUpdate(value=true)
 @NamedQuery(name="Customer.findAll", query="SELECT c FROM Customer c")
 public class Customer implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -28,8 +17,10 @@ public class Customer implements Serializable {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int customerId;
 
-	private String company_name;
+	@Column(name="company_name")
+	private String companyName;
 
+	private String customerNumber;
 
 	private String customerType;
 
@@ -41,22 +32,36 @@ public class Customer implements Serializable {
 
 	private String middlename;
 
-	private String customerNumber;
+	@OneToOne
+	@JoinColumn(name="addressId")
+	private Address addressId;
+	
+	@OneToOne
+	@JoinColumn(name="phoneId")
+	private Phone phoneId;
+	
+	@OneToOne
+	@JoinColumn(name="emailId")
+	private Email emailId;
+	
+	@OneToOne
+	@JoinColumn(name="contactPersonId")
+	private ContactPerson contactPersonId;
 	
 	public Customer() {
 	}
+
 	/**
 	 * @param companyName
 	 * @param companyNumber
 	 */
-	public Customer(String firstname,String lastname, String companyType) {
+	public Customer(String firstname,String lastname) {
 		this.firstname = firstname;
 		this.lastname = lastname;
-		this.customerType = companyType;
 		
 	}
 
-
+	
 	public int getCustomerId() {
 		return this.customerId;
 	}
@@ -65,6 +70,37 @@ public class Customer implements Serializable {
 		this.customerId = customerId;
 	}
 
+	public Address getAddressId() {
+		return this.addressId;
+	}
+
+	public void setAddressId(Address addressId) {
+		this.addressId = addressId;
+	}
+
+	public String getCompanyName() {
+		return this.companyName;
+	}
+
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
+	}
+
+	public ContactPerson getContactPersonId() {
+		return this.contactPersonId;
+	}
+
+	public void setContactPersonId(ContactPerson contactPersonId) {
+		this.contactPersonId = contactPersonId;
+	}
+
+	public String getCustomerNumber() {
+		return this.customerNumber;
+	}
+
+	public void setCustomerNumber(String customerNumber) {
+		this.customerNumber = customerNumber;
+	}
 
 	public String getCustomerType() {
 		return this.customerType;
@@ -72,6 +108,14 @@ public class Customer implements Serializable {
 
 	public void setCustomerType(String customerType) {
 		this.customerType = customerType;
+	}
+
+	public Email getEmailId() {
+		return this.emailId;
+	}
+
+	public void setEmailId(Email emailId) {
+		this.emailId = emailId;
 	}
 
 	public String getFirstname() {
@@ -106,26 +150,14 @@ public class Customer implements Serializable {
 		this.middlename = middlename;
 	}
 
-	public String getCustomerNumber() {
-		return customerNumber;
-	}
-	public void setCustomerNumber(String customerNumber) {
-		this.customerNumber = customerNumber;
+	public Phone getPhoneId() {
+		return this.phoneId;
 	}
 
-	public String getCompany_name() {
-		return company_name;
+	public void setPhoneId(Phone phoneId) {
+		this.phoneId = phoneId;
 	}
 
-
-	public void setCompany_name(String company_name) {
-		this.company_name = company_name;
-	}
-
-	/**
-	 * @param contactPerson the contactPerson to set
-	 */
-	
 	public String getCustomerName(){
 		StringBuilder sbr = new StringBuilder();
 		if(getFirstname() !=null && getLastname() !=null){
@@ -135,8 +167,9 @@ public class Customer implements Serializable {
 			}
 			sbr.append(getLastname());
 		}else{
-			sbr.append(getCompany_name());
+			sbr.append(getCompanyName());
 		}
 		return sbr.toString();
 	}
+
 }

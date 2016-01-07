@@ -669,3 +669,6 @@ input[readonly]{
 .boxHeight_15{
 	line-height:15em;
 }
+.activateLink:hover{
+	cursor:pointer;
+}

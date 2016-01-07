@@ -39,12 +39,9 @@ public class ContactPerson  implements Serializable{
 	
 	private String phoneNumber;
 	
+	//Relationship to the Company or Customer
 	private String association;
 
-	//bi-directional many-to-one association to Customer
-	@ManyToOne
-	@JoinColumn(name="customerId")
-	private Customer customer;
 	/**
 	 * @return the contactId
 	 */
@@ -128,21 +125,7 @@ public class ContactPerson  implements Serializable{
 	public void setAssociation(String association) {
 		this.association = association;
 	}
-	
-	
-	/**
-	 * @return the customer
-	 */
-	public Customer getCustomer() {
-		return customer;
-	}
 
-	/**
-	 * @param customer the customer to set
-	 */
-	public void setCustomer(Customer customer) {
-		this.customer = customer;
-	}
 
 	public String toString(){
 		StringBuilder sbr = new StringBuilder();

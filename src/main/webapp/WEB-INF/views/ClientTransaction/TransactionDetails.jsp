@@ -37,12 +37,12 @@
 	<jsp:include page="../header.jsp" />
 	<div id="container" class="container-fluid">
 		<div class="row">
-			<div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
+			<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
 				<jsp:include page="../sidebar.jsp"/>
 			</div>		
-			<div class="col-sm-10 col-md-10 col-lg-10">
+			<div class="col-sm-9 col-md-9 col-lg-9">
 				<div class="page-header col-sm-12 col-md-12 col-lg-12">
-					<span class="lead">Transaction Details </span>
+					<span class="lead">Bill/Order Details </span>
 					<div class="pull-right">
 						<c:set var="cust" value="${billing.getCustomer().getCustomerNumber()}"/>
 						<c:set var="customerId" value="${billing.getCustomer().getCustomerId()}"/>
@@ -60,6 +60,7 @@
 					<p><label class="labelLength_20">Payment Status:</label>${billing.getClientOrderId().getPaymentStatus() }</p>
 					<p><label class="labelLength_20">Next Payment Date:</label>${billing.getClientOrderId().getNextPaymentDate()}</p>
 					<input type="hidden" value="${orderNumber}" id="orderNumber"/>
+					<input type="hidden" value="${billing.totalAmountRemaining() }" name="amountRemaining" id="amountRemaining"/>
 				</div>
 				</div>
 				<div class="col-sm-12 col-md-2 col-lg-2">
@@ -70,21 +71,36 @@
 					</div>
 					<div class="list-group">
 						<a href="" class="btn btn-primary list-group-item">Print Statement</a>
-					</div>	
+					</div>
+						  
+						  <c:if test="${not empty viewTransactionDetailsOrderNumber }">
+						  	<a href="<c:url value="/customer/createOrders"/>" class="list-group-item">New Order<i class="glyphicon glyphicon-chevron-right pull-right"></i></a>
+						  <a class="list-group-item">
+						  	View Invoice<i class="glyphicon glyphicon-chevron-right pull-right"></i>
+						  </a>
+						  <a class="list-group-item spaceBelow_10">
+						  	Print Invoice<i class="glyphicon glyphicon-chevron-right pull-right"></i>
+						  </a>						 
+						 
+						  </c:if>
+						  
+						  <c:if test="${not empty billing }">
+						  	<a href="javascript:makePayment('makePayment',document.makeCustomerPayment);" class="list-group-item">Make A Payment<i class="glyphicon glyphicon-chevron-right pull-right"></i></a>
+						  </c:if>
+						  <a href="<c:url value="/customers/contactCustomer"/>" class="list-group-item">Send Email Message<i class="glyphicon glyphicon-chevron-right pull-right"></i></a>
+						
 				</div>	
 				<div class="clearfix"></div>		
 		<h3 class="page-header">Payment History</h3>
-			<div class="col-sm-12 col-md-8 col-lg-8">
+			<div class="col-sm-12 col-md-7 col-lg-7">
 				
 					<table id="transactionTable" class="table">
 						<thead>
 						<tr>
-							<th>List</th>
 							<th>Date</th>
 							<th>Amount Paid:</th>
 							<th>Payment Type</th>
 							<th>Staff Name</th>
-							<th>Action</th>
 						</tr>
 						</thead>
 						<tbody id="transactionBody">
@@ -92,12 +108,10 @@
 							<c:when test="${not empty paymentList }">
 								<c:forEach items="${paymentList }" var="payments" varStatus="i">
 									<tr>
-										<td>${i.count })</td>
 										<td>${payments.paymentDate }</td>
-										<td><fmt:formatNumber value="${payments.amountPaid }" type="currency"/></td>
+										<td>${payments.amountPaid }</td>
 										<td>${payments.paymentType.toUpperCase() }</td>
-										<td>${payments.getEmployeeName()}</td>
-										<td></td>
+										<td>${payments.getEmployeeName()}</td>										
 									</tr>
 								</c:forEach>
 							</c:when>
@@ -111,7 +125,7 @@
 					</table>	
 					
 					</div>
-				<div class="col-sm-12 col-md-4">
+				<div class="col-sm-12 col-md-5">
 					<div id="transactionChart">
 					
 					</div>
@@ -135,7 +149,8 @@
 	<script>
 	$(document).ready(function(){
 		var orderNumber = $('#orderNumber').val();
-		drawPieChart(orderNumber );
+		var amountLeft = $('#amountRemaining').val();
+		drawPieChart(orderNumber,amountLeft );
 		
 		$('#transactionTable').DataTable();
 	});
@@ -172,8 +187,7 @@
 		});
 	}
 	var AMT_PAID = 0;
-	function drawPieChart(tr){
-		var orderNumber = $('#orderNumber').val();
+	function drawPieChart(orderNumber,amountLeft){
 		var width = 360;
         var height = 360;
         var radius = Math.min(width, height) / 2;
@@ -210,24 +224,36 @@
 
       	tooltip.append('div')                        // NEW
         .attr('class', 'paymentType');                   // NEW
-
+        tooltip.append('div')                        // NEW
+        .attr('class', 'paymentAmount');     
         
-		d3.json("/abankus/platform/loadCustomerOrderByOrderNumber?orderNumber="+tr, function(error, data) {
+      	d3.json("/abankus/platform/loadPaymentsByOrderNumber?orderNumber="+orderNumber, function(error, data) {
+			var total = d3.sum(data.map(function(d) {                
+              return d.amountPaid;                                           // NEW
+            }));
+			var orderAmount = data.orderAmount;
+			data.forEach(function(d) {                             // NEW
+				d.amountPaid =+  d.amountPaid;  
+				});	
 			
-			
+			console.log(data);
 			var path = svg.selectAll('path')
             .data(pie(data))
             .enter()
             .append('path')
             .attr('d', arc)
             .attr('fill', function(d, i) { 
-              return color(d.amountPaid);
+              return color(d.data.amountPaid);
             });
 
 				path.on('mouseover', function(d) {
-			 
+				  var total = d3.sum(data.map(function(d) {
+				    return d.amountPaid;
+				  }));
+				 
 				  tooltip.select('.paymentDate').html("<b>Payment Date: </b>"+d.data.paymentDate);
 				  tooltip.select('.paymentType').html("<b>Payment Type: </b>"+d.data.paymentType); 
+				  tooltip.select('.paymentAmount').html("<b>Payment Amount: </b>"+d.data.amountPaid.toFixed(2)); 
 				  tooltip.style('display', 'block');
 				});
 			path.on('mouseout', function() {
@@ -265,7 +291,7 @@
 	      .attr("dy", "0em")
 	      .style("text-anchor", "middle")
 	      .attr("class", "bold")
-	      .text(function(d) { return "Amount Paid: $"+d.orderAmount; });
+	      .text(function(d) { return "Amount Paid: $"+total; });
           
           svg.append("text")
           .data(data)
@@ -273,15 +299,9 @@
 	      .attr("dx", "-5em")
 	      .style("text-anchor", "bottom")
 	      .attr("class", "bold")
-	      .text(function(d) { return "Amount Left: $"+(d.amountRemaining).toFixed(2); });
+	      .text("Amount Left: $"+amountLeft);
        
 			});		
-        
-
-		
-
-        
-
 	}
 	
 	function submitCustomerPayment(orderNo,amount){

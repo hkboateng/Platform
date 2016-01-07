@@ -21,14 +21,18 @@
 <%-- Include page header --%>
 <jsp:include page="../header.jsp"/>
 <%-- End of Include page header --%>
-<div id="container" class="container">
-<div class="row">
-<div class="col-sm-9 col-md-9 col-lg-9">
-	<h3>
-		<c:if test="${not empty customer}">
-		${not empty customer.getCustomerName() ? customer.getCustomerName() : customer.getCompany_name()} (Account #:${customerAccount.customer.customerNumber.toUpperCase() })
-		</c:if>
-	</h3>
+	<div id="container" class="container-fluid">
+		<div class="row">
+			<div class="col-sm-3 col-md-3 col-lg-3">
+				<jsp:include page="../sidebar.jsp" />
+			</div>
+		<div class="col-sm-9 col-md-9 col-lg-9">
+			<h3 class="page-header">
+				<c:if test="${not empty customer}">
+				${not empty customer.getCustomerName() ? customer.getCustomerName() : customer.getCompany_name()} (Account #:${customerAccount.customer.customerNumber.toUpperCase() })
+				</c:if>
+			</h3>
+	
 	<%---
 		<c:choose>
 			<c:when test="${not empty address}">
@@ -64,11 +68,9 @@
 		</c:if>	
 	</div>		
 	---%>
-</div> 	
-	
-<div class="clearfix underline-div"></div>
+
 	<%-- Account Details Information --%>
-<div class="col-sm-12 col-md-9 col-lg-9main-container">
+<div class="col-sm-12 col-md-9 col-lg-9">
 		<h3>Account Details</h3>
 		<div>
 			<label class="bold">Account Number:</label>
@@ -89,14 +91,15 @@
 				</c:otherwise>
 			</c:choose>			
 			</address>
-
-			
-			
 		</div>
-		<div>
+		<p>
 			<label class="bold">Account Status:</label>
 			<span>${customerAccount.getStatus()}</span>
-		</div>		
+		</p>
+		<p>
+			<label class="bold">Last Activity Date:</label>
+			<span>${customerAccount.getLastActivityDate()}</span>
+		</p>		
 
 		<h3 class="underline-div">Transaction History</h3>
 
@@ -205,7 +208,8 @@
 			<div class="col-sm-12 col-md-3 col-lg-3 main-container">
 				<div class="list-group">
 					<a href="javascript:document.createOrderForm.submit();" class="list-group-item">Create New Order<i class="glyphicon glyphicon-chevron-right pull-right"></i></a>
-					<a href="#" class="list-group-item">Update Customer Information<i class="glyphicon glyphicon-cog pull-right"></i></a>
+					<a href="<c:url value="/customers/editCustomerInfo" />" class="list-group-item">Update Customer Information<i class="glyphicon glyphicon-cog pull-right"></i></a>
+					<a href="<c:url value="/customers/editCustomerPin" />"  class="list-group-item">Change Customer Pin</a>
 				</div>
 				<%--
 				<jsp:include page="../sidebar.jsp"/>
@@ -280,6 +284,7 @@
 				
 			</div>
 </div>
+</div> 
 </div>
 </body>
 <script>

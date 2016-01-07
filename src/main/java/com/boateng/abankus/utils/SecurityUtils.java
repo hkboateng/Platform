@@ -98,10 +98,8 @@ public class SecurityUtils {
 	        }
 	        return bytes;
 	    }
-	  public static  String generateStorngPasswordHash(String password){
-		  synchronized(password){
-			  return passwdencode().encode(password);
-		  }
+	  public static synchronized String generateStorngPasswordHash(String password){
+		  return passwdencode().encode(password);
 	  }
 	  
 	  public static boolean authenticatePassword(String originalPassword, String storedPassword){
@@ -113,11 +111,11 @@ public class SecurityUtils {
 		  StringBuilder str = new StringBuilder(pin);
 		  str.append(password);
 
-		  generateStorngCodeHash(str.toString());
+		  generateStrongCodeHash(str.toString());
 
 		  return passwdencode().encode(password);
 	  }
-	    private static String generateStorngCodeHash(String password) throws  PlatformException
+	    private static String generateStrongCodeHash(String password) throws  PlatformException
 	    {
 	    	try{
 		        int iterations = 1000;
@@ -271,4 +269,10 @@ public class SecurityUtils {
 				throw ace;
 			}
 	    }    
+	    
+	    public static Integer generateCompanyNumber(){
+	    	SecureRandom rand = new SecureRandom();
+	    	
+	    	return  rand.nextInt();
+	    }
 }

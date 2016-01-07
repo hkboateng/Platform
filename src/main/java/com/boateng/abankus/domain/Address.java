@@ -1,12 +1,7 @@
 package com.boateng.abankus.domain;
 
 import java.io.Serializable;
-
 import javax.persistence.*;
-
-import org.hibernate.annotations.DynamicUpdate;
-
-import java.math.BigInteger;
 
 
 /**
@@ -14,7 +9,6 @@ import java.math.BigInteger;
  * 
  */
 @Entity
-@DynamicUpdate(value=true)
 @NamedQuery(name="Address.findAll", query="SELECT a FROM Address a")
 public class Address implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -35,25 +29,23 @@ public class Address implements Serializable {
 
 	private String zipcode;
 
-	//bi-directional many-to-one association to Customer
-	@ManyToOne
-	@JoinColumn(name="customerId")
-	private Customer customer;
-
-	public Address(){}
+	
 	/**
 	 * @param address1
-	 * @param addressType
+	 * @param address2
 	 * @param city
 	 * @param region
 	 * @param zipcode
 	 */
-	public Address(String address1, String addressType, String city,String region, String zipcode) {
+	public Address(String address1, String address2, String city, String region, String zipcode) {
 		this.address1 = address1;
-		this.addressType = addressType;
+		this.address2 = address2;
 		this.city = city;
 		this.region = region;
 		this.zipcode = zipcode;
+	}
+
+	public Address() {
 	}
 
 	public int getAddressId() {
@@ -110,14 +102,6 @@ public class Address implements Serializable {
 
 	public void setZipcode(String zipcode) {
 		this.zipcode = zipcode;
-	}
-
-	public Customer getCustomer() {
-		return this.customer;
-	}
-
-	public void setCustomer(Customer customer) {
-		this.customer = customer;
 	}
 
 }

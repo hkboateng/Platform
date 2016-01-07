@@ -1,292 +1,137 @@
 package com.boateng.abankus.domain;
 
 import java.io.Serializable;
-import java.net.URI;
+import javax.persistence.*;
 
-import javax.persistence.Id;
-import javax.validation.constraints.Null;
+import org.hibernate.annotations.DynamicUpdate;
+
 
 /**
- * 
- * @author hkboateng
- * Company class is the customer
+ * The persistent class for the company database table.
  * 
  */
+@Entity
+@DynamicUpdate(value=true)
+@NamedQuery(name="Company.findAll", query="SELECT c FROM Company c")
 public class Company implements Serializable {
+	private static final long serialVersionUID = 1L;
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5329208303763227646L;
-	
 	@Id
-	private int id;
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private int companyId;
+
+	private String businessname;
+
+	private String businessType;
+
+	private String companyName;
+
+	private String taxId;
+
+	private int companyNumber;
 	
-	/**
-	 * Unique Id for Company
-	 */
-	private String companyUId;
-	
-	private String company_name;
-	
-	@Null
-	private String company_name1;
-	
-	private String address;
-	
-	@Null
-	private String address1;
-	
-	@Null
-	private String address2;
+	//bi-directional one-to-one association to Address
+	@OneToOne
+	@JoinColumn(name="addressId")
+	private Address addressBean;
 
-	private String city;
-	
-	private String state;
-	
-	private String zipcode;
-	
-	private String email;
-	
-	private Contact contact;
-	@Null
-	private URI webAddress;
-	
-	private String phone1;
-	
-	@Null
-	private String phone2;
-	
-	@Null
-	private String phone3;
+	//bi-directional one-to-one association to Contactperson
+	@OneToOne
+	@JoinColumn(name="contactPersonId")
+	private ContactPerson contactperson;
 
-	/**
-	 * @return the id
-	 */
-	public int getId() {
-		return id;
+	//bi-directional one-to-one association to Email
+	@OneToOne
+	@JoinColumn(name="emailId")
+	private Email emailBean;
+
+	//bi-directional one-to-one association to Phone
+	@OneToOne
+	@JoinColumn(name="phoneId")
+	private Phone phoneBean;
+
+	public Company() {
 	}
 
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(int id) {
-		this.id = id;
+	public int getCompanyId() {
+		return this.companyId;
 	}
 
-	/**
-	 * @return the compnayId
-	 */
-	public String getCompanyUId() {
-		return companyUId;
+	public void setCompanyId(int companyId) {
+		this.companyId = companyId;
 	}
 
-	/**
-	 * @param compnayId the compnayId to set
-	 */
-	public void setCompanyId(String companyId) {
-		this.companyUId = companyId;
+	public String getBusinessname() {
+		return this.businessname;
 	}
 
-	/**
-	 * @return the company_name
-	 */
-	public String getCompany_name() {
-		return company_name;
+	public void setBusinessname(String businessname) {
+		this.businessname = businessname;
 	}
 
-	/**
-	 * @param company_name the company_name to set
-	 */
-	public void setCompany_name(String company_name) {
-		this.company_name = company_name;
+	public String getBusinessType() {
+		return this.businessType;
 	}
 
-	/**
-	 * @return the company_name1
-	 */
-	public String getCompany_name1() {
-		return company_name1;
+	public void setBusinessType(String businessType) {
+		this.businessType = businessType;
 	}
 
-	/**
-	 * @param company_name1 the company_name1 to set
-	 */
-	public void setCompany_name1(String company_name1) {
-		this.company_name1 = company_name1;
+	public String getCompanyName() {
+		return this.companyName;
 	}
 
-	/**
-	 * @return the address
-	 */
-	public String getAddress() {
-		return address;
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
 	}
 
-	/**
-	 * @param address the address to set
-	 */
-	public void setAddress(String address) {
-		this.address = address;
+
+	public String getTaxId() {
+		return this.taxId;
 	}
 
-	/**
-	 * @return the address1
-	 */
-	public String getAddress1() {
-		return address1;
+	public void setTaxId(String taxId) {
+		this.taxId = taxId;
 	}
 
-	/**
-	 * @param address1 the address1 to set
-	 */
-	public void setAddress1(String address1) {
-		this.address1 = address1;
+	public Address getAddressBean() {
+		return this.addressBean;
 	}
 
-	/**
-	 * @return the address2
-	 */
-	public String getAddress2() {
-		return address2;
+	public void setAddressBean(Address addressBean) {
+		this.addressBean = addressBean;
 	}
 
-	/**
-	 * @param address2 the address2 to set
-	 */
-	public void setAddress2(String address2) {
-		this.address2 = address2;
+	public ContactPerson  getContactperson() {
+		return this.contactperson;
 	}
 
-	/**
-	 * @return the city
-	 */
-	public String getCity() {
-		return city;
+	public void setContactperson(ContactPerson  contactperson) {
+		this.contactperson = contactperson;
 	}
 
-	/**
-	 * @param city the city to set
-	 */
-	public void setCity(String city) {
-		this.city = city;
+	public Email getEmailBean() {
+		return this.emailBean;
 	}
 
-	/**
-	 * @return the state
-	 */
-	public String getState() {
-		return state;
+	public void setEmailBean(Email emailBean) {
+		this.emailBean = emailBean;
 	}
 
-	/**
-	 * @param state the state to set
-	 */
-	public void setState(String state) {
-		this.state = state;
+	public Phone getPhoneBean() {
+		return this.phoneBean;
 	}
 
-	/**
-	 * @return the zipcode
-	 */
-	public String getZipcode() {
-		return zipcode;
+	public void setPhoneBean(Phone phoneBean) {
+		this.phoneBean = phoneBean;
 	}
 
-	/**
-	 * @param zipcode the zipcode to set
-	 */
-	public void setZipcode(String zipcode) {
-		this.zipcode = zipcode;
+	public int getCompanyNumber() {
+		return companyNumber;
 	}
 
-	/**
-	 * @return the email
-	 */
-	public String getEmail() {
-		return email;
+	public void setCompanyNumber(int companyNumber) {
+		this.companyNumber = companyNumber;
 	}
 
-	/**
-	 * @param email the email to set
-	 */
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	/**
-	 * @return the webAddress
-	 */
-	public URI getWebAddress() {
-		return webAddress;
-	}
-
-	/**
-	 * @param webAddress the webAddress to set
-	 */
-	public void setWebAddress(URI webAddress) {
-		this.webAddress = webAddress;
-	}
-
-	/**
-	 * @return the phone1
-	 */
-	public String getPhone1() {
-		return phone1;
-	}
-
-	/**
-	 * @param phone1 the phone1 to set
-	 */
-	public void setPhone1(String phone1) {
-		this.phone1 = phone1;
-	}
-
-	/**
-	 * @return the phone2
-	 */
-	public String getPhone2() {
-		return phone2;
-	}
-
-	/**
-	 * @param phone2 the phone2 to set
-	 */
-	public void setPhone2(String phone2) {
-		this.phone2 = phone2;
-	}
-
-	/**
-	 * @return the phone3
-	 */
-	public String getPhone3() {
-		return phone3;
-	}
-
-	/**
-	 * @param phone3 the phone3 to set
-	 */
-	public void setPhone3(String phone3) {
-		this.phone3 = phone3;
-	}
-	
-	
-	//private String
-	public String getCompanyName(){
-		return getCompany_name();
-	}
-	
-	private String companyCurrency;
-	
-	public void setCompanyCurrency(String currency){
-		if(currency == null){
-			companyCurrency = "$";
-		}else{
-		companyCurrency = currency;
-		}
-	}
-	/** Returns the type of currency that the Company or Business will be using for this application.**/
-	public String getCompanyCurrency(){
-		return companyCurrency;
-	}
 }

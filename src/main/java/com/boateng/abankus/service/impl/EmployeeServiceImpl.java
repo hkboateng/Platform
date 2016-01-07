@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.hibernate.CacheMode;
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import com.boateng.abankus.domain.Team;
 import com.boateng.abankus.domain.User;
 import com.boateng.abankus.domain.UserRole;
 import com.boateng.abankus.employees.utils.EmployeeUtils;
+import com.boateng.abankus.exception.PlatformException;
 import com.boateng.abankus.services.AuthenticationService;
 import com.boateng.abankus.services.EmployeeService;
 
@@ -166,6 +168,50 @@ public class EmployeeServiceImpl implements EmployeeService{
 						.setParameter("employeeId", employeeId)
 						.list();
 		return payments;
+	}
+	/* (non-Javadoc)
+	 * @see com.boateng.abankus.services.EmployeeService#findAllEmployeeByEmployeeNumber(java.lang.String)
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Employee> findAllEmployeeByEmployeeNumber(String employeeNumber) throws PlatformException{
+		Session session = getSessionFactory().getCurrentSession();
+		List<Employee> employeeList = session.createQuery("from Employee e wheren e.employeeNumber =:employeeNumber")
+				.setParameter("employNumber", employeeNumber)
+				.list();
+		return employeeList;
+	}
+	/* (non-Javadoc)
+	 * @see com.boateng.abankus.services.EmployeeService#findAllEmployeeByFirstAndLastName(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public List<Employee> findAllEmployeeByFirstAndLastName(String firstname, String lastname) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	/* (non-Javadoc)
+	 * @see com.boateng.abankus.services.EmployeeService#findAllEmployeeByEmailAddress(java.lang.String)
+	 */
+	@Override
+	public List<Employee> findAllEmployeeByEmailAddress(String emaillAddress) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	/* (non-Javadoc)
+	 * @see com.boateng.abankus.services.EmployeeService#findAllEmployeeListSearchString(java.lang.String)
+	 */
+	@Override
+	public List<Employee> findAllEmployeeListSearchString(String search) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	/* (non-Javadoc)
+	 * @see com.boateng.abankus.services.EmployeeService#findAllEmployeeByEmployeeId(java.lang.Integer)
+	 */
+	@Override
+	public List<Employee> findAllEmployeeByEmployeeId(Integer employeeId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

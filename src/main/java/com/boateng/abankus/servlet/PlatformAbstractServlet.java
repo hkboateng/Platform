@@ -79,6 +79,14 @@ public abstract class PlatformAbstractServlet {
 
 	}
 	
+	public void clearMessages(HttpServletRequest request){
+		HttpSession session = request.getSession(false);
+		session.removeAttribute(PlatformFields.SEARCH_ERROR_SESSION);
+		session.removeAttribute(PlatformFields.PRODUCT_LIST_SESSION);
+		session.removeAttribute(PlatformFields.CUSTOMER_ORDER_LIST_SESSION);
+		session.removeAttribute(PlatformFields.CUSTOMER_SESSION);
+	}
+	
 	/**
 	 * Loads all of Products currently in the Database to a HashMap.
 	 * 

@@ -51,6 +51,7 @@ import com.boateng.abankus.services.EmployeeService;
 import com.boateng.abankus.services.PaymentService;
 import com.boateng.abankus.servlet.PlatformAbstract;
 import com.boateng.abankus.servlet.PlatformAbstractServlet;
+import com.boateng.abankus.utils.PlatformUtils;
 import com.boateng.abankus.utils.SecurityUtils;
 import com.boateng.abankus.utils.ValidationUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -82,7 +83,7 @@ public class PaymentProcessor extends PlatformAbstract{
 			logger.info("Input field is empty or null");
 			valid = "Input field is empty or null";
 		}
-		
+		logger.info(valid);
 		return valid;
 	}
 	
@@ -120,29 +121,7 @@ public class PaymentProcessor extends PlatformAbstract{
 		
 		return customer;
 	}
-	public String processPayment(HttpServletRequest request){
-		HttpSession session = request.getSession(false);
-		
-		Employee employee = (Employee) session.getAttribute(EmployeeFields.EMPLOYEE_SESSION);		
-		String orderNumber = request.getParameter("orderNumber");	
-		
-		logActivity("is Processing a Payment for OrderNumber: "+orderNumber,employee);
 
-			
-		CustomerOrder order = customerOrderServiceImpl.findCustomerOrderByOrderNumber(orderNumber);	
-			CustomerPaymentBuilder builder = new CustomerPaymentBuilder(request);
-
-			OrderPayment orderPayment = builder.buildOrderPayment(order,employee);
-			logActivity("is Processing a Payment for OrderNumber: "+orderNumber+". Payment amount of"+orderPayment.getAmountPaid(),employee);
-			Paymentmethod paymentMethod = builder.buildPaymentMethod();
-			BankInformation bank = builder.buildBankInformation();
-			logger.info("Employee: "+employee.getEmployeeId()+ " is submitting a payment of: "+orderPayment.getAmountPaid()+" for order number: "+orderNumber);
-			String status  = paymentServiceImpl.submitPayment(orderPayment,paymentMethod,bank);
-
-			logger.info("Employee Id: "+employee.getEmployeeId()+ " has submitted a payment of: "+orderPayment.getAmountPaid()+" for order number: "+orderNumber+". Confirmation Number: "+status);
-			
-			return status;
-	}
 	public List<String> validateOrderPayment(String amount,String orderAmount,String orderNumber, String typeOfPayment, String formOfPayment){
 
 		logger.log(Level.INFO, "Started validation for Order Number: "+orderNumber);
@@ -212,12 +191,12 @@ public class PaymentProcessor extends PlatformAbstract{
 			throw ace;
 		}
 	}
-	
+
 	/**
 	 * @param customerpin
 	 */
-	public boolean authenticatePasscode(String pin,String customerId)  throws PlatformException {
-		logger.log(Level.INFO,"Platform is validating customer Pin Code.");
+	public boolean authenticatePasscode(String pin,String customerId,Employee employee)  throws PlatformException {
+		logger.info(logActivity(" is authenticating Customer PIN",employee));
 		Authenticatecustomer customer = null;
 		boolean valid = false;
 		try{
@@ -233,6 +212,7 @@ public class PaymentProcessor extends PlatformAbstract{
 				return valid;
 			}
 			valid = isCustomerPasscodeValid(pin,customer.getPin());
+			logActivity("has completed authenticating customer PIN code.",employee);
 			logger.info("Authenticating Customer results is: "+valid);
 			return valid;
 		}catch(Exception e){
@@ -248,43 +228,39 @@ public class PaymentProcessor extends PlatformAbstract{
 		return hashpin.contentEquals(encodedPin);
 		//return SecurityUtils.authenticatePassword(pin, hashpin);
 	}	
-	
-	private Paymentmethod buildPaymentMethod(HttpServletRequest request){
-		Paymentmethod paymentMethod = new Paymentmethod();
-		/**
-		 * Whether payment is made in cash or CC or Bank
-		 */
-		String paymentType = request.getParameter("paymentMethod");
+
+	private PaymentRequest buildBankInformation(HttpServletRequest request, PaymentRequest paymentRequest){
+
 		String bankName = request.getParameter("bankName");
 		String bankRoutingNumber = request.getParameter("bankRoutingNumber");
-		String bankCustName = request.getParameter("bankCustName");
+		String bankCustomerName = request.getParameter("bankCustName");
 		String bankAccountNumber = request.getParameter("bankAccountNumber");
 		String checkNumber = request.getParameter("checkNumber");
 		
-		paymentMethod.setPaymentType(paymentType);
-		if(paymentType.equalsIgnoreCase("check")){
-			
-		}		
-		if(paymentType.equalsIgnoreCase("card")){
-			
-		}
-		return paymentMethod;
-	}
-
-	/**
-	 * @param request
-	 */
-	public void submitPayment(HttpServletRequest request) {
-		String amountPaid = request.getParameter("amountPaid");
-		String paymentType = request.getParameter("paymentMethod");
-		String orderNumber = request.getParameter("orderNumber");
-		String customerId = request.getParameter("customerId");
-		String orderId = request.getParameter("orderId");
-	
-		Paymentmethod paymentMethod = 	buildPaymentMethod(request);
-
+		paymentRequest.setBankAccountNumber(bankAccountNumber);
+		paymentRequest.setBankRoutingNumber(bankRoutingNumber);
+		paymentRequest.setBankName(bankName);
+		paymentRequest.setCheckNumber(checkNumber);
+		paymentRequest.setBankCustomerName(bankCustomerName);
 		
+		return paymentRequest;
 	}
+	
+	private PaymentRequest buildDebitCardInformation(HttpServletRequest request, PaymentRequest paymentRequest){
+		String nameOnCard = request.getParameter("nameOnCard");
+		String cardType  = request.getParameter("cardType");
+		String cardNumber = request.getParameter("cardNumber");
+		String expirationDate = request.getParameter("expirationDate");
+		String securityNumber = request.getParameter("securityNumber");
+		
+		paymentRequest.setCardNumber(cardNumber);
+		paymentRequest.setCardType(cardType);
+		paymentRequest.setExpirationDate(expirationDate);
+		paymentRequest.setNameOnCard(nameOnCard);
+		paymentRequest.setSecurityNumber(securityNumber);		
+		return paymentRequest;
+	}
+
 
 	/**
 	 * @param orderNumber
@@ -306,7 +282,36 @@ public class PaymentProcessor extends PlatformAbstract{
 		
 		return errors;
 	}
+	public String processPayment(HttpServletRequest request) throws PlatformException{
+		
+		HttpSession session = request.getSession(false);
+		
+		Employee employee = (Employee) session.getAttribute(EmployeeFields.EMPLOYEE_SESSION);		
+		String orderNumber = request.getParameter("orderNumber");	
+		CustomerOrder order = customerOrderServiceImpl.findCustomerOrderByOrderNumber(orderNumber);	
+		
+		String paymentMethod = request.getParameter("paymentMethod");
+		String amount = request.getParameter("paymentAmount");
+		String customer = request.getParameter("unicode");	
+		
+		Integer orderId = null;
+		Integer customerId = null;
+		try{
+			orderId = Integer.valueOf(String.valueOf(order.getClientOrderId()));
+			customerId= Integer.valueOf(customer);
+		}catch(NumberFormatException e){
+			PlatformException ace = new PlatformException(e);
+			throw ace;
+		}
+		order = null;
+		logActivity("is Processing a Payment for OrderNumber: "+orderNumber,employee);
+		String paymentTransaction = null;
 
+		paymentTransaction = submitBillPayment(customerId,orderId,amount,paymentMethod,employee,request);
+
+					
+		return paymentTransaction;
+	}	
 	/**
 	 * @param orderNumber - Order Number to apply the amount to.
 	 * @param amount - Amount Paid
@@ -314,9 +319,9 @@ public class PaymentProcessor extends PlatformAbstract{
 	 * @param employee - Staff submitting the Payment request
 	 * @return 
 	 */
-	public PaymentTransaction submitBillPayment(Integer customerId,Integer orderNumber, String amount, String paymentMethod, Employee employee,HttpServletRequest request) {
+	public String submitBillPayment(Integer customerId,Integer orderNumber, String amount, String paymentMethod, Employee employee,HttpServletRequest request) {
 		
-		logger.info(logActivity(" is submitting payment amount: "+amount+ "to order number: "+orderNumber,employee));
+		logger.finest(logActivity(" is submitting payment amount: "+amount+ " to order number: "+orderNumber,employee));
 		
 		DateTime dateTime = new DateTime();
 
@@ -326,34 +331,43 @@ public class PaymentProcessor extends PlatformAbstract{
 		paymentRequest.setOrderId(orderNumber);
 		paymentRequest.setPaymentDate(dateTime.toString("MM/d/YYYY"));
 		paymentRequest.setPaymentMethod(paymentMethod);
+		if(paymentMethod.equals("check")){
+			 buildBankInformation(request,paymentRequest);
+		}
+		if(paymentMethod.equals("card")){
+			 buildDebitCardInformation(request,paymentRequest);
+		}
 		paymentRequest.setCustomerId(customerId);
 		paymentRequest.setEmployeeId(employee.getId());
-		PaymentTransaction transaction = null;
+		String transaction = null;
 		try {
-			transaction = submitPaymentRequest(paymentRequest);
+			transaction = submitPaymentRequest(paymentRequest,employee);
 		} catch (PlatformException e) {
 			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
+		paymentRequest = null;
 		return transaction;
 	}
 	
-	private PaymentTransaction submitPaymentRequest(PaymentRequest request) throws  PlatformException{
+	private String submitPaymentRequest(PaymentRequest request, Employee employee) throws  PlatformException{
 		
 		Client client = ClientBuilder.newClient();
 		WebTarget target = client.target("http://localhost:8080/paymenthub/paymentservice");
 		AsyncInvoker invoke  = target.path("/saveCustomerPayment").request().async();
 		ObjectMapper mapper = new ObjectMapper();
 		
-		PaymentTransaction transaction = null;
+		String transaction = null;
 		try {
 			Future<String> response = invoke.post(Entity.entity(mapper.writeValueAsString(request), MediaType.APPLICATION_JSON), String.class);
-			String result = response.get();
-			transaction = mapper.readValue(result, PaymentTransaction.class);
+
+				transaction = response.get();				
+
+				logger.finest(logActivity("has completed submittingPayment Transaction.",employee));
 		} catch (InterruptedException | ExecutionException | IOException e) {
-			PlatformException ace = new PlatformException();
+			PlatformException ace = new PlatformException(e);
 			throw ace;
 		}
-		logger.info("Ok");;
+		
 		return transaction;
 	}
 }

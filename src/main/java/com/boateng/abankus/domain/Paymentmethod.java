@@ -5,6 +5,7 @@ import javax.persistence.*;
 
 import org.hibernate.annotations.DynamicUpdate;
 
+import com.boateng.abankus.application.interfaces.PaymentCollection;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
@@ -24,7 +25,7 @@ public class Paymentmethod implements Serializable {
 
 
 	private String paymentType;
-
+	
 	@JsonIgnoreProperties
 	@OneToOne(mappedBy="paymentmethod")
 	private OrderPayment orderpayment;

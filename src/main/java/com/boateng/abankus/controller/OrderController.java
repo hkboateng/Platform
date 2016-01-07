@@ -91,17 +91,20 @@ public class OrderController {
 	
 	@RequestMapping(value = "/client/createCustomerOrder", method = RequestMethod.GET)
 	public String createOrder(@RequestParam(value="accountNumber",required=true) String accountNumber,Model model){
-	logger.info("Username: is viewing Create Order page.");
+		logger.info("Username: is viewing Create Order page.");
 					
-			CustomerAccount account = customerServiceProcessor.findCustomerAccountByAccountNumber(accountNumber);
-			if(account == null){
-				return "Account Number is invalid";
-			}		
+		CustomerAccount account = customerServiceProcessor.findCustomerAccountByAccountNumber(accountNumber);
+		if(account == null){
+			return "Account Number is invalid";
+		}		
+		
 		List<Product> productList = productServiceProcessor.getAllProducts();
 		model.addAttribute("productList", productList);
 		model.addAttribute("account",account);
+		
 		return "ClientServices/createOrders";
 	}	
+	
 	@RequestMapping(value = "/customer/findCustomer", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public String findCustomer(@RequestParam(value="accountNumber",required=true) String accountNumber,HttpServletRequest request) throws IOException{
@@ -119,6 +122,7 @@ public class OrderController {
 		return acct;
 	}
 
+	/**
 	
 	@RequestMapping(value = "/client/addProductToCart", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
@@ -153,7 +157,7 @@ public class OrderController {
 	public void addCustomerOrder(HttpServletRequest request, Model model){
 		
 	}
-	
+	**/
 	@RequestMapping(value = "/client/clientOrderDetail", method = RequestMethod.POST)
 	public ModelAndView clientOrderDetail(HttpServletRequest request, Model model){
 		logger.info("Employee is viewing Client Order Summary");
@@ -169,6 +173,7 @@ public class OrderController {
 		ObjectMapper mapper = new ObjectMapper();
 		String productDetails = mapper.writeValueAsString(product);
 		
+		product = null;
 		return productDetails;
 	}
 
@@ -183,6 +188,7 @@ public class OrderController {
 		}
 		
 		session.setAttribute("successMessageList", validation);
+		validation = null;
 		return "redirect:/customer/createOrders";
 	}
 	
@@ -198,7 +204,9 @@ public class OrderController {
 			session = request.getSession(false);
 			session.setAttribute(CustomerOrderFields.BILLING_COLLECTION_SESSION, collection);
 			model.addAttribute("billing", collection);
-
+			
+			collection = null;
+			orderList = null;
 		return "ClientServices/OrderHistory";
 	}
 	

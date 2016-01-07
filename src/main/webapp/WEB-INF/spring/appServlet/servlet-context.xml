@@ -30,7 +30,11 @@
 		<beans:property name="prefix" value="/WEB-INF/views/" />
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
-	
+	<!-- Resolves views selected for rendering by @Controllers to .html resources in the /WEB-INF/static directory -->
+	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name="prefix" value="/WEB-INF/static/" />
+		<beans:property name="suffix" value=".html" />
+	</beans:bean>	
 
 	<context:component-scan base-package="com.boateng.abankus" />
 	
@@ -113,7 +117,8 @@
 	<beans:bean id="productServiceProcessor" class="com.boateng.abankus.processors.ProductServiceProcessor" />
 	
 	<beans:bean id="orderOrderProcessor" class="com.boateng.abankus.processors.CustomerOrderProcessor" />
-
+	
+	<beans:bean id="companyProcessor" class="com.boateng.abankus.processors.CompanyProcessor"/>
 
 	<beans:bean id="paymentProcessor" class="com.boateng.abankus.processors.PaymentProcessor" />
 	
@@ -137,4 +142,9 @@
 	<beans:bean id="productServiceImpl" class="com.boateng.abankus.service.impl.ProductServiceImpl">
 		<beans:property name="sessionFactory" ref="sessionFactory" />
 	</beans:bean>
+
+	<beans:bean id="companyServiceImpl" class="com.boateng.abankus.service.impl.CompanyServiceImpl">
+		<beans:property name="sessionFactory" ref="sessionFactory" />
+	</beans:bean>	
+	
 </beans:beans>

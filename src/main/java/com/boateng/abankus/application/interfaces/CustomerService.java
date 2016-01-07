@@ -120,4 +120,6 @@ public interface CustomerService {
 	ContactPerson findCustomerContactByCustomerId(int customerId);
 	
 	Customer findCustomerByAccountNumber(String accountNumber);
+	
+	Integer countTotalCustomer();
 }

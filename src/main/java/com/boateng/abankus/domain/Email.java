@@ -24,10 +24,6 @@ public class Email implements Serializable {
 
 	private String emailType;
 
-	//bi-directional many-to-one association to Customer
-	@ManyToOne
-	@JoinColumn(name="customerId")
-	private Customer customer;
 
 	public Email() {
 	}
@@ -60,12 +56,5 @@ public class Email implements Serializable {
 		this.emailType = emailType;
 	}
 
-	public Customer getCustomer() {
-		return this.customer;
-	}
-
-	public void setCustomer(Customer customer) {
-		this.customer = customer;
-	}
 
 }

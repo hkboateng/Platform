@@ -9,18 +9,21 @@
 <link href="<c:url value="/resources/css/bootstrap.css" />" rel="stylesheet"/>
 <link href="<c:url value="/resources/css/platform.css" />" rel="stylesheet"/>
 <link href="<c:url value="/resources/css/fonts-awesome/font-awesome.css" />" rel="stylesheet"/>
-<link href="<c:url value="/resources/css/tables/jquery.dataTables.css" />" rel="stylesheet"/>
 <script src="<c:url value="/resources/js/jquery.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/bootstrap.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/platform-functions.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/application.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/visualization/d3.js" />" type="text/javascript"  charset="utf-8"></script>
+<script type="text/javascript" src="<c:url value="/resources/js/visualization/guage.js" />"></script>
+<script src="<c:url value="/resources/js/visualization/visualization.js" />" type="text/javascript"  charset="utf-8"></script>
 <style>
 
  .axis {
    font: 10px sans-serif;
  }
+.tick line{
 
+}
  .axis path,
  .axis line {
    fill: none;
@@ -37,218 +40,184 @@
 	<!-- Body Begins-->
 	<div id="container" class="container-fluid">
 		<div class="row">
-		 	<div class=" spaceBelow_20"></div>
-			<div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
-				<jsp:include page="../sidebar.jsp"/>
-			</div>	
-			<div class="col-sm-12 col-md-10 col-lg-10 center-block main">
-			<h2 class="page-header">Welcome, ${employee.firstname}&nbsp;${employee.lastname}</h2>
+			<div class="col-sm-12 col-md-12 col-lg-12  page-header">
+
+				<span class="lead">Welcome, ${employee.firstname}&nbsp;${employee.lastname}</span>
+
+				<script>
+					periodList();
+				</script>
+			</div>
+			<div class="col-sm-12 col-md-12 col-lg-12 center-block main">
+			
 			<!-- Messages -->
 			          <c:if test="${not empty success }">
-				          <div class="alert alert-success" role="alert">
+				          <div class="alert alert-success close" role="alert"  data-dismiss="alert" aria-label="Close">
+				          	<span aria-hidden="true">&times;</span>
 				          	${success}
 				          </div>
 			          </c:if>
 			          <div class="col-lg-12">
 					      <c:if test="${not empty searchError }">
-						    <div class="alert alert-danger" role="alert">
+						    <div class="alert alert-danger col-lg-8" role="alert">
 						        ${searchError }
 						    </div>
 					      </c:if>			          
-			          </div>					 	
+			          </div>					
+			          <div id="" class="col-lg-12 col-md-12"> 
+			          <div class="col-lg-9 col-md-9">
+						<div id="" class="col-lg-3 col-md-4">
+				         <span class="lead">Total Payments for  <span class="yearId"></span></span>
+				         <table id="tblTotalYearPayment" class="table table-bordered">
+				         	<thead>
+				         		<tr>
+					         		<th>Year</th>
+					         		<th>Total Amount</th>
+				         		</tr>
+				         	</thead>
+				         	<tbody id="totalYearPayment">
+				         	
+				         	</tbody>
+				         </table>
+				         </div>	
+				         
+				         <div id="totalDayPayment" class="col-lg-3 col-md-4">
+					         <span class="lead">Payments collected in <span id="todayId"></span></span>
+					         <table class="table table-bordered ">
+					         	<thead>
+					         		<tr class="success">
+						         		<th>Transactions Processed</th>
+					         		</tr>
+					         	</thead>
+					         	<tbody id="transactionToday">
+					         	
+					         	</tbody>
+					         </table>
+				         </div>
+				         <div class="clearfix"></div>
+				         <!-- Guage -->
+					 <div class="col-md-3 col-lg-4">
+					 	<div class="panel panel-default">
+						  	<!-- Default panel contents -->
+						  	<div class="panel-heading">Number of Customers</div>
+						  </div>
+						  <span id="customerGaugeContainer">
+						  
+						  </span>
+					  
+					  	
+					 </div>		
+					 <div class="col-md-9 col-lg-8">
+					 	<div id="barChart">
+						
+						</div>
+					 </div>		         				         		          
+			          </div>
+			          <div class="col-lg-3 col-md-3">
+					         <span class="lead">Payments for each month in <span class="yearId"></span></span>
+					         <table class="table table-bordered ">
+					         	<thead>
+					         		<tr class="success">
+						         		<th>Month</th>
+						         		<th>Total Amount</th>
+					         		</tr>
+					         	</thead>
+					         	<tbody id="totalMonthPayment">
+					         	
+					         	</tbody>
+					         </table>	          
+			          </div>				          
+			          </div>
+
 					 <div class="clear"></div>
-					<div id="barChart">
+
+					 <div class="col-md-3">
 					
-					</div>
-			           
-			       <%--
-				          <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
-				          	
-				          	<h3>My Customer(s)</h3>
-				          	<c:if test="${not empty employeeCustomerList }">
-				          	<table id="assignedCustomerList" class="table">
-				          		<thead>
-				          		<tr>
-				          			<th>Customer Name</th>
-				          			<th>Account Status</th>
-				          			<th>Action</th>
-				          		</tr>
-				          		</thead>
-				          		<tbody>
-				          		<c:forEach items="${employeeCustomerList }" var="customerList" >
-				          		<tr>
-				          			<td>${customerList.customer.getCustomerName() }</td>
-				          			<td>${customerList.getStatus() }</td>
-				          			<td>
-				          			<!-- Split button -->
-										<div class="btn-group">
-										  <button type="button" class="btn btn-success">Action</button>
-										  <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-										    <span class="caret"></span>
-										    <span class="sr-only">Toggle Dropdown</span>
-										  </button>
-										  <ul class="dropdown-menu">
-										    <li><a href="javascript:submitCustomerURL(document.customerViewProfileForm,'${customerList.getCustomer().getCustomerNumber()}')">View Customer Details</a></li>
-										    <li><a href="#">Transaction History</a></li>
-										    <li role="separator" class="divider"></li>
-										    <li><a href="#">Separated link</a></li>
-										  </ul>
-										</div>
-				          			</td>
-				          		</tr>
-				          		</c:forEach>
-				          		</tbody>
-				          	</table>
-				          	</c:if>
-				          	<c:if test="${empty employeeCustomerList}">				          	
-								No Customer
-								<div class="center-block">
-									<a class="btn btn-success" href="<c:url value="/customers/create"/>"> Add New Customer</a>
-								</div>	          		
-				          	</c:if>		 	          	
-
-				          <h3 class="underline-div"> Transaction History</h3>				          
-							  <div class="btn-group btn-group-justified" role="group" >
-								  <div class="btn-group" role="group">
-								    <a aria-controls="todayDivContainer" role="tab" data-toggle="tab" id="todayDiv" href="#todayDivContainer"  class="btn btn-success">Today</a>
-								  </div>
-								  <div class="btn-group" role="group">
-								    <a aria-controls="monthlyDivContainer" role="tab" data-toggle="tab" href="#monthlyDivContainer" class="btn btn-default">Monthly</a>
-								  </div>
-								  <div class="btn-group" role="group">
-								    <a aria-controls="monthlyDivContainer" role="tab" data-toggle="tab" href="#YTDDivContainer"  class="btn btn-default">Year-To-Date</a>
-								  </div>
-								  <div class="btn-group" role="group">
-								    <a aria-controls="monthlyDivContainer" role="tab" data-toggle="tab" href="#FilterDivContainer"  class="btn btn-default">
-								    	Filter
-								    </a>						    
-								  </div>							  
-							   </div>	
-								  <div class="tab-content">
-								  <div class="spaceBelow_10"></div>
-								  	<div  role="tabpanel" class="tab-pane active" id="todayDivContainer">								  		
-									        <table id="transactionTodayTbl" class="table table-striped transactionTable">
-									        	<thead>
-										          	<tr>
-											          	<th>Date</th>
-											          	<th>Amount</th>
-											          	<th>Type Of Payment</th>
-											          	<th>Action</th>
-										          	</tr>		
-									          	</thead>	
-									          	<tbody id="transactionToday">
-																          	
-									          	</tbody>  
-						          				<tfoot>
-						          					<tr>
-						          						<td colspan="1"><span class="bold">Total Amount:</span></td>
-						          						<td colspan="2" id="todayTotal"></td>
-						          						<td></td>
-						          					</tr>
-						          				</tfoot>
-						          			</table>								  		
-								  		</div>
-
-								  	<div  role="tabpanel" class="tab-pane" id="monthlyDivContainer">
-									        <table id="transactionMonthTbl" class="table table-striped transactionTable">
-									        	<thead>
-										          	<tr>
-											          	<th>Date</th>
-											          	<th>Amount</th>
-											          	<th>Type Of Payment</th>
-											          	<th>Action</th>
-										          	</tr>		
-									          	</thead>	
-									          	<tbody id="transactionMonth">
-																          	
-									          	</tbody>  
-						          			</table>								  		
-								  	</div>		
-								  	<div  role="tabpanel" class="tab-pane" id="YTDDivContainer">
-									        <table id="transactionYTDTbl" class="table transactionTable">
-									        	<thead>
-										          	<tr>
-											          	<th>Date</th>
-											          	<th>Amount</th>
-											          	<th>Type Of Payment</th>
-											          	<th>Action</th>
-										          	</tr>		
-									          	</thead>	
-									          	<tbody id="transactionYTD">
-																          	
-									          	</tbody>  
-						          				<tfoot>
-						          					<tr>
-						          						<td colspan="1"><span class="bold">Total Amount:</span></td>
-						          						<td colspan="2">Total</td>
-						          						<td></td>
-						          					</tr>
-						          				</tfoot>
-						          			</table>
-						          			<div>
-						          				<a href="transactionList">Transaction List</a>
-						          			</div>								  		
-								  	</div>
-								  	<div  role="tabpanel" class="tab-pane" id="FilterDivContainer">
-								  		<h4>Filter Transaction</h4>
-								  	</div>								  						  	
-								  </div>				          
-				         	</div>		
-							--%>		          	
+					 </div>
+					 
+					 
 			</div>
-			
 		</div>
-
 	</div>
-	<footer class="footer">
-		<div class="container">
-			<p>Copyright &copy; 2015</p>
-		</div>		
-	</footer>
+	<%-- Include page header --%>
+	<jsp:include page="../footer.jsp"/>
+	<!-- Page Header ends -->
 <sf:form action="/abankus/customers/viewProfile" method="post" name="customerViewProfileForm">
 <input type="hidden" name="searchType" id="searchType" value="customerNumber">
 <input type="hidden" name="customerNumber" id="customerNumber" value="">
 </sf:form>
 </body>
-
-<script src="<c:url value="/resources/js/tables/jquery.dataTables.js" />" type="text/javascript"></script>
 <script>
 	$(document).ready(function(){
-		//loadEmployeeCustomers();
-		//loadYearPayments()
-		//loadTodayPayment();
-		//loadMonthAndYearPayments();
-		//$('#assignedCustomerList').DataTable({});
-		//graph();
+		createGauges();
+		setInterval(loadTotalCustomerCount(), 5000);
+		$(document).ajaxStart(function() {
+			  $("#loading-text").show();
+			});
+
+			$(document).ajaxStop(function() {
+			  $("#loading-text").hide();
+			});
+		var year = new Date().getFullYear();
+		var month = new Date().getMonth()+1;
+		changeAnalystics(year,month);
+
+		var pullData = function(){
+			graph(year);
+		}
+		setTimeout(pullData,20000);
 	});
-	
+	function createGauges()	{
+		createGauge("customer", "Customer");
+	}
 	function loadEmployeeCustomers(){
 		
 	}
-	function loadYearPayments(){
-		var year = new Date().getFullYear();
+	function changeAnalystics(year,month){
+		//graph(year)
+		loadYearPayments(year);
+		countTodayPayment();
+		loadMonthAndYearPayments(month,year);
+		loadTotalCustomerCount();
+	}
+	///customers/countTotalCustomers
+	function loadTotalCustomerCount(){
 		$.ajax({
-			url: 'http://localhost:8080/paymenthub/rs/paymentservice/loadYearTransactionHistory',
+			url: 'countTotalCustomers',
+			method: 'get',
+			dataType: 'json',
+			success: function(result){
+				console.log(result);
+				updateGauges('customer',result);
+			},
+			error : function(err){
+				console.log(err.responseText);
+			}
+		});			
+	}
+	function loadYearPayments(year){
+		if(year == null){
+			year = new Date().getFullYear();
+		}
+		$.ajax({
+			url: 'http://localhost:8080/paymenthub/paymentservice/findPaymentByOrderYear',
 			method: 'get',
 			data : {
 				year : year
 			},
 			dataType: 'json',
 			success: function(result){
-				console.log(result);
-				if(result.length > 0){
-					var table = "";
-				$.each(result,function(key,value){
+				var table = "";
+				if(result[0] != null && result[1] != null){
+				
 					table +="<tr>";
-					table +="<td>"+value.paymentDate+"</td>";
-					table +="<td>"+value.amountPaid+"</td>";
-					table +="<td>"+toTitleCase(value.paymentType)+"</td>";
-					table +="<td><a class='btn btn-primary' href='#' role='button' onclick=''>Action</a>";
+					table +="<td>"+result[0]+"</td>";
+					table +="<td>$"+result[1].toFixed(2)+"</td>";
 					table +="</tr>";
-				});
-				$('#transactionYTD').html(table);					
+				$('#totalYearPayment').html(table);					
 			}else{
-				$('#transactionYTD').html("No Data");		
+				table = "<tr><td colspan='2'>No Data</td></tr>";
+				$('#totalYearPayment').html(table);		
 			}
 			},
 			error : function(err){
@@ -256,44 +225,48 @@
 			}
 		});				
 	}
-	function loadMonthAndYearPayments(){
-		var thisMonth= new Date().getMonth()+1;
-		var year = new Date().getFullYear();
+	function loadMonthAndYearPayments(month,year){
+		$('.yearId').html(year);
+		if(year == null){
+			year = new Date().getFullYear();
+		}
 		$.ajax({
-			url: 'http://localhost:8080/paymenthub/rs/paymentservice/findPaymentTransactionByMonthAndYear',
+			url: 'http://localhost:8080/paymenthub/paymentservice/findPaymentByOrderMonthAndYear',
 			method: 'get',
 			data: {
-				month: thisMonth,
 				year:year
 			},
 			dataType: 'json',
 			success: function(result){
-				
-				if(result.length > 0){
+				var table="";
+				if(result.length > 0 && result != null){
 					$.each(result,function(key,value){
 						table +="<tr>";
-						table +="<td>"+value.paymentDate+"</td>";
-						table +="<td>"+value.amountPaid+"</td>";
-						table +="<td>"+toTitleCase(value.paymentType)+"</td>";
-						table +="<td><a class='btn btn-primary' href='#' role='button' onclick=''>Action</a>";
+						table +="<td>"+result[key][0]+"</td>";
+						table +="<td>$"+result[key][2]+"</td>";
 						table +="</tr>";
 					});
-					$('#transactionMonth').html(table);					
+					$('#totalMonthPayment').html(table);					
 				}else{
-					$('#transactionMonth').html("No Data");		
+					table = "<tr><td colspan='3'>No Data</td></tr>";
+					$('#totalMonthPayment').html(table);		
 				}
 
 			},
 			error : function(err){
 				$('#transactionMonth').html("No Transaction");
+			},
+			complete: function(e){
+				$('#yearId').html(year);
 			}
 		});		
 	}
-	function loadTodayPayment(){
+	function countTodayPayment(){
 		var now = new Date();
+		$("#todayId").html(now.toLocaleDateString("en-US"));
 		var day = now.getDate();
 		if(day <10){
-			day = "0"+day;
+			day = day;
 		}
 		var month = now.getMonth()+1;
 		if(month < 10){
@@ -306,31 +279,24 @@
 		
 		var toDate = new Date().toLocaleDateString("en-US");
 		$.ajax({
-			url: "loadPayments",
+			url: "http://localhost:8080/paymenthub/paymentservice/countTotalPaymentDate",
 			method: 'get',
 			data: {
 				date: date
 			},
 			dataType: 'json',
 			success: function(result){
+				Number(result);
 				
 				var table = "";
-				var total = 0;
-				$.each(result,function(key,value){
-					table +="<tr>";
-					table +="<td>"+value.paymentDate+"</td>";
-					table +="<td>"+value.amountPaid+"</td>";
-					table +="<td>"+toTitleCase(value.paymentType)+"</td>";
-					table +="<td><a class='btn btn-primary' href='#' role='button' onclick=''>Action</a>";
-					table +="</tr>";
-					total  += Number(value.amountPaid);
-				});
-				$('#transactionToday').html(table);
-				console.log(total);
-				$('#todayTotal').html(total.toFixed(2));
+						table +="<tr>";
+						table +="<td>"+result+"</td>";
+						table +="</tr>";
+					$('#transactionToday').html(table);	
 			},
 			error : function(err){
-				console.log(err.responseText);
+				table = "<tr><td>No Data</td></tr>";
+				$('#transactionToday').html(table);	
 			}
 		});
 	}
@@ -341,22 +307,21 @@
 		
 	}
 	
-	function graph(){
+	function graph(year){
 		var margin = {top: 20, right: 20, bottom: 70, left: 40},
-	    width = 900 - margin.left - margin.right,
+	    width = 800 - margin.left - margin.right,
 	    height = 600 - margin.top - margin.bottom;
-	var year = new Date().getFullYear();
+	
 	// Parse the date / time
 	var parseDate = d3.time.format("%m").parse;
 
-	var x = d3.scale.ordinal().rangeRoundBands([0, width], 0.05);
+	var x = d3.scale.ordinal().rangeRoundBands([0, width], 0.5);
 
 	var y = d3.scale.linear().range([height, 0]);
 
 	var xAxis = d3.svg.axis()
 	    .scale(x)
-	    .orient("bottom")
-	    .tickFormat(d3.time.format("%B"));
+	    .orient("bottom");
 
 	var yAxis = d3.svg.axis()
 	    .scale(y)
@@ -372,48 +337,46 @@
 	    .attr("transform", 
 	          "translate(" + margin.left + "," + margin.top + ")");
 
-	d3.json("http://localhost:8080/abankus/platform/loadYearTransactionHistory", function(error, data) {
+	d3.json("http://localhost:8080/paymenthub/paymentservice/findPaymentByOrderMonthAndYear?year="+year, function(error, data) {
 		console.log(data);
-	    data.forEach(function(d) {
-	        d.date = parseDate(d.paymentMonth);
-	        d.value = +d.amountPaid;
-	    });
-	 
-	  x.domain(data.map(function(d) { return d.date; }));
-	  y.domain([0, d3.max(data, function(d) { return d.value; })]);
-
-	  svg.append("g")
-	      .attr("class", "x axis")
-	      .attr("transform", "translate(0," + height + ")")
-	      .call(xAxis)
-	    .selectAll("text")
-	      .style("text-anchor", "end")
-	      .attr("dx", "1em")
-	      .attr("dy", "1.55em")
-	      .attr("transform", "rotate(-0)" );
-
-	  svg.append("g")
-	      .attr("class", "y axis")
-	      .call(yAxis)
-	    .append("text")
-	      .attr("transform", "rotate(-90)")
-	      .attr("y", 6)
-	      .attr("dy", ".71em")
-	      .style("text-anchor", "end")
-	      .text("Revenue ($)");
-
-	  svg.selectAll("bar")
-	      .data(data)
-	    .enter().append("rect")
-	      .style("fill", function(d, i) { 
-              return color(d.date);
-          })
-	      .attr("x", function(d) { return x(d.date); })
-	      .attr("width", x.rangeBand()-300)
-	      .attr("y", function(d) { return y(d.value); })
-	      .attr("height", function(d) { return height - y(d.value); });
-
-	});		
+ 		if(data.length > 0){
+			  x.domain(data.map(function(d) { return d[0]; }));
+			  y.domain([0, d3.max(data, function(d) { return d[2]; })]);
+		
+			  svg.append("g")
+			      .attr("class", "x axis")
+			      .attr("transform", "translate(0," + height + ")")
+			      .call(xAxis)
+			    .selectAll("text")
+			      .style("text-anchor", "end")
+			      .attr("dx", "1em")
+			      .attr("dy", "1.55em")
+			      .attr("transform", "rotate(-0)" );
+		
+			  svg.append("g")
+			      .attr("class", "y axis")
+			      .call(yAxis)
+			    .append("text")
+			      .attr("transform", "rotate(-90)")
+			      .attr("y", 6)
+			      .attr("dy", ".71em")
+			      .style("text-anchor", "end")
+			      .text("Revenue ($)");
+		
+			  var path = svg.selectAll("bar")
+			      .data(data)
+			    .enter().append("rect")
+			      .style("fill", function(d, i) { 
+		              return color(d[2]);
+		          })
+			      .attr("x", function(d) { return x(d[0]); })
+			      .attr("width", x.rangeBand())
+			      .attr("y", function(d) { return y(d[2]); })
+			      .attr("height", function(d) { return height - y(d[2]); });
+			}else{
+				$('#barChart').html('No Data');
+			}
+		});		
 	}
 
 </script>

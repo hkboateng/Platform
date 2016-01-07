@@ -3,6 +3,8 @@
  */
 package com.boateng.abankus.processors;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -15,6 +17,7 @@ import com.boateng.abankus.controller.OrderController;
 import com.boateng.abankus.domain.Employee;
 import com.boateng.abankus.domain.User;
 import com.boateng.abankus.domain.UserRole;
+import com.boateng.abankus.exception.PlatformException;
 import com.boateng.abankus.fields.EmployeeFields;
 import com.boateng.abankus.services.EmployeeService;
 import com.boateng.abankus.utils.SecurityUtils;
@@ -187,6 +190,39 @@ public class EmployeeServiceProcessor {
 		employee.setZipcode(zipcode);
 		employee.setDateOfBirth(sbr.toString());
 		return employee;
+		
+	}
+	/**
+	 * @param search
+	 */
+	public List<Employee> findEmployeeDetails(String search) {
+		if(search == null){
+			return null;
+		}
+		
+		search = search.replaceAll("[^\\w\\s-]", "");
+		List<Employee> employeeList = null;
+		try {
+			employeeList = employeeSvcImpl.findAllEmployeeByEmployeeNumber(search);
+			if(employeeList == null){
+				Integer employeeId = Integer.parseInt(search);
+				employeeList = employeeSvcImpl.findAllEmployeeByEmployeeId(employeeId);
+			}
+			if(employeeList == null){
+				String[] names = search.split(" ");
+				String firstname = names[0];
+				String lastname = names[1];
+				employeeList = employeeSvcImpl.findAllEmployeeByFirstAndLastName(firstname, lastname);
+				if(employeeList == null){
+					//employeeList = employeeSvcImpl.
+				}
+			}
+		} catch (PlatformException  | NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+		// TODO Auto-generated method stub
 		
 	}
 }

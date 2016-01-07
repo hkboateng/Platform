@@ -1176,7 +1176,14 @@ $.extend( $.validator, {
 			}
 			return value.length > 0;
 		},
-
+		//Custom JQuery Validation by Kyeremateng Boateng
+		zipCodeGh : function(value,element){
+			return this.optional(element) || /(^\d{5}$)|(^\d{5}-\d{4}$)/.test(value);
+		},
+		//Custom JQuery Validation by Kyeremateng Boateng
+		phoneGh : function(value,element){
+			return this.optional(element) || /^\+?([0-9]{2})\)?[- ]?([0-9]{3})[- ]([0-9]{3})[- ]?([0-9]{3})$/.test(value);
+		},
 		// http://jqueryvalidation.org/email-method/
 		email: function( value, element ) {
 			// From https://html.spec.whatwg.org/multipage/forms.html#valid-e-mail-address

@@ -30,11 +30,7 @@ public class Phone implements Serializable {
 	private String phoneType;
 
 	private boolean primaryPhone;
-	
-	//bi-directional many-to-one association to Customer
-	@ManyToOne
-	@JoinColumn(name="customerId")
-	private Customer customer;
+
 
 	public Phone() {
 	}
@@ -70,13 +66,6 @@ public class Phone implements Serializable {
 		this.phoneType = phoneType;
 	}
 
-	public Customer getCustomer() {
-		return this.customer;
-	}
-
-	public void setCustomer(Customer customer) {
-		this.customer = customer;
-	}
 
 	public String getPhoneNumber() {
 		return phoneNumber;

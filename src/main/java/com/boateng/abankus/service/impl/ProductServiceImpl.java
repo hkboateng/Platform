@@ -93,6 +93,8 @@ public class ProductServiceImpl implements ProductService{
 							.uniqueResult();
 		return product;
 	}
+	
+	
 	@Transactional	
 	public Product updateProduct(String productCode, String productName, String description,float unitCost){
 		Session session = sessionFactory.getCurrentSession();

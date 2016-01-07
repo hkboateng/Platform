@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.boateng.abankus.domain.Employee;
@@ -52,6 +53,7 @@ public class EmployeeController {
 		
 		return "Employee/UpdateEmployee";
 	}	
+	
 	@RequestMapping(value="/updateEmployee", method=RequestMethod.POST)
 	public String updateEmployee(HttpServletRequest request,Model model,RedirectAttributes redirectAttributess){
 		employeeServiceProcessor.process("update", request);
@@ -66,4 +68,18 @@ public class EmployeeController {
 		
 		return employee;
 	}
+	
+	@RequestMapping(value="/employeSearchView", method=RequestMethod.GET)
+	public String employeSearchView(HttpServletRequest request,Model model,RedirectAttributes redirectAttributess){
+
+		return "Employee/EmployeeSearch";
+	}
+	
+	@RequestMapping(value="/findEmployee", method=RequestMethod.POST)
+	public String findEmployee(HttpServletRequest request,Model model,RedirectAttributes redirectAttributess){
+		String search = request.getParameter("employeeSearch");
+		employeeServiceProcessor.findEmployeeDetails(search);
+		return "Employee/EmployeeSearch";
+	}
+
 }

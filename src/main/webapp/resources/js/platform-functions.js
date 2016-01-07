@@ -13,6 +13,10 @@ function isEmpty(str){
     return !str.replace(/^\s+/g, '').length; // boolean (`true` if field is empty)
 }
 
+//Checks if the String is blank
+function isBlank(str) {
+    return (!str || /^\s*$/.test(str));
+}
 /**
  * How it Works
  * 			^         start of string
@@ -56,3 +60,13 @@ function commaSeparateNumber(val){
     }
     return val;
   }
+
+function getRadioBtnValue(elementId,ele){
+	$.each($(elementId), function (idx,group){
+		 var checked = $(group).find('[type=radio]:checked');
+		 if(checked){
+			 var title = checked.attr('title'); 
+			 $(ele).html(title);
+		 }
+	});
+}

@@ -17,13 +17,15 @@
 		<script	src="<c:url value="/resources/js/validation/jquery.validation.js" />" type="text/javascript"></script>
 		<script src="<c:url value="/resources/js/bootstrap.js" />" 	type="text/javascript"></script>
 		<script src="<c:url value="/resources/js/application.js" />" type="text/javascript"></script>
-		<script src="<c:url value="/resources/js/accounting/accounting.js" />" 	type="text/javascript"></script>
-		<script src="<c:url value="/resources/js/jquery-masked.js" />" type="text/javascript"></script>
 	</head>
 <body>
 	<%-- Include page header --%>
 	<jsp:include page="../header.jsp" />
-	<div id="container" class="container">
+	<div id="container" class="container-fluid">
+		<div class="row">
+			<div class="col-sm-3 col-md-3 col-lg-3">
+				<jsp:include page="../sidebar.jsp" />
+			</div>
 			<div class="col-sm-9 col-md-9 col-lg-9 main">
 			<h1 id="paymentHeading"> Make A Payment</h1>
 			<hr class="line1">
@@ -39,12 +41,10 @@
 								
 									<sf:form name="customerPaymentForm" action="submitOrderPayment" method="post">
 									<div class="col-md-6" id="paymentEntry">
-										<label for="orderNumber">Order Number:</label> <input type="text"
-											name="orderNumber" id="orderNumber" class="form-state  width-75"
-											value="${billing.getClientOrderId().getOrderNumber() }" /> 
-											<label for="paymentType">Select Payment
-											Type:</label> <select name="paymentType" id="paymentType" class="form-state"
-											onchange="javascript:showBankCardInfoDiv(this);">
+										<label for="orderNumber">Order Number:</label>
+										<input type="text"	name="orderNumber" id="orderNumber" class="form-state  width-75" value="${billing.getClientOrderId().getOrderNumber() }" /> 
+										<label for="paymentMethod">Select Payment	Type:</label> 
+										<select name="paymentMethod" id="paymentMethod" class="form-state"	onchange="javascript:showBankCardInfoDiv(this);">
 											<option value="cash">Cash</option>
 											<option value="check">Bank Draft (Check)</option>
 											<option value="card">Credit/Debit Card</option>
@@ -52,8 +52,8 @@
 										<div id="bankInfoDiv" class="hidden moveL_30">
 											<h4 class="underline">Cheque Details</h4>
 
-											<label for="bankName">Name of Bank:</label> <input type="text"
-												name="bankName" class="form-state width-100" id="bankName" value="" />
+											<label for="bankName">Name of Bank:</label> 
+											<input type="text"	name="bankName" class="form-state width-100" id="bankName" value="" />
 											<label for="bankAccountNumber">Account Number:</label>
 											<input type="text" id="bankAccountNumber" name="bankAccountNumber"	class="form-state  width-100" />
 											<div class="help-text bold">Confirm Account Number</div>
@@ -93,7 +93,7 @@
 										</div><%--<fmt:formatNumber value="${customerOrder.getTotalAmount()} --%>
 										<c:set var="amountLeft" value="${billing.totalAmountRemaining() }"/>
 										<label for="paymentAmount">Payment Amount:</label>
-										 <input type="text"	name="paymentAmount" class="form-state  width-75" id="paymentAmount" value="${amountLeft}" onblur="javascript:checkAmountPaid(this.value)" placeholder="Amount"/>
+										 <input type="text"	name="paymentAmount" class="form-state  width-75" id="paymentAmount" value="${amountLeft}" onblur="javascript:checkAmountPaid(this.value);formatAmount('paymentAmount',this)" placeholder="Amount"/>
 											<p>
 												<button name="paymentSubmitBtn" id="paymentSubmitBtn" onclick="javascript:customerPaymentConfirmation(document.paymentForm);return false;" class="btn btn-success">Continue with Payment</button>
 												<a href="#" class="moveL_20">Cancel</a>
@@ -101,7 +101,7 @@
 																			
 											<input type="hidden" name="pId" value="${orderNumber }" id="pId"/>	
 											<input type="hidden" name="orderTotalAmount" id="orderTotalAmount" value="${customerOrder.getTotalAmount()}">	
-											<input type="hidden" name="cust" id="cust" value="${cust}">
+											<input type="hidden" name="unicode" id="cust" value="${customerOrder.getCustomer().customerId}">
 											<input type="hidden" name="amountleft" id="amountleft" value="${amountLeft}"/>
 											</div>	
 												<!-- Review and Submit Customer Payment -->
@@ -143,8 +143,9 @@
 						</div>
 					
 						</div>						
-			</div>
+			</div>			
 		</div>
+	</div>
 
 	<%--- Confirmation Page --%>
 
@@ -156,18 +157,12 @@ $(document).ready(function(){
 	$("#loading").hide();
 	
 	$("#paymentHeading").html("Make A Payment");
-	$('#paymentAmount').blur(function(){
-		$(this).mask('000,000.00', {reverse: true});
-	});
-	
-	$('#paymentAmount').focusout(function(){
-		$(this).mask('000,000.00', {reverse: true});
-	});	
+
 
 	$("#cancelPayment").on('click',function(){
 		$('#paymentSummary').hide();
 		$('#paymentEntry').show();
-		$("#paymentHeading").html("Make A Payment");
+		$("#paymentHeading").html("Make Payment");
 	});
 		
 	$('#submitBtn').click(function(e){
@@ -182,7 +177,7 @@ $(document).ready(function(){
 				orderNumber : $("#orderNumber").val(),
 				paymentSchedule :$("#paymentSchedule").val(),
 				paymentAmount: $("#paymentAmount").val(),
-				paymentType: $("#paymentType").val()
+				paymentType: $("#paymentMethod").val()
 			}
 		if(!validatePin(custId)){
 			$('#customerPin-error').text("You must enter a valid Pin Number!!!");
@@ -310,7 +305,7 @@ function customerPaymentConfirmation(form){
 	
 	var accountnumber = $("#orderNumber").val() ;
 	var paymentamount = $("#paymentAmount").val();
-	var paymenttype = $("#paymentType").val();
+	var paymenttype = $("#paymentMethod").val();
 	var paymentschedule = $("#paymentSchedule").val();
 	
 	if(isEmpty(paymentamount)){

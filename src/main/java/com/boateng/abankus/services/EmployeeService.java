@@ -10,6 +10,7 @@ import com.boateng.abankus.domain.EmployeeCustomerAccount;
 import com.boateng.abankus.domain.OrderPayment;
 import com.boateng.abankus.domain.Salesemployee;
 import com.boateng.abankus.domain.User;
+import com.boateng.abankus.exception.PlatformException;
 
 
 public interface EmployeeService {
@@ -49,4 +50,19 @@ public interface EmployeeService {
 	List<Customer> findAllCustomerByEmployeeId(int employeeId);
 	
 	List<OrderPayment> findAllPaymentByEmployeeAndDate(int employeeId);
+	
+	List<Employee> findAllEmployeeByEmployeeNumber(String employeeNumber) throws PlatformException;
+	
+	List<Employee> findAllEmployeeByFirstAndLastName(String firstname, String lastname);
+	
+	List<Employee> findAllEmployeeByEmailAddress(String address);
+	
+	List<Employee> findAllEmployeeListSearchString(String search);
+
+
+	/**
+	 * @param employeeId
+	 * @return
+	 */
+	List<Employee> findAllEmployeeByEmployeeId(Integer employeeId);
 }

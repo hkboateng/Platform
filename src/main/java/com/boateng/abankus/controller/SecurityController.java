@@ -50,7 +50,7 @@ public class SecurityController extends PlatformAbstractServlet {
 		return "index";
 	}
 
-
+	
 	@RequestMapping(value = "/security/authenticate",method = RequestMethod.POST)
 	public String login(RedirectAttributes redirectAttributess,HttpServletRequest request) {
 		String username = request.getParameter("username");

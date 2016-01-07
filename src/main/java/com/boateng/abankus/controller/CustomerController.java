@@ -1,12 +1,10 @@
 package com.boateng.abankus.controller;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -15,14 +13,13 @@ import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,7 +30,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.boateng.abankus.application.builders.ContactPersonBuilder;
 import com.boateng.abankus.application.interfaces.CustomerService;
 import com.boateng.abankus.customer.processor.CustomerServiceProcessor;
-import com.boateng.abankus.domain.Address;
 import com.boateng.abankus.domain.BillingCollection;
 import com.boateng.abankus.domain.ContactPerson;
 import com.boateng.abankus.domain.Customer;
@@ -42,21 +38,15 @@ import com.boateng.abankus.domain.CustomerOrder;
 import com.boateng.abankus.domain.Email;
 import com.boateng.abankus.domain.OrderPayment;
 import com.boateng.abankus.domain.PaymentTransaction;
-import com.boateng.abankus.domain.Phone;
 import com.boateng.abankus.exception.PlatformException;
-import com.boateng.abankus.fields.CustomerFields;
 import com.boateng.abankus.fields.CustomerOrderFields;
 import com.boateng.abankus.processors.CustomerOrderProcessor;
 import com.boateng.abankus.services.PaymentService;
 import com.boateng.abankus.servlet.PlatformAbstractServlet;
-import com.boateng.abankus.utils.SecurityUtils;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @Controller
-//@RequestMapping("/customers")
 public class CustomerController extends PlatformAbstractServlet{
 
 
@@ -87,7 +77,7 @@ public class CustomerController extends PlatformAbstractServlet{
 		return "ClientServices/NewCustomer";
 	}
 	
-	@PreAuthorize("isFullyAuthenticated")
+	@Secured("ROLE_EMPLOYEE")
 	@RequestMapping(value="/customers/create/individual", method=RequestMethod.GET)
 	public ModelAndView addIndividualCustomer(){
 		ModelAndView model = new ModelAndView();
@@ -98,17 +88,14 @@ public class CustomerController extends PlatformAbstractServlet{
 	
 	@RequestMapping(value="/customers/addCustomerContactPerson", method=RequestMethod.GET)
 	public String addCustomerContactPerson(HttpServletRequest request) throws PlatformException{
-		Customer customer = getCustomerInSession(request);
-		int customerId = customer.getCustomerId();
-	
 		return "ClientServices/AddCustomerContactPerson";
 	}	
 	
+	@Secured("ROLE_EMPLOYEE")
 	@RequestMapping(value="/customers/updateContactPerson", method=RequestMethod.POST)
 	public String updateCustomerContactPerson(HttpServletRequest request) throws PlatformException{
 		Customer customer = getCustomerInSession(request);
 		if(customer == null){
-			
 			return "redirect:/platform/dashboard";
 		}
 		
@@ -121,7 +108,8 @@ public class CustomerController extends PlatformAbstractServlet{
 		
 		return "redirect:/customers/viewProfile";
 	}		
-	@PreAuthorize("isFullyAuthenticated")
+	
+	@Secured("ROLE_EMPLOYEE")
 	@RequestMapping(value="/customers/create/company", method=RequestMethod.GET)
 	public ModelAndView addCompanyCustomer(){
 		ModelAndView model = new ModelAndView();
@@ -129,10 +117,11 @@ public class CustomerController extends PlatformAbstractServlet{
 		return model;
 	}
 	
+	@Secured("ROLE_EMPLOYEE")
 	@RequestMapping(value="/customers/addCustomer", method=RequestMethod.POST)
 	public String addCustomer(@Valid Customer customers,BindingResult result,HttpServletRequest request,RedirectAttributes redirectAttributess){
 		if(result.hasErrors()){
-			redirectAttributess.addAttribute("errors",result);
+			redirectAttributess.addFlashAttribute("errors",result.getFieldError());
 			return "redirect:/create/individual";
 		}
 		try {
@@ -141,7 +130,7 @@ public class CustomerController extends PlatformAbstractServlet{
 			e.printStackTrace();
 		}
 		
-		redirectAttributess.addAttribute("success", UUID.randomUUID().toString());
+		redirectAttributess.addFlashAttribute("success","New Customer Information ahs being added succesfully" );
 		return "redirect:/platform/index";
 	}
 	
@@ -153,14 +142,12 @@ public class CustomerController extends PlatformAbstractServlet{
 		return "ClientServices/listCustomers";
 	}
 	
-	private void getCustomerDetails(){
-		
-	}
+	@Secured("ROLE_EMPLOYEE")
 	@RequestMapping(value="/customers/viewProfile", method={RequestMethod.GET,RequestMethod.POST})
-	public String viewCustomerProfile(Model model,HttpServletRequest request) throws PlatformException{
+	public String viewCustomerProfile(RedirectAttributes redirectAttributess,Model model,HttpServletRequest request) throws PlatformException{
 			Customer customer = null;
-		
-			HttpSession session = request.getSession(false);
+			clearMessages(request);
+			
 			String customerId = request.getParameter("customerId");
 			String firstname = request.getParameter("firstname");
 			String lastname = request.getParameter("lastname");
@@ -179,7 +166,7 @@ public class CustomerController extends PlatformAbstractServlet{
 			}
 	
 			if(customer == null){
-				request.setAttribute("searchError", "Your Search did not return any results.");
+				redirectAttributess.addFlashAttribute("searchError", "Your Search did not return any results.");
 				return "redirect:/platform/index";
 			}
 			
@@ -188,27 +175,11 @@ public class CustomerController extends PlatformAbstractServlet{
 			loadCustomerOrderHistory(model,customer.getCustomerId(),request);
 			
 			CustomerAccount customerAccount = customerServiceProcessor.findCustomerAccountByCustomerNumber(custID);
-			
-			List<Address> address = customerServiceProcessor.findAddressByCustomerId(custID);
-			
-			List<Phone> phone = customerServiceProcessor.findCustomerPhoneByCustomerId(custID);
-			
-			List<Email> email = customerServiceProcessor.findCustomerEmailByCustomerId(custID);
-			
-			ContactPerson person = customerServiceProcessor.findCustomerContactPersonByCustomerId(custID);
-			
-			model.addAttribute("address",address);
 			model.addAttribute("customerAccount",customerAccount);
 			model.addAttribute("customer",customer);
-			model.addAttribute("phone",phone);
-			model.addAttribute("email",email);
-			model.addAttribute("person",person);
 			
 			customer = null;
 			customerAccount = null; 
-			address= null;
-			phone = null;
-			email = null;
 		return "ClientServices/ViewCustomerProfile";
 	}
 	
@@ -224,6 +195,11 @@ public class CustomerController extends PlatformAbstractServlet{
 		orderList = null;
 		collection = null;
 	}
+	/**
+	 * Checks if the Email Address of a Customer is unique or not
+	 * @param emailAddress
+	 * @return true if unique and false if not
+	 */
 	@RequestMapping(value="/customers/isCustomerEmailUnique", method=RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public boolean isEmailUnique(@RequestParam(value="emailAddress",required=true) String emailAddress){
@@ -260,16 +236,16 @@ public class CustomerController extends PlatformAbstractServlet{
 		return "ClientTransaction/CustomerPaymentSearch";
 	}		
 
+	@Secured("ROLE_EMPLOYEE")
+	@RequestMapping(value = "/customers/editCustomerPin", method = RequestMethod.GET)
+	public String updateCustomerPin(Model model){
+		return "ClientServices/UpdateCustomerPin";
+	}
 	
-	private List<PaymentTransaction> buildPaymentTransactionList(List<OrderPayment> orderPayment){
-		
-		ArrayList<PaymentTransaction> payments = new ArrayList<PaymentTransaction>();
-		PaymentTransaction transaction = null;
-		for(OrderPayment list: orderPayment){
-			transaction = new PaymentTransaction(list);
-			payments.add(transaction);
-		}
-		return payments;
+	@Secured("ROLE_EMPLOYEE")
+	@RequestMapping(value = "/customers/editCustomerInfo", method = RequestMethod.GET)
+	public String editCustomerInfo(Model model){
+		return "ClientServices/EditCustomer";
 	}
 	public static JsonNode merge(JsonNode mainNode, JsonNode updateNode) {
 

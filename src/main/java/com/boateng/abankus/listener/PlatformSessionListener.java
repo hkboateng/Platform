@@ -23,10 +23,14 @@ public class PlatformSessionListener implements HttpSessionListener{
 
 	@Override
 	public void sessionDestroyed(HttpSessionEvent event) {
+
 		if(event.getSession().getLastAccessedTime() > 480000){
+			logger.info("Current session has being destroyed."+event.getSession().getId());
 			event.getSession().invalidate();
+			
 		}
-		logger.info("Current session has being destroyed."+event.getSession().getId());
+		
+
 	}
 
 }

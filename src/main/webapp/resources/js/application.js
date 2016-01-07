@@ -1,6 +1,6 @@
 function createRegionList(){
 	var str = "";
-		str += "<select name='state' class='form-control'>";
+		str += "<select name='state' class='form-state'>";
 		str += "<option value=''> Select </option>";
 		str += "<option value='AR'> Ashanti </option>";
 		str += "<option value='BA'> Brong-Ahafo </option>";
@@ -27,6 +27,40 @@ function typeOfIdentification(){
 	str += "</select>";
 	
 	document.write(str);	
+}
+function periodList(){
+	var str = "";
+	str += "<select name='period' class='form-state pull-right' onchange='javascript:changeAnalystics(this.value);'>";
+	str += "<option value=''>Select Year </option>";
+	str += "<option value='2015'>2015</option>";
+	str += "<option value='2016'>2016</option>";	
+	str += "<option value='2017'>2017</option>";
+	str += "</select>";
+	
+	document.write(str);	
+}
+function displayMessage(result,messageDiv){
+	$(messageDiv).addClass('platform-info-caution');
+	$.each(result,function(key,value){
+		messageDiv.text(result);
+	});
+}
+function hideMessageDiv(message){
+	message.removeClass('platform-alert-caution');
+	message.removeClass('platform-info-caution ');	
+	message.html(" ");
+	message.addClass('hidden');
+}
+
+function showMessage(message,level,messageDiv){
+	if(level === "alert"){
+		messageDiv.addClass('platform-alert-caution');
+	}else if(level === "info"){
+		messageDiv.addClass('platform-info-caution ');	
+	}
+	messageDiv.html(message);
+	messageDiv.removeClass('hidden');	
+	window.scrollTo(0, 0);
 }
 function genderList(){
 	var str = "";
@@ -169,8 +203,8 @@ function validateCustomerCredential(customer,customerId){
 function showBankCardInfoDiv(select){
 	if(select.value === "check"){
 		$("#bankInfoDiv").removeClass('hidden');
-		("#cardInfoDiv").addClass('hidden');
-	}if(select.value === "card"){
+		$("#cardInfoDiv").addClass('hidden');
+	}else if(select.value === "card"){
 		$("#cardInfoDiv").removeClass('hidden');
 		$("#bankInfoDiv").addClass('hidden');
 	}else{
@@ -184,4 +218,69 @@ function submitCustomerURL(form,value){
 	}
 	form.submit();
 	
+}
+function validateForm(formName){
+	$(formName).validate({
+		onsubmit:false,
+		rules : {
+			firstname: {
+				required :true
+			},
+			lastname: {
+				required :true
+			},
+			emailAddress: {
+				required :true,
+				email:true
+			},
+			phonenumber: {
+				required :true,
+				digits: true
+			},
+			association: {
+				required :true
+			},
+			address : {
+				required: true
+			},
+			zipcode: {
+				required: true,
+				zipCodeGh:true
+			},
+			city: {
+				required: true
+			},
+			state: {
+				required: true
+			},
+			phoneType: {
+				required: true
+			},
+			companyname: {
+				required:true
+			},
+			password: {
+				required: true,
+				maxlength:12
+			},
+			confirmpassword: {
+				required: true,
+				equalTo: '#password'
+			}
+		},
+		messages :{
+			confirmpassword: {
+				equalTo: 'Both Password\'s do not match'
+			},
+			state: {
+				required: ''
+			},
+			zipcode: {
+				zipCodeGh: 'Enter valid Zip or Postal Code.'
+			}
+		}
+	});
+	if(!$('form').valid())
+		 return false;
+	 return true;	
 }

@@ -39,8 +39,11 @@ public class PlatformFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
         HttpSession session = req.getSession(false);
-
-       chain.doFilter(request, response);
+        if(session == null){
+        	
+        }else{
+        	chain.doFilter(request, response);
+        }
 	}
 
 	/**

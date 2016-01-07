@@ -3,6 +3,8 @@ package com.boateng.abankus.domain;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.boateng.abankus.application.interfaces.PaymentCollection;
+
 
 /**
  * The persistent class for the bankinformation database table.
@@ -11,7 +13,7 @@ import javax.persistence.*;
 @Entity
 @Table(name="Bankinformation")
 @NamedQuery(name="Bankinformation.findAll", query="SELECT b FROM BankInformation b")
-public class BankInformation implements Serializable {
+public class BankInformation implements Serializable,PaymentCollection {
 	private static final long serialVersionUID = 1L;
 	
 	private int bankInformationId;
@@ -97,6 +99,25 @@ public class BankInformation implements Serializable {
 
 	public void setPaymentmethod(Paymentmethod paymentmethod) {
 		this.paymentmethod = paymentmethod;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see com.boateng.abankus.application.interfaces.PaymentCollection#getPaymentType()
+	 */
+	@Override
+	public String getPaymentType() {
+		return paymentmethod.getPaymentType();
+	}
+
+
+	/* (non-Javadoc)
+	 * @see com.boateng.abankus.application.interfaces.PaymentCollection#setPaymentType(java.lang.String)
+	 */
+	@Override
+	public void setPaymentType(String paymentType) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -80,12 +80,12 @@
 					<input type="text" name="company_name" id="company_name" class=" form-state width-100" placeholder="Company Name"/>	
 					</div>				
 					<div class="col-sm-12 col-md-12">
-					<label for="address1">Address 1:</label>
-					<input type="text" name="address1" id="address1" placeholder="Postal Address"  class="form-state width-100"/>
+						<label for="address1">Address 1:</label>
+						<input type="text" name="address1" id="address1" placeholder="Postal Address"  class="form-state width-100"/>
 					</div>
 					<div class="col-sm-12 col-md-12">
-					<label for="address2"> Address 2:</label>
-					<input type="text" name="address2" placeholder="Optional" class=" form-state width-100" id="address2"/>				
+						<label for="address2"> Address 2:</label>
+						<input type="text" name="address2" placeholder="Optional" class=" form-state width-100" id="address2"/>				
 					</div>					
 					<div class="col-sm-12 col-md-4">
 						<label for="city" >City:</label>

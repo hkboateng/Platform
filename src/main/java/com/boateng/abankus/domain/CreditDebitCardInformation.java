@@ -3,14 +3,17 @@ package com.boateng.abankus.domain;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.boateng.abankus.application.interfaces.PaymentCollection;
+
 
 /**
  * The persistent class for the debitcardinformation database table.
  * 
  */
 @Entity
-@NamedQuery(name="Debitcardinformation.findAll", query="SELECT d FROM Debitcardinformation d")
-public class Debitcardinformation implements Serializable {
+@Table(name="Debitcardinformation")
+@NamedQuery(name="Debitcardinformation.findAll", query="SELECT d FROM CreditDebitCardInformation d")
+public class CreditDebitCardInformation implements Serializable,PaymentCollection {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -29,7 +32,7 @@ public class Debitcardinformation implements Serializable {
 
 	private Paymentmethod paymentmethodId;
 
-	public Debitcardinformation() {
+	public CreditDebitCardInformation() {
 	}
 
 	public int getCardInformationId() {
@@ -61,7 +64,9 @@ public class Debitcardinformation implements Serializable {
 	}
 
 	public void setExpirationDate(String expirationDate) {
-		this.expirationDate = expirationDate;
+		if(expirationDate != null && !expirationDate.isEmpty()){
+			this.expirationDate = expirationDate;
+		}
 	}
 
 	public String getNameOnCard() {
@@ -69,7 +74,9 @@ public class Debitcardinformation implements Serializable {
 	}
 
 	public void setNameOnCard(String nameOnCard) {
-		this.nameOnCard = nameOnCard;
+		if(nameOnCard != null && !nameOnCard.isEmpty()){
+			this.nameOnCard = nameOnCard;
+		}
 	}
 
 	public String getSecurityNumber() {
@@ -86,6 +93,23 @@ public class Debitcardinformation implements Serializable {
 
 	public void setPaymentmethod(Paymentmethod paymentmethod) {
 		this.paymentmethodId = paymentmethod;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.boateng.abankus.application.interfaces.PaymentCollection#getPaymentType()
+	 */
+	@Override
+	public String getPaymentType() {
+		return paymentmethodId.getPaymentType();
+	}
+
+	/* (non-Javadoc)
+	 * @see com.boateng.abankus.application.interfaces.PaymentCollection#setPaymentType(java.lang.String)
+	 */
+	@Override
+	public void setPaymentType(String paymentType) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

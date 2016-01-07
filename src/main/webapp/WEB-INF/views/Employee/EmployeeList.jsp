@@ -18,13 +18,13 @@
 <%-- Include page header --%>
 <jsp:include page="../header.jsp"/>
 
-<div id="container" class="container">
+<div id="container" class="container-fuild">
 	<div class="row">
-		<div class="col-sm-12 col-md-3 col-lg-3">
-			
-		</div>	
-		<div class="col-sm-9 col-md-9">
-			<div class="row">
+			<div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+				<jsp:include page="../sidebar.jsp"/>
+			</div>	
+			<div class="col-sm-12 col-md-10 col-lg-10 center-block main">
+
 			<%-- Filter List --%>
 				<div>
 				<h2>Employee List</h2>
@@ -57,7 +57,6 @@
 						</tbody>
 					</table>
 				</div>
-			</div>
 		</div>
 	</div>
 </div>

@@ -14,6 +14,7 @@ import org.joda.time.format.DateTimeFormat;
 
 import com.boateng.abankus.domain.BankInformation;
 import com.boateng.abankus.domain.CustomerOrder;
+import com.boateng.abankus.domain.CreditDebitCardInformation;
 import com.boateng.abankus.domain.Employee;
 import com.boateng.abankus.domain.OrderPayment;
 import com.boateng.abankus.domain.Paymentmethod;
@@ -36,37 +37,50 @@ public class CustomerPaymentBuilder {
 	
 	private String checkNumber;
 	
-	private String amount = null;
+	private String amount;
 	
 	private String orderAmount;
 	
 	private String paymentSchedule;
 	
-	private String orderNumber ;
+	private String orderNumber;
 	
-	private	Paymentmethod paymentMethod = null;
+	//private	Paymentmethod paymentMethod;
+	
+	private String nameOnCard;
+	
+	private String cardType;
+	
+	private String cardNumber;
+	
+	private String expirationDate;
+	
+	private String securityNumber;
 	
 	public CustomerPaymentBuilder(HttpServletRequest request){
 		/**
 		 * Whether payment is made in cash or CC or Bank
 		 */
-		typeOfPayment = request.getParameter("paymentForm");
-		bankName = request.getParameter("bankName");
-		bankRoutingNumber = request.getParameter("bankRoutingNumber");
-		bankCustomerName = request.getParameter("bankCustName");
-		bankAccountNumber = request.getParameter("bankAccountNumber");
-		checkNumber = request.getParameter("checkNumber");		
-		amount = request.getParameter("paymentAmount");
-		orderAmount = request.getParameter("orderTotalAmount");
-		orderNumber = request.getParameter("orderNumber");
-		paymentSchedule = request.getParameter("paymentSchedule");
+		this.typeOfPayment = request.getParameter("paymentForm");
+		this.bankName = request.getParameter("bankName");
+		this.bankRoutingNumber = request.getParameter("bankRoutingNumber");
+		this.bankCustomerName = request.getParameter("bankCustName");
+		this.bankAccountNumber = request.getParameter("bankAccountNumber");
+		this.checkNumber = request.getParameter("checkNumber");		
+		this.amount = request.getParameter("paymentAmount");
+		this.orderAmount = request.getParameter("orderTotalAmount");
+		this.orderNumber = request.getParameter("orderNumber");
+		this.paymentSchedule = request.getParameter("paymentSchedule");
+		this.nameOnCard = request.getParameter("nameOnCard");
+		this.cardType  = request.getParameter("cardType");
+		this.cardNumber = request.getParameter("cardNumber");
+		this.expirationDate = request.getParameter("expirationDate");
+		this.securityNumber = request.getParameter("securityNumber");
 	}
 	
-	public Paymentmethod buildPaymentMethod(){
-	paymentMethod = new Paymentmethod();
-
-		
-		paymentMethod.setPaymentType(typeOfPayment);
+	public Paymentmethod getPaymentMethod(){
+		Paymentmethod paymentMethod = new Paymentmethod();
+		paymentMethod.setPaymentType(getTypeOfPayment());
 		
 		return paymentMethod;
 	}
@@ -81,21 +95,35 @@ public class CustomerPaymentBuilder {
 		bank.setBankNumber(bankRoutingNumber);
 		bank.setCheckNumber(checkNumber);
 		bank.setNameOnAccount(bankCustomerName);
-		bank.setPaymentmethod(buildPaymentMethod());
+		bank.setPaymentmethod(getPaymentMethod());
 		return bank;
 	}
 
+	public CreditDebitCardInformation buildCardInformation(){
+		CreditDebitCardInformation card = new CreditDebitCardInformation();
+		
+		card.setPaymentmethod(getPaymentMethod());
+		card.setCardNumber(getCardNumber());
+		card.setCareType(getCardType());
+		card.setExpirationDate(getExpirationDate());
+		card.setNameOnCard(getNameOnCard());
+		card.setPaymentmethod(getPaymentMethod());
+		card.setSecurityNumber(getSecurityNumber());
+		
+		return card;
+	}
 	public OrderPayment buildOrderPayment(CustomerOrder order,Employee employee){
 		OrderPayment orderPayment = new OrderPayment();
 		double paidAmount = 0.0;
 		SimpleDateFormat dateFormatter = new SimpleDateFormat("MM/dd/yyyy");
+		
 		Date dateTime = new Date();
-		paidAmount = Double.parseDouble(amount);
+		paidAmount = Double.parseDouble(getAmount());
 		orderPayment.setAmountPaid(paidAmount);
 		orderPayment.setPaymentSchedule(paymentSchedule);
 		orderPayment.setClientorder(order);
 		orderPayment.setEmployee(employee);
-		
+		orderPayment.setPaymentMethod(getPaymentMethod());
 		orderPayment.setDatePaid(dateFormatter.format(dateTime).toString());
 		return orderPayment;
 	}
@@ -104,7 +132,8 @@ public class CustomerPaymentBuilder {
 	 * @return the typeOfPayment
 	 */
 	public String getTypeOfPayment() {
-		return typeOfPayment;
+
+		return this.typeOfPayment;
 	}
 
 	/**
@@ -240,18 +269,45 @@ public class CustomerPaymentBuilder {
 		this.orderNumber = orderNumber;
 	}
 
-	/**
-	 * @return the paymentMethod
-	 */
-	public Paymentmethod getPaymentMethod() {
-		return paymentMethod;
+
+	public String getNameOnCard() {
+		return nameOnCard;
 	}
 
-	/**
-	 * @param paymentMethod the paymentMethod to set
-	 */
-	public void setPaymentMethod(Paymentmethod paymentMethod) {
-		this.paymentMethod = paymentMethod;
+	public void setNameOnCard(String nameOnCard) {
+		this.nameOnCard = nameOnCard;
+	}
+
+	public String getCardType() {
+		return cardType;
+	}
+
+	public void setCardType(String cardType) {
+		this.cardType = cardType;
+	}
+
+	public String getCardNumber() {
+		return cardNumber;
+	}
+
+	public void setCardNumber(String cardNumber) {
+		this.cardNumber = cardNumber;
+	}
+
+	public String getExpirationDate() {
+		return expirationDate;
+	}
+
+	public void setExpirationDate(String expirationDate) {
+		this.expirationDate = expirationDate;
+	}
+
+	public String getSecurityNumber() {
+		return securityNumber;
+	}
+
+	public void setSecurityNumber(String securityNumber) {
+		this.securityNumber = securityNumber;
 	}
 	
 	

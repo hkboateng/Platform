@@ -1,3 +1,8 @@
+var emailRegExp = new RegExp();
+
+var zipCodeRegExp = new Reg('((\d{5})(-\d{4})?)');
+
+var validName = new RegExp('');
 function validation(){
 		$("form").validate({
 			onsubmit:false,

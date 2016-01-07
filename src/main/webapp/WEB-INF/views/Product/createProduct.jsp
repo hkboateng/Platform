@@ -10,7 +10,6 @@
 <title>Abankus Corporation - Sales Connection</title>
 <link href="<c:url value="/resources/css/bootstrap.css" />" rel="stylesheet"/>
 <link href="<c:url value="/resources/css/platform.css" />" rel="stylesheet"/>
-<link href="<c:url value="/resources/css/datepicker.css" />" rel="stylesheet"/>
 	<script src="<c:url value='/resources/js/jquery.js' />" type="text/javascript"></script>
 
 <script src="<c:url value="/resources/js/bootstrap.js" />" type="text/javascript"></script>
@@ -20,9 +19,12 @@
 <body>
 <%-- Include page header --%>
 <jsp:include page="../header.jsp"/>
-<div class="container" >
+<div id="container" class="container-fluid" >
 	<div class="row">
-<div class="col-sm-9 col-sm-offset-3 col-md-8 col-md-offset-2 main">
+			<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+				<jsp:include page="../sidebar.jsp"/>
+			</div>		
+<div class="col-sm-9 col-md-9 col-lg-9 main">
           <h1>Client Services - Prospective Customer</h1>
 			<hr>
 			<%-- Error or Information --%>

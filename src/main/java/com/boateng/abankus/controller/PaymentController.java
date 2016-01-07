@@ -3,6 +3,7 @@
  */
 package com.boateng.abankus.controller;
 
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.logging.Level;
@@ -44,6 +45,7 @@ import com.boateng.abankus.processors.ProductServiceProcessor;
 import com.boateng.abankus.services.ProductService;
 import com.boateng.abankus.servlet.PlatformAbstract;
 import com.boateng.abankus.utils.NumberFormatUtils;
+import com.boateng.abankus.utils.PlatformUtils;
 import com.boateng.abankus.utils.SecurityUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -74,15 +76,12 @@ public class PaymentController extends PlatformAbstract  {
 		return "ClientTransaction/CustomerPaymentSearch";
 	}
 
-	@RequestMapping(value="/submitPayment", method=RequestMethod.POST)
-	public void submitPayment(HttpServletRequest request,Model model){
-		paymentProcessor.submitPayment(request);
-	}
 	@RequestMapping(value="/searchPaymentDetail", method=RequestMethod.POST)
 	public String searchPaymentDetail(HttpServletRequest request,Model model) throws PlatformException{
 		String searchInputField = request.getParameter("searchField");
 		
 		 String status = paymentProcessor.validatePaymentInput(searchInputField);
+
 		 if(status != null){
 			 model.addAttribute(PlatformFields.SEARCH_ERROR_SESSION, status);
 			 logger.info(status);
@@ -90,20 +89,21 @@ public class PaymentController extends PlatformAbstract  {
 		 }
 		 Customer customer = paymentProcessor.searchPaymentDetail(searchInputField);
 		 List<CustomerOrder> customerOrderList = null;
-		 if(customer != null){
-			customerOrderList = customerOrderProcessor.loadAllOrderByCustomer(customer.getCustomerId());
-			// List<OrderPayment>paymentProcessor.searchPaymentListByCustomer(customer);
-			 model.addAttribute(PlatformFields.CUSTOMER_ORDER_LIST_SESSION, customerOrderList);
-			 model.addAttribute(PlatformFields.CUSTOMER_SESSION, customer);
-		 }
 		 if(customer == null){
-			
+				
 			 status = "No Information was found";
-			 logger.info(status);
 			 model.addAttribute(PlatformFields.SEARCH_ERROR_SESSION, status);
+			 return "ClientTransaction/CustomerPaymentSearch";
+		 }
+		 customerOrderList = customerOrderProcessor.loadAllOrderByCustomer(customer.getCustomerId());
+		 if(customerOrderList.isEmpty()){
+				model.addAttribute(PlatformFields.SEARCH_ERROR_SESSION, "No Order List is avaiable for Customer");
+		 }else{
+			model.addAttribute(PlatformFields.CUSTOMER_ORDER_LIST_SESSION, customerOrderList);
+			model.addAttribute(PlatformFields.CUSTOMER_SESSION, customer);				
 		 }
 		customer = null;
-		 customerOrderList = null;
+		customerOrderList = null;
 		 
 		return "ClientTransaction/CustomerPaymentSearch";
 	}
@@ -134,6 +134,7 @@ public class PaymentController extends PlatformAbstract  {
 	public String validatePassword(HttpServletRequest request)  throws PlatformException, JsonProcessingException{
 		String customerpin = request.getParameter("customerPIN");
 		Customer customer = (Customer) request.getSession(false).getAttribute(CustomerFields.CUSTOMER_SESSION);
+		Employee employee = (Employee) request.getSession(false).getAttribute(EmployeeFields.EMPLOYEE_SESSION);
 		
 		String customerId = String.valueOf(customer.getCustomerId());
 		String status = null;
@@ -146,7 +147,7 @@ public class PaymentController extends PlatformAbstract  {
 		}
 		
 		try{
-			boolean note = paymentProcessor.authenticatePasscode(customerpin,customerId);
+			boolean note = paymentProcessor.authenticatePasscode(customerpin,customerId,employee);
 			logger.info("Parsing response from Authenticating Passcode....to JSON");
 
 			status = mapper.writeValueAsString(String.valueOf(note));
@@ -165,17 +166,19 @@ public class PaymentController extends PlatformAbstract  {
 		return status;
 	}
 	
-	@RequestMapping(value = "/submitBillPayment", method = RequestMethod.POST)
+	@RequestMapping(value = "/submitBillPayment", method = RequestMethod.GET,produces="application/json")
+	@ResponseBody
 	public String submitBillPayment(HttpServletRequest request,Model model) throws PlatformException{
 		Employee employee = (Employee) request.getSession(false).getAttribute(EmployeeFields.EMPLOYEE_SESSION);
 		String orderNumber = request.getParameter("orderNumber");
 		String amount = request.getParameter("amountPaid");
 		String paymentMethod = request.getParameter("paymentMethod");
-		String customer = request.getParameter("customerId");
+		String customer = request.getParameter("customer");
+		String customerCode = request.getParameter("passcode");
 		
-		logger.info(logActivity("is validating Billing Payment variables.",employee));
+		String status = "";
+		logger.info(logActivity("has started the process of Submitting a payment transaction.",employee));
 		List<String> validation = paymentProcessor.validateBillPayment(orderNumber,amount,paymentMethod);
-		
 		if(validation.size() > 0){
 			model.addAttribute("billPaymentError", validation);
 			return "";
@@ -190,14 +193,25 @@ public class PaymentController extends PlatformAbstract  {
 			PlatformException ace = new PlatformException(e);
 			throw ace;
 		}
+		Boolean note = paymentProcessor.authenticatePasscode(customerCode,customer,employee);
+		if(!note){
+			try {
+				status = PlatformUtils.convertToJSON(note);
+				return status;
+			} catch (IOException e) {
+				PlatformException ace = new PlatformException(e);
+				logger.info(""+e.getMessage());
+				throw ace;
+			}
+		}
 		logger.info(logActivity("is submitting Bill Paying for Order Number: "+orderNumber+" with payment amount: "+amount,employee));
-		PaymentTransaction transaction = paymentProcessor.submitBillPayment(customerId,orderId,amount,paymentMethod,employee,request);
+		String transaction = paymentProcessor.submitBillPayment(customerId,orderId,amount,paymentMethod,employee,request);
+		logger.info(logActivity(" Payment sent has being completed.\n"+transaction,employee));
 		validation = null;
 		employee = null;
 		
-		request.setAttribute("paymentTransaction",transaction);
-		transaction = null;
-		return "ClientTransaction/BillPaymentConfirmation";
+		
+		return transaction;		
 	}
 	private String submitPayment(HttpServletRequest request) throws PlatformException{
 		String status = null;

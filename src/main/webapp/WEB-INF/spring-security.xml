@@ -8,7 +8,9 @@
 	
 	    <http auto-config="true">
     	<intercept-url pattern="/security/**" access="isAnonymous()"/>
+    	<intercept-url pattern="/platform/Signup" access="isAnonymous()"/>
     	<intercept-url pattern="/abankus/**" access="isFullyAuthenticated()"/>
+    	<intercept-url pattern="/Payments/**" access="isFullyAuthenticated()"/>
     	<intercept-url pattern="/client/**" access="isFullyAuthenticated()"/>
     	<intercept-url pattern="/platform/**" access="isFullyAuthenticated()"/>
     	<intercept-url pattern="/registration/**" access="isFullyAuthenticated()"/>

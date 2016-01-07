@@ -54,9 +54,9 @@
 		          		<c:forEach varStatus="count" items="${customers}" var="customer" >
 			          		<tr>
 			          			<td>${count.count }</td>
-			          			<td>${customer.firstname }</td>
-			          			<td>${customer.lastname}</td>
-			          			<td>${customer.company_name }</td>
+			          			<td>${customer.getFirstname() }</td>
+			          			<td>${customer.getLastname()}</td>
+			          			<td>${customer.getCompanyName() }</td>
 			          			<td>
 				          			<!-- Split button -->
 										<div class="btn-group">

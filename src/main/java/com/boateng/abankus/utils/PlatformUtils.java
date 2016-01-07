@@ -3,8 +3,13 @@
  */
 package com.boateng.abankus.utils;
 
+import java.io.IOException;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.joda.time.DateTime;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * @author hkboateng
@@ -58,5 +63,13 @@ public class PlatformUtils {
 		return DateTime.parse(date).toDateTime();
 	}
 
-
+	public static String convertToJSON(Object o) throws IOException{
+	ObjectMapper mapper = new ObjectMapper();
+		String map = null;
+		if(o != null && o instanceof Object){
+			mapper.writeValue(System.out, o);
+			map = mapper.writeValueAsString(o);
+		}
+		return map;
+	}
 }

@@ -43,7 +43,7 @@ public class PaymentTransaction implements Serializable {
 
 	private String transactionNumber;
 
-@Transient
+
 	private String orderAmount;
 	
 	public PaymentTransaction() {
@@ -61,6 +61,7 @@ public class PaymentTransaction implements Serializable {
 		this.paymentDate = payment.getDatePaid().toString();
 		this.employeeNumber = payment.getEmployee().getEmployeeId();
 		this.setOrderAmount(payment.getClientorder().getTotalAmount().toString());
+		this.orderNumber = payment.getClientorder().getTotalAmount().toString();
 		if(this.employeeNumber != null){
 			StringBuilder sbr = new StringBuilder();
 			sbr.append(payment.getEmployee().getFirstname());

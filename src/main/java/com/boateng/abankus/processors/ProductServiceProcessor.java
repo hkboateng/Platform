@@ -83,7 +83,6 @@ public class ProductServiceProcessor {
 		
 	}
 	public List<Product> getAllProducts(){
-		
 		List<Product> productList = null;
 		if(productMap.isEmpty()){
 			productList = loadProductIntoMap();

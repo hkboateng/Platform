@@ -2,6 +2,7 @@
 <%-- Page for enter Client Order which creates a ClientBilling instance --%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -30,23 +31,15 @@
 			
 			<h1> Make A Payment</h1>
 			<hr class="line1">
-			${PlatformFields.SEARCH_ERROR_SESSION }
 						<div class="paymentContainer">
+						<div class="platform-alert" id="paymentMessage">
 						
-						<div class="alert alert-warning alert-dismissible fade in" id="paymentMessageContainer" role="alert">
-							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-								<span aria-hidden="true">×</span>
-							</button>
-							<span  id="paymentMessage">
-							
-							</span>							
 						</div>
-
 						<div class='spaceBelow_20'>
 						<sf:form name="searchOrder" method="post" action="/abankus/Payments/searchPaymentDetail">
 							<p>Search for Customer's Order:</p>
 							<label class="sr-only">Order Number:</label>
-    						<input type="text" name="searchField" id="searchField"  class="custom-text width-50" placeholder="Customer Id, Customer Number, Order Number"/>
+    						<input type="text" name="searchField" id="searchField"  class="custom-text" placeholder="Customer Id, Customer Number, Order Number"/>
     						<button class="btn btn-success" value="Search" id="btnSearchPayment"><i class="fa fa-search"></i></button>
     						<hr>
 						</sf:form>
@@ -56,15 +49,12 @@
 							<c:choose>
 								<c:when test="${not empty customerOrderList }">
 									<sf:form name="submitPayment" id="submitPayment" method="post" action="/abankus/Payments/submitBillPayment">
-									
-									<div class="panel panel-default">
-										  <!-- Default panel contents -->
-										<div class="panel-heading">${customer.getCustomerName() }</div>
+									<div id="paymentSegment">
 										
 										  <!-- Table -->
-										<table class="table">
+										<table class="table" id="paymentTable">
 										  	<tr>
-										  		<th></th>
+										  		<th>#</th>
 										  		<th>Date</th>
 										  		<th>Order Number</th>
 										  		<th>Product Name</th>
@@ -72,11 +62,11 @@
 										  	</tr>
 												<c:forEach items="${customerOrderList }" var="orderList">
 													<c:if test="${orderList.amountRemaining() gt 0.00}">
-														<tr>
-														<td><input type="radio" name="orderNumber" id="orderNumber" value="${orderList.clientOrderId }"/></td>
+														<tr class="clickable-row" data-object="${orderList.amountRemaining() }">
+														<td><input type="radio" name="orderNumber" id="orderNumber" value="${orderList.clientOrderId }" title="${orderList.getProductCode() }" /></td>
 														<td>${orderList.convertOrderDate() }</td>
 														<td>${orderList.getOrderNumber() }</td>
-														<td>${orderList.getProductCode() }</td>
+														<td id="productCode">${orderList.getProductCode() }</td>
 														<td>${orderList.amountRemaining() }</td>
 														</tr>
 														
@@ -84,12 +74,11 @@
 												</c:forEach>									
 										  </table>
 										  <label id="orderNumber-errorLabel" class="error"></label>
-										</div>		
 										<div class="col-lg-12">
 										</div>
 											<label>Payment Method:</label>
 											<span id="paymentMethodError" class="error"></span>
-											<select name="paymentMethod" class="form-state" onchange="javascript:showBankCardInfoDiv(this);">
+											<select name="paymentMethod" id="paymentMethod" class="form-state" onchange="javascript:showBankCardInfoDiv(this);">
 												<option value=""></option>
 												<option value="cash">Cash</option>
 												<option value="check">Check (Cheque)</option>
@@ -100,47 +89,94 @@
 		
 													<label for="bankName">Name of Bank:</label> <input type="text"
 														name="bankName" class="form-state width-100" id="bankName" value="" />
-													<label for="bankAccountNumber">Account Number:</label>
-													<input type="text" id="bankAccountNumber" name="bankAccountNumber"	class="form-state  width-100" />
-													<div class="help-text bold">Confirm Account Number</div>
-													<input type="text" id="confirmAccountNumber" name="confirmAccountNumber" class="form-state  width-100" />
-													<label for="bankRoutingNumber">Routing Number:</label>
-													<input type="text"	id="bankRoutingNumber" name="bankRoutingNumber"	class="form-state  width-100" />
-													<label for="bankCustName">Name on Bank Account:</label>
+													<label for="bankAccountNumber" class="platform_form-block">Account Number:</label>
+													<input type="text" id="bankAccountNumber" name="bankAccountNumber"	class="form-state  width-50" />
+													<label for="confirmAccountNumber" class="platform_form-block">Confirm Account Number</label>
+													<input type="text" id="confirmAccountNumber" name="confirmAccountNumber" class="form-state  width-50" />
+													<label for="bankRoutingNumber" class="platform_form-block">Routing Number:</label>
+													<input type="text"	id="bankRoutingNumber" name="bankRoutingNumber"	class="form-state  width-50" />
+													<label for="bankCustName" class="platform_form-block">Name on Bank Account:</label>
 													<input type="text" name="bankCustName"	class="form-state width-100" id="bankCustName" value="" />
-													<label for="checkNumber">Check/Cheque Number:</label>
-													<input type="text" name="checkNumber"	class="form-state width-100" id="checkNumber" value="" />											
+													<label for="checkNumber" class="platform_form-block">Check/Cheque Number:</label>
+													<input type="text" name="checkNumber"	class="form-state width-50" id="checkNumber" value="" />											
 												</div>	
 												<div id="cardInfoDiv" class="hidden moveL_30">
 													<h4 class="page-header">Credit Card Payment</h4>
 													<label>Name on Card:</label>
-													<input type="text" name="nameOnCard" class="form-state  width-100">
+													<input type="text" name="nameOnCard" class="form-state  width-50">
 													<label>Card Number:</label>
-													<input type="text" name="cardNumber" class="form-state  width-100">
+													<input type="text" name="cardNumber" class="form-state  width-50"><span><input name="cardType" type="hidden" value="Visa"/></span>
 													<label>Expiration Date:
-													<input type="text" class="form-state width-40" placeholder="MM/YY">
+													<input type="text" class="form-state width-40" name="expirationDate" placeholder="MM/YY">
 													</label>
 													
 													<label>Security Number:
-													<input type="text" class="form-state width-40">		
+													<input type="text" class="form-state width-40" name="securityNumber">		
 													</label>
 																														
 												</div>		
 											<div>	
 											<div></div>																		
-											<label for="amountPaid">
-												Payment Amount:
-											</label>
+											<label for="amountPaid">Payment Amount:	</label>
 											</div>	
-											<input type="text" name="amountPaid" id="amountPaid" onblur="javascript:formatAmount('amountPaid',this)" class="form-state" placeholder="Amount">
+											<input type="text" name="amountPaid" id="amountPaid" onblur="javascript:formatAmount('amountPaid',this)" value="" class="form-state" placeholder="Amount">
 											<hr>
-
-											<input type="hidden" name="customerId" value="${customer.getCustomerId() }"/>
-										</sf:form>
+											
+											<input type="hidden" name="maximumAmount" id="maximumAmount" value=""/>
+											<input type="hidden" name="customer" value="${customer.getCustomerId() }"/>	
 											<p>
 												<input type="submit" onclick="javascript:validatePaymentForm(); return false;" value="Submit Payment" id="btnSubmitPayment" class="btn btn-success"/>		
-												<a href="#" class="btn btn-danger moveL_20">Cancel</a>	
-											</p>										
+												<a href="<c:url value="/platform/dashbaord" />" class="btn btn-danger moveL_20">Cancel</a>	
+											</p>								
+									</div>
+	
+											<c:set var="date" value="<%=new java.util.Date()%>" /> 
+											<%-- Payment Summary Container --%>
+											<div id="paymentSummary">
+												<div class="lead">
+												 	By Entering your Customer Identification Code and Submitting this Payment, you agree to
+												 	the Terms and Conditions to this transaction and also agree to pay the amount below.
+												</div>
+												<div  id="summaryAmount" class="lead"></div>
+												<div>
+													<label class="labelLength_20">Payment Date:</label><span id="summaryDate"><fmt:formatDate value="${date}" type="both" timeStyle="long" dateStyle="long" /></span>
+												</div>
+												<div>
+													<label class="labelLength_20">Product Name:</label><span id="summaryProduct"></span>
+												</div>
+												<div>
+													<label class="labelLength_20">Payment Method:</label><span id="summaryPaymentMethod"></span>
+												</div>
+												
+												<div id="summaryCheckDetails">
+													<div>
+														<label class="labelLength_20">Check Number:</label><span id="summaryCheckNumber"></span>
+													</div>
+													<div>
+														<label class="labelLength_20">Bank Name:</label><span id="summaryBankName"></span>
+													</div>
+													<div>
+														<label class="labelLength_20">Account Number</label><span id="summaryBankAccount"></span>								
+													</div>
+												</div>
+				
+																
+												<%-- Customer Pin Code or Identification --%>
+												<label for="passcode">Pin Code</label>
+												<div id="customerPin-error" class="help-text-inline-error"></div>
+												<input type="password" name="passcode" id="passcode" class="form-state width-50" />
+												
+												<div class="help-text-inline inlineBlock">
+													Click only once because clicking more than once will submit the payment more than once.
+												</div>
+												<div>
+													<input type="button" class="btn btn-success" id="submitPaymentBtn" value="Submit Buttom" />		
+													<a href="#" id="cancelPayment" class="btn btn-default moveL_20">Cancel Payment</a>												
+												</div>						
+											</div>	
+											<%-- End Payment Container --%>										
+										</sf:form>
+																				
 								</c:when>
 								<c:otherwise>
 								<c:if test="${not empty searchError }">
@@ -151,38 +187,173 @@
 									</span>							
 								</div>									
 								</c:if>
-									<a href="#" class="btn btn-primary" id="btnContinue">Continue</a>
 								</c:otherwise>
 							</c:choose>
+							
 
+							
+							<div id="paymentConfirmation" class="modal" tabindex="-1" role="dialog">
+								<div class="modal-dialog">
+								    <div class="modal-content">
+								      <div class="modal-header">
+								        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+								        <h4 class="modal-title">Payment Confirmation</h4>
+								      </div>
+								      <div class="modal-body">
+											You have agreed to Payment the following amount <span id="summaryAmount"></span>
+											<div id="confirmationDate"><fmt:formatDate value="${date}" type="both" timeStyle="long" dateStyle="long" /></div>
+											<div id="confirmationOrderNumber"></div>
+											<div id="confirmationPaymentType"></div>
+											<div id="confirmationCheckNumber"></div>
+											<div id="confirmationBankName"></div>
+								      </div>
+								      <div class="modal-footer">
+								        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+								        <button type="button" id="" class="btn btn-primary">Save changes</button>
+								      </div>
+								    </div><!-- /.modal-content -->
+								  </div><!-- /.modal-dialog -->							
+								
+							</div>
 							</div>
 						</div>		
 						</div>
 			</div>
 		</div>
 	</div>
+	<%--
+					$('#paymentConfirmation').modal({
+					backdrop : 'false',
+					show: 'true',
+					escape: 'false'
+				});
+	 --%>
 	<script>
+	var messageDiv = $('#paymentMessage');
 	$(document).ready(function(){
-		$('#paymentMessageContainer').hide();
+		//$('#paymentMessageContainer').hide();
+		$('#paymentSummary').hide();
+		
 		$("#btnSearchOrder").click(function(){
 			document.searchOrder.searchField.value = searchField;
 			document.searchOrder.submit();
 
 		});
 		
+		$('#amountPaid').blur(function(){
+			var maxAmount = $('#maximumAmount').val();
+			var amount = $(this).val();
+			var paymentValid = isPaymentAmountValid(amount,maxAmount);	
+			if(amount === "InValid"){
+				showMessage('Enter a valid Payment Amount.','alert',messageDiv);
+				return;
+			}
+			if(maxAmount){
+				if(!paymentValid){
+					showMessage('You cannot pay more than you owe.','alert',messageDiv);
+				}else{
+					hideMessageDiv(messageDiv);
+				}			
+			}else{
+				showMessage('Select from the list, what bill you will be paying.','info',messageDiv);
+			}
+
+		});
+		
+		$('.clickable-row').click(function(){
+			var amount = $(this).data("object");
+			$('#maximumAmount').val(amount);
+		});
+		
+		$('#cancelPayment').click(function(){
+			$('#paymentSegment').show();
+			$('#summaryCheckDetails').hide();
+			$('#paymentSummary').hide();
+		});
 		$('#btnSubmitPayment').click(function(){
-			validateOrderNumberRadioBtn();			
-			if(validatePaymentForm()){
-				document.submitPayment.submit();
+		
+			if(validatePaymentForm() && validateOrderNumberRadioBtn()){
+				$('#summaryCheckDetails').hide();
+				$('#paymentSegment').hide();
+				var amountPaid = $('#amountPaid').val();
+				var paymentMethod = $('#paymentMethod').val();
+				getRadioBtnValue("#paymentTable",'#summaryProduct');
+				var bankName = $('#bankName').val();
+				var accountNumber = $('#custAccountNumber').val();
+				var check = $('#checkNumber').val();
+				
+				$('#summaryOrderDate').html(new Date());
+				$('#summaryPaymentMethod').html(paymentMethod);
+				$('#summaryAmount').html("$"+amountPaid);
+				if(paymentMethod == 'check'){
+					$('#summaryCheckDetails').show()
+					$('#summaryBankName').html(bankName);
+					$('#summaryBankAccount').html(accountNumber);
+					$('#summaryBankCheck').html(check);					
+				}else{
+					$('#summaryCheckDetails').hide();
+				}
+				$('#paymentSummary').show();
+				//document.submitPayment.submit();
 			}
 			
 		});
+		
+		$('#submitPaymentBtn').click(function(){
+			var form = $('form').serialize();
+			$('#customerPin-error').text(" ");
+			
+			$(document).ajaxStart(function() {
+				  $("#loading").show();
+			});
+
+			$(document).ajaxComplete(function() {
+				 $("#loading").hide();
+			});
+			$.ajax({
+				url: 'submitBillPayment',
+				data : form,
+				dataType: 'json',
+				beforeSend: function(){
+					 $("#loading").text("Validating your Pin Number");
+				},
+				success : function(result){	
+					if(result == false){
+						showMessage('You must enter a valid Pin Number!!!','alert',messageDiv);
+						$("#paymentMessage").text("You must enter a valid Pin Number!!!");			
+						$('#paymentSegment').show();
+						$('#summaryCheckDetails').hide();
+						$('#paymentSummary').hide();						
+					}else{
+						$('#paymentConfirmation').modal({
+							
+						});
+					}
+					
+				},
+				error : function(err){
+					console.log(err.responseText+" error");
+				}
+			});			
+		});
 	});
+	
+	
+	function validatePassCode(value){
+		
+		var codePattern = new RegExp('/^[A-z0-9]+');
+		if(isEmpty(value) && isBlank(str)){
+			$('#customerPin-error').html("Enter your Pin Number before clicking Submit.");
+			return;
+		}
+	}
 	function validateOrderNumberRadioBtn(){
 		if($("input[name=orderNumber]:checked").length < 1) {
 			  $('#orderNumber-errorLabel').html('Select an Order/Bill to continue...');
 			  $('#orderNumber-errorLabel').removeAttr('style');
-			  return;
+			  return false;
+		}else{
+			return true;
 		}
 	}
 
@@ -202,25 +373,23 @@
 				data: data,
 				dataType: 'html',
 				success: function(response){
-					
+					console.log(response);
 					if(response == null){
-						$('#paymentMessageContainer').show();
-						$("#paymentMessage").text("NO information was found. Try again with a valid Customer Information");		
+						showMessage('No information was found. Try again with a valid Customer Information','alert',messageDiv);
+					
 					}
-					$('#paymentContainer').show();
-										
+															
 				},
 				error: function(err){
-					$('#paymentMessageContainer').show();
-					$("#paymentMessage").text("Problem occured while processing your request, please try again.");
+					showMessage('Problem occured while processing your request, please try again.','alert',messageDiv);
+					
 				},
 				complete: function(e){
 					console.log(e.statusText+" complete");
 				}
 			});
 		}else{
-			$('#paymentMessageContainer').show();
-			$("#paymentMessage").text("Order Number cannot be null.");
+			showMessage('Order Number cannot be null.','alert',messageDiv);
 			$("#btnSearchOrder").html('<i class="fa fa-search"></i>');
 		}
 	}
@@ -237,16 +406,39 @@
 					required: true
 				},
 				checkNumber : {
+					required: true,
+					digits: true
+				},
+				bankCustName : {
+					required: true
+				},
+				bankRoutingNumber : {
+					required: true,
+					digits: true
+				},
+				bankAccountNumber: {
+					required: true,
+					digits: true
+				},
+				confirmAccountNumber: {
+					required: true,
+					equalTo: '#bankAccountNumber'
+				},
+				bankName: {
 					required: true
 				}
 			},
 			messages : {
 				amountPaid : {
 					required: "Enter the amount that the Customer is paying",
-					numbers: "Quantity can only be a whole number!!."
+					numbers: "Enter a valid Payment Amount"
 				},
 				paymentMethod : {
-					required: 'Select the Payment Method'
+					required: 'Select a Payment Method to continue'
+				},
+				checkNumber : {
+					required : 'Enter the Check Number',
+					digits: 'Enter a valid check number'
 				}
 			}
 		});
@@ -255,6 +447,14 @@
 		 return true;			
 	}
 
+	function isPaymentAmountValid(paymentAmount,maxAmount){
+		
+		var paymentValid = false;
+		if((paymentAmount > 0.0) && parseFloat(paymentAmount) <= parseFloat(maxAmount)){
+			paymentValid = true;
+		}
+		return paymentValid;
+	}
 	</script>
 	</body>
 	</html>

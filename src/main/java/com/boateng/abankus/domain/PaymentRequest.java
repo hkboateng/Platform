@@ -24,6 +24,28 @@ public class PaymentRequest {
 	private Integer orderId;
 	
 	private Integer employeeId;
+
+	private String nameOnCard;
+	
+	private String cardType;
+	
+	private String cardNumber;
+	
+	private String expirationDate;
+	
+	private String securityNumber;
+	
+	private String typeOfPayment;
+	
+	private String bankName;
+	
+	private String bankRoutingNumber;
+	
+	private String bankCustomerName;
+	
+	private String bankAccountNumber;
+	
+	private String checkNumber;
 	
 	public PaymentRequest(){
 		
@@ -105,6 +127,115 @@ public class PaymentRequest {
 
 	public void setEmployeeId(Integer employeeId) {
 		this.employeeId = employeeId;
+	}
+
+	public String getNameOnCard() {
+		return nameOnCard;
+	}
+
+
+	public void setNameOnCard(String nameOnCard) {
+		this.nameOnCard = nameOnCard;
+	}
+
+
+	public String getCardType() {
+		return cardType;
+	}
+
+
+	public void setCardType(String cardType) {
+		this.cardType = cardType;
+	}
+
+
+	public String getCardNumber() {
+		return cardNumber;
+	}
+
+
+	public void setCardNumber(String cardNumber) {
+		this.cardNumber = cardNumber;
+	}
+
+
+	public String getExpirationDate() {
+		return expirationDate;
+	}
+
+
+	public void setExpirationDate(String expirationDate) {
+		this.expirationDate = expirationDate;
+	}
+
+
+	public String getSecurityNumber() {
+		return securityNumber;
+	}
+
+
+	public void setSecurityNumber(String securityNumber) {
+		this.securityNumber = securityNumber;
+	}
+
+
+	public String getTypeOfPayment() {
+		return typeOfPayment;
+	}
+
+
+	public void setTypeOfPayment(String typeOfPayment) {
+		this.typeOfPayment = typeOfPayment;
+	}
+
+
+	public String getBankName() {
+		return bankName;
+	}
+
+
+	public void setBankName(String bankName) {
+		this.bankName = bankName;
+	}
+
+
+	public String getBankRoutingNumber() {
+		return bankRoutingNumber;
+	}
+
+
+	public void setBankRoutingNumber(String bankRoutingNumber) {
+		this.bankRoutingNumber = bankRoutingNumber;
+	}
+
+
+	public String getBankCustomerName() {
+		return bankCustomerName;
+	}
+
+
+	public void setBankCustomerName(String bankCustomerName) {
+		this.bankCustomerName = bankCustomerName;
+	}
+
+
+	public String getBankAccountNumber() {
+		return bankAccountNumber;
+	}
+
+
+	public void setBankAccountNumber(String bankAccountNumber) {
+		this.bankAccountNumber = bankAccountNumber;
+	}
+
+
+	public String getCheckNumber() {
+		return checkNumber;
+	}
+
+
+	public void setCheckNumber(String checkNumber) {
+		this.checkNumber = checkNumber;
 	}
 	
 	

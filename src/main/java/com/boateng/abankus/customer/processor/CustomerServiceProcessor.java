@@ -34,13 +34,12 @@ import com.boateng.abankus.fields.CustomerFields;
 import com.boateng.abankus.fields.EmailFields;
 import com.boateng.abankus.fields.EmployeeFields;
 import com.boateng.abankus.fields.PhoneFields;
-import com.boateng.abankus.processors.AbankusBaseProcessor;
 import com.boateng.abankus.services.AuthenticationService;
 import com.boateng.abankus.services.EmployeeService;
 import com.boateng.abankus.utils.SecurityUtils;
 
 
-public class CustomerServiceProcessor extends AbankusBaseProcessor{
+public class CustomerServiceProcessor{
 	private static final Log log = LogFactory.getLog(CustomerServiceProcessor.class);
 
 	/**
@@ -95,13 +94,13 @@ public class CustomerServiceProcessor extends AbankusBaseProcessor{
 	}
 	
 	public Customer addIndividualCustomer(String firstname,String middlename,String lastname,String companyName, String customerType, String gender){
-		Customer customer = new Customer(firstname,lastname,customerType);
+		Customer customer = new Customer(firstname,lastname);
 		String customerNo = SecurityUtils.generateCustomerId();
 		if(customerServiceImpl.findCustomerByCustomerNumber(customerNo) == null){
 			customerNo = SecurityUtils.generateCustomerId();
 		}
 		customer.setCustomerNumber(customerNo);
-		customer.setCompany_name(companyName);
+		customer.setCompanyName(companyName);
 		customer.setMiddlename(middlename);
 		customer.setGender(gender);
 	
@@ -226,7 +225,7 @@ public class CustomerServiceProcessor extends AbankusBaseProcessor{
 	
 	public Email FindCustomerByEmailAddress(String email){
 		Email customer = null;
-		if(!isNullOrBlank(email)){
+		if(!StringUtils.isBlank(email)){
 			customer = customerServiceImpl.findCustomerByEmailAddress(email);
 		}
 		return customer;
@@ -276,20 +275,18 @@ public class CustomerServiceProcessor extends AbankusBaseProcessor{
 		}
 		if(customerId > 0){
 			log.info("Found customer information");
-			customer = findCustomerByCustomerId(customerId);
+			customer = customerServiceImpl.findCustomerByCustomerId(customerId);
 		}
 		
 		if(customer == null){
 			//Find Customer By Email
 			if(cust.contains("@")){
+				log.info("Searching for Customer with Email Address: "+cust);
 				customer =customerServiceImpl.findCustomerByEmail(cust);
 			}
 		}
 		if(customer == null){
-			String[] name = cust.split(" ");
-			if(name.length > 1){
-				customer = customerServiceImpl.findCustomerByFirstNameAndLastName(name[0], name[1]);
-			}
+			customer = customerServiceImpl.findCustomerByCustomerNumber(cust);
 		}
 		return customer;
 	}

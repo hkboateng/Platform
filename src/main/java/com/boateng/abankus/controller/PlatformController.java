@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.boateng.abankus.application.interfaces.CustomerService;
 import com.boateng.abankus.customer.processor.CustomerServiceProcessor;
 import com.boateng.abankus.domain.Address;
 import com.boateng.abankus.domain.BillingCollection;
@@ -71,11 +72,15 @@ public class PlatformController  extends PlatformAbstractServlet {
 	@Autowired(required=true)
 	@Qualifier(value="paymentServiceImpl")
 	private PaymentService paymentServiceImpl;	
+
+	@Autowired(required=true)
+	private CustomerService customerServiceImpl;	
 	
 	@Autowired(required=true)
 	private CustomerServiceProcessor customerServiceProcessor;
 	
 	private static final Logger logger = Logger.getLogger(PlatformController.class.getName());
+
 	
 	@RequestMapping(value = "/platform/index", method = RequestMethod.GET)
 	public String home(HttpServletRequest request, Model model) {
@@ -309,7 +314,7 @@ public class PlatformController  extends PlatformAbstractServlet {
 	
 	@RequestMapping(value = "/platform/loadCustomerOrderByOrderNumber", method = RequestMethod.GET, produces="application/json")
 	@ResponseBody
-	public String loadPaymentsByOrderNumber(HttpServletRequest request){
+	public String loadCustomerOrderByOrderNumber(HttpServletRequest request){
 		String orderNumber = request.getParameter("orderNumber");
 		ObjectMapper mapper = new ObjectMapper();
 		CustomerOrder customerOrder = customerOrderServiceImpl.findCustomerOrderByOrderNumber(orderNumber);
@@ -324,4 +329,29 @@ public class PlatformController  extends PlatformAbstractServlet {
 		}
 		return payments;
 	}
+	
+	@RequestMapping(value = "/platform/loadPaymentsByOrderNumber", method = RequestMethod.GET,produces="application/json")
+	@ResponseBody
+	public String loadPaymentsByOrderNumber(HttpServletRequest request){
+		String orderNumber = request.getParameter("orderNumber");
+		
+		ObjectMapper mapper = new ObjectMapper();
+		
+		List<PaymentTransaction> payments = paymentServiceImpl.findPaymentTransactionByOrderNumber(orderNumber);
+		String status = null;
+		try {
+			status = mapper.writeValueAsString(payments);
+		} catch (JsonProcessingException e) {
+			logger.warning(e.getMessage());
+		}
+		return status;
+	}
+	@RequestMapping(value = "/platform/countTotalCustomers", method = RequestMethod.GET, produces = "application/json")
+	@ResponseBody
+	public Integer countTotalCustomers(){
+		int total = customerServiceImpl.countTotalCustomer();
+		
+		return total;
+	}
+	
 }
