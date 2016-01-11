@@ -14,7 +14,7 @@ import com.boateng.abankus.domain.Phone;
  *
  */
 public interface CompanyService {
-	Company saveCompany(Company company,Email email, Phone phone, Address address, ContactPerson person);
+	Company saveCompany(Company company, Email email, Phone phone, Address address, ContactPerson person);
 	
 	Company findCompanyByCompanyId(Integer comapnyId);
 	

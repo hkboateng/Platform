@@ -8,7 +8,10 @@ import java.io.IOException;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.joda.time.DateTime;
 
+import com.boateng.abankus.application.ws.svc.AuthenticationResponse;
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
@@ -71,5 +74,15 @@ public class PlatformUtils {
 			map = mapper.writeValueAsString(o);
 		}
 		return map;
+	}
+	
+	public static <T>  T convertFromJSON(Class<T> cls, String json) throws JsonParseException, JsonMappingException, IOException{
+		ObjectMapper mapper = new ObjectMapper();
+		T object = null;
+		if(json != null){
+			object = mapper.readValue(json, (Class<T>) cls);
+		}
+		
+		return object;
 	}
 }

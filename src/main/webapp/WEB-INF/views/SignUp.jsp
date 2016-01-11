@@ -1,6 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,7 +18,7 @@
 <nav class="navbar navbar-default">
   <div class="container-fluid">
     <div class="navbar-header">
-      <a class="navbar-brand" href="#">
+      <a class="navbar-brand" href="<c:url value="/platform/index" />">
         Abankus Payments
       </a>
     </div>
@@ -31,9 +32,24 @@
 				</div>
 			</div>
 			<div class="col-sm-12 col-md-8 col-lg-8">
-
+				<c:if test="${success_message  != null}">
+					<div class="alert alert-success">
+						${success_message}
+					</div>
+				</c:if>
+				<c:if test="${validationError  != null}">
+					<div class="alert alert-warning">
+						${validationError}
+					</div>
+				</c:if>			
+				<c:if test="${error_message != null}">
+					<div class="alert alert-success">
+						${error_message}
+					</div>
+				</c:if>		
 				<form name="frmCompanySignUp" id="frmCompanySignUp" action="<c:url value="/Company/saveCompany" />" method="post">
 					<div class="col-sm-8 col-md-8">
+
 						<div>
 							<label for="companyname">Company Name:</label>
 							<input type="text" class="form-state width-100" name="companyname" id="companyname"/>	
@@ -69,16 +85,21 @@
 															
 					<div class="col-sm-8 col-md-4">
 						<label for="zipcode">Zip Code:</label>
-						<input type="text" class="form-state width-100" name="zipcode" id="zipcode"/>							
+						<input type="text" class="form-state width-100" name="zipcode" id="zipcode" maxlength=5/>							
 					</div>	
-					<div class="col-sm-8 col-md-8">
+					<div class="col-sm-8 col-md-6">
 						<label for="phonenumber">Phone Number:</label>
-						<input type="text" class="form-state width-100" name="phonenumber" id="phonenumber" placeholder="XXX-XXX-XXXX"/>							
-					</div>										
-					<div class="col-sm-8 col-md-8">
-						<div>
+						<input type="text" class="form-state width-100" name="phonenumber" id="phonenumber" placeholder="XXX-XXX-XXXX"/>	
+					</div>	
+					<div class="col-sm-8 col-md-6">
 						<label>Email address:</label>
 						<input type="text" name="emailAddress" id="emailAddress" class="form-state width-100"/>
+					</div>					
+															
+					<div class="col-sm-8 col-md-8">
+						<div>
+						<label for="username">Username:</label>
+						<input type="text" name="username" id="username" class="form-state width-100"/>
 						</div>
 						<div>
 						<label>Password:</label>

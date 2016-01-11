@@ -15,7 +15,7 @@
     	<intercept-url pattern="/platform/**" access="isFullyAuthenticated()"/>
     	<intercept-url pattern="/registration/**" access="isFullyAuthenticated()"/>
     	<intercept-url pattern="/customers/**" access="isFullyAuthenticated()"/>
-    	<form-login login-page='/security/login' default-target-url='/platform/dashboard'
+    	<form-login login-page='/security/login' default-target-url='/platform/index'
             always-use-default-target='true' authentication-failure-url='/?error=access_denied' />
         <logout invalidate-session="true" delete-cookies="JSESSIONID" logout-url="/platform/logout"  logout-success-url="/login?logout_successful=18"/>
 

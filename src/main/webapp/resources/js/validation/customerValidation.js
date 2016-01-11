@@ -51,6 +51,9 @@ function validation(){
 				},
 				customerIndustry: {
 					required: true
+				},
+				username : {
+					required:true
 				}
 			},
 			messages: {

@@ -12,7 +12,7 @@
 	
 	<!-- Application Loggers -->
 	<logger name="com.boateng.abankus">
-		<level value="severe,info,warn,error" />
+		<level value="all" />
 	</logger>
 	
 	<!-- 3rdparty Loggers -->
@@ -34,7 +34,7 @@
 
 	<!-- Root Logger -->
 	<root>
-		<priority value="warn" />
+		<priority value="all" />
 		<appender-ref ref="console" />
 	</root>
 	

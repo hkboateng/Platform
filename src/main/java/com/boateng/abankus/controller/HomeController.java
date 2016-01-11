@@ -37,5 +37,12 @@ public class HomeController {
 		return "index";
 	}
 
+	@RequestMapping(value ="/error", method = RequestMethod.GET)
+	public String error(Locale locale, Model model) {
+		logger.info("Welcome home! The client locale is {}.");
+
+		
+		return "index";
+	}
 
 }

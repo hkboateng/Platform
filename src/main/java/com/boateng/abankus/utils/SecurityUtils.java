@@ -271,8 +271,9 @@ public class SecurityUtils {
 	    }    
 	    
 	    public static Integer generateCompanyNumber(){
-	    	SecureRandom rand = new SecureRandom();
-	    	
-	    	return  rand.nextInt();
+	    	StringBuilder sbr = new StringBuilder();
+	    	String pin = RandomStringUtils.random(6, true, true).toUpperCase();
+	    	sbr.append(pin);
+	    	return Integer.valueOf(sbr.toString());
 	    }
 }

@@ -49,15 +49,15 @@ public class CompanyServiceImpl implements CompanyService {
 		}else{
 			session = getSessionFactory().getCurrentSession();
 		}
-		session.save(address);
-		session.save(phone);
 		session.save(email);
+		session.save(phone);
+		session.save(address);
 		session.save(person);
 		
 		company.setAddressBean(address);
-		company.setPhoneBean(phone);;
-		company.setEmailBean(email);
 		company.setContactperson(person);
+		company.setPhoneBean(phone);
+		company.setEmailBean(email);
 		
 		session.save(company);
 		session.flush();

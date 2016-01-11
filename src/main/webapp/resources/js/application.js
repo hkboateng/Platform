@@ -266,6 +266,9 @@ function validateForm(formName){
 			confirmpassword: {
 				required: true,
 				equalTo: '#password'
+			},
+			username : {
+				required:true
 			}
 		},
 		messages :{

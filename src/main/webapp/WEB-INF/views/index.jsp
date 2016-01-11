@@ -50,7 +50,7 @@
 					</c:if>
 					<c:if test="${info !=null }">
 						<div class="alert alert-success">
-							<span class="glyphicon glyphicon-info-sign"></span>${info }
+							<span class="glyphicon glyphicon-info-sign"></span> ${info }
 						</div>
 					</c:if>
 					<c:if test="${param.error != null}">
