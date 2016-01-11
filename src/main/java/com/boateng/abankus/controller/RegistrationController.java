@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.boateng.abankus.domain.Customer;
 import com.boateng.abankus.domain.Employee;
@@ -59,16 +60,16 @@ public class RegistrationController {
 	}
 	
 	@RequestMapping(value="addEmployee", method=RequestMethod.POST)
-	public String addEmployee(@Valid Employee employee,BindingResult result,HttpServletRequest request){
+	public String addEmployee(@Valid Employee employee,BindingResult result,HttpServletRequest request,RedirectAttributes redirectAttributess){
 		HttpSession session = request.getSession();
 		if(result.hasErrors()){
-
-			return "Employee/AddNewEmployee";
+			redirectAttributess.addFlashAttribute("validationError", result.getAllErrors());
+			return "redirct:/employee";
 		}
 		boolean isEmailUsed =  authenticationServiceImpl.doEmailExist((employee.getEmail()));
 		if(isEmailUsed){
-			request.setAttribute("errors", "Email Address already in use.");
-			return "Employee/AddNewEmployee";
+			redirectAttributess.addFlashAttribute("errors", "Email Address already in use.");
+			return "redirct:/employee";
 		}	
 		
 		logger.info("Saving New Employee data");
@@ -77,22 +78,22 @@ public class RegistrationController {
 			session.setAttribute("roleList", roleList);
 		}
 		session.setAttribute("employee", employee);
-		return "Employee/SecurityInfo";
+		return "redirct:/security";
 	}
 	
 	@RequestMapping(value="addEmployeeLogin", method=RequestMethod.POST)
-	public String addEmployeeLogin(@Valid User login, BindingResult result,HttpServletRequest request){
+	public String addEmployeeLogin(@Valid User login, BindingResult result,HttpServletRequest request,RedirectAttributes redirectAttributess){
 		HttpSession session = request.getSession();
 		String[] roleId = request.getParameterValues("role");
 		if(result.hasErrors()){
-			
-			return "Employee/SecurityInfo";
+			redirectAttributess.addFlashAttribute("validationError", result.getAllErrors());
+			return "redirct:/security";
 		}
 		
 		boolean usernameExist =  authenticationServiceImpl.doEmailExist((login.getUsername()));
 		if(usernameExist){
-			request.setAttribute("errors", "Username already exist in system.");
-			return "Employee/SecurityInfo";
+			redirectAttributess.addFlashAttribute("error_message", "Username already exist.");
+			return "redirct:/security";
 		}
 		
 		Employee employee = (Employee) session.getAttribute("employee");
@@ -108,9 +109,13 @@ public class RegistrationController {
 			
 		}
 		request.setAttribute("success", "Congratulations on registering. Please Login !!!");
-		return "index";
+		return "redirct:/employee";
 	}
 	
+	@RequestMapping(value="/security", method=RequestMethod.POST)
+	public String securityInfo(){
+		return "Employee/SecurityInfo";
+	}
 	@RequestMapping(value="newCustomer", method=RequestMethod.GET)
 	public ModelAndView newCustomer(@Valid Customer customer, BindingResult result){
 		ModelAndView model = new ModelAndView();

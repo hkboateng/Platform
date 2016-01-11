@@ -58,7 +58,7 @@ public class EmployeeController {
 	public String updateEmployee(HttpServletRequest request,Model model,RedirectAttributes redirectAttributess){
 		employeeServiceProcessor.process("update", request);
 		
-		redirectAttributess.addAttribute("info", "Employee has being added successfully.");
+		redirectAttributess.addFlashAttribute("info", "Employee has being added successfully.");
 		return "redirect:/platform/dashboard";
 	}
 	
