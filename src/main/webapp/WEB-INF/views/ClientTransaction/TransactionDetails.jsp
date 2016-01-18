@@ -26,7 +26,7 @@
   padding: 10px;
   position: absolute;
   text-align: center;
-  top: 350px;
+  top: -100px;
   width: 190px;
   z-index: 10;
 }
@@ -111,13 +111,13 @@
 										<td>${payments.paymentDate }</td>
 										<td>${payments.amountPaid }</td>
 										<td>${payments.paymentType.toUpperCase() }</td>
-										<td>${payments.getEmployeeName()}</td>										
+										<td>${payments.getEmployeeName()}</td>									
 									</tr>
 								</c:forEach>
 							</c:when>
 							<c:otherwise>
 								<tr>
-									<td colspan="45" style="text-align:center;">No Payment History found.</td>
+									<td colspan="4" style="text-align:center;">No Payment History found.</td>
 								</tr>
 							</c:otherwise>
 						</c:choose>
@@ -227,7 +227,7 @@
         tooltip.append('div')                        // NEW
         .attr('class', 'paymentAmount');     
         
-      	d3.json("/abankus/platform/loadPaymentsByOrderNumber?orderNumber="+orderNumber, function(error, data) {
+      	d3.json("http://localhost:8080/paymenthub/paymentservice/findPaymentsByOrderNumber?orderNumber="+orderNumber, function(error, data) {
 			var total = d3.sum(data.map(function(d) {                
               return d.amountPaid;                                           // NEW
             }));
@@ -247,9 +247,6 @@
             });
 
 				path.on('mouseover', function(d) {
-				  var total = d3.sum(data.map(function(d) {
-				    return d.amountPaid;
-				  }));
 				 
 				  tooltip.select('.paymentDate').html("<b>Payment Date: </b>"+d.data.paymentDate);
 				  tooltip.select('.paymentType').html("<b>Payment Type: </b>"+d.data.paymentType); 
@@ -291,7 +288,7 @@
 	      .attr("dy", "0em")
 	      .style("text-anchor", "middle")
 	      .attr("class", "bold")
-	      .text(function(d) { return "Amount Paid: $"+total; });
+	      .text(function(d) { return "Amount Paid: $"+parseFloat(total).toFixed(2); });
           
           svg.append("text")
           .data(data)
@@ -299,7 +296,7 @@
 	      .attr("dx", "-5em")
 	      .style("text-anchor", "bottom")
 	      .attr("class", "bold")
-	      .text("Amount Left: $"+amountLeft);
+	      .text("Amount Left: $"+parseFloat(amountLeft).toFixed(2));
        
 			});		
 	}

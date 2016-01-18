@@ -206,13 +206,13 @@ public class Employee implements Serializable {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append(firstname);
+		builder.append(getFirstname());
 		if(getMiddlename() !=null){
 			builder.append(" ");
-			builder.append(middlename);
+			builder.append(getMiddlename());
 		}
 		builder.append(" ");
-		builder.append(lastname);		
+		builder.append(getLastname());		
 		return builder.toString();
 	}
 

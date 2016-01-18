@@ -12,7 +12,8 @@
 <link href="<c:url value="/resources/css/platform.css" />" rel="stylesheet"/>
 <link href="<c:url value="/resources/css/datepicker.css" />" rel="stylesheet"/>
 	<script src="<c:url value='/resources/js/jquery.js' />" type="text/javascript"></script>
-
+<script src="<c:url value="/resources/js/validation/jquery.validation.js" />" type="text/javascript"></script>
+<script src="<c:url value="/resources/js/validation/customerValidation.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/bootstrap.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/application.js" />" type="text/javascript"></script>
 </head>

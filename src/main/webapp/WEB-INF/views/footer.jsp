@@ -24,6 +24,8 @@
 				$("#customerIdDiv").addClass('hidden');
 				$('#customerNameDiv').addClass('hidden')
 				
-			});				
+			});		
+			 
+
 		});
 		</script>

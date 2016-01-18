@@ -104,4 +104,20 @@ public class Address implements Serializable {
 		this.zipcode = zipcode;
 	}
 
+	@Override
+	public String toString() {
+		
+			StringBuilder sbr = new StringBuilder();
+			sbr.append(getAddress1());
+			if(getAddress2() != null){
+				sbr.append("\n").append(getAddress2());
+			}
+			sbr.append(getCity()).append(" ")
+			.append(getRegion()).append(" ")
+			.append(getZipcode());
+
+		return sbr.toString();
+	}
+
+	
 }

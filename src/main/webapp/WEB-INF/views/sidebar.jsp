@@ -111,25 +111,19 @@ ul li {
 									<label>Quick Search</label>
 										<div class="spaceBelow_10">
 											<label class="radio-inline">
-											  <input type="radio" name="searchBill" id="customerId" value="customerIdDiv" checked> Customer Id:
+											  <input type="radio" name="searchBill" id="customerDivId" value="customerIdDiv" checked> Customer Id:
 											</label>
 											<label class="radio-inline">
-											  <input type="radio" name="searchBill" id="customerName" value="customerNameDiv"> Customer Name
-											</label>
-											<label class="radio-inline">
-											  <input type="radio" name="searchBill" id="customerOrder" value="customerOrderDiv"> Order #:
+											  <input type="radio" name="searchBill" id="customerDivName" value="customerNameDiv"> Customer Name
 											</label>
 										</div>
-										<div id="customerIdDiv" class="">
+										<div id="hideIdDiv" class="hidden">
 											<label>Customer Id:</label><input type="text" name="customerId" class="form-state width-100" placeholder="Customer Id, Customer Number or Email Address" />
 											
 										</div>
 										<div id="customerNameDiv" class="hidden">
 											<label>First Name:</label><input type="text" name="firstname" class="form-state width-100">
 											<label>Last Name:</label><input type="text" name="lastname" class="form-state width-100">
-										</div>
-										<div class="hidden" id="customerOrderDiv">
-											<label>Order Number:</label><input type="text" name="OrderNumber" class="form-state width-100">
 										</div>
 										<input type="hidden" name="searchType" id="searchType" value="customerId">
 										<button type="submit" class="btn btn-success btn-sm btn-block"><span class="glyphicon glyphicon-search moveR_20"></span>Search</button>
@@ -140,6 +134,7 @@ ul li {
 				</div>
 	    <script>
 	    $(document).ready(function() {
+	    	$("#hideIdDiv").removeClass('hidden');
 	    	$('#paymentExpand').click(function(){
 	    		$('#paymentDiv').toggle();
 	    	});	 
@@ -156,21 +151,20 @@ ul li {
 					$(this).children("div.submenu").hide();
 				}
 			});
-			$('#customer').on('click',function(){
+			$('#customerDivId').on('click',function(){
 				$('#searchType').val("customer");
-				$("#customerIdDiv").removeClass('hidden');
-				$('#customerNameDiv').addClass('hidden');
-				$('#customerOrderDiv').addClass('hidden');
+				$("#hideIdDiv").removeClass('hidden');
+				$("#customerNameDiv").addClass('hidden');
 			});
-			$('#customerPayments').on('click',function(){
-				$('#searchType').val("customerPayments");
-				$('#customerNameDiv').removeClass('hidden');
-				$("#customerIdDiv").addClass('hidden');
-				$('#customerOrderDiv').addClass('hidden');
+			$('#customerDivName').on('click',function(){
+				$('#searchType').val("customerName");
+				$("#customerNameDiv").removeClass('hidden');
+				$("#hideIdDiv").addClass('hidden');
+				
+				
 			});
 			$('#employee').on('click',function(){
 				$('#searchType').val("employee");
-				$('#customerOrderDiv').removeClass('hidden');
 				$("#customerIdDiv").addClass('hidden');
 				$('#customerNameDiv').addClass('hidden')
 				

@@ -9,87 +9,190 @@
 <link href="<c:url value="/resources/css/bootstrap.css" />"	rel="stylesheet" />
 <link href="<c:url value="/resources/css/platform.css" />"	rel="stylesheet" />
 <script src="<c:url value="/resources/js/jquery.js" />"	type="text/javascript"></script>
-<script	src="<c:url value="/resources/js/validation/jquery.validation.js" />" type="text/javascript"></script>
+<script src="<c:url value="/resources/js/validation/jquery.validation.js" />" type="text/javascript"></script>
+<script src="<c:url value="/resources/js/validation/customerValidation.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/bootstrap.js" />"	type="text/javascript"></script>
 <script src="<c:url value="/resources/js/application.js" />"	type="text/javascript"></script>
-<script src="<c:url value="/resources/js/accounting/accounting.js" />"	type="text/javascript"></script>
+<script src="<c:url value="/resources/js/platform-functions.js" />"	type="text/javascript"></script>
 </head>
 <body>
 	<%-- Include page header --%>
 	<jsp:include page="../header.jsp" />
 	<div id="container" class="container">
 		<div class="row">
-			<div class="col-sm-9 col-md-10 center-block">
-				<h2>Search for Customer</h2>
-				<hr class="line1" />
-				<div class="col-md-12">
-					<label class="radio-inlne moveR_20">
-						<input type="radio" name="searchCustomer" id="customerIdSrc" value="customerIdDiv" checked/>
-						Find By Customer Name:
-					</label>
-					<label class="radio-inline moveR_20">
-						<input type="radio" name="searchCustomer" id="accountNumberSrc" value="accountNumberDiv" class=""/>
-						Account Number or Customer Number:
-					</label>
-					<label class="radio-inline moveR_20">
-						<input type="radio" name="searchCustomer" id="emailPhoneSrc" value="emailPhoneDiv" class=""/>
-						Email or Phone Number:
-					</label>
-					<div>
-						<div id="customerIdDiv" class="hidden">
-							<label>First Name:</label>
-							<input type="text" name="firstname" class="form-state">
-							<label>Last Name:</label>
-							<input type="text" name="lastname" class="form-state">						
-						</div>
-						<div id="accountNumberDiv" class="hidden">
-							<label>Customer Account Number:</label>
-							<input type="text" name="accountNumber" class="form-state">
-							<div class="center-block ">OR</div>
-							<label>Customer Number or Identification:</label>
-							<input type="text" name="customerNumber" class="form-state">								
-						</div>		
-						<p>
-							<input type="submit" id="btnCustomerSearchSubmit" value=" Search" class="btn btn-primary">
-						</p>			
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				<div id="searchContainer">
+					<div class="spaceBelow_10 container">						
+							<label>Quick Search</label>
+							<div class="spaceBelow_10">
+								<label class="radio-inline">
+									<input type="radio" name="searchBill" id="customer" value="customerIdDiv" checked>Search for Customer:
+								</label>
+								<label class="radio-inline">
+									<input type="radio" name="searchBill" id="employee" value="customerOrderDiv">Search for Payment(s) made by Customer and received by Employee:
+								</label>
+							</div>
+							<div class="col-lg-12">
+							<div id="customerIdDiv" class="vertical-divider">
+								<div class="col-lg-5 spaceBelow_20">
+									<sf:form name="searchForm" id="searchCustomerNumberForm" action="/abankus/platform/customerProfileSearch" method="post">
+										<label>Customer Number or Email Address:</label>
+										<input type="text" name="customerIdentity" id="customerIdentity" class="form-state width-100" placeholder="Customer Id, Number  or Email address">				
+										<div>
+											<button type="submit" class="btn btn-success btn-sm" id="searchCustomerNumberBtn" onclick="javascript:validateCustomerNumberSearch();return false;"><span class="glyphicon glyphicon-search moveR_20"></span>Search</button>
+										</div>
+										<input type="hidden" name="searchType" id="searchType" value="customerIdentity">
+									</sf:form>
+									
+								</div>
+								<div class="col-lg-5 spaceBelow_20">	
+									<sf:form name="searchForm" id="searchCustomerNameForm" action="/abankus/platform/customerProfileSearch" method="post">
+										<div>			
+											<label>First Name:</label><input type="text"  id="firstname" name="firstName" class="form-state width-100 customer_search" placeholder=" First Name">
+										</div>
+										<label>Last Name:</label><input type="text" id="lastname" name="lastName" class="form-state width-100 customer_search" placeholder=" Last Name">
+										<div>
+											<button type="submit" class="btn btn-success btn-sm" id="searchCustomerNameBtn" onclick="javascript:validateCustomerNameSearch();return false;"><span class="glyphicon glyphicon-search moveR_20"></span>Search</button>
+										</div>
+										<input type="hidden" name="searchType" id="searchType" value="customerDetail">
+									</sf:form>
+								</div>			
+							</div>
+							
+							<div class="hidden vertical-divider" id="customerOrderDiv">
+								<div class="col-lg-5 spaceBelow_20">
+									<sf:form name="searchForm" id="searchCustomerPaymentForm" action="/abankus/platform/customerPaymentSearch" method="post">
+										<div>
+											<label>Customer Number:</label><input type="text" name="customerNumber" id="customerNumber" class="form-state width-100 customer_search" placeholder="Customer Number">					
+										</div>
+										<div>			
+											<label>Payment Transaction From:</label><input type="text"  id="transactionFrom" name="transactionFrom" class="form-state width-100 customer_search" placeholder=" First Name">
+										</div>
+										<label>Payment Transaction To:</label><input type="text" id="transactionTo" name="transactionTo" class="form-state width-100 customer_search" placeholder=" Last Name">
+										<div>
+											<button type="submit" class="btn btn-success btn-sm" id="searchCustomerPaymentBtn" onclick="javascript:validateCustomerPaymentSearch();return false;"><span class="glyphicon glyphicon-search moveR_20"></span>Search</button>
+										</div>
+										<input type="hidden" name="searchType" id="searchType" value="customerPayments">
+									</sf:form>
+								</div>
+								<div class="col-lg-5 spaceBelow_20">	
+									<sf:form name="searchForm" id="searchEmployeePaymentForm" action="/abankus/platform/datePaymentSearch" method="post">	
+										<div>	
+											<label>Transaction From:</label><input type="text" name="transactionFrom" id="empTransactionFrom" class="form-state width-100 employee_search" placeholder="Employee First Name">
+										</div>	
+										<label>Transaction To:</label><input type="text" name="transactionTo" id="empTransactionTo" class="form-state width-100 employee_search" placeholder="Employee Last Name">
+										<div>
+											<button type="submit" class="btn btn-success btn-sm" id="searchEmployeePaymentBtn" onclick="javascript:validateEmployeePaymentSearch();return false;"><span class="glyphicon glyphicon-search moveR_20"></span>Search</button>
+										</div>
+										<input type="hidden" name="searchType" id="searchType" value="employeePayments">
+									</sf:form>
+								</div>
+							</div>
+							<div class="clearfix"></div>
+							
+							<%-- 
+							<input type="hidden" name="searchType" id="searchType" value="customerId">
+							<button type="submit" class="btn btn-success btn-sm" id="platformSearchBtn" onclick="javascript:validatePlatformSearch();return false;"><span class="glyphicon glyphicon-search moveR_20"></span>Search</button>
+							--%>
+							</div>
+					</div>	  
+				  </div>			
+				<div class="page-header">
+					<h1>Search Results</h1>
+				</div>
+				 <c:if test="${not empty paymentsearch_message }">
+					<div class="alert alert-danger col-lg-8" role="alert">
+						 ${searchError }
 					</div>
-
-				</div>
-				<div class="clearfix"></div>
-				<div id="resultHeading" class="resultHeading">
-					<div id="resultHeading-word" class="anw">Search Results</div>
-				</div>
+				</c:if>	
+				<div id="customerPaymentList">
+				<c:if test="${not empty customerList}">
 					<table class="table">
 						<thead>
 							<tr>
-								<th>Name:</th>
-								<th>Address:</th>
+								<th>Customer Number</th>
+								<th>Customer Name</th>
+								<th>Address</th>
+								<th>Contact Information</th>
+								<th>Action</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<td></td>
-								<td></td>
-							</tr>
+							<c:forEach items="${customerList}" var="customer">
+								<tr>
+									<td>${customer.getCustomerNumber()}</td>
+									<td>${customer.getCustomerName()}</td>
+									<td>${customer.getAddressId()}</td>
+									<td>
+										<div>${customer.getEmailId()}</div>
+										<div>${customer.getPhoneId()}</div>
+									</td>
+									<td><a href="<c:url value="/customers/viewProfile?searchType=customerNumber&customerNumber=${customer.getCustomerNumber() }" />" >View Profile</a></td>
+								</tr>
+							</c:forEach>
 						</tbody>
 					</table>				
+				</c:if>	
+				<c:if test="${not empty customerSearchPayment}">
+					<table class="table">
+						<thead>
+							<tr>
+								<th>Transaction Number</th>
+								<th>Amount Paid</th>
+								<th>Payment Type</th>
+								<th>Order Number</th>
+								<th>Payment Date</th>
+								<th>Accepted By</th>
+							</tr>
+						</thead>
+						<tbody id="customerPaymentBody">
+							<c:forEach items="${customerSearchPayment}" var="payment">
+								<tr>
+									<td>${payment.getConfirmationNumber() }</td>
+									<td>${payment.getAmountPaid() }</td>
+									<td>${payment.getPaymentType() }</td>
+									<td>${payment.getOrderNumber()}</td>
+									<td>${payment.getDatePaid() }</td>
+									<td>${payment.getEmployeeId() }</td>
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
+				</c:if>
 			</div>
 		</div>
 	</div>
+	</div>
+		<%-- Include page header --%>
+	<jsp:include page="../footer.jsp"/>
+	<!-- Page Header ends -->
+
 </body>
 <script type="text/javascript">
 $(document).ready(function(e){
-	//e.preventDefault();
-	$('#customerIdSrc').on('click',function(){
-		$('#searchType').val("customerId");
-		$("#customerIdDiv").removeClass('hidden');
-		$('#customerNameDiv').addClass('hidden');	
+	$("#searchCustomerNumberBtn").click(function(){
+		if(validateCustomerNumberSearch()){
+			$("#searchCustomerNumberForm").submit();
+		}
 	});
-	$('#accountNumberSrc').on('click',function(){
-		$('#searchType').val("accountNumber");
-		$("#customerIdDiv").addClass('hidden');
-		$('#accountNumberDiv').removeClass('hidden');
-	});	
+	
+	$("#searchEmployeePaymentBtn").click(function(){
+		if(validateEmployeePaymentSearch()){
+			$("#searchEmployeePaymentForm").submit();
+		}
+	});
+
+	$("#searchCustomerPaymentBtn").click(function(){		
+		if(validateCustomerPaymentSearch()){
+			$("#searchCustomerPaymentForm").submit();
+		}
+	});
+	
+	$("#searchCustomerNameBtn").click(function(){
+		if(validateCustomerNameSearch()){
+			$("#searchCustomerNameForm").submit();
+		}
+	});
 });
 </script>
 </html>

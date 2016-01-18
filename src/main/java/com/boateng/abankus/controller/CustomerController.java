@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,8 +35,10 @@ import com.boateng.abankus.domain.BillingCollection;
 import com.boateng.abankus.domain.ContactPerson;
 import com.boateng.abankus.domain.Customer;
 import com.boateng.abankus.domain.CustomerAccount;
+import com.boateng.abankus.domain.CustomerBilling;
 import com.boateng.abankus.domain.CustomerOrder;
 import com.boateng.abankus.domain.Email;
+import com.boateng.abankus.domain.Employee;
 import com.boateng.abankus.domain.OrderPayment;
 import com.boateng.abankus.domain.PaymentTransaction;
 import com.boateng.abankus.exception.PlatformException;
@@ -143,8 +146,31 @@ public class CustomerController extends PlatformAbstractServlet{
 	}
 	
 	@Secured("ROLE_EMPLOYEE")
-	@RequestMapping(value="/customers/viewProfile", method={RequestMethod.GET,RequestMethod.POST})
+	@RequestMapping(value="/customers/viewProfile", method=RequestMethod.GET)
 	public String viewCustomerProfile(RedirectAttributes redirectAttributess,Model model,HttpServletRequest request) throws PlatformException{
+		String customerNumber = request.getParameter("customerNumber");
+		String searchType=request.getParameter("searchType");
+		Customer customer = null;
+		Employee employee = getEmployeeInSession(request);
+		log.info(logActivity("Searching for Customer with Customer Number: "+customerNumber+" and search type :"+searchType,employee));
+		if(searchType != null && !customerNumber.isEmpty() && searchType.equals("customerNumber")){
+			customer = customerServiceProcessor.findCustomerByCustomerNumber(customerNumber);
+		}
+		
+		if(customer == null){
+			redirectAttributess.addFlashAttribute("searchError", "Your Search did not return any results.");
+			return "redirect:/customers/searchForCustomer";
+		}
+		
+		int custID = customer.getCustomerId();
+		loadCustomerIntoSession(request,customer);
+		loadCustomerOrderHistory(model,customer.getCustomerId(),request);
+		
+		CustomerAccount customerAccount = customerServiceProcessor.findCustomerAccountByCustomerNumber(custID);
+		model.addAttribute("customerAccount",customerAccount);
+		model.addAttribute("customer",customer);
+		log.info(logActivity("is being redirected to Customer Profile Page for Customer: "+customer.getCompanyName(),employee));
+			/**
 			Customer customer = null;
 			clearMessages(request);
 			
@@ -180,21 +206,10 @@ public class CustomerController extends PlatformAbstractServlet{
 			
 			customer = null;
 			customerAccount = null; 
+			**/
 		return "ClientServices/ViewCustomerProfile";
 	}
-	
-	private void loadCustomerOrderHistory(Model model,int customerId,HttpServletRequest request) throws PlatformException{
-		HttpSession session = request.getSession(false);
-		List<CustomerOrder> orderList = customerOrderProcessor.loadAllOrderByCustomer(customerId);
-		model.addAttribute("customerOrder", orderList);
 
-		BillingCollection collection = customerOrderProcessor.getCustomerBillings(customerId);
-
-		session.setAttribute(CustomerOrderFields.BILLING_COLLECTION_SESSION, collection);
-		model.addAttribute("billing", collection);	
-		orderList = null;
-		collection = null;
-	}
 	/**
 	 * Checks if the Email Address of a Customer is unique or not
 	 * @param emailAddress
@@ -222,7 +237,9 @@ public class CustomerController extends PlatformAbstractServlet{
 	}
 	
 	@RequestMapping(value="/customers/searchForCustomer", method=RequestMethod.GET)
-	public String searchForCustomer(){
+	public String searchForCustomer(HttpServletRequest request) throws PlatformException{
+		Employee employee = getEmployeeInSession(request);
+		logActivity("is viewing Customer Search page.",employee);
 		return "ClientServices/CustomerSearch";
 	}
 	@RequestMapping(value = "/customers/makePayment", method = RequestMethod.POST)
@@ -232,7 +249,9 @@ public class CustomerController extends PlatformAbstractServlet{
 	}	
 	
 	@RequestMapping(value = "/customers/makePaymentSearch", method = RequestMethod.GET)
-	public String makePaymentSearch(){
+	public String makePaymentSearch(HttpServletRequest request) throws PlatformException{
+		Employee employee = getEmployeeInSession(request);
+		logActivity("is viewing Customer Search page.",employee);
 		return "ClientTransaction/CustomerPaymentSearch";
 	}		
 

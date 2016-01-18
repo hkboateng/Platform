@@ -3,6 +3,7 @@
  */
 package com.boateng.abankus.domain;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,7 +25,12 @@ import com.boateng.abankus.utils.SecurityUtils;
  * @author hkboateng
  *
  */
-public class CustomerBilling implements Billing {
+public class CustomerBilling implements Billing,Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5960830713386638440L;
 
 	@Autowired
 	private ProductServiceProcessor productServiceProcessor;
@@ -42,33 +48,34 @@ public class CustomerBilling implements Billing {
 	private String productCode;
 	
 	private String productName;
+	
+	private String orderNumber;
+	
+	private String customerNumber;
+	
+	private String customerName;
 	/**
 	 * List of Payments for an Order
 	 */
-	private List<OrderPayment> payments;
+	private List<OrderPayment> payments =  new ArrayList<OrderPayment>();
+
 
 	/**
 	 * Map of Order Payments with orderNumber as Key.
-	 */
+	 
 	private Map<String, List<OrderPayment>> paymentMap;
-	
+	*/
 	public CustomerBilling(CustomerOrder clientOrderId){
-		paymentMap = new HashMap<String, List<OrderPayment>>();
+		
 		if(clientOrderId != null){
 			this.clientOrderId = clientOrderId;
 			this.orderDate = convertDateFromLong(clientOrderId);
 			this.totalOrderAmount = clientOrderId.getTotalAmount().toString();
 			this.customer = clientOrderId.getCustomer();
 			this.productCode = clientOrderId.getProductCode();
-		}
-	}
-
-	/**
-	 * @param payments the payments to set
-	 */
-	public void setPayments(OrderPayment payments) {
-		if(payments != null){
-			 addPaymentListToMap(payments);
+			this.customerNumber = clientOrderId.getCustomer().getCustomerNumber();
+			this.orderNumber = clientOrderId.getOrderNumber();
+			this.customerName = clientOrderId.getCustomer().getCustomerName();
 		}
 	}
 
@@ -155,16 +162,10 @@ public class CustomerBilling implements Billing {
 	}
 
 
-
-	/**
-	 * @return the paymentMap
-	 */
-	public Map<String, List<OrderPayment>> getPaymentMap() {
-		return paymentMap;
+	public void setPayments(List<OrderPayment> payments) {
+		this.payments = payments;
 	}
-
 	
-
 	/**
 	 * @return the productCode
 	 */
@@ -195,23 +196,12 @@ public class CustomerBilling implements Billing {
 	}
 
 	public void addPaymentToList(OrderPayment payment){
-		payments = new ArrayList<OrderPayment>();
-		if(getClientOrderId().getOrderNumber().equals(payment.getClientorder().getOrderNumber())){
-			payments.add(payment);
+		if(payment != null){
+			this.payments.add(payment);
 		}
+		
 	}
-	
-	public void addPaymentListToMap(OrderPayment payment){
-		String orderNumber = payment.getClientorder().getOrderNumber();
-		if(getPaymentMap().containsKey(orderNumber)){
-			payments = getPaymentMap().get(orderNumber);
-			payments.add(payment);
-		}else{
-			payments = new ArrayList<OrderPayment>();
-			payments.add(payment);
-			getPaymentMap().put(orderNumber, payments);
-		}
-	}
+
 	public float totalAmountPaid(){
 		float total = 0.0f;
 		if(getPayments() != null && !getPayments().isEmpty()){
@@ -266,5 +256,29 @@ public class CustomerBilling implements Billing {
 			ace.logger(Level.SEVERE, e.getMessage(), ace);
 			throw ace;
 		}
+	}
+
+	public String getOrderNumber() {
+		return orderNumber;
+	}
+
+	public void setOrderNumber(String orderNumber) {
+		this.orderNumber = orderNumber;
+	}
+
+	public String getCustomerNumber() {
+		return customerNumber;
+	}
+
+	public void setCustomerNumber(String customerNumber) {
+		this.customerNumber = customerNumber;
+	}
+
+	public String getCustomerName() {
+		return customerName;
+	}
+
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName;
 	}
 }

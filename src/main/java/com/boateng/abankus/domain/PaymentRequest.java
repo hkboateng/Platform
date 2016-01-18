@@ -47,6 +47,16 @@ public class PaymentRequest {
 	
 	private String checkNumber;
 	
+	private String customerNumber;
+	
+	private String paymentFrom;
+	
+	private String paymentTo;
+	
+	private String employeeNumber;
+	
+	private String confirmationNumber;
+	
 	public PaymentRequest(){
 		
 	}
@@ -236,6 +246,56 @@ public class PaymentRequest {
 
 	public void setCheckNumber(String checkNumber) {
 		this.checkNumber = checkNumber;
+	}
+
+
+	public String getCustomerNumber() {
+		return customerNumber;
+	}
+
+
+	public void setCustomerNumber(String customerNumber) {
+		this.customerNumber = customerNumber;
+	}
+
+
+	public String getPaymentFrom() {
+		return paymentFrom;
+	}
+
+
+	public void setPaymentFrom(String paymentFrom) {
+		this.paymentFrom = paymentFrom;
+	}
+
+
+	public String getPaymentTo() {
+		return paymentTo;
+	}
+
+
+	public void setPaymentTo(String paymentTo) {
+		this.paymentTo = paymentTo;
+	}
+
+
+	public String getEmployeeNumber() {
+		return employeeNumber;
+	}
+
+
+	public void setEmployeeNumber(String employeeNumber) {
+		this.employeeNumber = employeeNumber;
+	}
+
+
+	public String getConfirmationNumber() {
+		return confirmationNumber;
+	}
+
+
+	public void setConfirmationNumber(String confirmationNumber) {
+		this.confirmationNumber = confirmationNumber;
 	}
 	
 	

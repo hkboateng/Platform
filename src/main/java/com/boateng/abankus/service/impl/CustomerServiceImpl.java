@@ -5,10 +5,13 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.log4j.Logger;
+import org.hibernate.CacheMode;
 import org.hibernate.LockMode;
 import org.hibernate.LockOptions;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -397,5 +400,28 @@ public class CustomerServiceImpl implements CustomerService {
 		total = session.createQuery("from Customer").list().size();
 		
 		return total;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.boateng.abankus.application.interfaces.CustomerService#findCustomerLikeFirstNameAndLastName(java.lang.String, java.lang.String)
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	@Transactional
+	public List<Customer> findCustomerLikeFirstNameAndLastName(String firstname, String lastname) {
+		Session session = getSessionFactory().getCurrentSession();
+		/**
+		List<Customer> customers = session.createSQLQuery("")
+									.setParameter("firstname", firstname)
+									.setParameter("lastname", lastname)
+									.setCacheable(true)
+									.setCacheMode(CacheMode.NORMAL)
+									.list();
+									**/
+		List<Customer> customers =session.createCriteria(Customer.class)
+									.add(Restrictions.ilike("firstname", firstname, MatchMode.START))
+									.add(Restrictions.ilike("lastname", lastname, MatchMode.START))
+									.list();
+		return customers;
 	}
 }

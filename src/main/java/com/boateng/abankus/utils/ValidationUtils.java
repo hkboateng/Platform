@@ -24,9 +24,26 @@ public class ValidationUtils {
 	private static final String ZIPCODE_PATTERN = 
 			"^[0-9]{5}(?:-[0-9]{4})?$";
 	
+	private ValidationUtils(){}
+	
+	/**
+	 * Validate against SQL Injection
+	 * @return
+	 */
+	public static boolean isValid(String value){
+		boolean valid = false;
+		if(value.indexOf("select ") == 0 || value.indexOf("Select ") == 0 || value.indexOf("SELECT ") == 0){
+			valid = false;
+		}else if(value.indexOf("delete ") == 0 || value.indexOf("Delete ") == 0 || value.indexOf("DELETE ") == 0){
+			valid = false;
+		}else{
+			valid = true;
+		}
+		return valid;
+	}
 	//private String 
 	public static boolean isAlpha(String s){
-		if(isNullOrBlank(s)){
+		if(isNullOrBlank(s) && !isValid(s)){
 			return false;
 		}else{
 			return StringUtils.isAlpha(s);
@@ -34,12 +51,19 @@ public class ValidationUtils {
 	}
 
 	public static boolean isAlphaNumeric(String s){
-		if(isNullOrBlank(s)){
+		if(isNullOrBlank(s)&& !isValid(s)){
 			return false;
 		}else{
 			return StringUtils.isAlphanumeric(s);
 		}
 	}	
+	public static boolean isNumeric(String s){
+		if(isNullOrBlank(s)&& !isValid(s)){
+			return false;
+		}else{
+			return StringUtils.isNumericSpace(s);
+		}
+	}		
 	
 	public static boolean isNullOrBlank(String str){
 		return (StringUtils.isBlank(str) || StringUtils.isEmpty(str));

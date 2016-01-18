@@ -172,4 +172,11 @@ public class Customer implements Serializable {
 		return sbr.toString();
 	}
 
+	public String getContactInformation(){
+		StringBuilder sbr = new StringBuilder();
+		if(getAddressId() != null){
+			sbr.append(getAddressId().getAddress1()).append("\n").append(getAddressId().getAddress2());
+		}
+		return sbr.toString();
+	}
 }

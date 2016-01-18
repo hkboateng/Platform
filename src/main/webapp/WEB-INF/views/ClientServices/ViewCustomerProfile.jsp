@@ -16,6 +16,8 @@
 <script src="<c:url value="/resources/js/bootstrap.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/tables/jquery.dataTables.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/application.js" />" type="text/javascript"></script>
+<script src="<c:url value="/resources/js/validation/jquery.validation.js" />" type="text/javascript"></script>
+<script src="<c:url value="/resources/js/validation/customerValidation.js" />" type="text/javascript"></script>
 </head>
 <body>
 <%-- Include page header --%>
@@ -117,17 +119,18 @@
 					</tr>
 				</thead>
 				<tbody>
-				<c:forEach items="${billing.getBillingMap() }" var="billings" varStatus="counter">
+				<c:forEach items="${billing }" var="billings" varStatus="counter">
 					<c:set value="${billings.key }" var="key" />
-					<c:set value="${billing.getCustomerBilling(key).encryptOrderNumber(key) }" var="keySec" />
+					<c:set value="${billings.value }" var="value" />
+					<c:set value="${value.encryptOrderNumber(key) }" var="keySec" />
 						
 							<tr>
-								<c:set value="${billings.key }" var="key" />
-								<td id="tblOrderDate${counter.count }">${billing.getCustomerBilling(key).convertOrderDate()}</td>
-								<td><fmt:formatNumber value="${billing.getCustomerBilling(key).getClientOrderId().getTotalAmount() }" type="currency"/></td>	
-								<td><fmt:formatNumber value="${billing.getCustomerBilling(key).totalAmountRemaining() }" type="currency"/></td>	
-								<td>${billing.getCustomerBilling(key).getClientOrderId().getPaymentStatus()}</td>
-								<td>${billing.getCustomerBilling(key).getClientOrderId().getNextPaymentDate()}</td>
+								
+								<td id="tblOrderDate${counter.count }">${value.convertOrderDate()}</td>
+								<td><fmt:formatNumber value="${value.getClientOrderId().getTotalAmount() }" type="currency"/></td>	
+								<td><fmt:formatNumber value="${value.totalAmountRemaining() }" type="currency"/></td>	
+								<td>${value.getClientOrderId().getPaymentStatus()}</td>
+								<td>${value.getClientOrderId().getNextPaymentDate()}</td>
 								<td>
 									<!-- Split button -->
 									<div class="btn-group">
@@ -137,7 +140,7 @@
 									    <span class="sr-only">Toggle Dropdown</span>
 									  </button>
 									  <ul class="dropdown-menu">
-									    <li><a href="#" id="makePaymentBtn" onclick="javascript:submitCustomerPayment('${keySec }','${billing.getCustomerBilling(key).getTotalOrderAmount()}');" >Make Payment</a></li>
+									    <li><a href="#" id="makePaymentBtn" onclick="javascript:submitCustomerPayment('${keySec }','${value.getTotalOrderAmount()}');" >Make Payment</a></li>
 									    <li role="separator" class="divider"></li>
 									    <li><a onclick="javascript:submitURLForm(document.viewTransactionDetail,'${keySec }')" href="#">View Order</a></li>
 									  </ul>
@@ -175,18 +178,17 @@
 						</tr>
 					</thead>
 					<tbody>
-					<c:forEach items="${billing.getBillingMap() }" var="billings" varStatus="counter">
-						<c:set value="${billings.key }" var="key" />
-							<c:if test="${billing.getCustomerBilling(key).finishPaying()}">
+					<c:forEach items="${billing}" var="billings" varStatus="counter">
+							<c:if test="${value.finishPaying()}">
 								<tr>
 									<c:set value="${billings.key }" var="key" />
 									<td id="tableId">
-										<input type="radio" name="orderNumber" id="orderNumber${counter.count }" value="${billing.getCustomerBilling(key).encryptOrderNumber(key) }"/>
+										<input type="radio" name="orderNumber" id="orderNumber${counter.count }" value="${billing.get(key).encryptOrderNumber(key) }"/>
 									</td> 
-									<td id="tblOrderDate${counter.count }">${billing.getCustomerBilling(key).convertOrderDate()}</td>
-									<td id="tblProductCode${counter.count }">${billing.getCustomerBilling(key).getProductCode()}</td>
-									<td>$ ${billing.getCustomerBilling(key).totalAmountRemaining() }</td>
-									<td>$&nbsp;${billing.getCustomerBilling(key).getTotalOrderAmount()}</td>	
+									<td id="tblOrderDate${counter.count }">${value.convertOrderDate()}</td>
+									<td id="tblProductCode${counter.count }">${value.getProductCode()}</td>
+									<td>$ ${value.totalAmountRemaining() }</td>
+									<td>$&nbsp;${value.getTotalOrderAmount()}</td>	
 									<td><button type="button" class="btn btn-success center-block " onclick="javascript:pushToURL('clients/createOrder')">Add Order for Customer<i class="fa fa-chevron-right moveL_30"></i></button></td>					
 								</tr>						
 							</c:if>

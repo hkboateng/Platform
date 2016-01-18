@@ -19,9 +19,11 @@ import javax.ws.rs.client.AsyncInvoker;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.lang3.StringUtils;
 import org.glassfish.jersey.client.ClientConfig;
@@ -42,6 +44,8 @@ import com.boateng.abankus.domain.CustomerOrder;
 import com.boateng.abankus.domain.Employee;
 import com.boateng.abankus.domain.OrderPayment;
 import com.boateng.abankus.domain.PaymentRequest;
+import com.boateng.abankus.domain.PaymentResponse;
+import com.boateng.abankus.domain.PaymentSearchResponse;
 import com.boateng.abankus.domain.PaymentTransaction;
 import com.boateng.abankus.domain.Paymentmethod;
 import com.boateng.abankus.exception.PlatformException;
@@ -54,7 +58,10 @@ import com.boateng.abankus.servlet.PlatformAbstractServlet;
 import com.boateng.abankus.utils.PlatformUtils;
 import com.boateng.abankus.utils.SecurityUtils;
 import com.boateng.abankus.utils.ValidationUtils;
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
@@ -362,7 +369,7 @@ public class PaymentProcessor extends PlatformAbstract{
 
 				transaction = response.get();				
 
-				logger.finest(logActivity("has completed submittingPayment Transaction.",employee));
+				logger.info(logActivity("has completed submittingPayment Transaction.",employee));
 		} catch (InterruptedException | ExecutionException | IOException e) {
 			PlatformException ace = new PlatformException(e);
 			throw ace;
@@ -370,4 +377,100 @@ public class PaymentProcessor extends PlatformAbstract{
 		
 		return transaction;
 	}
+	
+	public void findPaymentByTransactionNumberOrLastName(String transactionNumber, String lastname){
+		Client client = ClientBuilder.newClient();
+		WebTarget target = client.target("http://localhost:8080/paymenthub/paymentservice");
+		AsyncInvoker invoke  = target.path("/findPaymentTransactionByTransaction").request().async();
+		ObjectMapper mapper = new ObjectMapper();		
+	}
+
+	/**
+	 * @param emp
+	 * @param empTransactionTo
+	 * @param empTransactionTo2
+	 */
+	public void findPaymentTransactionForEmployeeByDate(String emp, String empTransactionTo, String empTransactionTo2) {
+		Client client = ClientBuilder.newClient();
+		WebTarget target = client.target("http://localhost:8080/paymenthub/paymentservice");
+		AsyncInvoker invoke  = target.path("/findPaymentTransactionByTransaction").request().async();
+		ObjectMapper mapper = new ObjectMapper();	
+	}
+
+	/**
+	 * @param customerId
+	 * @param custTransactionTo
+	 * @param custTransactionTo2
+	 */
+	public String findPaymentTransactionByCustomerIDAndDateRange(String customerId, String custTransactionTo,	String custTransactionTo2) {
+		Client client = ClientBuilder.newClient();
+		WebTarget target = client.target("http://localhost:8080/paymenthub/paymentservice");
+		AsyncInvoker invoke  = target.path("/findPaymentTransactionByTransaction").request().async();
+		ObjectMapper mapper = new ObjectMapper();
+		
+		String transaction = null;
+		return transaction;
+	}
+
+	/**
+	 * @param customerNumber
+	 * @param from
+	 * @param to
+	 * @param action
+	 */
+	public List<PaymentSearchResponse> submitPaymentSearchRequest(String customerNumber, String from, String to, String action) {
+		Client client = ClientBuilder.newClient();
+		WebTarget target = client.target("http://localhost:8080/paymenthub/paymentservice");
+		
+		Response response  = null;
+		if(action.equals("customerPaymentSearch")){
+			response = customerPaymentSearch(customerNumber,from,to,target);
+		}else if(action.equals("datePaymentSearch")){
+			response = datePaymentSearch(from,to,target);
+		}
+		
+		List<PaymentSearchResponse> paymentResponse = null;
+		String results = null;
+		if(response.getStatus() == 200){
+				results =  response.readEntity(String.class);
+				try {
+					 paymentResponse = PlatformUtils.convertListFronJson(new TypeReference<List<PaymentSearchResponse>>(){}, results);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}else{
+			logger.warning("Error occured");
+		}
+		
+		
+		
+		return paymentResponse;
+	}
+	
+	/**
+	 * @param from
+	 * @param to
+	 * @param target
+	 * @return
+	 */
+	private Response datePaymentSearch(String from, String to, WebTarget target) {
+		Response response  = target.path("/findCustomerPaymentBetweenFromAndToDate")
+				.queryParam("from", from)
+				.queryParam("to", to)
+				.request(MediaType.APPLICATION_JSON).get();
+		
+		return response;
+	}
+
+	private Response customerPaymentSearch(String customerNumber, String from, String to,WebTarget target){
+		Response response  = target.path("/findOrderPaymentByCustomerNumberAndDate")
+				.queryParam("customerNumber", customerNumber)
+				.queryParam("from", from)
+				.queryParam("to", to)
+				.request(MediaType.APPLICATION_JSON).get();
+		
+		return response;
+	}
+	
 }

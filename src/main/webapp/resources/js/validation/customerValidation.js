@@ -1,8 +1,7 @@
 var emailRegExp = new RegExp();
 
-var zipCodeRegExp = new Reg('((\d{5})(-\d{4})?)');
+var zipCodeRegExp = '/((\d{5})(-\d{4})?)/';
 
-var validName = new RegExp('');
 function validation(){
 		$("form").validate({
 			onsubmit:false,
@@ -68,18 +67,116 @@ function validation(){
 
 	}
 	
-	function isEmailValid(email){
-		
-	}
-	function isEmailUnique(email){
-		$.ajax({
+	function validateCustomerNumberSearch(){
+		try{
+			$("#searchCustomerNumberForm").validate({
+				onsubmit:false,
+				rules: {
+					customerIdentity: {
+						required: true
+					}
+				},
+				messages: {
+					customerIdentity: {
+						required: "You must enter a value to search for Customer"
+					}
+				}
+			});
 			
-		});
-	}
-	
-	function customerValidation(form){
-		
-		if(validation()){
-			form.submit();
+			if(!$("#searchCustomerNumberForm").valid())
+				 return false;
+			 return true;			
+		}catch(err){
+			console.log(err);
 		}
+	}
+	function validateCustomerNameSearch(){
+		$("#searchCustomerNameForm").validate({
+			
+			onsubmit:false,
+			rules: {
+				firstName: {
+					required: true
+				},
+				lastName: {
+					required: true
+				}
+			},
+			messages: {
+				firstName: {
+					required: "You must enter a value Customer First Name "
+				},
+				lastName: {
+					required: "You must enter a value Customer Last Name "
+				}
+			}
+		});
+		if(!$('#searchCustomerNameForm').valid())
+			 return false;
+		 return true;
+		 
+		 
+	}
+	function validateCustomerPaymentSearch(){
+		$('#searchCustomerPaymentForm').validate({
+			onsubmit:false,
+			rules : {
+				customerId : {
+				},
+				transactionFrom  : {
+					required: true
+				},
+				transactionTo : {
+					required: true
+				}			
+			},
+			messages : {
+				customerId : {
+					
+				},
+				transactionFrom: {
+					required: "Select Payment Transaction Date From:"
+				},
+				transactionTo: {
+					required: "Select Payment Transaction Date To:"
+				}
+			}
+		});
+		if(!$('#searchCustomerPaymentForm').valid())
+			 return false;
+		 return true;
+	}
+
+	function validateEmployeePaymentSearch(){
+		$('#searchEmployeePaymentForm').validate({
+			debug: true,
+			onsubmit:false,
+			rules: {
+				employee : {
+					digits:true
+				},
+				empTransactionFrom: {
+					require_from_group : [1,".employee_search"]
+				},
+				empTransactionTo : {
+					require_from_group : [1,".employee_search"]
+				}
+			},
+			messages: {
+				employee: {
+					require_from_group: "You can search by Employee Number or Email Address."
+				},
+				empTransactionFrom: {
+					require_from_group: "Select Payment Transaction Date From:",
+					required: true
+				},
+				empTransactionTo: {
+					require_from_group: "Select Payment Transaction Date To:",
+					required: true
+				}
+			}
+		});
+		if(!$('#searchEmployeePaymentForm').valid())
+			 return false;
+		 return true;
 	}

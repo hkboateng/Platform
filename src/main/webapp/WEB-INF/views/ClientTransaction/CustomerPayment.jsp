@@ -113,7 +113,7 @@
 														<div id="customerPin-error" class="help-text-inline-error">
 															
 														</div>	
-														<input type="password" name="customerPIN" id="customerPIN" onchange="" class="form-state width-50"  />													
+														<input type="password" name="customerPIN" id="customerPIN" class="form-state width-50"  />													
 													</div>
 														<div class="help-text-inline inlineBlock">
 															Click only once because clicking more than once will submit the payment more than once.
@@ -162,6 +162,9 @@ $(document).ready(function(){
 	$("#cancelPayment").on('click',function(){
 		$('#paymentSummary').hide();
 		$('#paymentEntry').show();
+		$('#customerPIN').val("");
+		$('#customerPIN').focus();
+		
 		$("#paymentHeading").html("Make Payment");
 	});
 		

@@ -6,7 +6,10 @@ package com.boateng.abankus.processors;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -175,10 +178,47 @@ public class CustomerOrderProcessor implements OrderService{
 
 		return collection;
 	}
+	public Map<String, CustomerBilling> getCustomerBilling(int customerId){
+		List<CustomerOrder> orderList = null;
+		CustomerBilling billing = null;
+		//Customer Number is Key, Value is a Map with order number as key
+		Map<String,Map<String,CustomerBilling>> customerBillingMap = new HashMap<String,Map<String,CustomerBilling>>();
+		//Order Number is key
+		Map<String,CustomerBilling> customerOrderBillMap = new HashMap<String,CustomerBilling>();
+		
+		List<CustomerBilling> billingList = new ArrayList<CustomerBilling>();
+		String orderNumber = null;
+		String customerNumber = null;
+		try {
+			orderList = loadAllOrderByCustomer(customerId);
+			if(orderList != null){
+				
+				for(CustomerOrder customerOrder: orderList){
+					customerNumber = customerOrder.getCustomer().getCustomerNumber();
+					orderNumber = customerOrder.getOrderNumber();
+					billing = new CustomerBilling(customerOrder);
+					List<OrderPayment> paymentList = findAllPaymentByOrderNumber(orderNumber);
+					billing.setPayments(paymentList);
+					billingList.add(billing);
+					customerOrderBillMap.putIfAbsent(orderNumber, billing);
+					customerBillingMap.putIfAbsent(customerNumber, customerOrderBillMap);				
+				
+				}
+				
+			}	
+		} catch (PlatformException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		billingList = null;
+		return customerBillingMap.get(customerNumber);
+	}
+	
+
 	/**
 	 * This method is used to retierve all customer Order's that are unpaid.
 	 * @throws PlatformException 
-	 */
+
 	public void customerOrderPayment(HttpServletRequest request) throws PlatformException{
 		String cust = request.getParameter("customerNumber");
 		List<CustomerOrder> orderList = null;
@@ -188,7 +228,7 @@ public class CustomerOrderProcessor implements OrderService{
 			 orderList = loadAllOrderByCustomer(customer.getCustomerId());
 		}
 	}
-	
+		 */
 	public List<CustomerOrder>  loadAllOrderByCustomerNumber(String customerNumber) throws PlatformException{
 		if(StringUtils.isBlank(customerNumber)){
 			return null;

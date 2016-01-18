@@ -26,4 +26,6 @@ public class PlatformFields {
 	public static final String ERROR_MESSAGE = "error_message";
 	
 	public static final String VALIDATION_ERROR = "validationError";
+
+	public static final String PAYMENT_SEARCH_MESSAGE = "paymentsearch_message";
 }

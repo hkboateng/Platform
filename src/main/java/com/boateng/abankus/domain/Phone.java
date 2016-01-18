@@ -94,4 +94,10 @@ public class Phone implements Serializable {
 	public void setPrimaryPhone(boolean primaryPhone) {
 		this.primaryPhone = primaryPhone;
 	}
+	
+	public String toString(){
+		StringBuilder sbr = new StringBuilder();
+		
+		return sbr.toString();
+	}
 }

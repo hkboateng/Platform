@@ -304,5 +304,17 @@ public class CustomerServiceProcessor{
 		return customer;
 	}
 
+	/**
+	 * @param customerId
+	 * @param transactionFrom
+	 * @param transactionTo
+	 * @return
+	 */
+	public Customer findPaymentTransactionForCustomerByDate(String customerId, String transactionFrom,
+			String transactionTo) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	
 }

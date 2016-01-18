@@ -1,9 +1,12 @@
 package com.boateng.abankus.domain;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+
 import javax.persistence.*;
 
 import org.joda.time.DateTime;
+
 
 
 /**
@@ -43,9 +46,19 @@ public class PaymentTransaction implements Serializable {
 
 	private String transactionNumber;
 
-
+	private String productName;
+	
 	private String orderAmount;
 	
+	
+	private BigDecimal paymentAmount;
+	
+	private String checkNumber;
+	
+	private String bankName;
+	
+	private String customerName;
+
 	public PaymentTransaction() {
 	}
 	public PaymentTransaction(OrderPayment payment){
@@ -69,6 +82,12 @@ public class PaymentTransaction implements Serializable {
 			sbr.append(payment.getEmployee().getLastname());
 			this.setEmployeeName(sbr.toString());
 		}
+		if(payment.getPaymentMethod().getPaymentType().equals("check")){
+			this.bankName = payment.getPaymentMethod().getBankinformation().getBankName();
+			this.checkNumber = payment.getPaymentMethod().getBankinformation().getCheckNumber();
+		}
+		this.paymentAmount = new BigDecimal(payment.getAmountPaid());
+		this.customerName = payment.getClientorder().getCustomer().getCustomerName();		
 	}
 	public int getPaymentTransactionId() {
 		return this.paymentTransactionId;
@@ -179,5 +198,36 @@ public class PaymentTransaction implements Serializable {
 	public void setOrderAmount(String orderAmount) {
 		this.orderAmount = orderAmount;
 	}
+	public String getProductName() {
+		return productName;
+	}
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
+	public BigDecimal getPaymentAmount() {
+		return paymentAmount;
+	}
+	public void setPaymentAmount(BigDecimal paymentAmount) {
+		this.paymentAmount = paymentAmount;
+	}
+	public String getCheckNumber() {
+		return checkNumber;
+	}
+	public void setCheckNumber(String checkNumber) {
+		this.checkNumber = checkNumber;
+	}
+	public String getBankName() {
+		return bankName;
+	}
+	public void setBankName(String bankName) {
+		this.bankName = bankName;
+	}
+	public String getCustomerName() {
+		return customerName;
+	}
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName;
+	}
 
+	
 }

@@ -56,5 +56,16 @@ public class Email implements Serializable {
 		this.emailType = emailType;
 	}
 
+	@Override
+	public String toString(){
+		StringBuilder builder = new StringBuilder();
+		if(getEmailAddress() != null){
+			builder.append(getEmailAddress());
+		}
+		if(getEmailType() != null){
+			builder.append("-").append(getEmailType());
+		}
+		return builder.toString();
+	}
 
 }

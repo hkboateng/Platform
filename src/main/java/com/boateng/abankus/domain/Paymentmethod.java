@@ -4,8 +4,6 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import org.hibernate.annotations.DynamicUpdate;
-
-import com.boateng.abankus.application.interfaces.PaymentCollection;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
@@ -30,6 +28,14 @@ public class Paymentmethod implements Serializable {
 	@OneToOne(mappedBy="paymentmethod")
 	private OrderPayment orderpayment;
 
+
+	//bi-directional many-to-one association to BankInformation
+	@OneToOne(mappedBy="paymentmethod")
+	private BankInformation bankinformation;
+	
+	private DebitCardInformation debitcardinformation;
+
+	
 	public Paymentmethod() {
 	}
 
@@ -60,6 +66,22 @@ public class Paymentmethod implements Serializable {
 
 	public void setOrderpayment(OrderPayment orderpayment) {
 		this.orderpayment = orderpayment;
+	}
+
+	public BankInformation getBankinformation() {
+		return bankinformation;
+	}
+
+	public void setBankinformation(BankInformation bankinformation) {
+		this.bankinformation = bankinformation;
+	}
+
+	public DebitCardInformation getDebitcardinformation() {
+		return debitcardinformation;
+	}
+
+	public void setDebitcardinformation(DebitCardInformation debitcardinformation) {
+		this.debitcardinformation = debitcardinformation;
 	}
 
 }

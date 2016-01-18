@@ -21,5 +21,10 @@ function createGauge(name, label, min, max)
 }
 function updateGauges(key,value)
 {
-	gauges[key].redraw(value);
+	try{
+		gauges[key].redraw(value);
+	}catch(err){
+		console.log(err.message);
+	}
+	
 }

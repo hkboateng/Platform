@@ -111,6 +111,8 @@ public interface CustomerService {
 	 */
 	List<Customer> findCustomerByFirstName(String firstname);
 	
+	List<Customer> findCustomerLikeFirstNameAndLastName(String firstname, String lastname);
+	
 	void updateCustomerContactPerson(ContactPerson person,int customerId);
 
 	/**

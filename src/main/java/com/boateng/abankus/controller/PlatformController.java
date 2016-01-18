@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -39,18 +40,24 @@ import com.boateng.abankus.domain.CustomerTransaction;
 import com.boateng.abankus.domain.Email;
 import com.boateng.abankus.domain.Employee;
 import com.boateng.abankus.domain.OrderPayment;
+import com.boateng.abankus.domain.PaymentResponse;
+import com.boateng.abankus.domain.PaymentSearchResponse;
 import com.boateng.abankus.domain.PaymentTransaction;
 import com.boateng.abankus.domain.Phone;
+import com.boateng.abankus.domain.Product;
 import com.boateng.abankus.exception.PlatformException;
 import com.boateng.abankus.fields.CustomerOrderFields;
 import com.boateng.abankus.fields.EmployeeFields;
 import com.boateng.abankus.fields.PlatformFields;
+import com.boateng.abankus.processors.PaymentProcessor;
+import com.boateng.abankus.processors.ProductServiceProcessor;
 import com.boateng.abankus.services.CustomerOrderService;
 import com.boateng.abankus.services.EmployeeService;
 import com.boateng.abankus.services.PaymentService;
 import com.boateng.abankus.servlet.PlatformAbstractServlet;
 import com.boateng.abankus.utils.PlatformConverter;
 import com.boateng.abankus.utils.SecurityUtils;
+import com.boateng.abankus.utils.ValidationUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -61,6 +68,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Controller
 public class PlatformController  extends PlatformAbstractServlet {
+	
+	/**
+	 * 
+	 */
+	private static final String CUSTOMER_PAYMENT_SEARCH = "customerPaymentSearch";
+
+	private static final String DATE_PAYMENT_SEARCH = "datePaymentSearch";
 	
 	@Autowired(required=true)
 	@Qualifier(value="employeeServiceImpl")
@@ -79,6 +93,12 @@ public class PlatformController  extends PlatformAbstractServlet {
 	@Autowired(required=true)
 	private CustomerServiceProcessor customerServiceProcessor;
 	
+	@Autowired(required=true)
+	private PaymentProcessor paymentProcessor;
+	
+	@Autowired
+	private ProductServiceProcessor productServiceProcessor;
+	
 	private static final Logger logger = Logger.getLogger(PlatformController.class.getName());
 
 	
@@ -94,6 +114,7 @@ public class PlatformController  extends PlatformAbstractServlet {
 		}
 		return "dashboard/dashboard";
 	}
+	
 	@RequestMapping(value = "/platform/settings", method = RequestMethod.GET)
 	public String settings() {
 
@@ -168,47 +189,99 @@ public class PlatformController  extends PlatformAbstractServlet {
 		
 	}
 
-	
-	@RequestMapping(value = "/platform/searchDashboard", method = RequestMethod.POST)
-	public String searchDashBoard(HttpServletRequest request,Model model,RedirectAttributes redirectAttributess){
+	/**
+	@RequestMapping(value = "/platform/customerPaymentSearch", method = RequestMethod.POST)
+	public String searchCustomerPayment(HttpServletRequest request,Model model,RedirectAttributes redirectAttributess){
+		String results = null;
+		
 		String customerId = request.getParameter("customerId");
-		String firstname = request.getParameter("firstname");
-		String lastname = request.getParameter("lastname");
-		String orderNumber = request.getParameter("orderNumber");
+		String custTransactionFrom = request.getParameter("custTransactionFrom");
+		String custTransactionTo = request.getParameter("custTransactionTo");
+		String empTransactionFrom = request.getParameter("empTransactionFrom");
+		String empTransactionTo = request.getParameter("empTransactionTo");
+		String emp = request.getParameter("employee");
 		String searchType=request.getParameter("searchType");
-		HttpSession session = request.getSession(false);
 		
-		Customer customer = null;
-		if(searchType.equals("customerId")){
-			customer = customerServiceProcessor.searchForCustomer(customerId);
-		}else if(searchType.equals("customerName")){
-			customer = customerServiceProcessor.searchForCustomerByFirstAndLastName(firstname, lastname);
-		}else if(searchType.equals("order")){
-			//search by order number, confirmation number or transaction Id
+		if(searchType.equals("customerPayments")){
+			
 		}
-		if(customer == null){
-			session.setAttribute("searchError", "No information was found, Try again.");
-			return "redirect:/platform/dashboard";
-		}
-
-				
-		loadCustomerIntoSession(request,customer);
-		CustomerAccount customerAccount = customerServiceProcessor.findCustomerAccountByCustomerNumber(customer.getCustomerId());
-		
-		List<Address> address = customerServiceProcessor.findAddressByCustomerId(customer.getCustomerId());
-		
-		List<Phone> phone = customerServiceProcessor.findCustomerPhoneByCustomerId(customer.getCustomerId());
-		
-		List<Email> email = customerServiceProcessor.findCustomerEmailByCustomerId(customer.getCustomerId());
-		model.addAttribute("address",address);
-		model.addAttribute("customerAccount",customerAccount);
-		model.addAttribute("customer",customer);
-		model.addAttribute("phone",phone);
-		model.addAttribute("email",email);
-		
-		return "ClientServices/ViewCustomerProfile";
+		return results;
 	}
+	**/
+	@RequestMapping(value = "/platform/customerProfileSearch", method = {RequestMethod.POST,RequestMethod.GET})
+	public String searchDashBoard(HttpServletRequest request,Model model,RedirectAttributes redirectAttributess) throws PlatformException{
+		String redirect = null;
+		String firstname = request.getParameter("firstName");
+		String lastname = request.getParameter("lastName");
+		String customerId = request.getParameter("customerIdentity");
+		String searchType=request.getParameter("searchType");
+		
+		logger.info("Search for Customer with Customer Number: "+customerId);
+		Customer customer = null;
+		List<Customer> customerList = null;
+		if(searchType.equals("customerIdentity")){
+			if((customerId != null && !customerId.isEmpty())){
+				customer = findCustomerIdentity(customerId);
+			}		
+		}else if(searchType.equals("customerDetail")){
+			customerList = findAllCustomerByFirstNameAndLastName(firstname,lastname);
+		}
+		if(customerList != null){
+			redirectAttributess.addFlashAttribute("customerList",customerList);
+			redirect = "redirect:/customers/searchForCustomer";
+		}
+		if(customer == null || customerList == null){
+			redirectAttributess.addFlashAttribute("searchError", "No information was found, Try again.");
+			redirect = "redirect:/customers/searchForCustomer";			
+						
+		}		
+		//The results did not return any results
+		if(customer != null){
+			loadCustomerIntoSession(request,customer);
+			loadCustomerOrderHistory(model,customer.getCustomerId(),request);	
+			CustomerAccount customerAccount = customerServiceProcessor.findCustomerAccountByCustomerNumber(customer.getCustomerId());
 	
+			model.addAttribute("customerAccount",customerAccount);
+			model.addAttribute("customer",customer);
+			redirect = "ClientServices/ViewCustomerProfile";
+		}
+		return 	redirect;
+	}
+
+	/**
+	 * @param firstname
+	 * @param lastname
+	 * @return
+	 */
+	private List<Customer> findAllCustomerByFirstNameAndLastName(String firstname, String lastname) {
+		List<Customer> customers = null;
+		if(ValidationUtils.isAlpha(firstname) && ValidationUtils.isAlpha(lastname)){
+			customers = customerServiceImpl.findCustomerLikeFirstNameAndLastName(firstname, lastname);
+		}
+		return customers;
+	}
+	/**
+	 * @param customerIdentity
+	 * @return
+	 */
+	private Customer findCustomerIdentity(String customerIdentity) {
+		Customer customer = null;
+		if(ValidationUtils.isValid(customerIdentity) && ValidationUtils.isEmailValid(customerIdentity)){
+			customer = customerServiceImpl.findCustomerByEmail(customerIdentity);
+		}else if(ValidationUtils.isValid(customerIdentity) && ValidationUtils.isNumeric(customerIdentity)){
+			customer = customerServiceProcessor.findCustomerByCustomerNumber(customerIdentity);
+			if(customer == null){
+				try{
+					Integer customerId = Integer.parseInt(customerIdentity);
+					customer = customerServiceProcessor.findCustomerByCustomerId(customerId);
+				}catch(NumberFormatException e){
+					logger.warning("Customer Id:"+customerIdentity+" is throwing an error while parse it to an Integer.");
+					logger.warning(e.getMessage());
+				}
+			}
+		}
+		return customer;
+	}
 	@RequestMapping(value = "/platform/loadPayments", method = RequestMethod.GET,produces="application/json")
 	@ResponseBody
 	public String loadPayments(HttpServletRequest request){
@@ -262,31 +335,31 @@ public class PlatformController  extends PlatformAbstractServlet {
 	@RequestMapping(value = "/platform/viewTransactionHistory", method = RequestMethod.POST)
 	public String transactionHistory(HttpServletRequest request,Model model){
 		String customerNumber = request.getParameter("customerNumber");
-		
+		logger.info("Search for Transaction History for Customer Number: "+customerNumber);
 		PaymentTransaction payment = paymentServiceImpl.findPaymentTransactionByTransactionId(customerNumber);
 		model.addAttribute("transaction", payment);
 		return "ClientTransaction/TransactionHistory";
 	}	
 	
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/platform/viewTransactionDetail", method = RequestMethod.POST)
 	public String transactionDetails(HttpServletRequest request,Model model) throws PlatformException{
 		String orderNumber = request.getParameter("orderNumber");
+		logger.info("Searching for Transaction Details for Order Number: "+orderNumber);
 		HttpSession session = request.getSession(false);
 		
 		orderNumber = SecurityUtils.decryptOrderNumber(orderNumber);
-		BillingCollection collection = (BillingCollection) session.getAttribute(CustomerOrderFields.BILLING_COLLECTION_SESSION);
+		Map<String, CustomerBilling> collection = (Map<String, CustomerBilling>) session.getAttribute(CustomerOrderFields.BILLING_COLLECTION_SESSION);
 		
 		List<PaymentTransaction> payment = null;
 		CustomerBilling billing = null;
 		List<OrderPayment> orderPayment = null;
 		if(collection != null){
-			billing = collection.getCustomerBilling(orderNumber);
-			orderPayment = collection.getCustomerBillingPayment(orderNumber);
-				
+			billing = collection.get(orderNumber);
+			orderPayment = billing.getPayments();
 		}	
 		if(orderPayment !=null){
 			payment = buildPaymentTransactionList(orderPayment); 
-			
 		}
 		model.addAttribute("paymentList", payment);
 		model.addAttribute(PlatformFields.VIEW_TRANSACTION_DETAILS_ORDER_NUMBER, orderNumber);
@@ -302,10 +375,14 @@ public class PlatformController  extends PlatformAbstractServlet {
 		
 		ArrayList<PaymentTransaction> payments = new ArrayList<PaymentTransaction>();
 		PaymentTransaction transaction = null;
-		for(OrderPayment list: orderPayment){
-			transaction = new PaymentTransaction(list);
+		Product product = null;
+		for(OrderPayment payment: orderPayment){
+			transaction = new PaymentTransaction(payment);
+			product = productServiceProcessor.findProductByProductCode(payment.getClientorder().getProductCode());
+			transaction.setProductName(product.getProductName());
 			payments.add(transaction);
 		}
+		product = null;
 		transaction = null;
 		return payments;
 	}
@@ -354,4 +431,57 @@ public class PlatformController  extends PlatformAbstractServlet {
 		return total;
 	}
 	
+	@RequestMapping(value="/platform/customerPaymentSearch", method = RequestMethod.POST, produces = "application/json" )
+	public String customerPaymentSearch(HttpServletRequest request,Model model,RedirectAttributes redirectAttributess) throws PlatformException{
+		String customerNumber = request.getParameter("customerNumber");
+		String from = request.getParameter("transactionFrom");
+		String to = request.getParameter("transactionTo");
+		Employee employee = getEmployeeInSession(request);
+		logger.info(logActivity(" is submitting a Payment Search for Customer Number: "+customerNumber+" for Date from: "+from+" to: "+to,employee));
+		String redirect = "redirect:/customers/searchForCustomer";
+		String action = PlatformController.CUSTOMER_PAYMENT_SEARCH;
+		List<PaymentSearchResponse> response = paymentProcessor.submitPaymentSearchRequest(customerNumber,from,to,action);
+		
+		if(response != null){
+			redirectAttributess.addFlashAttribute("customerSearchPayment", response);
+			
+		}else{
+			redirectAttributess.addFlashAttribute(PlatformFields.PAYMENT_SEARCH_MESSAGE, "No Payment search results was returned for Customer Number: "+customerNumber+" Date from:"+from+" to: "+to);
+		}
+		
+		action = null;
+		from = null;
+		to = null;
+		customerNumber = null;
+		return  redirect;
+	}
+	
+	@RequestMapping(value="/platform/platformSearch", method = RequestMethod.GET)
+	public String platformCustomerSearch(){
+		return "ClientServices/CustomerSearch";
+	}
+	
+	@RequestMapping(value="/platform/datePaymentSearch", method = RequestMethod.POST)
+	public String datePaymentSearch(HttpServletRequest request,Model model,RedirectAttributes redirectAttributess){
+		String customerNumber = request.getParameter("customerNumber");
+		String from = request.getParameter("transactionFrom");
+		String to = request.getParameter("transactionTo");
+		
+		String redirect = "redirect:/customers/searchForCustomer";
+		String action = PlatformController.DATE_PAYMENT_SEARCH;
+		List<PaymentSearchResponse> response = paymentProcessor.submitPaymentSearchRequest(customerNumber,from,to,action);
+		
+		if(response != null){
+			redirectAttributess.addFlashAttribute("customerSearchPayment", response);
+			
+		}else{
+			redirectAttributess.addFlashAttribute(PlatformFields.PAYMENT_SEARCH_MESSAGE, "No Payment search results was returned for Customer Number: "+customerNumber+" Date from:"+from+" to: "+to);
+		}
+		
+		action = null;
+		from = null;
+		to = null;
+		customerNumber = null;
+		return  redirect;
+	}
 }

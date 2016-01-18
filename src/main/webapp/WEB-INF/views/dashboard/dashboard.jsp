@@ -12,6 +12,8 @@
 <script src="<c:url value="/resources/js/jquery.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/bootstrap.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/platform-functions.js" />" type="text/javascript"></script>
+<script src="<c:url value="/resources/js/validation/jquery.validation.js" />" type="text/javascript"></script>
+<script src="<c:url value="/resources/js/validation/customerValidation.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/application.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/visualization/d3.js" />" type="text/javascript"  charset="utf-8"></script>
 <script type="text/javascript" src="<c:url value="/resources/js/visualization/guage.js" />"></script>
@@ -104,7 +106,9 @@
 						  <span id="customerGaugeContainer">
 						  
 						  </span>
-					  
+						  <span id="paymentGaugeContainer">
+						  
+						  </span>					  
 					  	
 					 </div>		
 					 <div class="col-md-9 col-lg-8">
@@ -150,31 +154,25 @@
 <script>
 	$(document).ready(function(){
 		createGauges();
-		setInterval(loadTotalCustomerCount(), 5000);
-		$(document).ajaxStart(function() {
-			  $("#loading-text").show();
-			});
-
-			$(document).ajaxStop(function() {
-			  $("#loading-text").hide();
-			});
 		var year = new Date().getFullYear();
 		var month = new Date().getMonth()+1;
-		changeAnalystics(year,month);
+		
 
 		var pullData = function(){
-			graph(year);
+			setTimeout(20000,changeAnalystics(year,month));;
 		}
-		setTimeout(pullData,20000);
+		pullData();
+		
 	});
 	function createGauges()	{
 		createGauge("customer", "Customer");
+		createGauge("payment", "Payments");
 	}
 	function loadEmployeeCustomers(){
 		
 	}
 	function changeAnalystics(year,month){
-		//graph(year)
+		graph(year)
 		loadYearPayments(year);
 		countTodayPayment();
 		loadMonthAndYearPayments(month,year);
@@ -187,7 +185,6 @@
 			method: 'get',
 			dataType: 'json',
 			success: function(result){
-				console.log(result);
 				updateGauges('customer',result);
 			},
 			error : function(err){
@@ -287,7 +284,7 @@
 			dataType: 'json',
 			success: function(result){
 				Number(result);
-				
+				updateGauges('payments',result);
 				var table = "";
 						table +="<tr>";
 						table +="<td>"+result+"</td>";

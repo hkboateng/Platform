@@ -672,3 +672,16 @@ input[readonly]{
 .activateLink:hover{
 	cursor:pointer;
 }
+
+.vertical-divider > [class*='col-']:before {
+ background: #e3e3e3;
+ bottom: 0;
+ content: " ";
+ left: 0;
+ position: absolute;
+ width: 1px;
+ top: 0;
+}
+.vertical-divider > [class*='col-']:first-child:before {
+ display: none;
+}

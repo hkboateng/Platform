@@ -17,16 +17,21 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.ui.Model;
 
 import com.boateng.abankus.domain.Customer;
+import com.boateng.abankus.domain.CustomerBilling;
+import com.boateng.abankus.domain.CustomerOrder;
 import com.boateng.abankus.domain.Employee;
 import com.boateng.abankus.domain.Product;
 import com.boateng.abankus.domain.User;
 import com.boateng.abankus.employees.utils.EmployeeCollection;
 import com.boateng.abankus.exception.PlatformException;
 import com.boateng.abankus.fields.CustomerFields;
+import com.boateng.abankus.fields.CustomerOrderFields;
 import com.boateng.abankus.fields.EmployeeFields;
 import com.boateng.abankus.fields.PlatformFields;
+import com.boateng.abankus.processors.CustomerOrderProcessor;
 import com.boateng.abankus.processors.ProductServiceProcessor;
 import com.boateng.abankus.services.AuthenticationService;
 import com.boateng.abankus.services.ProductService;
@@ -50,6 +55,9 @@ public abstract class PlatformAbstractServlet {
 	@Autowired
 	@Qualifier(value="productServiceProcessor")
 	private ProductServiceProcessor productServiceProcessor;
+	
+	@Autowired(required=true)
+	private CustomerOrderProcessor customerOrderProcessor;
 	
 	public void loadUserIntoSession(HttpServletRequest request) throws PlatformException{
 		HttpSession session = request.getSession(false);
@@ -121,10 +129,37 @@ public abstract class PlatformAbstractServlet {
 			cust = null;
 		}
 	}
-	
+	public void loadCustomerOrderHistory(Model model,int customerId,HttpServletRequest request) throws PlatformException{
+		HttpSession session = request.getSession(false);
+		session.setAttribute(CustomerOrderFields.BILLING_COLLECTION_SESSION,null);
+		List<CustomerOrder> orderList = customerOrderProcessor.loadAllOrderByCustomer(customerId);
+		model.addAttribute("customerOrder", orderList);
+
+		Map<String, CustomerBilling> collection = customerOrderProcessor.getCustomerBilling(customerId);
+
+		session.setAttribute(CustomerOrderFields.BILLING_COLLECTION_SESSION, collection);
+		model.addAttribute("billing", collection);	
+		orderList = null;
+		collection = null;
+	}
 	public Customer getCustomerInSession(HttpServletRequest request)throws PlatformException{
 		HttpSession session = request.getSession(false);
 		Customer customer = (Customer) session.getAttribute(CustomerFields.CUSTOMER_SESSION);
 		return customer;
+	}
+	
+	public Employee getEmployeeInSession(HttpServletRequest request)throws PlatformException{
+		HttpSession session = request.getSession(false);
+		Employee employee = (Employee) session.getAttribute(EmployeeFields.EMPLOYEE_SESSION);
+		return employee;
+	}
+	
+	public String logActivity(String activity,Employee employee){
+		StringBuilder sbr = new StringBuilder();
+		if(employee != null){
+			sbr.append("Staff ").append(employee.toString());
+			sbr.append(" "+activity);			
+		}
+		return sbr.toString();
 	}
 }

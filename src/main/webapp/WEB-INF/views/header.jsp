@@ -136,48 +136,15 @@
 		        </ul>		                  
             </li>
           	<li class="dropdown">
-          		<a id="searchBtn" onclick="javascript:toggleSearchContainer();" class="activateLink"><span class="glyphicon glyphicon-search moveR_10"></span>Search</a>
+          		<a id="searchBtn" href="<c:url value="/platform/platformSearch" />" class="activateLink"><span class="glyphicon glyphicon-search moveR_10"></span>Payment Transaction</a>
         	</li>        
           </ul>
           </div>        
   </div>
-  <div id="searchContainer">
-	<div class="spaceBelow_10 container">
-		<sf:form action="/abankus/Search/platformSearch" method="post">
-			<label>Quick Search</label>
-			<div class="spaceBelow_10">
-				<label class="radio-inline">
-					<input type="radio" name="searchBill" id="customer" value="customerIdDiv" checked> Customer:
-				</label>
-				<label class="radio-inline">
-					<input type="radio" name="searchBill" id="customerPayments" value="customerNameDiv"> Customer Payments
-				</label>
-				<label class="radio-inline">
-					<input type="radio" name="searchBill" id="employee" value="customerOrderDiv"> Employee:
-				</label>
-			</div>
-			<div class="col-lg-3">
-			<div id="customerIdDiv" class="">
-				<label>Customer Id:</label><input type="text" name="customerId" class="form-state width-100" placeholder="Customer Id, Customer Number or Email Address" />									
-			</div>
-			<div id="customerNameDiv" class="hidden">
-				<label>Transaction Id:</label><input type="text" name="firstname" class="form-state width-100">
-				<label>Last Name:</label><input type="text" name="lastname" class="form-state width-100">
-			</div>
-			<div class="hidden" id="customerOrderDiv">
-				<label>Employee:</label><input type="text" name="OrderNumber" class="form-state width-100" placeholder="Employee Number, Email address">
-			</div>
-			<div class="clearfix"></div>
-			<input type="hidden" name="searchType" id="searchType" value="customerId">
-			<button type="submit" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-search moveR_20"></span>Search</button>
-			</div>
-		</sf:form>	
-	</div>	  
-  </div>
+  
 </nav>
 <script>
 $(document).ready(function() {
-	$('#searchContainer').toggle();
 	var stickyNavTop = $('#stickyNav').offset().top;
 	 
 	var stickyNav = function(){
@@ -191,13 +158,18 @@ $(document).ready(function() {
 	    $('#stickyMenu').addClass('hidden');
 	}
 	};
-	 
-	stickyNav();
-	 
-	$(window).scroll(function() {
-	    stickyNav();
+
+	
+		stickyNav();
+		 
+		$(window).scroll(function() {
+		    stickyNav();
+		});
 	});
-	});
+	
+function closeSearchContainer(){
+	toggleSearchContainer();
+}	
 function makePayment(url,form){
 	if(isEmpty(url) || !isAlphaNumeric(url)){
 		return false;
@@ -208,5 +180,7 @@ function makePayment(url,form){
 function toggleSearchContainer(){
 	$('#searchContainer').toggle('fast');
 }
+
+
 
 </script>
