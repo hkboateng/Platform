@@ -146,12 +146,13 @@ public class CustomerController extends PlatformAbstractServlet{
 	}
 	
 	@Secured("ROLE_EMPLOYEE")
-	@RequestMapping(value="/customers/viewProfile", method=RequestMethod.GET)
+	@RequestMapping(value="/customers/viewProfile", method={RequestMethod.POST,RequestMethod.GET})
 	public String viewCustomerProfile(RedirectAttributes redirectAttributess,Model model,HttpServletRequest request) throws PlatformException{
 		String customerNumber = request.getParameter("customerNumber");
 		String searchType=request.getParameter("searchType");
 		Customer customer = null;
 		Employee employee = getEmployeeInSession(request);
+		
 		log.info(logActivity("Searching for Customer with Customer Number: "+customerNumber+" and search type :"+searchType,employee));
 		if(searchType != null && !customerNumber.isEmpty() && searchType.equals("customerNumber")){
 			customer = customerServiceProcessor.findCustomerByCustomerNumber(customerNumber);
@@ -170,6 +171,8 @@ public class CustomerController extends PlatformAbstractServlet{
 		model.addAttribute("customerAccount",customerAccount);
 		model.addAttribute("customer",customer);
 		log.info(logActivity("is being redirected to Customer Profile Page for Customer: "+customer.getCompanyName(),employee));
+		customer = null;
+		customerAccount = null;
 			/**
 			Customer customer = null;
 			clearMessages(request);
@@ -239,7 +242,7 @@ public class CustomerController extends PlatformAbstractServlet{
 	@RequestMapping(value="/customers/searchForCustomer", method=RequestMethod.GET)
 	public String searchForCustomer(HttpServletRequest request) throws PlatformException{
 		Employee employee = getEmployeeInSession(request);
-		logActivity("is viewing Customer Search page.",employee);
+		log.info(logActivity("is viewing Customer Search page.",employee));
 		return "ClientServices/CustomerSearch";
 	}
 	@RequestMapping(value = "/customers/makePayment", method = RequestMethod.POST)
@@ -251,7 +254,7 @@ public class CustomerController extends PlatformAbstractServlet{
 	@RequestMapping(value = "/customers/makePaymentSearch", method = RequestMethod.GET)
 	public String makePaymentSearch(HttpServletRequest request) throws PlatformException{
 		Employee employee = getEmployeeInSession(request);
-		logActivity("is viewing Customer Search page.",employee);
+		log.info(logActivity("is viewing Customer Search page.",employee));
 		return "ClientTransaction/CustomerPaymentSearch";
 	}		
 

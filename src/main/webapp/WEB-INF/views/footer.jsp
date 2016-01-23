@@ -28,4 +28,7 @@
 			 
 
 		});
+	    function closeSearchContainer(){
+	    	toggleSearchContainer();
+	    }	    
 		</script>

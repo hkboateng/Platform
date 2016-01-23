@@ -1,15 +1,17 @@
-var emailRegExp = new RegExp();
-
-var zipCodeRegExp = '/((\d{5})(-\d{4})?)/';
 
 function validation(){
 		$("form").validate({
 			onsubmit:false,
 			rules :{
-				firstname: "required",
-				lastname: "required",
-				middlename: {
+				firstname: {
 					required: true
+				},
+				lastname: {
+					required: true
+				},
+				middlename: {
+					optional: true
+					//validname: true
 				},
 				gender : {
 					required: true
@@ -36,7 +38,8 @@ function validation(){
 					required: true
 				},
 				zipcode: {
-					required: true
+					required: true,
+					zipCodeGh:true
 				},
 				phoneNumber: {
 					required: true

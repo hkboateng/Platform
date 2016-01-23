@@ -3,6 +3,7 @@ package com.boateng.abankus.services;
 import java.util.List;
 
 import com.boateng.abankus.domain.Employee;
+import com.boateng.abankus.domain.Permission;
 import com.boateng.abankus.domain.Role;
 import com.boateng.abankus.domain.User;
 
@@ -11,7 +12,7 @@ public interface AuthenticationService {
 
 	User AuthenticateUser(String username,String passwd);
 	
-	List<Role> findRoleByUser(String username);
+	List<Permission> findRoleByUser(String username);
 
 	User findUserByUserName(String username);
 

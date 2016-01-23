@@ -23,9 +23,6 @@
 <!-- Page Header ends -->
 <div id="container" class="container-fluid">
 	<div class="row">
-			<div class="col-sm-2 col-md-2 col-lg-2">
-				<jsp:include page="../sidebar.jsp" />
-			</div>	
 <div class="col-sm-9 col-md-10 col-lg-10">
           <h1>Products/Service List</h1>
 		  <hr>

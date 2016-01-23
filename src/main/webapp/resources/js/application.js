@@ -1,6 +1,6 @@
 function createRegionList(){
 	var str = "";
-		str += "<select name='state' class='form-state'>";
+		str += "<select name='state' class='form-state  width-100'>";
 		str += "<option value=''> Select </option>";
 		str += "<option value='AR'> Ashanti </option>";
 		str += "<option value='BA'> Brong-Ahafo </option>";
@@ -19,7 +19,7 @@ function createRegionList(){
 
 function typeOfIdentification(){
 	var str = "";
-	str += "<select name='IdType' class='form-control'>";
+	str += "<select name='IdType' class='form-state  width-100'>";
 	str += "<option value=''> Select Identification </option>";
 	str += "<option value='healthInsurance'> National Health Insurance </option>";
 	str += "<option value='passport'> Passport </option>";	
@@ -64,7 +64,7 @@ function showMessage(message,level,messageDiv){
 }
 function genderList(){
 	var str = "";
-	str += "<select name='gender' class='form-control'>";
+	str += "<select name='gender' class='form-state width-100'>";
 	str += "<option value=''> Select </option>";
 	str += "<option value='male'> Male </option>";
 	str += "<option value='female'> Female </option>";	
@@ -209,8 +209,14 @@ function submitCustomerURL(form,value){
 	if( value !== undefined){
 		form.customerNumber.value = value;
 	}
-	form.submit();
+	submitForm(form);
 	
+}
+
+function submitForm(form){
+	if(form){
+		form.submit();
+	}
 }
 function validateForm(formName){
 	$(formName).validate({

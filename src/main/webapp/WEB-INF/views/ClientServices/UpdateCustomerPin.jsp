@@ -1,9 +1,3 @@
-<%
-	
-	String customerType = request.getParameter("customerType");
-	String employeeInfo = (String)session.getAttribute("employeeInfo");
-	pageContext.setAttribute("customerType", customerType);
-%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 
@@ -31,10 +25,12 @@
 			</div>
 			<div class="row">
 				<div class="col-lg-10">
-					<label for="customerNumber" class="labelLength_20">Customer Number:</label>
-					<input name="customerNumber" id="customerId" type="text" class="form-state-inline"/>
-					<hr>
-					<input type="submit" value="Send Update Request" class="btn btn-success"/>
+					<sf:form name="formUpdateCustomerPin" id="formUpdateCustomerPin" action="/customer/updateCustomer">
+						<label for="customerNumber" class="labelLength_20">Customer Number:</label>
+						<input name="customerNumber" id="customerNumber" type="text" class="form-state-inline"/>
+						<hr>
+						<input type="submit" value="Send Update Request" id="updatePinSubmitBtn" class="btn btn-success"/>					
+					</sf:form>
 				</div>
 			</div>
 	</div>
@@ -42,8 +38,16 @@
 
 <script>
 $(document).ready(function(){
+	$('#updatePinSubmitBtn').click(function(){
+		var customerNumber = $('#customerNumber').val();
+		if(validateCustomerPinForm(customerNumber)){
+			$('#formUpdateCustomerPin').submit();
+		}
+	});
 
 });
-
+function validateCustomerPinForm(customerNumber){
+	return isAlphaNumeric(customerNumber);
+}
 </script>
 </html>

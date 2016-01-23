@@ -6,6 +6,7 @@ package com.boateng.abankus.controller;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -20,6 +21,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -103,10 +105,11 @@ public class PlatformController  extends PlatformAbstractServlet {
 
 	
 	@RequestMapping(value = "/platform/index", method = RequestMethod.GET)
-	public String home(HttpServletRequest request, Model model) {
+	public String home(HttpServletRequest request, Model model,RedirectAttributes redirectAttributess) {
 		try {
 			loadUserIntoSession(request);
 			loadEmployeeIntoSessionByUsername(request);
+			loadProductIntoSession(request);
 		} catch (Exception e) {
 			PlatformException ace  = new PlatformException();
 			ace.logger(Level.WARNING,e.getMessage(), e);
@@ -120,6 +123,8 @@ public class PlatformController  extends PlatformAbstractServlet {
 
 		return "dashboard/Settings";
 	}	
+	
+	/**
 	@RequestMapping(value = "/platform/dashboard", method = RequestMethod.GET)
 	public String dashbaord(Locale locale, Model model,HttpServletRequest request) {
 		HttpSession session = request.getSession(false);
@@ -130,12 +135,12 @@ public class PlatformController  extends PlatformAbstractServlet {
 			loadUserIntoSession(request);
 			loadEmployeeIntoSessionByUsername(request);
 			Employee employee = (Employee) session.getAttribute(EmployeeFields.EMPLOYEE_SESSION);
-			int employeeId = employee.getId();	
+			//int employeeId = employee.getId();	
 			loadProductIntoSession(request);
 			employee = null;
-			List<Customer> customerList = employeeServiceImpl.findAllCustomerByEmployeeId(employeeId);
-			model.addAttribute(EmployeeFields.EMPLOYEE_CUSTOMER_LIST, customerList);
-			customerList = null;
+			//List<Customer> customerList = employeeServiceImpl.findAllCustomerByEmployeeId(employeeId);
+			//model.addAttribute(EmployeeFields.EMPLOYEE_CUSTOMER_LIST, customerList);
+			//customerList = null;
 		} catch (Exception e) {
 			PlatformException ace  = new PlatformException();
 			ace.logger(Level.WARNING,e.getMessage(), e);
@@ -144,7 +149,8 @@ public class PlatformController  extends PlatformAbstractServlet {
 		
 		return "dashboard/dashboard";
 	}	
-
+	**/
+	
 	@RequestMapping(value = "/platform/loadTodayTransactionHistory", method = RequestMethod.GET,produces="application/json")
 	@ResponseBody
 	public String loadTransactionHistory(HttpServletRequest request) throws PlatformException {
@@ -436,23 +442,23 @@ public class PlatformController  extends PlatformAbstractServlet {
 		String customerNumber = request.getParameter("customerNumber");
 		String from = request.getParameter("transactionFrom");
 		String to = request.getParameter("transactionTo");
+		
 		Employee employee = getEmployeeInSession(request);
 		logger.info(logActivity(" is submitting a Payment Search for Customer Number: "+customerNumber+" for Date from: "+from+" to: "+to,employee));
+		
 		String redirect = "redirect:/customers/searchForCustomer";
 		String action = PlatformController.CUSTOMER_PAYMENT_SEARCH;
 		List<PaymentSearchResponse> response = paymentProcessor.submitPaymentSearchRequest(customerNumber,from,to,action);
-		
 		if(response != null){
 			redirectAttributess.addFlashAttribute("customerSearchPayment", response);
 			
 		}else{
 			redirectAttributess.addFlashAttribute(PlatformFields.PAYMENT_SEARCH_MESSAGE, "No Payment search results was returned for Customer Number: "+customerNumber+" Date from:"+from+" to: "+to);
 		}
-		
-		action = null;
-		from = null;
-		to = null;
-		customerNumber = null;
+			action = null;
+			from = null;
+			to = null;
+			customerNumber = null;
 		return  redirect;
 	}
 	

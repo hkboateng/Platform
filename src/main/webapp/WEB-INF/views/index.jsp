@@ -63,10 +63,10 @@
 							<c:if test="${param.info != null}">
 								<p>You have been logged out.</p>
 							</c:if>
-							<label> Username:</label>
+							<label class="label"> Username:</label>
 							<input type="text" name="username"	placeholder="Username " class="form-state width-100" />
 							
-							 <label>Password:</label>
+							 <label class="label">Password:</label>
 							  <input type="password" name="password"	placeholder="Password" class="form-state width-100" />
 							
 							<input type="hidden" name="${_csrf.parameterName}"

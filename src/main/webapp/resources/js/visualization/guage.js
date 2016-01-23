@@ -81,7 +81,7 @@ function Gauge(placeholderName, configuration)
 						.style("stroke-width", "0px");
 		}
 		
-		var fontSize = Math.round(this.config.size / 16);
+		var fontSize = Math.round(12);
 		var majorDelta = this.config.range / (this.config.majorTicks - 1);
 		for (var major = this.config.min; major <= this.config.max; major += majorDelta)
 		{
@@ -121,7 +121,7 @@ function Gauge(placeholderName, configuration)
 				 			.attr("dy", fontSize / 3)
 				 			.attr("text-anchor", major == this.config.min ? "start" : "end")
 				 			.text(major)
-				 			.style("font-size", fontSize + "px")
+				 			.style("font-size", 14 + "px")
 							.style("fill", "#333")
 							.style("stroke-width", "0px");
 			}
@@ -214,7 +214,7 @@ function Gauge(placeholderName, configuration)
 		var pointerContainer = this.body.select(".pointerContainer");
 		
 		pointerContainer.selectAll("text").text(Math.round(value));
-		
+		console.log(Math.round(value)+" gd");
 		var pointer = pointerContainer.selectAll("path");
 		pointer.transition()
 					.duration(undefined != transitionDuration ? transitionDuration : this.config.transitionDuration)

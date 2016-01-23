@@ -434,7 +434,7 @@ public class PaymentProcessor extends PlatformAbstract{
 		if(response.getStatus() == 200){
 				results =  response.readEntity(String.class);
 				try {
-					 paymentResponse = PlatformUtils.convertListFronJson(new TypeReference<List<PaymentSearchResponse>>(){}, results);
+					 paymentResponse = PlatformUtils.convertFronJson(new TypeReference<List<PaymentSearchResponse>>(){}, results);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

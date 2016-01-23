@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.boateng.abankus.domain.Product;
 import com.boateng.abankus.processors.ProductServiceProcessor;
@@ -31,6 +32,7 @@ import com.boateng.abankus.processors.ProductServiceProcessor;
 public class ProductController {
 
 	private final Logger log = Logger.getLogger(ProductController.class);
+	
 	@Autowired(required=true)
 	private ProductServiceProcessor productServiceProcessor;
 	
@@ -42,11 +44,11 @@ public class ProductController {
 	}
 	
 	@RequestMapping(value = "/addProduct", method = RequestMethod.POST)
-	public String addNewProduct(@Valid Product product,BindingResult bindingResult,Model model){
-		log.info("Validation has passed..");
+	public String addNewProduct(@Valid Product product,BindingResult bindingResult,Model model,RedirectAttributes redirectAttributess){
+		log.info("Started processing product information to save into Database........");
 		if(bindingResult.hasErrors()){
-			model.addAttribute("error", bindingResult.getFieldErrors());
-			return "Product/createProduct"; 
+			redirectAttributess.addFlashAttribute("error", bindingResult.getFieldErrors());
+			return "redirect:/products/createProduct"; 
 		}
 
 		log.info("Validation has passed..");
@@ -81,7 +83,7 @@ public class ProductController {
 	}
 	
 	@RequestMapping(value="/updateProducts", method=RequestMethod.POST)
-	public String updateProduct(HttpServletRequest request,BindingResult bindingResult,Model model){
+	public String updateProduct(HttpServletRequest request,BindingResult bindingResult,Model model,RedirectAttributes redirectAttributess){
 		if(bindingResult.hasErrors()){
 			model.addAttribute("error", bindingResult.getFieldErrors());
 			return "Product/ViewProductDetail"; 
@@ -92,17 +94,6 @@ public class ProductController {
 	}
 	
 	public void removeProduct(@RequestParam int productId, Model model){
-		
-	}
-	
-	@RequestMapping(value="/createProductDetails", method=RequestMethod.GET)
-	public void createProductDetail(){
-		
-	}
-	
-	@RequestMapping(value="/saveProductDetail" , method=RequestMethod.POST)
-	public String saveProductDetail(){
-		
-		return null;
+		//TODO 
 	}
 }

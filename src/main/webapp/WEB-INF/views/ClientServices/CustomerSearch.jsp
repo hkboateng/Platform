@@ -8,12 +8,15 @@
 <title>Abankus Corporation - Customer Search</title>
 <link href="<c:url value="/resources/css/bootstrap.css" />"	rel="stylesheet" />
 <link href="<c:url value="/resources/css/platform.css" />"	rel="stylesheet" />
+<link href="<c:url value="/resources/css/datepicker.css" />"	rel="stylesheet" />
 <script src="<c:url value="/resources/js/jquery.js" />"	type="text/javascript"></script>
 <script src="<c:url value="/resources/js/validation/jquery.validation.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/validation/customerValidation.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/bootstrap.js" />"	type="text/javascript"></script>
 <script src="<c:url value="/resources/js/application.js" />"	type="text/javascript"></script>
 <script src="<c:url value="/resources/js/platform-functions.js" />"	type="text/javascript"></script>
+<script src="<c:url value="/resources/js/bootstrap-datepicker.js" />"	type="text/javascript"></script>
+<script src="<c:url value="/resources/js/moments.js" />"	type="text/javascript"></script>
 </head>
 <body>
 	<%-- Include page header --%>
@@ -21,15 +24,15 @@
 	<div id="container" class="container">
 		<div class="row">
 			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				<div class="spaceBelow_20"></div>
 				<div id="searchContainer">
 					<div class="spaceBelow_10 container">						
-							<label>Quick Search</label>
 							<div class="spaceBelow_10">
 								<label class="radio-inline">
 									<input type="radio" name="searchBill" id="customer" value="customerIdDiv" checked>Search for Customer:
 								</label>
 								<label class="radio-inline">
-									<input type="radio" name="searchBill" id="employee" value="customerOrderDiv">Search for Payment(s) made by Customer and received by Employee:
+									<input type="radio" name="searchBill" id="employee" value="customerOrderDiv">Payment(s) received by Employee:
 								</label>
 							</div>
 							<div class="col-lg-12">
@@ -66,9 +69,16 @@
 											<label>Customer Number:</label><input type="text" name="customerNumber" id="customerNumber" class="form-state width-100 customer_search" placeholder="Customer Number">					
 										</div>
 										<div>			
-											<label>Payment Transaction From:</label><input type="text"  id="transactionFrom" name="transactionFrom" class="form-state width-100 customer_search" placeholder=" First Name">
+											<label>From:</label><input type="text"  id="transactionFrom" name="transactionFrom" class="form-state width-100 customer_search" placeholder=" First Name">
+											
 										</div>
-										<label>Payment Transaction To:</label><input type="text" id="transactionTo" name="transactionTo" class="form-state width-100 customer_search" placeholder=" Last Name">
+										<label>To:</label>
+										<div class="input-group date  spaceBelow_20">
+											<input type="text" id="transactionTo" name="transactionTo" class="form-control customer_search" placeholder=" Last Name">
+											<div class="input-group-addon">
+										        <span class="glyphicon glyphicon-th"></span>
+										    </div>
+									    </div>
 										<div>
 											<button type="submit" class="btn btn-success btn-sm" id="searchCustomerPaymentBtn" onclick="javascript:validateCustomerPaymentSearch();return false;"><span class="glyphicon glyphicon-search moveR_20"></span>Search</button>
 										</div>
@@ -89,17 +99,9 @@
 								</div>
 							</div>
 							<div class="clearfix"></div>
-							
-							<%-- 
-							<input type="hidden" name="searchType" id="searchType" value="customerId">
-							<button type="submit" class="btn btn-success btn-sm" id="platformSearchBtn" onclick="javascript:validatePlatformSearch();return false;"><span class="glyphicon glyphicon-search moveR_20"></span>Search</button>
-							--%>
 							</div>
 					</div>	  
 				  </div>			
-				<div class="page-header">
-					<h1>Search Results</h1>
-				</div>
 				 <c:if test="${not empty paymentsearch_message }">
 					<div class="alert alert-danger col-lg-8" role="alert">
 						 ${searchError }
@@ -107,6 +109,9 @@
 				</c:if>	
 				<div id="customerPaymentList">
 				<c:if test="${not empty customerList}">
+					<div class="page-header">
+						<h1>Search Results</h1>
+					</div>
 					<table class="table">
 						<thead>
 							<tr>
@@ -134,6 +139,9 @@
 					</table>				
 				</c:if>	
 				<c:if test="${not empty customerSearchPayment}">
+				<div class="page-header">
+					<h1>Search Results</h1>
+				</div>				
 					<table class="table">
 						<thead>
 							<tr>
@@ -194,5 +202,17 @@ $(document).ready(function(e){
 		}
 	});
 });
+$(function() {
+    $( "#transactionFrom" ).datepicker();
+    $( "#transactionTo" ).datepicker({
+    	useCurrent: false
+    });
+    $("#transactionFrom").on("dp.change", function (e) {
+        $('#transactionTo').data("DateTimePicker").minDate(e.date);
+    });
+    $("#transactionTo").on("dp.change", function (e) {
+        $('#transactionFrom').data("DateTimePicker").maxDate(e.date);
+    });    
+  });
 </script>
 </html>

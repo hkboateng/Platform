@@ -6,6 +6,7 @@ package com.boateng.abankus.controller;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -100,6 +101,7 @@ public class PaymentController extends PlatformAbstractServlet  {
 		return "redirect:/Payments/QuickPayment";
 	}
 	
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/makeCustomerOrderPayment", method = RequestMethod.POST)
 	public String makeCustomerOrderPayment(HttpServletRequest request,Model model,RedirectAttributes redirectAttributess) throws NoSuchAlgorithmException, NoSuchPaddingException, PlatformException{
 		String order = request.getParameter("orderNumber");
@@ -107,9 +109,9 @@ public class PaymentController extends PlatformAbstractServlet  {
 		String orderNumber = SecurityUtils.decryptOrderNumber(order);
 		session = request.getSession(false);
 		
-		BillingCollection collection = (BillingCollection) session.getAttribute(CustomerOrderFields.BILLING_COLLECTION_SESSION);
+		Map<String, CustomerBilling>  collection = (Map<String, CustomerBilling>) session.getAttribute(CustomerOrderFields.BILLING_COLLECTION_SESSION);
 		if(collection !=null){
-			CustomerBilling billing = collection.getCustomerBilling(orderNumber);
+			CustomerBilling billing = collection.get(orderNumber);
 			Product product = productServiceProcessor.findProductByProductCode(billing.getClientOrderId().getProductCode());
 
 			redirectAttributess.addFlashAttribute("product",product);		

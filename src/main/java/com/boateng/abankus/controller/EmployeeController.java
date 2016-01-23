@@ -4,6 +4,7 @@
 package com.boateng.abankus.controller;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -14,14 +15,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.boateng.abankus.domain.Employee;
+import com.boateng.abankus.exception.PlatformException;
 import com.boateng.abankus.fields.EmployeeFields;
 import com.boateng.abankus.processors.EmployeeServiceProcessor;
 import com.boateng.abankus.services.EmployeeService;
+import com.boateng.abankus.servlet.PlatformAbstractServlet;
 
 /**
  * @author hkboateng
@@ -29,8 +30,10 @@ import com.boateng.abankus.services.EmployeeService;
  */
 @Controller
 @RequestMapping("/employee")
-public class EmployeeController {
+public class EmployeeController extends PlatformAbstractServlet{
 
+	private static final Logger logger = Logger.getLogger(EmployeeController.class.getName());
+	
 	@Autowired(required=true)
 	@Qualifier(value="employeeServiceImpl")
 	private EmployeeService employeeServiceImpl;	
@@ -46,28 +49,31 @@ public class EmployeeController {
 	}
 	
 	@RequestMapping(value="/editEmployee", method=RequestMethod.GET)
-	public String editEmployeeProfile(HttpServletRequest request,Model model){
-
-		Employee employee = getEmployeeInSession(request);
-		model.addAttribute("employeeInstance", employee);
+	public String editEmployeeProfile(HttpServletRequest request,Model model,RedirectAttributes redirectAttributess){
+		logger.info("Loading and viewing Editing Employee Information...");
+		Employee employee = null;
+		try {
+			employee = getEmployeeInSession(request);
+			 model.addAttribute("employeeInstance", employee);
+		} catch (PlatformException e) {
+			 model.addAttribute("error_message","Error occured getting Employee information.");
+			employee = null;
+			e.printStackTrace();
+		}
 		
-		return "Employee/UpdateEmployee";
+		
+		return "Employee/EmployeeProfile";
 	}	
 	
 	@RequestMapping(value="/updateEmployee", method=RequestMethod.POST)
 	public String updateEmployee(HttpServletRequest request,Model model,RedirectAttributes redirectAttributess){
+		logger.info("Updating Employee Information.....");
 		employeeServiceProcessor.process("update", request);
 		
 		redirectAttributess.addFlashAttribute("info", "Employee has being added successfully.");
 		return "redirect:/platform/dashboard";
 	}
-	
-	private Employee getEmployeeInSession(HttpServletRequest request){
-		HttpSession session = request.getSession(false);
-		Employee employee = (Employee) session.getAttribute(EmployeeFields.EMPLOYEE_SESSION) ;
-		
-		return employee;
-	}
+
 	
 	@RequestMapping(value="/employeSearchView", method=RequestMethod.GET)
 	public String employeSearchView(HttpServletRequest request,Model model,RedirectAttributes redirectAttributess){

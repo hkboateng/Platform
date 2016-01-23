@@ -20,13 +20,10 @@
 <%-- Include page header --%>
 <jsp:include page="../header.jsp"/>
 <%-- End of Include page header --%>
-<div id="container" class="container-fluid">
+<div id="container" class="container">
 
 <div class="row">
-<div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
-<jsp:include page="../sidebar.jsp"/>
-</div>
-<div class="col-xs-12 col-sm-10 col-md-10 col-lg-10">
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 		  <div class="col-lg-12 page-header">
 		   	<span class="lead">Customers</span>
 		   	<a href="create" class="btn btn-success pull-right"><span class="glyphicon glyphicon-plus moveR_20"></span>Add Customer</a>
@@ -38,7 +35,7 @@
 			          </c:if>
 			          </ul>
 		          </div>
-		          <div>
+		          <div class="center-block">
 
 					<table id="customerList" class="table table-striped">
 						<thead>
@@ -58,7 +55,9 @@
 			          			<td>${customer.getLastname()}</td>
 			          			<td>${customer.getCompanyName() }</td>
 			          			<td>
-				          			<!-- Split button -->
+			          				<button type="button" id="aCustomerProfileLink" onclick="javascript:submitCustomerURL(document.customerViewProfileForm,'${customer.customerNumber}');return false;" class="btn btn-success">View Profile</button>
+				          		</td>
+				          			<!-- Split button
 										<div class="btn-group">
 										  <button type="button" class="btn btn-success">Action</button>
 										  <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -71,23 +70,19 @@
 										    <li role="separator" class="divider"></li>
 										    <li><a href="#">Quick Payment</a></li>
 										  </ul>
-										</div>			          			
+										</div>		
+										 -->         			
 			          		</tr>
 		          		</c:forEach>
 		          		</tbody>
 		          		</table>
-
-						<sf:form action="/abankus/customers/viewProfile" method="post" name="customerViewProfileForm">
-						<input type="hidden" name="searchType" id="searchType" value="customerNumber">
-						<input type="hidden" name="customerNumber" id="customerNumber" value="">
-						</sf:form>
 </div>
 </div>
 </div>
 </div>
-	<sf:form name="viewCustomerProfileBckBtn" action="/abankus/customers/viewProfile" method="post">
+	<sf:form  name="customerViewProfileForm" action="/abankus/customers/viewProfile" method="post">
 		<input type="hidden" name="searchType" id="searchType" value="customerNumber">
-		<input type="hidden"  name="customerNumber" value="${cust}"/>	          
+		<input type="hidden"  name="customerNumber" value=""/>	          
 	</sf:form>	
 <script src="<c:url value="/resources/js/tables/jquery.dataTables.js" />" type="text/javascript"></script>
 <script>

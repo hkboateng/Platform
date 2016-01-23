@@ -1,9 +1,3 @@
-<%
-	
-	String customerType = request.getParameter("customerType");
-	String employeeInfo = (String)session.getAttribute("employeeInfo");
-	pageContext.setAttribute("customerType", customerType);
-%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 
@@ -28,11 +22,11 @@
 
 <div  id="container" class="container">
 <div class="row">
-<div>
-		
-          <h1>Client Services - Prospective Customer</h1>
-			<hr>
+
           <div class="col-sm-12 col-md-8 col-md-8">
+          <div class="page-header">
+		  	<h1>Add Customer</h1>
+		  </div>
           <div class="errors">
 	          <ul>
 		          <c:if test="${not empty errors}">
@@ -56,8 +50,7 @@
 						<input type="text" name="firstname" id="firstname" class="form-state width-100" placeholder="First Name"/>
 						</div>
 						<div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
-						<label for="lastname">
-						Last Name:</label>
+						<label for="lastname">Last Name:</label>
 						<input type="text" name="lastname" id="lastname" placeholder="Last Name" class="form-state width-100"/>	
 						</div>
 						</div>
@@ -66,7 +59,8 @@
 						<label for="state" >Gender:</label>
 						<script>genderList();</script>				
 					</div>
-					<div class="col-xs-12 col-sm-6 col-md-6">
+					<div class="clearfix"></div>
+					<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
 						<label for="state" >Type of Identification:</label>
 						<script>typeOfIdentification();</script>
 						<div class="clear"></div>
@@ -120,22 +114,22 @@
 				  </div>
 					</div>	
 				  <div class="row">
-						<div class="col-xs-6 col-sm-6">
-						<label for="phoneNumber">Account Status:</label>	
-							<select name="accountStatus" class="form-state">
+						<div class="col-xs-12 col-sm-12 col-lg-6 col-md-6">
+						<label for="accountStatus">Account Status:</label>	
+							<select name="accountStatus" id="accountStatus" class="form-state  width-100">
 								<option value="">Select Account Status</option>
-								<option value="active">Active</option>
-								<option value="prospect" selected>Prospective</option>
+								<option value="active" selected>Active</option>
+								<option value="prospect">Prospective</option>
 								<option value="inactive">InActive</option>
 								<option value="close">Closed</option>
 							</select>
 						</div>
-						<div class="col-xs-6 col-sm-6">
+						<div class="clearfix">
 						
 						</div>
-						<div class="col-xs-6 col-sm-6">
+						<div class="col-xs-12 col-sm-12 col-lg-6 col-md-6">
 						<label for="customerIndustry">Industry</label>
-							<select name="customerIndustry" class="form-state">
+							<select name="customerIndustry" class="form-state  width-100">
 								<option value="">Select Industry</option>
 								<option value="financial">Financial Services</option>
 								<option value="retail">Retail</option>
@@ -154,22 +148,30 @@
 			
 			<hr>
 			<p>
-			<button class="btn btn-primary" onClick="javascript:customerValidation(document.customerForm);"> Save Customer </button>
+			<button class="btn btn-primary" id="newCustomerSubmitBtn" onClick="javascript:validation();return false;"> Save Customer </button>
 			&nbsp;&nbsp;&nbsp;
 			<a href="#"> Cancel </a>
 			</p>
 		
 			</sf:form>
           </div>
-</div>        
 </div>
 </div>
+	<%-- Include page header --%>
+	<jsp:include page="../footer.jsp"/>
+	<!-- Page Header ends -->
 </body>
 
 <script>
 $(document).ready(function(){
 	$('#phoneNumber').mask('000-000-0000');
 	$('#dateOfBirth').mask('00/00/0000');
+	
+	$('#newCustomerSubmitBtn').click(function(){
+		if(validation()){
+			submitForm(document.customerForm);
+		}
+	});
 });
 function isEmailUnique(email){
 
@@ -187,5 +189,6 @@ function isEmailUnique(email){
 		}
 	});			
 }
+
 </script>
 </html>

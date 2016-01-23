@@ -1,30 +1,23 @@
 package com.boateng.abankus.controller;
 
-import java.util.Locale;
-import java.util.UUID;
-import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.boateng.abankus.domain.Employee;
 import com.boateng.abankus.domain.User;
 import com.boateng.abankus.exception.PlatformException;
+import com.boateng.abankus.fields.PlatformFields;
 import com.boateng.abankus.services.AuthenticationService;
 import com.boateng.abankus.servlet.PlatformAbstractServlet;
-import com.boateng.abankus.users.UserCollection;
 
 /**
  * Handles requests for the application home page.
@@ -35,49 +28,37 @@ public class SecurityController extends PlatformAbstractServlet {
 	@Qualifier(value="authenticationServiceImpl")
 	private AuthenticationService authenticationServiceImpl;	
 	
-	private static final Logger logger = LoggerFactory.getLogger(SecurityController.class);
+	private static final Logger logger = Logger.getLogger(SecurityController.class.getName());
 	
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
 	@RequestMapping(value = "/security/login", method = RequestMethod.GET)
 	public String index(HttpServletRequest request, Model model) {
-		HttpSession session = request.getSession(false);
-		if(session != null){
-			session.invalidate();
-		}
-		
+
 		return "index";
-	}
-
-	
-	@RequestMapping(value = "/security/authenticate",method = RequestMethod.POST)
-	public String login(RedirectAttributes redirectAttributess,HttpServletRequest request) {
-		String username = request.getParameter("username");
-		String password = request.getParameter("password");
-		logger.info("Loggin into Platform app ");
-
-		User user =authenticationServiceImpl.AuthenticateUser(username, password);
-		if(user == null){
-			redirectAttributess.addFlashAttribute("errors", "Username or Password is Invalid!!. Try again");
-			return "redirect:/login";
-		}
-
-		logger.info("User Login validation passed. "+user.getEmailAddress());
-		
-		return "redirect:/abankus/dashboard";
 	}
 
 	
 	@RequestMapping(value = "/platform/logout", method =  {RequestMethod.GET,RequestMethod.POST})
 	public String logout(RedirectAttributes redirectAttributess,HttpServletRequest request,Model model) {
 		HttpSession session = request.getSession(false);
-		logger.info("Logging out");
+		
+		logger.info("Logging out... User: "+request.getUserPrincipal().getName());
 		if(session != null ){
 			session.removeAttribute("user");
 			session.invalidate();
+			logger.info("Loggout successful..");
 		}
 		redirectAttributess.addFlashAttribute("info", "You have logout successfully.");
 		return "redirect:/login";
-	}		
+	}
+	
+	@RequestMapping(value = "/security/accessdenied", method = {RequestMethod.GET,RequestMethod.POST})
+	public String errorMessage(HttpServletRequest request, Model model,RedirectAttributes redirectAttributess) throws PlatformException {
+		logger.info(logActivity(" does not have access to perform this operation.",getEmployeeInSession(request)));
+		model.addAttribute(PlatformFields.ERROR_MESSAGE, "You donot have access to perform this operation.");
+		logger.info(logActivity(" is viewing the Access Denied page.",getEmployeeInSession(request)));
+		return "AbankusErrorMessage";
+	}
 }

@@ -142,6 +142,7 @@ public abstract class PlatformAbstractServlet {
 		orderList = null;
 		collection = null;
 	}
+	
 	public Customer getCustomerInSession(HttpServletRequest request)throws PlatformException{
 		HttpSession session = request.getSession(false);
 		Customer customer = (Customer) session.getAttribute(CustomerFields.CUSTOMER_SESSION);

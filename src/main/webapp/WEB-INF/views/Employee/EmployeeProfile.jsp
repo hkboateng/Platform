@@ -4,21 +4,43 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Abankus Corporation - Sales Connection</title>
+<title>Abankus Payments - Employee Profile</title>
 <link href="<c:url value="/resources/css/bootstrap.css" />" rel="stylesheet"/>
 <link href="<c:url value="/resources/css/platform.css" />" rel="stylesheet"/>
-<script src="<c:url value="/resources/js/angular.js" />" type="text/javascript"></script>
+<script src="<c:url value="/resources/js/jquery.js" />" type="text/javascript"></script>
+<script src="<c:url value="/resources/js/bootstrap.js" />" type="text/javascript"></script>
+<script src="<c:url value="/resources/js/application.js" />" type="text/javascript"></script>
 </head>
-<body  ng-app="">
+<body>
 <%-- Include page header --%>
 <jsp:include page="../header.jsp"/>
-<div class="container">
+<div id="container" class="container">
 <div class="row">
-<jsp:include page="../sidebar.jsp"/>
-		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h1>Add New Employee</h1>
-			<hr>
-			<sf:form method="post" modelAttribute="employee" action="addEmployee"  name="newEmployee" class="form">
+		<div class="col-xs-12 col-sm-12 col-md-10 col-lg-10 main">
+          	<div class="page-header">
+          		<h1>Hi, <small>${employeeInstance}</small></h1>
+          	</div>
+          	<div id="employeeProfileDiv">
+          		<p>
+          			<label class="label labelLength_10">Employee Number:</label>
+          			<span>${employeeInstance.getEmployeeId()}</span>
+          		</p>
+          		<label class="label labelLength_30">Address</label>
+          		<div class="moveL_5 spaceBelow_10">
+          			<div>${employeeInstance.getAddress1() }</div>
+          			${employeeInstance.getAddress2() }
+          			<div>${employeeInstance.getCity() }&nbsp;${employeeInstance.getState() }&nbsp;${employeeInstance.getZipcode() }</div>
+          		</div>
+          		
+          		<p><label class="label labelLength_10">Phone Number:</label><span>${employeeInstance.getCellphone() }</span></p>
+          		
+          		<p><label class="label labelLength_10">Emaill Address:</label><span>${employeeInstance.getEmail() }</span></p>
+          	</div>
+          	<div class="spaceBelow_20">
+          		<hr>
+          	</div>
+          	<%--
+			<sf:form method="post" modelAttribute="employee" action="addEmployee"  name="newEmployee" class="form hidden">
 			<input type="hidden" name="trigger" value="personal">
 			<input type="hidden" name="punt" value="employeeDepartmentInfo">
 			<input type="hidden" name="currentpage" value="employeePersonal">
@@ -41,7 +63,7 @@
 			<ul class="inline-list-2">
 			<li>
 				<label for="email" >Email Address:</label>
-				<input type="text" class="form-control" id="email" ng-model="username" name="email">		
+				<input type="text" class="form-control" id="emailAddress" name="email">		
 		
 			</li>
 			<li>
@@ -74,47 +96,15 @@
 			</li>
 			<li>
 				<label for="gender" >Gender:</label>
-				<select name="gender" class="form-control">
-				<option value="male"> Male </option>
-				<option value="female"> Female </option>
-				</select>		
+				<script>genderList();</script>			
 			</li>
 			</ul>		
 
 			</sf:form>
+			 --%>
 		</div>        
 </div>
 </div>
 </body>
-<script>
-var pwd = document.getElementById("password").value;
-var cpwd = document.getElementById("cpassword").value;
 
-function validatePassword(){
-
-	var message = document.getElementById("pwdValid");
-	var msg = "";
-	if(cpwd === pwd){
-		return;
-		
-	}
-	if(cpwd !== pwd){
-		msg +="<span class='alert alert-danger'>Both passwords do not match...Try again</span>";
-	}
-	message.innerHTML = msg;
-	
-}
-
-function submitForm(document){
-	var form = document.form;
-	if(cpwd !== pwd){
-		return;
-	}else{
-		form.submit();
-	}
-}
-</script>
-<script src="<c:url value="/resources/js/jquery.js" />" type="text/javascript"></script>
-<script src="<c:url value="/resources/js/bootstrap.js" />" type="text/javascript"></script>
-<script src="<c:url value="/resources/js/application.js" />" type="text/javascript"></script>
 </html>

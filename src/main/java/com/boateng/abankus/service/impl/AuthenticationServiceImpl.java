@@ -16,13 +16,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.boateng.abankus.domain.Employee;
+import com.boateng.abankus.domain.Permission;
 import com.boateng.abankus.domain.Role;
 import com.boateng.abankus.domain.User;
 import com.boateng.abankus.services.AuthenticationService;
 import com.boateng.abankus.utils.SecurityUtils;
 
 @Component
-
 public class AuthenticationServiceImpl  implements AuthenticationService{
 	private final Logger log = Logger.getLogger( AuthenticationServiceImpl.class);
 
@@ -38,36 +38,23 @@ public class AuthenticationServiceImpl  implements AuthenticationService{
 
 
 	@Transactional
-	@SuppressWarnings("unchecked")
-	
-	public User AuthenticateUser(String username,String password) {
-		@SuppressWarnings("unused")
-		UsernamePasswordAuthenticationToken token=new UsernamePasswordAuthenticationToken(username,password);
-		
-		List<User> login = new ArrayList<User>();
-		login = sessionFactory.getCurrentSession()
+	public User AuthenticateUser(String username) {
+		User user = (User) sessionFactory.getCurrentSession()
 				.createQuery("from User where username= :username")
 				.setParameter("username", username)
-				.list();
-		/**** Validating User's Password****/
-		if(login.size() == 1){
-			User user = login.get(0);
-			boolean validate = authenticateUser(password,user.getPassword());
-			if(validate){
-				return user;
-			}
-		}
-		return null;
+				.uniqueResult();
+
+		return user;
 
 	}
 
 	@Transactional
 	@SuppressWarnings("unchecked")
-
-	public List<Role> findRoleByUser(String username) {
-		List<Role> roles = getSessionFactory().getCurrentSession()	
-				 .createQuery("role from UserRole where username= :username")
-				 .setParameter("username", username)
+	@Override
+	public List<Permission> findRoleByUser(String userId) {
+		List<Permission> roles = getSessionFactory().getCurrentSession()	
+				 .createQuery("role from UserPermission where userId= :userId")
+				 .setParameter("username", userId)
 				 .list();
 		return roles;
 	}
@@ -160,6 +147,14 @@ public class AuthenticationServiceImpl  implements AuthenticationService{
 		}
 		Employee emp = (Employee) employee.get(0);
 		return emp;
+	}
+	/* (non-Javadoc)
+	 * @see com.boateng.abankus.services.AuthenticationService#AuthenticateUser(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public User AuthenticateUser(String username, String passwd) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 

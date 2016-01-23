@@ -19,14 +19,8 @@
 <body>
 	<%-- Include page header --%>
 	<jsp:include page="../header.jsp" />
-	<div id="container" class="container-fluid">
+	<div id="container" class="container">
 		<div class="row">
-			<div class="col-sm-2 col-md-2 col-lg-2">
-				<jsp:include page="../sidebar.jsp" />
-			</div>
-			<div class="col-sm-10 col-md-10 col-lg-10 main">
-			
-			</div>
 			<div class="col-sm-10 col-md-10 col-lg-10 main">
 			
 			<h1> Make A Payment</h1>
@@ -45,7 +39,7 @@
 						</sf:form>
 						</div>	
 						<div id="paymentContainer">
-							<div class="col-md-12 col-sm-12  col-lg-6">
+							<div class="col-md-12 col-sm-12  col-lg-8">
 							<c:choose>
 								<c:when test="${not empty customerOrderList }">
 									<sf:form name="submitPayment" id="submitPayment" method="post" action="/abankus/Payments/submitBillPayment">
@@ -84,7 +78,7 @@
 												<option value="check">Check (Cheque)</option>
 												<option value="card">Back Issued Debit Card</option>
 											</select>
-												<div id="bankInfoDiv" class="hidden moveL_30">
+												<div id="bankInfoDiv" class="hidden">
 													<h4 class="page-header">Cheque Details</h4>
 		
 													<label for="bankName">Name of Bank:</label> <input type="text"
@@ -100,23 +94,28 @@
 													<label for="checkNumber" class="platform_form-block">Check/Cheque Number:</label>
 													<input type="text" name="checkNumber"	class="form-state width-50" id="checkNumber" value="" />											
 												</div>	
-												<div id="cardInfoDiv" class="hidden moveL_30">
+												<div id="cardInfoDiv" class="hidden col-sm-12 col-xs-12 col-md-50 row-non">
 													<h4 class="page-header">Credit Card Payment</h4>
-													<label>Name on Card:</label>
-													<input type="text" name="nameOnCard" class="form-state  width-50">
-													<label>Card Number:</label>
-													<input type="text" name="cardNumber" class="form-state  width-50"><span><input name="cardType" type="hidden" value="Visa"/></span>
-													<label>Expiration Date:
-													<input type="text" class="form-state width-40" name="expirationDate" placeholder="MM/YY">
-													</label>
-													
-													<label>Security Number:
-													<input type="text" class="form-state width-40" name="securityNumber">		
-													</label>
-																														
+													<div class="col-sm-12 col-xs-12 col-md-7 row-non">
+														<label>Name on Card:</label>
+														<input type="text" name="nameOnCard" class="form-state width-100">	
+													</div>
+													<div class="col-sm-12 col-xs-12 col-md-7 row-non">												
+														<label>Card Number:</label>
+														<input type="text" name="cardNumber" class="form-state  width-100"><span><input name="cardType" type="hidden" value="Visa"/></span>
+													</div>
+													<div class="clearfix"></div>
+													<div class="col-sm-12 col-xs-12 col-md-3 row-non">
+														<label>Expiration Date:</label>
+														<input type="text" class="form-state width-100" name="expirationDate" placeholder="MM/YY">
+													</div>
+													<div class="col-sm-12 col-xs-12 col-md-4 row-non">
+														<label>Security Number:</label>
+														<input type="text" class="form-state width-100" name="securityNumber">												
+													</div>																													
 												</div>		
 											<div>	
-											<div></div>																		
+											<div class="clearfix"></div>																		
 											<label for="amountPaid">Payment Amount:	</label>
 											</div>	
 											<input type="text" name="amountPaid" id="amountPaid" onblur="javascript:formatAmount('amountPaid',this)" value="" class="form-state" placeholder="Amount">
@@ -126,7 +125,7 @@
 											<input type="hidden" name="customer" value="${customer.getCustomerId() }"/>	
 											<p>
 												<input type="submit" onclick="javascript:validatePaymentForm(); return false;" value="Submit Payment" id="btnSubmitPayment" class="btn btn-success"/>		
-												<a href="<c:url value="/platform/dashbaord" />" class="btn btn-danger moveL_20">Cancel</a>	
+												<a href="<c:url value="/platform/index" />" class="btn btn-danger moveL_20">Cancel</a>	
 											</p>								
 									</div>
 	

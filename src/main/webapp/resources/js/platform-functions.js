@@ -30,7 +30,7 @@ function isBlank(str) {
  */
 function isAlphaNumeric(str){
 	var alphanumeric = /^[a-zA-Z0-9]+$/i;
-	return alphanumeric.test(str);
+	return this.isBlank(str) && alphanumeric.test(str);
 }
 
 /**

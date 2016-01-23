@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Abankus Corporation - Sales Connection</title>
+<title>Abankus Payments - Edit Employee Information</title>
 <link href="<c:url value="/resources/css/bootstrap.css" />" rel="stylesheet"/>
 <link href="<c:url value="/resources/css/platform.css" />" rel="stylesheet"/>
 <script src="<c:url value="/resources/js/jquery.js" />" type="text/javascript"></script>
@@ -18,7 +18,7 @@
 	<%-- Include page header --%>
 	<jsp:include page="../header.jsp"/>
 	
-		<div class="container">
+		<div id="container" class="container">
 			<div class="row">
 					<div class="col-sm-12 col-md-12 col-lg-12 center-block">
 				          <h1>Update Information</h1>

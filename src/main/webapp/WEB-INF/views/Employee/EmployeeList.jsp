@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Abankus Corporation - Sales Connection</title>
+<title>Abankus Payment - Staff List</title>
 <link href="<c:url value="/resources/css/bootstrap.css" />" rel="stylesheet"/>
 <link href="<c:url value="/resources/css/platform.css" />" rel="stylesheet"/>
 <link href="<c:url value="/resources/css/fonts-awesome/font-awesome.css" />" rel="stylesheet"/>
@@ -18,12 +18,9 @@
 <%-- Include page header --%>
 <jsp:include page="../header.jsp"/>
 
-<div id="container" class="container-fuild">
+<div id="container" class="container">
 	<div class="row">
-			<div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
-				<jsp:include page="../sidebar.jsp"/>
-			</div>	
-			<div class="col-sm-12 col-md-10 col-lg-10 center-block main">
+			<div class="col-sm-12 col-md-12 col-lg-12 center-block main">
 
 			<%-- Filter List --%>
 				<div>
@@ -47,10 +44,10 @@
 									<td>${TheCount.count}</td>
 									<td>${empList.firstname} ${empList.middlename} ${empList.lastname}</td>
 									<td>
-										${empList.address1 }&nbsp;${empList.address1 }
-										<p>${empList.city }${empList.state }${empList.zipcode }</p>
+										${empList.address1 }<br>${empList.address2 }
+										<p>${empList.city }&nbsp;${empList.state }&nbsp;${empList.zipcode }</p>
 									</td>
-									<td>${empList.cellphone } ${empList.email}</td>
+									<td>${empList.cellphone }<br/>${empList.email}</td>
 									<td><a href="" class="btn btn-success"><i class="fa fa-eye moveR_10"></i>Select</a></td>
 								</tr>
 							</c:forEach>

@@ -19,13 +19,10 @@
 <body>
 <%-- Include page header --%>
 <jsp:include page="../header.jsp"/>
-<div id="container" class="container-fluid" >
-	<div class="row">
-			<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
-				<jsp:include page="../sidebar.jsp"/>
-			</div>		
-<div class="col-sm-9 col-md-9 col-lg-9 main">
-          <h1>Client Services - Prospective Customer</h1>
+<div id="container" class="container" >
+	<div class="row">	
+		<div class="col-sm-12 col-md-9 col-lg-9 main">
+          <h1>Add Product</h1>
 			<hr>
 			<%-- Error or Information --%>
 			<div class="info_header">
@@ -36,9 +33,11 @@
 				</c:if>
 				<c:if test="${error != null }">
 					<div class="errorContainer">
+						<ul>
 						<c:forEach var="i" items="${error }" varStatus="errors">
-							${errors}
+							<li>${i}</li>
 						</c:forEach>
+						</ul>
 					</div>
 				</c:if>
 			</div>
@@ -65,7 +64,7 @@
 					<p>
 						<input type="submit" id="btnCreateProduct" value=" Add Product" class="btn btn-success">
 						
-						<a href="#"> Cancel </a>
+						<a href="<c:url value="/products/listProduct" />"> Cancel </a>
 					</p>
 				</form>
 				</div>

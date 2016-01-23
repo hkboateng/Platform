@@ -2,16 +2,16 @@
  <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
  <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!-- Page Header -->
-<nav id="" class="navbar  navbar-default navbar-static-top">
+<nav id="" class="navbar  navbar-default navbar-static-top hideen-xs">
       <div class="container-fluid">
         <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#stickyNavbar" aria-expanded="false" aria-controls="stickyNavbar">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/abankus/platform/index">Abankus Connection</a>
+          <a class="navbar-brand" href="/abankus/platform/index">Abankus Payments</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
 
@@ -38,17 +38,8 @@
     </nav>
   <nav id="stickyNav" class="navbar navbar-blue ">
   <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand sr-only" href="index">Abankus Payments</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-		<ul id="stickyMenu" class="nav navbar-nav navbar-right hidden">
+        <div id="stickyNavbar" class="navbar-collapse collapse">
+		<ul id="stickyMenu" class="nav navbar-nav navbar-right">
             <li id="">
 	            <a id="aEmployeeInfoLink" href="#" class=" dropdown-toggle header-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
 		          <i class="fa fa-user fa-md moveR_10"></i>${employee.firstname}&nbsp;${employee.lastname}
@@ -67,7 +58,7 @@
           </ul>
           <ul class="nav navbar-nav">
             <li>
-            	<a href="/abankus/platform/dashboard"><i class="fa fa-home fa-lg moveR_10"></i>DashBoard</a>
+            	<a href="<c:url value="/platform/index" /> "><i class="fa fa-home fa-lg moveR_10"></i>DashBoard</a>
             </li>
             
             <li>
@@ -81,7 +72,6 @@
 		          <li><a href="/abankus/products/listProduct"><i class="fa fa-sign-out fa-lg moveR_5"></i>List Products</a></li>
 		        </ul>            
             </li>            
-			<sec:authorize access="hasRole('sales-manager')">
             <li>
 	            <a id="aEmployeeInfoLink" href="#" class=" dropdown-toggle header-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
 		          <i class="glyphicon glyphicon-tasks moveR_10"></i>Sale Transaction
@@ -93,15 +83,13 @@
 		          <li><a href="/abankus/employee/listEmployee"><i class="fa fa-sign-out fa-lg moveR_5"></i>List Employees</a></li>
 		        </ul>            
             </li>			
-			</sec:authorize>
-			<sec:authorize access="hasRole('EMPLOYEE')">
 	            <li>
 		            <a id="aEmployeeInfoLink" href="#" class=" dropdown-toggle header-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
 			          <i class="glyphicon glyphicon-tasks moveR_10"></i>Payments and Collection
 			          <span class="caret"></span>
 			        </a> 
 					<ul id="menu1" class="dropdown-menu" aria-labelledby="aEmployeeInfoLink">
-			          <li><a href="/abankus/registration/employee"><i class="fa fa-pencil-square-o fa-lg moveR_5"></i>Accept Payment</a></li>
+			          <li><a href="<c:url value="/Payments/QuickPayment" />"><i class="fa fa-pencil-square-o fa-lg moveR_5"></i>Accept Payment</a></li>
 			          <li role="separator" class="divider"></li>
 			          <li><a href="/abankus/employee/listEmployee"><i class="fa fa-sign-out fa-lg moveR_5"></i>Search for Transaction</a></li>
 					  <li><a href="#"><span class="glyphicon glyphicon-list-alt moveR_20"></span>Transaction History</a></li>
@@ -120,12 +108,10 @@
 				        <sf:form name="makeCustomerPayment" method="post" action="">
 				          <input type="hidden" value="${customer.customerNumber }" name="customerNumber"/>
 				        </sf:form>		                 
-	            </li>			
-			</sec:authorize>			
+	            </li>						
             <li>
 	            <a id="aClientInfoLink" href="#" class=" dropdown-toggle header-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-		          <i class="fa fa-user fa-md moveR_10"></i>Client Services
-		          <span class="caret"></span>
+		          <i class="glyphicon glyphicon-cog moveR_10"></i>Client Services
 		        </a> 
 				<ul id="menu1" class="dropdown-menu" aria-labelledby="aClientInfoLink">
 		          <li><a href="/abankus/customer/createOrders"><i class="fa fa-pencil-square-o fa-lg moveR_5"></i>Create Orders</a></li>
@@ -136,8 +122,22 @@
 		        </ul>		                  
             </li>
           	<li class="dropdown">
-          		<a id="searchBtn" href="<c:url value="/platform/platformSearch" />" class="activateLink"><span class="glyphicon glyphicon-search moveR_10"></span>Payment Transaction</a>
-        	</li>        
+          		<a id="searchBtn" href="<c:url value="/platform/platformSearch" />" class="activateLink"><span class="glyphicon glyphicon-search moveR_10"></span>Search</a>
+        	</li>  
+			<li id="" class="hidden-sm hidden-md hidden-lg">
+	            <a id="aEmployeeInfoLink" href="#" class=" dropdown-toggle header-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+		          <i class="fa fa-user fa-md moveR_10"></i>${employee.firstname}&nbsp;${employee.lastname}
+		          <span class="caret"></span>
+		        </a>
+	            <ul id="menu1" class="dropdown-menu" aria-labelledby="aEmployeeInfoLink">
+		          <li><a href="/abankus/employee/editEmployee?employeeId=${employee.employeeId}&jumboId=${employee.id}"><i class="fa fa-pencil-square-o fa-lg moveR_5"></i>Update your Profile</a></li>
+		          <sec:authorize access="hasRole('supervisor')">
+			          <li><a href="<c:url value="/platform/settings" />"><i class="fa fa-cogs fa-lg moveR_5"></i></a>Account Settings</li>
+		          </sec:authorize>
+		          <li role="separator" class="divider"></li>
+		          <li><a href="<c:url value="/platform/logout"/>"><i class="fa fa-sign-out fa-lg moveR_5"></i>Logout</a></li>
+		        </ul>
+            </li>        	      
           </ul>
           </div>        
   </div>
@@ -167,9 +167,7 @@ $(document).ready(function() {
 		});
 	});
 	
-function closeSearchContainer(){
-	toggleSearchContainer();
-}	
+	
 function makePayment(url,form){
 	if(isEmpty(url) || !isAlphaNumeric(url)){
 		return false;

@@ -49,6 +49,7 @@
 				<script>
 					periodList();
 				</script>
+				<div class="clearfix"></div>
 			</div>
 			<div class="col-sm-12 col-md-12 col-lg-12 center-block main">
 			
@@ -84,38 +85,12 @@
 				         </div>	
 				         
 				         <div id="totalDayPayment" class="col-lg-3 col-md-4">
-					         <span class="lead">Payments collected in <span id="todayId"></span></span>
-					         <table class="table table-bordered ">
-					         	<thead>
-					         		<tr class="success">
-						         		<th>Transactions Processed</th>
-					         		</tr>
-					         	</thead>
-					         	<tbody id="transactionToday">
-					         	
-					         	</tbody>
-					         </table>
+					         <div class="panel-heading">Payments collected in <span id="todayId"></span></div>
+								  <span id="paymentGaugeContainer">
+								  
+								  </span>
 				         </div>
-				         <div class="clearfix"></div>
-				         <!-- Guage -->
-					 <div class="col-md-3 col-lg-4">
-					 	<div class="panel panel-default">
-						  	<!-- Default panel contents -->
-						  	<div class="panel-heading">Number of Customers</div>
-						  </div>
-						  <span id="customerGaugeContainer">
-						  
-						  </span>
-						  <span id="paymentGaugeContainer">
-						  
-						  </span>					  
-					  	
-					 </div>		
-					 <div class="col-md-9 col-lg-8">
-					 	<div id="barChart">
-						
-						</div>
-					 </div>		         				         		          
+		         				         		          
 			          </div>
 			          <div class="col-lg-3 col-md-3">
 					         <span class="lead">Payments for each month in <span class="yearId"></span></span>
@@ -132,7 +107,13 @@
 					         </table>	          
 			          </div>				          
 			          </div>
-
+				         <div class="clearfix"></div>
+	
+					 <div class="col-md-12 col-lg-12">
+					 	<div id="barChart">
+						
+						</div>
+					 </div>
 					 <div class="clear"></div>
 
 					 <div class="col-md-3">
@@ -165,20 +146,19 @@
 		
 	});
 	function createGauges()	{
-		createGauge("customer", "Customer");
-		createGauge("payment", "Payments");
+		//createGauge("customer", "Customer");
+		createGauge("payment", "");
 	}
 	function loadEmployeeCustomers(){
 		
 	}
 	function changeAnalystics(year,month){
 		graph(year)
-		loadYearPayments(year);
 		countTodayPayment();
+		loadYearPayments(year);
 		loadMonthAndYearPayments(month,year);
-		loadTotalCustomerCount();
 	}
-	///customers/countTotalCustomers
+
 	function loadTotalCustomerCount(){
 		$.ajax({
 			url: 'countTotalCustomers',
@@ -283,8 +263,7 @@
 			},
 			dataType: 'json',
 			success: function(result){
-				Number(result);
-				updateGauges('payments',result);
+				updateGauges("payment",result);
 				var table = "";
 						table +="<tr>";
 						table +="<td>"+result+"</td>";
@@ -305,6 +284,7 @@
 	}
 	
 	function graph(year){
+		$("#barChart").html(" ");
 		var margin = {top: 20, right: 20, bottom: 70, left: 40},
 	    width = 800 - margin.left - margin.right,
 	    height = 600 - margin.top - margin.bottom;
@@ -328,14 +308,14 @@
 	var color = d3.scale.category10();
 	
 	var svg = d3.select("#barChart").append("svg")
-	    .attr("width", width + margin.left + margin.right)
+	    .attr("width", "100%")
 	    .attr("height", height + margin.top + margin.bottom)
 	  .append("g")
 	    .attr("transform", 
 	          "translate(" + margin.left + "," + margin.top + ")");
 
 	d3.json("http://localhost:8080/paymenthub/paymentservice/findPaymentByOrderMonthAndYear?year="+year, function(error, data) {
-		console.log(data);
+
  		if(data.length > 0){
 			  x.domain(data.map(function(d) { return d[0]; }));
 			  y.domain([0, d3.max(data, function(d) { return d[2]; })]);

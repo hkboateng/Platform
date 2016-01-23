@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
+import org.springframework.security.core.GrantedAuthority;
+
 import java.util.List;
 
 
@@ -14,7 +16,7 @@ import java.util.List;
 @Entity
 @Table(name="roletbl")
 @NamedQuery(name="Role.findAll", query="SELECT r FROM Role r")
-public class Role implements Serializable {
+public class Role implements Serializable, GrantedAuthority {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -60,6 +62,15 @@ public class Role implements Serializable {
 	public Role(String role) {
 		super();
 		this.role = role;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.springframework.security.core.GrantedAuthority#getAuthority()
+	 */
+	@Override
+	public String getAuthority() {
+		// TODO Auto-generated method stub
+		return this.getRole();
 	}
 
 

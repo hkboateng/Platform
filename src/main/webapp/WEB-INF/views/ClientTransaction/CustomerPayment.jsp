@@ -72,11 +72,11 @@
 											<label>Card Number:</label>
 											<input type="text" name="nameOnCard" class="form-state">
 											<label>Expiration Date:</label>
-											  <div class="col-xs-1">
-											    <input type="text" class="form-state " placeholder=".col-xs-2">
+											  <div class="">
+											    <input type="text" class="form-state " placeholder="">
 											  </div>
-											  <div class="col-xs-1">
-											    <input type="text" class="form-state " placeholder=".col-xs-3">
+											  <div class="">
+											    <input type="text" class="form-state " placeholder="">
 											  </div>																				
 										</div>
 										<label for="paymentSchedule">Payment Schedule:</label>
@@ -104,6 +104,12 @@
 											<input type="hidden" name="unicode" id="cust" value="${customerOrder.getCustomer().customerId}">
 											<input type="hidden" name="amountleft" id="amountleft" value="${amountLeft}"/>
 											</div>	
+											<div class="col-md-6">
+												<div class="page-header">
+													<h2>Order Details</h2>
+												</div>
+												<div><label class="labelLength_20">Product Name:</label><span>${product.getProductName()}</span></div>
+											</div>
 												<!-- Review and Submit Customer Payment -->
 												<div class="hidden col-md-10" id="paymentSummary">
 													<p class="lead">By entering your Pin  Code, you are agreeing to pay $<span id="paymentamountSummary"></span> today <fmt:formatDate value="${date}" type="both" timeStyle="long" dateStyle="long" /> with payment in the form of <span id="paymentFormSummary"></span> for the items ${product.getProductName()}.

@@ -1601,17 +1601,18 @@ pre code {
 }
 @media (min-width: 768px) {
   .container {
-    width: 750px ;
+    width: 90% ;
   }
 }
 @media (min-width: 992px) {
   .container {
-    width: 970px ;
+    width: 96% ;
   }
 }
 @media (min-width: 1200px) {
   .container {
-    width: 1192px; 
+    width: 1200px; 
+    max-width:96%;
   }
 }
 .container-fluid {
@@ -4593,7 +4594,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   background-color: #dddddd;
 }
 .navbar-default .navbar-toggle .icon-bar {
-  background-color: #888888;
+  background-color: #ffffff;
 }
 .navbar-default .navbar-collapse,
 .navbar-default .navbar-form {
@@ -4602,8 +4603,8 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .navbar-default .navbar-nav > .open > a,
 .navbar-default .navbar-nav > .open > a:hover,
 .navbar-default .navbar-nav > .open > a:focus {
-  background-color: #e7e7e7;
-  color: #555555;
+  background-color: #ffffff;
+  color: #0080ff;
 }
 @media (max-width: 767px) {
   .navbar-default .navbar-nav .open .dropdown-menu > li > a {

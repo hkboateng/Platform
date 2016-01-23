@@ -289,6 +289,7 @@
 </div> 
 </div>
 </body>
+<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 <script>
 $(document).ready(function(){
 	$('#orderHistoryTable').DataTable();

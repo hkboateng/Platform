@@ -1,6 +1,9 @@
 package com.boateng.abankus.domain;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,9 +12,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
+import javax.persistence.Transient;
 
-import org.hibernate.validator.constraints.Email;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 
 /**
@@ -21,7 +25,7 @@ import org.hibernate.validator.constraints.Email;
 @Entity
 @Table(name="usrtbl")
 @NamedQuery(name="User.findAll", query="SELECT l FROM User l")
-public class User implements Serializable{
+public class User implements Serializable, UserDetails{
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -33,13 +37,20 @@ public class User implements Serializable{
 
 	private String username;
 	
-	private String employeeId;
-	
-	private boolean enabled;
-	
-	@Email
-	@NotNull
-	private String emailAddress;
+	@Transient
+    private List<Permission> authorities;
+        
+    private String emailAddress;
+    
+    private String employeeId;
+    
+    private boolean accountNonExpired = true;
+    
+    private boolean accountNonLocked = true;
+    
+    private boolean credentialsNonExpired = true;
+    
+    private boolean enabled = true;
 
 	public User() {
 	}
@@ -52,11 +63,10 @@ public class User implements Serializable{
 	public User(String username, String password, String emailAddress,
 		boolean enabled) {
 		if(username !=null && !username.isEmpty()){
-		this.username = username;
+			this.username = username;
 		}
 		this.password = password;
 		this.setEnabled(enabled);
-		this.emailAddress = emailAddress;
 	}
 
 	/**
@@ -101,7 +111,43 @@ public class User implements Serializable{
 
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
+	} 
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		// TODO Auto-generated method stub
+		return this.authorities;
 	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	public void setAccountNonExpired(boolean accountNonExpired) {
+		this.accountNonExpired = accountNonExpired;
+	}
+	
+	public void setAccountNonLocked(boolean accountNonLocked) {
+		this.accountNonLocked = accountNonLocked;
+	}
+	
+	public void setCredentialsNonExpired(boolean credentialsNonExpired) {
+		this.credentialsNonExpired = credentialsNonExpired;
+	}
+	
 	public String getEmailAddress() {
 		return emailAddress;
 	}
@@ -114,6 +160,8 @@ public class User implements Serializable{
 	public void setEmployeeId(String employeeId) {
 		this.employeeId = employeeId;
 	}
+
+
 
 
 
