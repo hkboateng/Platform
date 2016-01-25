@@ -102,8 +102,11 @@
 							</div>
 					</div>	  
 				  </div>			
-				 <c:if test="${not empty paymentsearch_message }">
-					<div class="alert alert-danger col-lg-8" role="alert">
+				 <c:if test="${not empty searchError}">
+					<div class="page-header">
+						<h1>Search Results</h1>
+					</div>				 
+					<div class="alert alert-danger col-lg-8" role="alert">					
 						 ${searchError }
 					</div>
 				</c:if>	

@@ -83,8 +83,8 @@ public class PaymentTransaction implements Serializable {
 			this.setEmployeeName(sbr.toString());
 		}
 		if(payment.getPaymentMethod().getPaymentType().equals("check")){
-			this.bankName = payment.getPaymentMethod().getBankinformation().getBankName();
-			this.checkNumber = payment.getPaymentMethod().getBankinformation().getCheckNumber();
+			this.bankName = (payment.getPaymentMethod().getBankinformation() != null) ? payment.getPaymentMethod().getBankinformation().getBankName() : "";
+			this.checkNumber = (payment.getPaymentMethod().getBankinformation() != null) ? payment.getPaymentMethod().getBankinformation().getCheckNumber() : "";
 		}
 		this.paymentAmount = new BigDecimal(payment.getAmountPaid());
 		this.customerName = payment.getClientorder().getCustomer().getCustomerName();		

@@ -1,16 +1,16 @@
 package com.boateng.abankus.controller;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -24,17 +24,20 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.boateng.abankus.domain.Customer;
 import com.boateng.abankus.domain.Employee;
+import com.boateng.abankus.domain.Permission;
 import com.boateng.abankus.domain.Role;
 import com.boateng.abankus.domain.User;
+import com.boateng.abankus.exception.PlatformException;
 import com.boateng.abankus.processors.EmployeeServiceProcessor;
 import com.boateng.abankus.services.AuthenticationService;
 import com.boateng.abankus.services.EmployeeService;
+import com.boateng.abankus.servlet.PlatformAbstractServlet;
 
 @Controller
 @RequestMapping("/registration")
-public class RegistrationController {
+public class RegistrationController  extends PlatformAbstractServlet  {
 	
-	private static final Logger logger = LoggerFactory.getLogger(RegistrationController.class);
+	private static final Logger logger = Logger.getLogger(RegistrationController.class.getCanonicalName());
 	
 	@Autowired
 	@Qualifier(value="employeeSvcImpl")
@@ -46,54 +49,47 @@ public class RegistrationController {
 	
 	//private CustomerService customerSvc;
 	@RequestMapping(value = "/employee", method = RequestMethod.GET)
-	public String employee(Locale locale,Model model) {
-		logger.info("User view Registation page {}.", locale);
-		
-		Date date = new Date();
-		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
-		
-		String formattedDate = dateFormat.format(date);
-		
-		model.addAttribute("serverTime", formattedDate );
+	public String employee(HttpServletRequest request,Model model) throws PlatformException {
+		logger.info(logActivity("is accessing the Add New Employee page.",getEmployeeInSession(request)));
 		
 		return "Employee/AddNewEmployee";
 	}
 	
 	@RequestMapping(value="addEmployee", method=RequestMethod.POST)
-	public String addEmployee(@Valid Employee employee,BindingResult result,HttpServletRequest request,RedirectAttributes redirectAttributess){
+	public String addEmployee(@Valid Employee employee,BindingResult result,HttpServletRequest request,RedirectAttributes redirectAttributess) throws IOException{
 		HttpSession session = request.getSession();
 		if(result.hasErrors()){
 			redirectAttributess.addFlashAttribute("validationError", result.getAllErrors());
-			return "redirct:/employee";
+			return "redirect:/registration/employee";
 		}
 		boolean isEmailUsed =  authenticationServiceImpl.doEmailExist((employee.getEmail()));
 		if(isEmailUsed){
 			redirectAttributess.addFlashAttribute("errors", "Email Address already in use.");
-			return "redirct:/employee";
+			return "redirect:/registration/employee";
 		}	
 		
 		logger.info("Saving New Employee data");
-		List<Role> roleList = authenticationServiceImpl.getAllRoles();
-		if(roleList.size() > 0){
-			session.setAttribute("roleList", roleList);
+		List<Permission> permissionList = authenticationServiceImpl.getEmployeePermissions();
+		if(permissionList.size() > 0){
+			redirectAttributess.addFlashAttribute("permissionList", permissionList);
 		}
-		session.setAttribute("employee", employee);
-		return "redirct:/security";
+		redirectAttributess.addFlashAttribute("employee", employee);
+		return "redirect:/registration/security";
 	}
 	
-	@RequestMapping(value="addEmployeeLogin", method=RequestMethod.POST)
+	@RequestMapping(value="/addEmployeeLogin", method=RequestMethod.POST)
 	public String addEmployeeLogin(@Valid User login, BindingResult result,HttpServletRequest request,RedirectAttributes redirectAttributess){
 		HttpSession session = request.getSession();
 		String[] roleId = request.getParameterValues("role");
 		if(result.hasErrors()){
 			redirectAttributess.addFlashAttribute("validationError", result.getAllErrors());
-			return "redirct:/security";
+			return "redirect:/registration/security";
 		}
 		
 		boolean usernameExist =  authenticationServiceImpl.doEmailExist((login.getUsername()));
 		if(usernameExist){
 			redirectAttributess.addFlashAttribute("error_message", "Username already exist.");
-			return "redirct:/security";
+			return "redirect:/registration/security";
 		}
 		
 		Employee employee = (Employee) session.getAttribute("employee");
@@ -109,11 +105,11 @@ public class RegistrationController {
 			
 		}
 		request.setAttribute("success", "Congratulations on registering. Please Login !!!");
-		return "redirct:/employee";
+		return "redirect:/registration/employee";
 	}
 	
-	@RequestMapping(value="/security", method=RequestMethod.POST)
-	public String securityInfo(){
+	@RequestMapping(value="/security", method=RequestMethod.GET)
+	public String securityInfo(HttpServletRequest request){
 		return "Employee/SecurityInfo";
 	}
 	@RequestMapping(value="newCustomer", method=RequestMethod.GET)

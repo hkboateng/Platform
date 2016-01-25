@@ -107,11 +107,11 @@
 													<div class="clearfix"></div>
 													<div class="col-sm-12 col-xs-12 col-md-3 row-non">
 														<label>Expiration Date:</label>
-														<input type="text" class="form-state width-100" name="expirationDate" placeholder="MM/YY">
+														<input id="expirationDate" type="text" class="form-state width-100" name="expirationDate" placeholder="MM/YY">
 													</div>
 													<div class="col-sm-12 col-xs-12 col-md-4 row-non">
 														<label>Security Number:</label>
-														<input type="text" class="form-state width-100" name="securityNumber">												
+														<input id="securityNumber" type="text" class="form-state width-100" name="securityNumber">												
 													</div>																													
 												</div>		
 											<div>	
@@ -393,58 +393,7 @@
 		}
 	}
 
-	function validatePaymentForm(){
-		$("#submitPayment").validate({
-			onsubmit:false,
-			rules : {
-				amountPaid: {
-					required :true,
-					number:true
-				},
-				paymentMethod : {
-					required: true
-				},
-				checkNumber : {
-					required: true,
-					digits: true
-				},
-				bankCustName : {
-					required: true
-				},
-				bankRoutingNumber : {
-					required: true,
-					digits: true
-				},
-				bankAccountNumber: {
-					required: true,
-					digits: true
-				},
-				confirmAccountNumber: {
-					required: true,
-					equalTo: '#bankAccountNumber'
-				},
-				bankName: {
-					required: true
-				}
-			},
-			messages : {
-				amountPaid : {
-					required: "Enter the amount that the Customer is paying",
-					numbers: "Enter a valid Payment Amount"
-				},
-				paymentMethod : {
-					required: 'Select a Payment Method to continue'
-				},
-				checkNumber : {
-					required : 'Enter the Check Number',
-					digits: 'Enter a valid check number'
-				}
-			}
-		});
-		if(!$('#submitPayment').valid())
-			 return false;
-		 return true;			
-	}
+
 
 	function isPaymentAmountValid(paymentAmount,maxAmount){
 		

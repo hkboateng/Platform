@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -63,6 +64,7 @@ public class PaymentController extends PlatformAbstractServlet  {
 	private HttpSession session;
 	
 
+	//@Secured("ROLE_ACCEPT_PAYMENT")
 	@RequestMapping(value = "/QuickPayment", method = RequestMethod.GET)
 	public String payment(Model model){
 		logger.info("Viewing Quick Payment");
@@ -101,6 +103,7 @@ public class PaymentController extends PlatformAbstractServlet  {
 		return "redirect:/Payments/QuickPayment";
 	}
 	
+	//@Secured("ACCEPT_PAYMENT")
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/makeCustomerOrderPayment", method = RequestMethod.POST)
 	public String makeCustomerOrderPayment(HttpServletRequest request,Model model,RedirectAttributes redirectAttributess) throws NoSuchAlgorithmException, NoSuchPaddingException, PlatformException{
@@ -165,6 +168,7 @@ public class PaymentController extends PlatformAbstractServlet  {
 		return status;
 	}
 	
+	//@Secured("ROLE_ACCEPT_PAYMENT")
 	@RequestMapping(value = "/submitBillPayment", method = RequestMethod.GET,produces="application/json")
 	@ResponseBody
 	public String submitBillPayment(HttpServletRequest request,Model model) throws PlatformException{

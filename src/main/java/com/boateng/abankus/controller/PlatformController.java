@@ -124,33 +124,6 @@ public class PlatformController  extends PlatformAbstractServlet {
 		return "dashboard/Settings";
 	}	
 	
-	/**
-	@RequestMapping(value = "/platform/dashboard", method = RequestMethod.GET)
-	public String dashbaord(Locale locale, Model model,HttpServletRequest request) {
-		HttpSession session = request.getSession(false);
-		
-				
-		try {
-				
-			loadUserIntoSession(request);
-			loadEmployeeIntoSessionByUsername(request);
-			Employee employee = (Employee) session.getAttribute(EmployeeFields.EMPLOYEE_SESSION);
-			//int employeeId = employee.getId();	
-			loadProductIntoSession(request);
-			employee = null;
-			//List<Customer> customerList = employeeServiceImpl.findAllCustomerByEmployeeId(employeeId);
-			//model.addAttribute(EmployeeFields.EMPLOYEE_CUSTOMER_LIST, customerList);
-			//customerList = null;
-		} catch (Exception e) {
-			PlatformException ace  = new PlatformException();
-			ace.logger(Level.WARNING,e.getMessage(), e);
-
-		}
-		
-		return "dashboard/dashboard";
-	}	
-	**/
-	
 	@RequestMapping(value = "/platform/loadTodayTransactionHistory", method = RequestMethod.GET,produces="application/json")
 	@ResponseBody
 	public String loadTransactionHistory(HttpServletRequest request) throws PlatformException {
@@ -274,7 +247,7 @@ public class PlatformController  extends PlatformAbstractServlet {
 		Customer customer = null;
 		if(ValidationUtils.isValid(customerIdentity) && ValidationUtils.isEmailValid(customerIdentity)){
 			customer = customerServiceImpl.findCustomerByEmail(customerIdentity);
-		}else if(ValidationUtils.isValid(customerIdentity) && ValidationUtils.isNumeric(customerIdentity)){
+		}else if(ValidationUtils.isValid(customerIdentity) && ValidationUtils.isAlphaNumeric(customerIdentity)){
 			customer = customerServiceProcessor.findCustomerByCustomerNumber(customerIdentity);
 			if(customer == null){
 				try{

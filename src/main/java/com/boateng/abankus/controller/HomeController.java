@@ -30,7 +30,7 @@ public class HomeController {
 	}
 
 	@RequestMapping(value ="/", method = RequestMethod.GET)
-	public String index(Locale locale, Model model) {
+	public String index(Locale locale, Model model,HttpServletRequest request) {
 		logger.info("Welcome home! The client locale is {}.");
 
 		

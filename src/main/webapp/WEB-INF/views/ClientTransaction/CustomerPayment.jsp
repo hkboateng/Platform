@@ -21,14 +21,17 @@
 <body>
 	<%-- Include page header --%>
 	<jsp:include page="../header.jsp" />
-	<div id="container" class="container-fluid">
+	<div id="container" class="container">
 		<div class="row">
-			<div class="col-sm-3 col-md-3 col-lg-3">
-				<jsp:include page="../sidebar.jsp" />
-			</div>
+						<div class="page-header col-sm-12 col-md-12 col-lg-12">
+							<span class="lead" id="paymentHeading"> Make A Payment</span>
+							<div class="pull-right">
+								<c:set var="cust" value="${customerOrder.getCustomer().getCustomerNumber()}"/>
+								<a href="javascript:document.viewCustomerProfileBckBtn.submit()" class="">Back to Profile Page</a>
+							</div>				
+						</div>		
 			<div class="col-sm-9 col-md-9 col-lg-9 main">
-			<h1 id="paymentHeading"> Make A Payment</h1>
-			<hr class="line1">
+			
 						<div class="paymentContainer" id="paymentContainer">
 						<div class="platform-alert" id="paymentMessage">
 						${validation }
@@ -39,76 +42,81 @@
 						<c:choose>
 							<c:when test="${not empty customerOrder }">
 								
-									<sf:form name="customerPaymentForm" action="submitOrderPayment" method="post">
-									<div class="col-md-6" id="paymentEntry">
+									<sf:form name="customerPaymentForm" id="submitPayment" action="submitOrderPayment" method="post">
+										<div class="spaceBelow_10">
+											<label class="labelLength_10">Product Name:</label><span>${product.getProductName()}</span>
+										</div>									
+									<div class="col-md-8" id="paymentEntry">
 										<label for="orderNumber">Order Number:</label>
-										<input type="text"	name="orderNumber" id="orderNumber" class="form-state  width-75" value="${billing.getClientOrderId().getOrderNumber() }" /> 
+										<input type="text"	name="orderNumber" id="orderNumber" disabled class="form-state  width-75" value="${billing.getClientOrderId().getOrderNumber() }" /> 
 										<label for="paymentMethod">Select Payment	Type:</label> 
 										<select name="paymentMethod" id="paymentMethod" class="form-state"	onchange="javascript:showBankCardInfoDiv(this);">
 											<option value="cash">Cash</option>
 											<option value="check">Bank Draft (Check)</option>
 											<option value="card">Credit/Debit Card</option>
 										</select>
-										<div id="bankInfoDiv" class="hidden moveL_30">
+										<div id="bankInfoDiv" class="hidden moveL_30 col-sm-12 col-xs-12 col-md-12 row-non">
 											<h4 class="underline">Cheque Details</h4>
+											<div class="col-sm-12 col-xs-12 col-md-7 row-non">
+												<label for="bankCustName">Name on Bank Account:</label>
+												<input type="text" name="bankCustName"	class="form-state width-100" id="bankCustName" value="" />											
 
-											<label for="bankName">Name of Bank:</label> 
-											<input type="text"	name="bankName" class="form-state width-100" id="bankName" value="" />
-											<label for="bankAccountNumber">Account Number:</label>
-											<input type="text" id="bankAccountNumber" name="bankAccountNumber"	class="form-state  width-100" />
-											<div class="help-text bold">Confirm Account Number</div>
-											<input type="text" id="confirmAccountNumber" name="confirmAccountNumber" class="form-state  width-100" />
-											<label for="bankRoutingNumber">Routing Number:</label>
-											<input type="text"	id="bankRoutingNumber" name="bankRoutingNumber"	class="form-state  width-100" />
-											<label for="bankCustName">Name on Bank Account:</label>
-											<input type="text" name="bankCustName"	class="form-state width-100" id="bankCustName" value="" />
-											<label for="checkNumber">Check/Cheque Number:</label>
-											<input type="text" name="checkNumber"	class="form-state width-100" id="checkNumber" value="" />											
+											</div>
+											<div class="col-sm-12 col-xs-12 col-md-7 row-non">
+												<label for="bankAccountNumber">Account Number:</label>
+												<input type="text" id="bankAccountNumber" name="bankAccountNumber"	class="form-state  width-100" />
+											</div>
+											<div class="col-sm-12 col-xs-12 col-md-7 row-non">
+												<div class="help-text bold">Confirm Account Number</div>
+												<input type="text" id="confirmAccountNumber" name="confirmAccountNumber" class="form-state  width-100" />
+											</div>
+											<div class="col-sm-12 col-xs-12 col-md-7 row-non">
+												<label for="bankRoutingNumber">Routing Number:</label>
+												<input type="text"	id="bankRoutingNumber" name="bankRoutingNumber"	class="form-state  width-100" />
+											</div>
+											<div class="col-sm-12 col-xs-12 col-md-7 row-non">
+												<label for="bankName">Name of Bank:</label> 
+												<input type="text"	name="bankName" class="form-state width-100" id="bankName" value="" />
+											</div>
+											<div class="col-sm-12 col-xs-12 col-md-7 row-non">
+												<label for="checkNumber">Check/Cheque Number:</label>
+												<input type="text" name="checkNumber"	class="form-state width-100" id="checkNumber" value="" />
+											</div>											
 										</div>
-										<div id="cardInfoDiv" class="hidden moveL_30">
-											<h4 class="underline">Credit Card Payment</h4>
-											<label>Name on Card:</label>
-											<input type="text" name="nameOnCard" class="form-state">
-											<label>Card Number:</label>
-											<input type="text" name="nameOnCard" class="form-state">
-											<label>Expiration Date:</label>
-											  <div class="">
-											    <input type="text" class="form-state " placeholder="">
-											  </div>
-											  <div class="">
-											    <input type="text" class="form-state " placeholder="">
-											  </div>																				
-										</div>
-										<label for="paymentSchedule">Payment Schedule:</label>
-										<select
-											name="paymentSchedule" id="paymentSchedule"
-											class="form-state  width-75"
-											onchange="javascript:showPaymentDetails(this);">
-											<option value="full Payment">Full Payment</option>
-											<option value="partial Payment">Partial Payment</option>
-											<option value="installment Payment">Installment Payment</option>
-										</select>
-										<div id="paymentDetails" class="hidden">
-											<p>Hello EveryOne</p>
-										</div><%--<fmt:formatNumber value="${customerOrder.getTotalAmount()} --%>
+										<div id="cardInfoDiv" class="hidden col-sm-12 col-xs-12 col-md-12 row-non">
+													<h4 class="page-header">Credit Card Payment</h4>
+													<div class="col-sm-12 col-xs-12 col-md-7 row-non">
+														<label>Name on Card:</label>
+														<input type="text" name="nameOnCard" class="form-state width-100">	
+													</div>
+													<div class="col-sm-12 col-xs-12 col-md-7 row-non">												
+														<label>Card Number:</label>
+														<input type="text" name="cardNumber" class="form-state  width-100"><span><input name="cardType" type="hidden" value="Visa"/></span>
+													</div>
+													<div class="clearfix"></div>
+													<div class="col-sm-12 col-xs-12 col-md-3 row-non">
+														<label>Expiration Date:</label>
+														<input type="text" class="form-state width-100" name="expirationDate" placeholder="MM/YY">
+													</div>
+													<div class="col-sm-12 col-xs-12 col-md-4 row-non">
+														<label>Security Number:</label>
+														<input type="text" class="form-state width-100" name="securityNumber">												
+													</div>																													
+												</div>		
+										<%--<fmt:formatNumber value="${customerOrder.getTotalAmount()} --%>
 										<c:set var="amountLeft" value="${billing.totalAmountRemaining() }"/>
 										<label for="paymentAmount">Payment Amount:</label>
 										 <input type="text"	name="paymentAmount" class="form-state  width-75" id="paymentAmount" value="${amountLeft}" onblur="javascript:checkAmountPaid(this.value);formatAmount('paymentAmount',this)" placeholder="Amount"/>
 											<p>
+												
 												<button name="paymentSubmitBtn" id="paymentSubmitBtn" onclick="javascript:customerPaymentConfirmation(document.paymentForm);return false;" class="btn btn-success">Continue with Payment</button>
-												<a href="#" class="moveL_20">Cancel</a>
+												<a href="javascript:document.viewCustomerProfileBckBtn.submit()" class="moveL_20">Cancel</a>
 											</p>	
 																			
 											<input type="hidden" name="pId" value="${orderNumber }" id="pId"/>	
 											<input type="hidden" name="orderTotalAmount" id="orderTotalAmount" value="${customerOrder.getTotalAmount()}">	
 											<input type="hidden" name="unicode" id="cust" value="${customerOrder.getCustomer().customerId}">
 											<input type="hidden" name="amountleft" id="amountleft" value="${amountLeft}"/>
-											</div>	
-											<div class="col-md-6">
-												<div class="page-header">
-													<h2>Order Details</h2>
-												</div>
-												<div><label class="labelLength_20">Product Name:</label><span>${product.getProductName()}</span></div>
 											</div>
 												<!-- Review and Submit Customer Payment -->
 												<div class="hidden col-md-10" id="paymentSummary">
@@ -152,7 +160,10 @@
 			</div>			
 		</div>
 	</div>
-
+	<sf:form name="viewCustomerProfileBckBtn" action="/abankus/customers/viewProfile" method="post">
+		<input type="hidden" name="searchType" id="searchType" value="customerNumber">
+		<input type="hidden"  name="customerNumber" value="${cust}"/>	          
+	</sf:form>	
 	<%--- Confirmation Page --%>
 
 <script>
@@ -316,23 +327,21 @@ function customerPaymentConfirmation(form){
 	var paymentamount = $("#paymentAmount").val();
 	var paymenttype = $("#paymentMethod").val();
 	var paymentschedule = $("#paymentSchedule").val();
-	
-	if(isEmpty(paymentamount)){
-		$("#paymentMessage").addClass('platform-alert-caution');
-		getElementById("paymentMessage").innerHTML = "Payment Amount cannot by empty.";
-	}else{
+	if(validatePaymentForm()){
 		getElementById("paymentMessage").innerHTML = "";
 		$("#paymentMessage").removeClass('platform-alert-caution');
 		$("#paymentHeading").html("Review and Confirm Payment");
 		$("#accountNumberSummary").html(accountnumber);
 		$("#paymentamountSummary").html(paymentamount);
 		$("#paymentFormSummary").html(paymenttype.toUpperCase());
-		$("#paymentscheduleSummary").html(paymentschedule.toUpperCase());
+		//$("#paymentscheduleSummary").html(paymentschedule.toUpperCase());
 		// Openning Modal
 		$('#paymentEntry').hide();
 		$("#paymentSummary").removeClass("hidden");
-		$("#paymentSummary").show();
+		$("#paymentSummary").show();		
+		
 	}
+
 
 }
 </script>

@@ -44,9 +44,8 @@ public class SecurityController extends PlatformAbstractServlet {
 	public String logout(RedirectAttributes redirectAttributess,HttpServletRequest request,Model model) {
 		HttpSession session = request.getSession(false);
 		
-		logger.info("Logging out... User: "+request.getUserPrincipal().getName());
-		if(session != null ){
-			session.removeAttribute("user");
+		if(session != null){
+			logger.info("Logging out... User: "+request.getUserPrincipal().getName());
 			session.invalidate();
 			logger.info("Loggout successful..");
 		}
@@ -60,5 +59,12 @@ public class SecurityController extends PlatformAbstractServlet {
 		model.addAttribute(PlatformFields.ERROR_MESSAGE, "You donot have access to perform this operation.");
 		logger.info(logActivity(" is viewing the Access Denied page.",getEmployeeInSession(request)));
 		return "AbankusErrorMessage";
+	}
+	
+	@RequestMapping(value="/security/error")
+	public String securityError(RedirectAttributes redirectAttributess){
+		
+		redirectAttributess.addFlashAttribute("error_message", "Your current session has ended. Please login again.");
+		return "redirect:/security/login";
 	}
 }

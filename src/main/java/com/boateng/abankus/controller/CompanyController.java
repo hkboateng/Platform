@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.boateng.abankus.application.ws.svc.AuthenticationResponse;
 import com.boateng.abankus.domain.Company;
 import com.boateng.abankus.entity.validation.CompanyValidation;
 import com.boateng.abankus.exception.PlatformException;
@@ -59,11 +60,11 @@ public class CompanyController {
 		Company company = null;
 
 			try {
-				boolean success = companyProcessor.submitCompanyCredential(request);
-				if(success){
+				AuthenticationResponse authenticationResponse = companyProcessor.submitCompanyCredential(request);
+				if(authenticationResponse.isResult()){
 					company = companyProcessor.buildAndSubmitCompany(request);
 				}else{
-					redirectAttributess.addFlashAttribute(PlatformFields.ERROR_MESSAGE, "Error occured while processing the request.");
+					redirectAttributess.addFlashAttribute(PlatformFields.ERROR_MESSAGE,authenticationResponse.getMessage());
 					return "redirect:/Company/signup";					
 				}
 			} catch (PlatformException | IOException e) {

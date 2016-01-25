@@ -1,6 +1,6 @@
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
+<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,11 +8,12 @@
 <title>Abankus Payment - Staff List</title>
 <link href="<c:url value="/resources/css/bootstrap.css" />" rel="stylesheet"/>
 <link href="<c:url value="/resources/css/platform.css" />" rel="stylesheet"/>
-<link href="<c:url value="/resources/css/fonts-awesome/font-awesome.css" />" rel="stylesheet"/>
+<link href="<c:url value="/resources/css/tables/jquery.dataTables.css" />" rel="stylesheet"/>
 <script src="<c:url value="/resources/js/jquery.js" />" type="text/javascript"></script>
 
 <script src="<c:url value="/resources/js/bootstrap.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/application.js" />" type="text/javascript"></script>
+<script src="<c:url value="/resources/js/tables/jquery.dataTables.js" />" type="text/javascript"></script>
 </head>
 <body>
 <%-- Include page header --%>
@@ -23,19 +24,18 @@
 			<div class="col-sm-12 col-md-12 col-lg-12 center-block main">
 
 			<%-- Filter List --%>
-				<div>
-				<h2>Employee List</h2>
-				<hr/>
-				</div>
+		  <div class="col-lg-12 page-header">
+		   	<span class="lead">Employee List</span>
+		   	<a href="<c:url value="/registration/employee" />" class="btn btn-success pull-right"><span class="glyphicon glyphicon-plus moveR_20"></span>Add New Employee</a>
+		  </div>  
 				<div id="listOfEmployee">
-					<table class="table">
+					<table id="employeeList" class="table">
 						<thead>
 							<tr>
 								<th></th>
 								<th>Full Name</th>
 								<th>Address</th>
 								<th>Contact Information</th>
-								<th>View Profile</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -47,8 +47,10 @@
 										${empList.address1 }<br>${empList.address2 }
 										<p>${empList.city }&nbsp;${empList.state }&nbsp;${empList.zipcode }</p>
 									</td>
-									<td>${empList.cellphone }<br/>${empList.email}</td>
-									<td><a href="" class="btn btn-success"><i class="fa fa-eye moveR_10"></i>Select</a></td>
+									<td>
+										<p><span class="label"><i class="fa fa-phone-square"></i></span>&nbsp;${empList.cellphone }</p>
+										<p><span class="label"><i class="fa fa-envelope"></i></span>&nbsp;${empList.email}</p>
+									</td>
 								</tr>
 							</c:forEach>
 						</tbody>
@@ -59,5 +61,18 @@
 </div>
 <!-- prefix free to deal with vendor prefixes -->
 </body>
+	<script>
+$(document).ready(function(){
+	 $('#employeeList').DataTable();
+	 
+});
 
+function submitCustomerURL(form,value){
+	if( value !== undefined){
+		form.customerNumber.value = value;
+	}
+	form.submit();
+	
+}
+</script>
 </html>

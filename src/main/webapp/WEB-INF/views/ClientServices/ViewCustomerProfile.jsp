@@ -23,12 +23,9 @@
 <%-- Include page header --%>
 <jsp:include page="../header.jsp"/>
 <%-- End of Include page header --%>
-	<div id="container" class="container-fluid">
+	<div id="container" class="container">
 		<div class="row">
-			<div class="col-sm-3 col-md-3 col-lg-3">
-				<jsp:include page="../sidebar.jsp" />
-			</div>
-		<div class="col-sm-9 col-md-9 col-lg-9">
+		<div class="col-sm-10 col-md-10 col-lg-12">
 			<h3 class="page-header">
 				<c:if test="${not empty customer}">
 				${not empty customer.getCustomerName() ? customer.getCustomerName() : customer.getCompany_name()} (Account #:${customerAccount.customer.customerNumber.toUpperCase() })
@@ -73,11 +70,32 @@
 
 	<%-- Account Details Information --%>
 <div class="col-sm-12 col-md-9 col-lg-9">
-		<h3>Account Details</h3>
+          	<div id="employeeProfileDiv">
+          	<c:if test="${not empty customer}">
+           	<div class="lead page-header">Customer Information</div>
+          		<p>
+          			<label class="label labelLength_10">Employee Number:</label>
+          			<span>${customer.getCustomerNumber().toUpperCase()}</span>
+          		</p>
+          		<label class="label labelLength_30">Address</label>
+          		<div class="moveL_5 spaceBelow_10">
+          			<div>${customer.getAddressId().getAddress1() }</div>
+          			${customer.getAddressId().getAddress2() }
+          			<div>${customer.getAddressId().getCity() }&nbsp;${customer.getAddressId().getRegion() }&nbsp;${customer.getAddressId().getZipcode() }</div>
+          		</div>
+          		
+          		<p><label class="label labelLength_10">Phone Number:</label><span>${customer.getPhoneId().getPhoneNumber() }</span></p>
+          		
+          		<p><label class="label labelLength_10">Emaill Address:</label><span>${customer.getEmailId().getEmailAddress() }</span></p>        	
+          	</c:if>
+
+          	</div>
+		<div class="lead page-header">Account Details</div>
 		<div>
 			<label class="bold">Account Number:</label>
 			<span>${customerAccount.getAccountNumber() }</span>
 		</div>
+		<%-- 
 		<div>
 			<label class="bold">Contact Person:</label>
 			<address>
@@ -94,6 +112,7 @@
 			</c:choose>			
 			</address>
 		</div>
+		--%>
 		<p>
 			<label class="bold">Account Status:</label>
 			<span>${customerAccount.getStatus()}</span>
@@ -162,8 +181,9 @@
 			</c:if>
 			</div>
 			
+			
+			<div class="hidden">
 			<h3 class="underline-div">Activity Logs</h3>
-			<div>
 				<c:choose>
 				<c:when test="${not empty customerOrder }">
 				<table id='orderHistoryClosed' class="table">
@@ -289,6 +309,9 @@
 </div> 
 </div>
 </body>
+<%-- Include page header --%>
+<jsp:include page="../footer.jsp"/>
+<%-- End of Include page header --%>
 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 <script>
 $(document).ready(function(){

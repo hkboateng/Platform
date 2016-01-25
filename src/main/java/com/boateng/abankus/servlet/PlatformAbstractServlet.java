@@ -82,9 +82,10 @@ public abstract class PlatformAbstractServlet {
 			EmployeeCollection.getInstance().addEmployee(username, employee);
 			
 			//employeeCollection.addEmployee(username, employee);
-			session.setAttribute(EmployeeFields.EMPLOYEE_SESSION,employee);					
+			session.setAttribute(EmployeeFields.EMPLOYEE_SESSION,employee);		
+			logger.info(employee.toString()+" has been loaded in Current Session.");
 		}
-
+		
 	}
 	
 	public void clearMessages(HttpServletRequest request){
@@ -145,20 +146,27 @@ public abstract class PlatformAbstractServlet {
 	
 	public Customer getCustomerInSession(HttpServletRequest request)throws PlatformException{
 		HttpSession session = request.getSession(false);
-		Customer customer = (Customer) session.getAttribute(CustomerFields.CUSTOMER_SESSION);
+		Customer customer = null;
+		if(session != null && (Customer) session.getAttribute(CustomerFields.CUSTOMER_SESSION) != null){
+			customer = (Customer) session.getAttribute(CustomerFields.CUSTOMER_SESSION);
+		}
 		return customer;
 	}
 	
 	public Employee getEmployeeInSession(HttpServletRequest request)throws PlatformException{
 		HttpSession session = request.getSession(false);
-		Employee employee = (Employee) session.getAttribute(EmployeeFields.EMPLOYEE_SESSION);
+		Employee employee = null;
+		if(session != null && (Employee) session.getAttribute(EmployeeFields.EMPLOYEE_SESSION) != null){
+			employee = (Employee) session.getAttribute(EmployeeFields.EMPLOYEE_SESSION);
+		}
+		
 		return employee;
 	}
 	
 	public String logActivity(String activity,Employee employee){
 		StringBuilder sbr = new StringBuilder();
 		if(employee != null){
-			sbr.append("Staff ").append(employee.toString());
+			sbr.append("Staff: ").append(employee.toString());
 			sbr.append(" "+activity);			
 		}
 		return sbr.toString();

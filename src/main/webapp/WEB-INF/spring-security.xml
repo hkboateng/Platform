@@ -15,15 +15,16 @@
     	<intercept-url pattern="/platform/**" access="isFullyAuthenticated()"/>
     	<intercept-url pattern="/registration/**" access="isFullyAuthenticated()"/>
     	<intercept-url pattern="/customers/**" access="isFullyAuthenticated()"/>
+    	<intercept-url pattern="/employee/**" access="isFullyAuthenticated()"/>
     	<intercept-url pattern="/products/**" access="isFullyAuthenticated()"/>
     	<form-login login-page='/security/login' default-target-url='/platform/index' 
-            always-use-default-target='true' authentication-failure-url='/?error=login_failed' />
+            always-use-default-target='true' authentication-failure-url='/security/login?error=login_failed' />
         <logout invalidate-session="true" delete-cookies="JSESSIONID" logout-url="/platform/logout"  logout-success-url="/login?logout_successful=18"/>
 
 		<access-denied-handler error-page="/security/accessdenied"/>
 
-        <session-management>
-       	 <concurrency-control max-sessions="1" expired-url="/security/login?max-time=2"/>
+        <session-management session-authentication-error-url="/security/error?sessionexpired=true">
+       		<concurrency-control max-sessions="1" expired-url="/security/login?max-time=2" />
         </session-management>
 			<headers>
 				<xss-protection/>
@@ -32,14 +33,13 @@
 			</headers>
 			<csrf/>
     </http>
-    <beans:bean id="customErrorHandler" class="com.boateng.abankus.authentication.CustomAccessDeniedHandler">
-    	<beans:property name="errorPage" value="/abankus/security/accessdenied"></beans:property>
-    </beans:bean>
     
 	<beans:bean id="customAuthenticationProvider" class="com.boateng.abankus.authentication.CustomAuthenticationProvider" />
 	
 	<jee:jndi-lookup id="dataSource" jndi-name="jdbc/platformDB"/>
 	
+
+
 	<authentication-manager>
 		<authentication-provider ref="customAuthenticationProvider"/>
 	</authentication-manager>

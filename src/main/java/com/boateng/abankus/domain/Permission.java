@@ -10,6 +10,8 @@ public class Permission implements GrantedAuthority {
 	
 	private String permission;
 
+	private int permissionId;
+	
 	public Permission(){
 		
 	}
@@ -17,6 +19,7 @@ public class Permission implements GrantedAuthority {
 	/* (non-Javadoc)
 	 * @see org.springframework.security.core.GrantedAuthority#getAuthority()
 	 */
+	
 	@Override
 	public String getAuthority() {
 		// TODO Auto-generated method stub
@@ -35,6 +38,14 @@ public class Permission implements GrantedAuthority {
 	 */
 	public void setPermission(String permission) {
 		this.permission = permission;
+	}
+
+	public int getPermissionId() {
+		return permissionId;
+	}
+
+	public void setPermissionId(int permissionId) {
+		this.permissionId = permissionId;
 	}
 
 

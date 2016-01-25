@@ -14,11 +14,11 @@
 <script src="<c:url value="/resources/js/bootstrap-datepicker.js" />" type="text/javascript"></script>
 <script src="<c:url value="/resources/js/application.js" />" type="text/javascript"></script>
 </head>
-<body  ng-app="">
+<body>
 <%-- Include page header --%>
 <jsp:include page="../header.jsp"/>
 
-<div class="container">
+<div class="container" id="container">
 <div class="row">
 
 <div class="col-sm-12 col-md-12 col-lg-12 center-block">
@@ -62,7 +62,7 @@
 			<div class="col-xs-6 col-sm-6 col-md-6">
 
 				<label for="email" >Email Address:</label>
-				<input type="email" class="form-control" id="email" ng-model="username" name="email">	
+				<input type="email" class="form-control" id="email"  name="email">	
 				</div>	
 			<div class="col-xs-6 col-sm-6 col-md-6">
 				<label for="phone" >Phone Number:</label>
@@ -96,47 +96,16 @@
 				<option value="female"> Female </option>
 				</select>					
 			</div>
-          		  		 
+          	<hr>	  		 
 			<p>
-			<hr>
+			
 			<input type="submit" value=" Save Employee " class="btn btn-primary" />
 			&nbsp;&nbsp;&nbsp;
 			<a href="#"> Cancel </a>
 			</p> 
 			</sf:form>
           </div>
-          <%--
-          <div class="col-md-5">
- 			<h3> Job Credentials</h3>	<hr/>	
-			<label for="username">
-				Username
-			</label>
-			<input type="text" class="form-control" id="username" name="username" value="{{username}}"/>				
-			<label for="passwd"> Password: </label>
-			<input type="password" name="password" class="form-control" id="password"/>	
-			<label for="confirm_passwd">Confirm Password: </label>	
-			<input type="password" class="form-control" id="cpassword" name="cpassword" onblur="javascript:validatePassword();" onchange="javascript:validatePassword();">	
-			<div id="pwdValid"></div>	
-			<div>Select Employee Role:</div>
-			<ul>
-				<c:if test="${roleList.size() > 0}">
-					<c:forEach var="role" items="${roleList }" varStatus="gdg" >
-						<li>
-						<input type="checkbox" name="role" value="${role.role }">${role.role }
-						</li>
-					</c:forEach>
-				</c:if>
-			</ul>				
-			<label for="department">
-				Employee Role:
-			</label>
-			<select name="department" class="form-control">
-				<option value="12"> Sales </option>
-				<option value="13"> Customer Services </option>
-				<option value="14"> Help Desk </option>
-			</select>							         	
-          </div>
-           --%>
+
                     </div>
 
 </div>  
@@ -147,41 +116,5 @@
 <script>
 $('.datepicker').datepicker()
 </script>
-<%--
-<script>
 
-var app = angular.module('myApp', []);
-app.controller('validateCtrl', function($scope) {
-    $scope.user = 'John Doe';
-    $scope.email = 'john.doe@gmail.com';
-});
-
-var pwd = document.getElementById("password").value;
-var cpwd = document.getElementById("cpassword").value;
-
-function validatePassword(){
-
-	var message = document.getElementById("pwdValid");
-	var msg = "";
-	if(cpwd === pwd){
-		return;
-		
-	}
-	if(cpwd !== pwd){
-		msg +="<span class='alert alert-danger'>Both passwords do not match...Try again</span>";
-	}
-	message.innerHTML = msg;
-	
-}
-$('.datepicker').datepicker()
-function submitForm(document){
-	var form = document.form;
-	if(cpwd !== pwd){
-		return;
-	}else{
-		form.submit();
-	}
-}
-</script>
- --%>
 </html>

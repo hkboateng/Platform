@@ -22,12 +22,10 @@
 		          <span class="caret"></span>
 		        </a>
 	            <ul id="menu1" class="dropdown-menu" aria-labelledby="aEmployeeInfoLink">
-		          <li><a href="/abankus/employee/editEmployee?employeeId=${employee.employeeId}&jumboId=${employee.id}"><i class="fa fa-pencil-square-o fa-lg moveR_5"></i>Update your Profile</a></li>
-		          <sec:authorize access="hasRole('superuser')">
-			          <li><a href="#"><i class="fa fa-cogs fa-lg moveR_5"></i></a>Company Settings</li>
-		          </sec:authorize>
+		          <li><a href="/abankus/employee/editEmployee?employeeId=${employee.employeeId}&jumboId=${employee.id}"><i class="fa fa-pencil-square-o fa-lg moveR_10"></i>View Profile</a></li>
+			          <li><a href="<c:url value="/platform/settings" />"><i class="fa fa-cogs fa-lg moveR_10"></i>Company Settings</a></li>
 		          <li role="separator" class="divider"></li>
-		          <li><a href="<c:url value="/platform/logout"/>"><i class="fa fa-sign-out fa-lg moveR_5"></i>Logout</a></li>
+		          <li><a href="<c:url value="/platform/logout"/>"><i class="glyphicon glyphicon-off fa-lg moveR_10"></i>Logout</a></li>
 		        </ul>
             </li>
 
@@ -47,11 +45,10 @@
 		        </a>
 	            <ul id="menu1" class="dropdown-menu" aria-labelledby="aEmployeeInfoLink">
 		          <li><a href="/abankus/employee/editEmployee?employeeId=${employee.employeeId}&jumboId=${employee.id}"><i class="fa fa-pencil-square-o fa-lg moveR_5"></i>Update your Profile</a></li>
-		          <sec:authorize access="hasRole('supervisor')">
-			          <li><a href="<c:url value="/platform/settings" />"><i class="fa fa-cogs fa-lg moveR_5"></i></a>Account Settings</li>
-		          </sec:authorize>
+		          
+			      <li><a href="<c:url value="/platform/settings" />"><i class="fa fa-cogs fa-lg moveR_5"></i>Account Settings</a></li>
 		          <li role="separator" class="divider"></li>
-		          <li><a href="<c:url value="/platform/logout"/>"><i class="fa fa-sign-out fa-lg moveR_5"></i>Logout</a></li>
+		          <li><a href="<c:url value="/platform/logout"/>"><i class="glyphicon glyphicon-off fa-lg moveR_10"></i>Logout</a></li>
 		        </ul>
             </li>
 
@@ -131,11 +128,9 @@
 		        </a>
 	            <ul id="menu1" class="dropdown-menu" aria-labelledby="aEmployeeInfoLink">
 		          <li><a href="/abankus/employee/editEmployee?employeeId=${employee.employeeId}&jumboId=${employee.id}"><i class="fa fa-pencil-square-o fa-lg moveR_5"></i>Update your Profile</a></li>
-		          <sec:authorize access="hasRole('supervisor')">
-			          <li><a href="<c:url value="/platform/settings" />"><i class="fa fa-cogs fa-lg moveR_5"></i></a>Account Settings</li>
-		          </sec:authorize>
+			          <li><a href="<c:url value="/platform/settings" />"><i class="fa fa-cogs fa-lg moveR_5"></i>Account Settings</a></li>
 		          <li role="separator" class="divider"></li>
-		          <li><a href="<c:url value="/platform/logout"/>"><i class="fa fa-sign-out fa-lg moveR_5"></i>Logout</a></li>
+		          <li><a href="<c:url value="/platform/logout"/>"><i class="glyphicon glyphicon-off fa-lg moveR_5"></i>Logout</a></li>
 		        </ul>
             </li>        	      
           </ul>

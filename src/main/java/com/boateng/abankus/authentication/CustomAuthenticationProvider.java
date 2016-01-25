@@ -22,10 +22,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import com.boateng.abankus.domain.Permission;
+import com.boateng.abankus.exception.CustomAuthenticationException;
 import com.boateng.abankus.exception.PlatformException;
 import com.boateng.abankus.utils.PlatformUtils;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -41,13 +41,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
 	private static final Logger logger = Logger.getLogger(CustomAuthenticationProvider.class.getName());
+	
 	@Autowired
     private CustomUserDetailService userService;
-	
+
 	@Override
 	public Authentication authenticate(Authentication authenticate) throws AuthenticationException {
 		String username = authenticate.getName();
 		String password = authenticate.getCredentials().toString();
+
 		AuthenticationResponse authenticationResponse = null;
 		String status = null;
 		Client client = ClientBuilder.newClient();
@@ -57,13 +59,18 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 										.queryParam("password", password)
 										.request(MediaType.APPLICATION_JSON)
 										.get();
-		status = response.readEntity(String.class);
 		ObjectMapper mapper = new ObjectMapper();
-		
+		if(response.getStatus() == 404){
+			CustomAuthenticationException ace = new CustomAuthenticationException("Authentication Web Service is currently down or offline.");
+			
+			throw ace;
+		}
 		try {
+			status = response.readEntity(String.class);
 			authenticationResponse = mapper.readValue(status, AuthenticationResponse.class);
 		} catch (JsonParseException e) {
 			PlatformException ace = new PlatformException(e);
+			
 			
 		} catch (JsonMappingException e) {
 			PlatformException ace = new PlatformException(e);
@@ -72,10 +79,9 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 		}
 		logger.info("Retreiving User Detail information for authentication and authorization...");
 		if(!authenticationResponse.isResult() &&  authenticationResponse.getMessage().equalsIgnoreCase("Username is invalid")){
-			logger.warning("User:"+username+" authentication falied. Message = "+authenticationResponse.getMessage());
+			logger.warning("User:"+username+" authentication failed. Message = "+authenticationResponse.getMessage());
 			 throw new BadCredentialsException("Username and/or Password is invalid.");
 		}
-		//boolean isAuthenticated = SecurityUtils.authenticatePassword(password, user.getPassword());
 		
 		if(!authenticationResponse.isResult() && authenticationResponse.getMessage().equalsIgnoreCase("invalid username and password")){
 			logger.warning("User:"+username+" authentication falied. Message = "+authenticationResponse.getMessage());
@@ -83,9 +89,12 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 		}
 		
 		List<String> permissionList = getUserPermissions(authenticationResponse.getUserId());
-		Collection<? extends GrantedAuthority> authorithies = getAllUserPermission(permissionList);
+		Collection<? extends GrantedAuthority> authorities = getAllUserPermission(permissionList);
+		for(GrantedAuthority permission: authorities){
+			logger.info(permission.getAuthority());
+		}
 		logger.info("User "+username+" authentication is completed and valid.");
-		return new UsernamePasswordAuthenticationToken(username,password,authorithies);
+		return new UsernamePasswordAuthenticationToken(username,password,authorities);
 	}
 
 	/* (non-Javadoc)
@@ -103,7 +112,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 			permissions = new ArrayList<Permission>();
 			for(String permission: permissionList){
 				Permission p = new Permission();
-				p.setPermission(permission);
+				p.setPermission("ROLE_"+permission);
 				permissions.add(p);
 			}
 		}
@@ -136,5 +145,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 		logger.info("Retreiving user's permission completed.....");
 		return permissionList;
 	}
+
 
 }

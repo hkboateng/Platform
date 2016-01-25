@@ -54,7 +54,7 @@
 						</div>
 					</c:if>
 					<c:if test="${param.error != null}">
-						<div class="alert alert-success">
+						<div class="alert alert-warning">
 							<p>Invalid username and password.</p>
 						</div>
 					</c:if>								

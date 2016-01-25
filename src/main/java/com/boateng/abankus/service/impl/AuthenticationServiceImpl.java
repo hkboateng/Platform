@@ -2,8 +2,15 @@ package com.boateng.abankus.service.impl;
 
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.apache.log4j.Logger;
 import org.hibernate.CacheMode;
@@ -20,7 +27,11 @@ import com.boateng.abankus.domain.Permission;
 import com.boateng.abankus.domain.Role;
 import com.boateng.abankus.domain.User;
 import com.boateng.abankus.services.AuthenticationService;
+import com.boateng.abankus.utils.PlatformUtils;
 import com.boateng.abankus.utils.SecurityUtils;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 @Component
 public class AuthenticationServiceImpl  implements AuthenticationService{
@@ -157,6 +168,40 @@ public class AuthenticationServiceImpl  implements AuthenticationService{
 		return null;
 	}
 	
-
+	@Override
+	public List<Permission> getEmployeePermissions() throws IOException{
+		Client client = ClientBuilder.newClient();
+		WebTarget target = client.target("http://localhost:8080/authenticationhub/authentication");
+		Response response = target.path("/getEmployeeAllPermission")
+										.request(MediaType.APPLICATION_JSON)
+										.get();
+		List<String> permissions = null;
+		
+		List<Permission> permissionList = null;
+		String results= null;
+		if(response.getStatus() == 200){
+			results = response.readEntity(String.class);
+			 permissionList = PlatformUtils.convertFronJson(new TypeReference<List<Permission>>() {}, results);
+		}
+		//List<Permission> permissionList = getAllUserPermission(permissions);
+		return permissionList;
+	}
+	/**
+	 * Removes hypen from the Strings
+	 * @param permissionList
+	 * @return
+	 */
+	private List<Permission> getAllUserPermission(List<String> permissionList){
+		List<Permission> permissions = null;
+		if(permissionList != null){
+			permissions = new ArrayList<Permission>();
+			for(String permission: permissionList){
+				Permission p = new Permission();
+				p.setPermission(permission.replaceAll("_", " "));
+				permissions.add(p);
+			}
+		}
+		return permissions;
+	}
 	
 }

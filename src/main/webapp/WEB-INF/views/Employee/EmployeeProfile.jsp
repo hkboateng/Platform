@@ -21,6 +21,7 @@
           		<h1>Hi, <small>${employeeInstance}</small></h1>
           	</div>
           	<div id="employeeProfileDiv">
+          	<div class="lead page-header">Staff Info</div>
           		<p>
           			<label class="label labelLength_10">Employee Number:</label>
           			<span>${employeeInstance.getEmployeeId()}</span>
@@ -38,6 +39,12 @@
           	</div>
           	<div class="spaceBelow_20">
           		<hr>
+          	</div>
+          	<div class="">
+          		<div class="lead page-header">Company Info</div>
+          		<p><span class="labelLength_20 label">Company Name:</span></p>
+          		<p><span class="labelLength_20 label">Company Address:</span></p>
+          		<p><span class="labelLength_20 label">Industry:</span></p>
           	</div>
           	<%--
 			<sf:form method="post" modelAttribute="employee" action="addEmployee"  name="newEmployee" class="form hidden">

@@ -140,10 +140,10 @@
 			</li>
 			</ul>		
 			<ul>
-				<c:if test="${roleList.size() > 0}">
-					<c:forEach var="role" items="${roleList }" varStatus="gdg" >
+				<c:if test="${permissionList.size() > 0}">
+					<c:forEach var="permission" items="${permissionList }" varStatus="gdg" >
 						<li>
-						<input type="checkbox" name="role" value="${role.role }">${role.role }
+						<input type="checkbox" name="role" value="${permission.permissionId}">${permission.permission.replaceAll("_"," ") }
 						</li>
 					</c:forEach>
 				</c:if>

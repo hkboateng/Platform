@@ -66,21 +66,20 @@ public class CustomerController extends PlatformAbstractServlet{
 	@Autowired(required=true)
 	private CustomerServiceProcessor customerServiceProcessor;
 	
-	@Autowired(required=true)
-	private CustomerOrderProcessor customerOrderProcessor;
 	
 	@Autowired(required=true)
 	@Qualifier(value="paymentServiceImpl")
 	private PaymentService paymentServiceImpl;	
 	
-	@PreAuthorize("isFullyAuthenticated")
+	//@Secured("ROLE_CREATE_CUSTOMER_PROFILE")
+	//@PreAuthorize("isFullyAuthenticated")
 	@RequestMapping(value="/customers/create", method=RequestMethod.GET)
 	public String index(HttpServletRequest request){
 		
 		return "ClientServices/NewCustomer";
 	}
 	
-	@Secured("ROLE_EMPLOYEE")
+	//@Secured("ROLE_CREATE_CUSTOMER_PROFILE")
 	@RequestMapping(value="/customers/create/individual", method=RequestMethod.GET)
 	public ModelAndView addIndividualCustomer(){
 		ModelAndView model = new ModelAndView();
@@ -89,12 +88,13 @@ public class CustomerController extends PlatformAbstractServlet{
 		return model;
 	}
 	
+	//@Secured("ROLE_UPDATE_CUSTOMER_PROFILE")
 	@RequestMapping(value="/customers/addCustomerContactPerson", method=RequestMethod.GET)
 	public String addCustomerContactPerson(HttpServletRequest request) throws PlatformException{
 		return "ClientServices/AddCustomerContactPerson";
 	}	
 	
-	@Secured("ROLE_EMPLOYEE")
+	//@Secured("ROLE_UPDATE_CUSTOMER_PROFILE")
 	@RequestMapping(value="/customers/updateContactPerson", method=RequestMethod.POST)
 	public String updateCustomerContactPerson(HttpServletRequest request) throws PlatformException{
 		Customer customer = getCustomerInSession(request);
@@ -112,7 +112,7 @@ public class CustomerController extends PlatformAbstractServlet{
 		return "redirect:/customers/viewProfile";
 	}		
 	
-	@Secured("ROLE_EMPLOYEE")
+	//@Secured("ROLE_EMPLOYEE")
 	@RequestMapping(value="/customers/create/company", method=RequestMethod.GET)
 	public ModelAndView addCompanyCustomer(){
 		ModelAndView model = new ModelAndView();
@@ -120,7 +120,7 @@ public class CustomerController extends PlatformAbstractServlet{
 		return model;
 	}
 	
-	@Secured("ROLE_EMPLOYEE")
+	//@Secured("ROLE_EMPLOYEE")
 	@RequestMapping(value="/customers/addCustomer", method=RequestMethod.POST)
 	public String addCustomer(@Valid Customer customers,BindingResult result,HttpServletRequest request,RedirectAttributes redirectAttributess){
 		if(result.hasErrors()){
@@ -137,15 +137,16 @@ public class CustomerController extends PlatformAbstractServlet{
 		return "redirect:/platform/index";
 	}
 	
+	//@Secured("VIEW_CUSTOMER_PROFILE")
 	@RequestMapping(value="/customers/listCustomer", method=RequestMethod.GET)
 	public String listCustomer(Model model,HttpServletRequest request){
-		
+
 		Set<Customer> customers = customerServiceProcessor.getAllCustomers();
 		model.addAttribute("customers", customers);
 		return "ClientServices/listCustomers";
 	}
 	
-	@Secured("ROLE_EMPLOYEE")
+	//@Secured("VIEW_CUSTOMER_PROFILE")
 	@RequestMapping(value="/customers/viewProfile", method={RequestMethod.POST,RequestMethod.GET})
 	public String viewCustomerProfile(RedirectAttributes redirectAttributess,Model model,HttpServletRequest request) throws PlatformException{
 		String customerNumber = request.getParameter("customerNumber");
@@ -170,46 +171,12 @@ public class CustomerController extends PlatformAbstractServlet{
 		CustomerAccount customerAccount = customerServiceProcessor.findCustomerAccountByCustomerNumber(custID);
 		model.addAttribute("customerAccount",customerAccount);
 		model.addAttribute("customer",customer);
+		
 		log.info(logActivity("is being redirected to Customer Profile Page for Customer: "+customer.getCompanyName(),employee));
+		
 		customer = null;
 		customerAccount = null;
-			/**
-			Customer customer = null;
-			clearMessages(request);
-			
-			String customerId = request.getParameter("customerId");
-			String firstname = request.getParameter("firstname");
-			String lastname = request.getParameter("lastname");
-			String customerNumber = request.getParameter("customerNumber");
-			String searchType=request.getParameter("searchType");
-			
-			
-			if(searchType != null && searchType.equals("customerId")){
-				customer = customerServiceProcessor.searchForCustomer(customerId);
-			}else if(searchType != null && searchType.equals("customerName")){
-				customer = customerServiceProcessor.searchForCustomerByFirstAndLastName(firstname, lastname);
-			}else if(searchType != null && searchType.equals("order")){
-				//search by order number, confirmation number or transaction Id
-			}else if(searchType != null && !customerNumber.isEmpty() && searchType.equals("customerNumber")){
-				customer = customerServiceProcessor.findCustomerByCustomerNumber(customerNumber);
-			}
-	
-			if(customer == null){
-				redirectAttributess.addFlashAttribute("searchError", "Your Search did not return any results.");
-				return "redirect:/platform/index";
-			}
-			
-			int custID = customer.getCustomerId();
-			loadCustomerIntoSession(request,customer);
-			loadCustomerOrderHistory(model,customer.getCustomerId(),request);
-			
-			CustomerAccount customerAccount = customerServiceProcessor.findCustomerAccountByCustomerNumber(custID);
-			model.addAttribute("customerAccount",customerAccount);
-			model.addAttribute("customer",customer);
-			
-			customer = null;
-			customerAccount = null; 
-			**/
+
 		return "ClientServices/ViewCustomerProfile";
 	}
 
@@ -234,6 +201,7 @@ public class CustomerController extends PlatformAbstractServlet{
 		return isUnique;
 	}
 	
+	//@Secured("UPDATE_CUSTOMER_ACCOUNT")
 	@RequestMapping(value="/customers/updateAccountStatus", method=RequestMethod.POST)
 	public void updateCustomerAccountStatus(HttpServletRequest request){
 		System.out.println("Updating Customer Account Status");
@@ -258,13 +226,11 @@ public class CustomerController extends PlatformAbstractServlet{
 		return "ClientTransaction/CustomerPaymentSearch";
 	}		
 
-	@Secured("ROLE_EMPLOYEE")
 	@RequestMapping(value = "/customers/editCustomerPin", method = RequestMethod.GET)
 	public String updateCustomerPin(Model model){
 		return "ClientServices/UpdateCustomerPin";
 	}
 	
-	@Secured("ROLE_EMPLOYEE")
 	@RequestMapping(value = "/customers/editCustomerInfo", method = RequestMethod.GET)
 	public String editCustomerInfo(Model model){
 		return "ClientServices/EditCustomer";

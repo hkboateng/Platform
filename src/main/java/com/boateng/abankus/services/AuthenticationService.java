@@ -1,5 +1,6 @@
 package com.boateng.abankus.services;
 
+import java.io.IOException;
 import java.util.List;
 
 import com.boateng.abankus.domain.Employee;
@@ -25,4 +26,10 @@ public interface AuthenticationService {
 	boolean isEmployeeIdExist(String employeeId);
 	
 	Employee findEmployeeByUserName(String username);
+
+	/**
+	 * @return
+	 * @throws IOException
+	 */
+	List<Permission> getEmployeePermissions() throws IOException;
 }

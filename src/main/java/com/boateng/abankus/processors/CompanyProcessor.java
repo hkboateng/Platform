@@ -83,28 +83,18 @@ public class CompanyProcessor {
 		return company;
 	}
 	
-	public boolean submitCompanyCredential(HttpServletRequest request) throws PlatformException, IOException{
+	public AuthenticationResponse submitCompanyCredential(HttpServletRequest request) throws PlatformException, IOException{
 		AuthenticationResponse authenticationResponse = null;
 		AuthenticationRequest  authenticationRequest = new AuthenticationRequest(request);
 		Client client = ClientBuilder.newClient();
-		WebTarget target = client.target("http://localhost:8080/AuthenticationHub/rs/authentication");
+		WebTarget target = client.target("http://localhost:8080/authenticationhub/authentication");
 		WebTarget targetPath = target.path("/saveCustomerCredentials");
-		Future<String> response = targetPath.request(MediaType.APPLICATION_JSON_TYPE)
-								.async()
+		String response = targetPath.request(MediaType.APPLICATION_JSON_TYPE)
 								.put(Entity.entity(PlatformUtils.convertToJSON(authenticationRequest), MediaType.APPLICATION_JSON_TYPE),String.class);
 		boolean status  = false;
-		if(response.isDone()){
-			try {
-				String respond = response.get();
-				 
-				authenticationResponse = (AuthenticationResponse) PlatformUtils.convertFromJSON(AuthenticationResponse.class,respond);
-				status = authenticationResponse.isResult();
-			} catch (InterruptedException | ExecutionException e) {
-				PlatformException ace = new PlatformException(e);
-				throw ace;
-			}
-		}
+		authenticationResponse = (AuthenticationResponse) PlatformUtils.convertFromJSON(AuthenticationResponse.class,response);
+		status = authenticationResponse.isResult();
 		
-		return status;
+		return authenticationResponse;
 	}
 }

@@ -286,3 +286,77 @@ function validateForm(formName){
 		 return false;
 	 return true;	
 }
+function validatePaymentForm(){
+	$("#submitPayment").validate({
+		onsubmit:false,
+		rules : {
+			amountPaid: {
+				required :true,
+				number:true
+			},
+			paymentMethod : {
+				required: true
+			},
+			checkNumber : {
+				required: true,
+				digits: true
+			},
+			bankCustName : {
+				required: true
+			},
+			bankRoutingNumber : {
+				required: true,
+				digits: true
+			},
+			bankAccountNumber: {
+				required: true,
+				digits: true
+			},
+			confirmAccountNumber: {
+				required: true,
+				equalTo: '#bankAccountNumber'
+			},
+			bankName: {
+				required: true
+			},
+			nameOnCard : {
+				required: true
+			},
+			securityNumber : {
+				required : true
+			},
+			expirationDate : {
+				required: true
+			},
+			cardNumber : {
+				required:true,
+				creditcard: true
+			}
+		},
+		messages : {
+			amountPaid : {
+				required: "Enter the amount that the Customer is paying",
+				numbers: "Enter a valid Payment Amount"
+			},
+			paymentMethod : {
+				required: 'Select a Payment Method to continue'
+			},
+			checkNumber : {
+				required : 'Enter the Check Number',
+				digits: 'Enter a valid check number'
+			},
+			bankName : {
+				required: "Enter the name of financial institution."
+			},
+			bankCustName: {
+				required: "Enter the Name on the Account."
+			},
+			expirationDate : {
+				required: "Exp. Date required"
+			}
+		}
+	});
+	if(!$('#submitPayment').valid())
+		 return false;
+	 return true;			
+}

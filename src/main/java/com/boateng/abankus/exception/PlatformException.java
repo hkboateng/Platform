@@ -15,8 +15,10 @@ import org.apache.commons.logging.LogFactory;
  */
 public class PlatformException extends Exception {
 
-	private static final Log log = LogFactory.getLog(PlatformException.class);
 	private static final Logger logger = Logger.getLogger(PlatformException.class.getName());
+	
+	private String message;
+	
 	/**
 	 * 
 	 */
@@ -52,7 +54,7 @@ public class PlatformException extends Exception {
 	 */
 	public PlatformException(String message, Throwable cause) {
 		super(message, cause);
-		
+		this.message = message;
 	}
 
 	/**
@@ -60,7 +62,7 @@ public class PlatformException extends Exception {
 	 */
 	public PlatformException(String message) {
 		super(message);
-		log.warn(message);
+		this.message = message;
 	}
 
 	/**
@@ -71,6 +73,10 @@ public class PlatformException extends Exception {
 		logger.log(Level.SEVERE, cause.getMessage(),cause);
 		cause.printStackTrace();
 
+	}
+	
+	public void log(){
+		
 	}
 
 	

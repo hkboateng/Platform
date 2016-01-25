@@ -112,7 +112,7 @@
 							<input type="hidden" name="xUnitCost" value="" id="xUnitCost"/>		
 							<input type="hidden" name="customerId" value="${account.customer.customerId }" id="customerId"/>
 							<input type="hidden" name="productCategory" value="" id="productCategory"/>
-							<a href="/abankus/platform/dashboard" class="btn btn-primary moveR_20">Cancel Transaction</a>	
+							<a href="<c:url value="/platform/index"/>" class="btn btn-primary moveR_20">Cancel Transaction</a>	
 							<button type="button"  class="btn btn-success" id="showOrderSummary" >Continue to payment</button>
 				
 			
