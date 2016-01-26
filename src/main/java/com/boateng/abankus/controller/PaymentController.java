@@ -71,6 +71,12 @@ public class PaymentController extends PlatformAbstractServlet  {
 		return "ClientTransaction/CustomerPaymentSearch";
 	}
 
+	@RequestMapping(value = "/ExternalPayment", method = RequestMethod.GET)
+	public String externalpayment(Model model){
+		logger.info("Viewing Quick Payment");
+		return "ClientTransaction/QuickPayment";
+	}
+	
 	@RequestMapping(value="/searchPaymentDetail", method=RequestMethod.POST)
 	public String searchPaymentDetail(HttpServletRequest request,Model model,RedirectAttributes redirectAttributess) throws PlatformException{
 		String searchInputField = request.getParameter("searchField");
@@ -103,7 +109,7 @@ public class PaymentController extends PlatformAbstractServlet  {
 		return "redirect:/Payments/QuickPayment";
 	}
 	
-	//@Secured("ACCEPT_PAYMENT")
+	@Secured("ROLE_ACCEPT_PAYMENT")
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/makeCustomerOrderPayment", method = RequestMethod.POST)
 	public String makeCustomerOrderPayment(HttpServletRequest request,Model model,RedirectAttributes redirectAttributess) throws NoSuchAlgorithmException, NoSuchPaddingException, PlatformException{
@@ -168,7 +174,7 @@ public class PaymentController extends PlatformAbstractServlet  {
 		return status;
 	}
 	
-	//@Secured("ROLE_ACCEPT_PAYMENT")
+	@Secured("ROLE_ACCEPT_PAYMENT")
 	@RequestMapping(value = "/submitBillPayment", method = RequestMethod.GET,produces="application/json")
 	@ResponseBody
 	public String submitBillPayment(HttpServletRequest request,Model model) throws PlatformException{
@@ -230,6 +236,7 @@ public class PaymentController extends PlatformAbstractServlet  {
 		}	
 	}
 
+	@Secured("ROLE_ACCEPT_PAYMENT")
 	@RequestMapping(value = "/makePayment", method = RequestMethod.GET)
 	public String makePayment(HttpServletRequest request,Model model){
 		

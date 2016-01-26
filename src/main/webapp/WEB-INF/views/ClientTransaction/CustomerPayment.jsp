@@ -102,7 +102,7 @@
 														<label>Security Number:</label>
 														<input type="text" class="form-state width-100" name="securityNumber">												
 													</div>																													
-												</div>		
+										</div>		
 										<%--<fmt:formatNumber value="${customerOrder.getTotalAmount()} --%>
 										<c:set var="amountLeft" value="${billing.totalAmountRemaining() }"/>
 										<label for="paymentAmount">Payment Amount:</label>
