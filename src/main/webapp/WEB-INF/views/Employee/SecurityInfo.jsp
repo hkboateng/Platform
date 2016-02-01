@@ -7,127 +7,33 @@
 <title>Abankus Corporation - Sales Connection</title>
 <link href="<c:url value="/resources/css/bootstrap.css" />" rel="stylesheet"/>
 <link href="<c:url value="/resources/css/platform.css" />" rel="stylesheet"/>
-<script src="<c:url value="/resources/js/angular.js" />" type="text/javascript"></script>
 </head>
-<body  ng-app="">
+<body>
 
 <!-- Page Header -->
-<nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">Abankus Connection</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-        
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Dashboard</a></li>
-            <li><a href="#">Settings</a></li>
-            <li><a href="#">About Us</a></li>
-            <li><a href="#">Help and Contact Us</a></li>
-          </ul>
-          <form class="navbar-form navbar-right">
-            <input type="text" class="form-control" placeholder="Search...">
-          </form>
-        </div>
-      </div>
-    </nav>
-
+<jsp:include page="../header.jsp"/>
 <!-- Page Header ends -->
-<div class="container">
-<div class="row">
-			<div  class="col-sm-3 col-md-3 sidebar">
-			    <div id="accordian">
-				<ul>
-					<li>
-						<h3><span class="fa fa-tachometer fa-2x"></span>Dashboard</h3>
-						<ul>
-							<li><a href="#">Reports</a></li>
-							<li><a href="#">Search</a></li>
-							<li><a href="#">Graphs</a></li>
-							<li><a href="#">Settings</a></li>
-						</ul>
-					</li>
-					<!-- we will keep this LI open by default -->
-					<li class="active">
-						<h3><span class="icon-tasks"></span>Tasks</h3>
-						<ul>
-							<li><a href="#">Today's tasks</a></li>
-							<li><a href="#">Urgent</a></li>
-							<li><a href="#">Overdues</a></li>
-							<li><a href="#">Recurring</a></li>
-							<li><a href="#">Settings</a></li>
-						</ul>
-					</li>
-					<li>
-						<h3><span class="icon-calendar"></span>Calendar</h3>
-						<ul>
-							<li><a href="#">Current Month</a></li>
-							<li><a href="#">Current Week</a></li>
-							<li><a href="#">Previous Month</a></li>
-							<li><a href="#">Previous Week</a></li>
-							<li><a href="#">Next Month</a></li>
-							<li><a href="#">Next Week</a></li>
-							<li><a href="#">Team Calendar</a></li>
-							<li><a href="#">Private Calendar</a></li>
-							<li><a href="#">Settings</a></li>
-						</ul>
-					</li>
-					<li>
-						<h3><span class="fa fa-sign-out"></span>Favourites</h3>
-						<ul>
-							<li><a href="#">Global favs</a></li>
-							<li><a href="#">My favs</a></li>
-							<li><a href="#">Team favs</a></li>
-							<li><a href="#">Settings</a></li>
-						</ul>
-					</li>
-					<li>
-						<h3><span class="fa fa-sign-out fa-lg"></span> Sign Out</h3>
-				
-					</li>
-				</ul>
-			</div>
-	    </div>
+<div id="container" class="container">
+<div class="row height">
 		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
           <h1>Add New Employee</h1>
 			<hr>
-			<div class="row">
-				<ul class="progressbar-list-3">
-					<li class="active">
-						Personal Information
-					</li>
-					<li class="normal">
-						Department/Employment
-					</li>
-					<li class="normal">
-						Security and Login
-					</li>
-				</ul>
-			</div>
-          <div class="row">
+          <div>
           <div class="col-md-7">
-                   <ul>
 			          <c:if test="${not empty success}">
-			          <li class="alert alert-success">${success }</li>
+			          	<span class="alert alert-success">${success }</span>
 			          </c:if>
-		          </ul>
 			<sf:form method="post" modelAttribute="login" action="addEmployeeLogin" name="securityForm" class="form">
 
 			<input type="hidden" name="trigger" value="security">
 			<input type="hidden" name="punt" value="dashboard">
 			<input type="hidden" name="currentpage" value="employeeLoginCredential">	
-			<input type="hidden" name="emailAddress" value="${employee.email}"/>	
+			<input type="hidden" name="emailAddress" value="${employee.emailAddress}"/>	
 			
 			<ul class="block-list">
 			<li>
 			  <label for="username" >Username:</label>
-			    <input type="text" class="form-control" name="username" placeholder="User Name">					
+			    <input type="text" class="form-control" name="username" value="${userInstance.getUsername() }" placeholder="User Name">					
 			</li>
 			<li>
 				<label for="password" >Password:</label>
@@ -139,10 +45,10 @@
 				<div id="pwdValid"></div>			
 			</li>
 			</ul>		
-			<ul>
+				<ul class="spaceBelow_30">
 				<c:if test="${permissionList.size() > 0}">
 					<c:forEach var="permission" items="${permissionList }" varStatus="gdg" >
-						<li>
+						<li class="col-md-6 col-lg-6">
 						<input type="checkbox" name="role" value="${permission.permissionId}">${permission.permission.replaceAll("_"," ") }
 						</li>
 					</c:forEach>
@@ -151,7 +57,7 @@
 			<p>
 			<button class="btn btn-primary" onclick="javascript:submitForm(document.securityForm);"> Save Employee </button>
 			&nbsp;&nbsp;&nbsp;
-			<a href="#"> Cancel </a>
+			<a href="<c:url value="/employee/listEmployee" />"> Cancel </a>
 			</p>
 			
 			</sf:form>
@@ -160,6 +66,9 @@
 		</div>        
 </div>
 </div>
+<!-- Page Header -->
+<jsp:include page="../footer.jsp"/>
+<!-- Page Header ends -->
 </body>
 <script>
 var pwd = document.getElementById("password").value;

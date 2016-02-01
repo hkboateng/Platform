@@ -36,23 +36,18 @@ public class Employee implements Serializable {
 	private String address2;
 	
 
-	private String cellphone;
+	private String phoneNumber;
 	
 
 	private String city;
 
 
-	private String dateOfBirth;
-
-
-	private String email;
+	private String emailAddress;
 
 	private String firstname;
 
 
 	private String gender;
-
-	private String homephone;
 
 
 	private String lastname;
@@ -66,6 +61,8 @@ public class Employee implements Serializable {
 	private String zipcode;
 
 	private String  employeeId;
+	
+	private long companyNumber;
 
 	public Employee() {
 	}
@@ -112,12 +109,12 @@ public class Employee implements Serializable {
 		this.address2 = address2;
 	}
 
-	public String getCellphone() {
-		return this.cellphone;
+	public String getPhoneNumber() {
+		return this.phoneNumber;
 	}
 
-	public void setCellphone(String cellphone) {
-		this.cellphone = cellphone;
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
 
 	public String getCity() {
@@ -128,20 +125,12 @@ public class Employee implements Serializable {
 		this.city = city;
 	}
 
-	public String getDateOfBirth() {
-		return this.dateOfBirth;
+	public String getEmailAddress() {
+		return this.emailAddress;
 	}
 
-	public void setDateOfBirth(String dateOfBirth) {
-		this.dateOfBirth = dateOfBirth;
-	}
-
-	public String getEmail() {
-		return this.email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
+	public void setEmailAddress(String emailAddress) {
+		this.emailAddress = emailAddress;
 	}
 
 
@@ -161,13 +150,6 @@ public class Employee implements Serializable {
 		this.gender = gender;
 	}
 
-	public String getHomephone() {
-		return this.homephone;
-	}
-
-	public void setHomephone(String homephone) {
-		this.homephone = homephone;
-	}
 
 	@JsonValue
 	public String getLastname() {
@@ -214,6 +196,16 @@ public class Employee implements Serializable {
 		builder.append(" ");
 		builder.append(getLastname());		
 		return builder.toString();
+	}
+
+
+	public  long getCompanyNumber() {
+		return companyNumber;
+	}
+
+
+	public void setCompanyId( long companyNumber) {
+		this.companyNumber = companyNumber;
 	}
 
 

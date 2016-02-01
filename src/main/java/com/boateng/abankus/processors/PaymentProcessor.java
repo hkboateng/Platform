@@ -304,7 +304,7 @@ public class PaymentProcessor extends PlatformAbstract{
 		Integer orderId = null;
 		Integer customerId = null;
 		try{
-			orderId = Integer.valueOf(String.valueOf(order.getClientOrderId()));
+			orderId = Long.valueOf(order.getClientOrderId()).intValue();
 			customerId= Integer.valueOf(customer);
 		}catch(NumberFormatException e){
 			PlatformException ace = new PlatformException(e);
@@ -434,7 +434,7 @@ public class PaymentProcessor extends PlatformAbstract{
 		if(response.getStatus() == 200){
 				results =  response.readEntity(String.class);
 				try {
-					 paymentResponse = PlatformUtils.convertFronJson(new TypeReference<List<PaymentSearchResponse>>(){}, results);
+					 paymentResponse = PlatformUtils.convertFromJson(new TypeReference<List<PaymentSearchResponse>>(){}, results);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

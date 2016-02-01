@@ -31,7 +31,7 @@
     </div>
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav navbar-right">
+      <ul class="nav navbar-nav navbar-right hidden">
       	<li><a href="#">About Us</a></li>
       	<li><a href="#">Sign In</a></li>
         <li><a href="<c:url value="/Company/signup" />">Sign Up</a></li>
@@ -44,6 +44,7 @@
 		<div id="container" class="container-fluid">
 			<div class="row">
 				<div class="col-md-6 col-md-offset-3 col-lg-6 col-lg-offset-3">	
+					<div class="spaceBelow_20"></div>
 					<div class="col-sm-12 col-md-8 col-lg-6">	
 					<c:if test="${not empty errors }">
 					<div class="alert alert-success"> ${errors } </div>
@@ -57,7 +58,8 @@
 						<div class="alert alert-warning">
 							<p>Invalid username and password.</p>
 						</div>
-					</c:if>								
+					</c:if>				
+					<div class="spaceBelow_20"></div>				
 						<form action="<c:url value='/login' />" method='POST' class="spaceBelow_10">
 	
 							<c:if test="${param.info != null}">

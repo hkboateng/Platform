@@ -1,8 +1,10 @@
 package com.boateng.abankus.services;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
+import com.boateng.abankus.application.ws.svc.AuthenticationEmployeeRequest;
 import com.boateng.abankus.domain.Customer;
 import com.boateng.abankus.domain.CustomerAccount;
 import com.boateng.abankus.domain.Employee;
@@ -15,13 +17,14 @@ import com.boateng.abankus.exception.PlatformException;
 
 public interface EmployeeService {
 
-	Employee saveEmployee(Employee e,User u, String[] roleId);
+	Employee saveEmployee(Employee e,User u, String[] roleId) throws PlatformException, IOException;
 
+	Employee addEmployeeInformation(Employee employee) throws PlatformException;
 
 	/**
 	 * @return
 	 */
-	List<Employee> getAllEmployee();
+	List<Employee> getAllEmployee(long companyId);
 
 	Employee getEmployeeById(int employeeId);
 
@@ -65,4 +68,11 @@ public interface EmployeeService {
 	 * @return
 	 */
 	List<Employee> findAllEmployeeByEmployeeId(Integer employeeId);
+
+
+	/**
+	 * @param request
+	 * @return
+	 */
+	String saveLoginCredentials(AuthenticationEmployeeRequest request);
 }

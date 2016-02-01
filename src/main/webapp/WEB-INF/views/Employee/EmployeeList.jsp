@@ -22,12 +22,16 @@
 <div id="container" class="container">
 	<div class="row">
 			<div class="col-sm-12 col-md-12 col-lg-12 center-block main">
-
+			<c:if test="${not empty success_message}">
+				<div class="alert alert-danger" role="alert">
+					<span>${success_message}</span>
+				</div>
+			</c:if>
 			<%-- Filter List --%>
 		  <div class="col-lg-12 page-header">
 		   	<span class="lead">Employee List</span>
 		   	<a href="<c:url value="/registration/employee" />" class="btn btn-success pull-right"><span class="glyphicon glyphicon-plus moveR_20"></span>Add New Employee</a>
-		  </div>  
+		    </div>  
 				<div id="listOfEmployee">
 					<table id="employeeList" class="table">
 						<thead>
@@ -48,8 +52,8 @@
 										<p>${empList.city }&nbsp;${empList.state }&nbsp;${empList.zipcode }</p>
 									</td>
 									<td>
-										<p><span class="label"><i class="fa fa-phone-square"></i></span>&nbsp;${empList.cellphone }</p>
-										<p><span class="label"><i class="fa fa-envelope"></i></span>&nbsp;${empList.email}</p>
+										<p><span class="label"><i class="fa fa-phone-square"></i></span>&nbsp;${empList.getPhoneNumber() }</p>
+										<p><span class="label"><i class="fa fa-envelope"></i></span>&nbsp;${empList.getEmailAddress()}</p>
 									</td>
 								</tr>
 							</c:forEach>

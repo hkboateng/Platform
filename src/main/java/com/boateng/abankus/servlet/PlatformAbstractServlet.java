@@ -79,11 +79,14 @@ public abstract class PlatformAbstractServlet {
 			
 			//Loading User into Session
 			Employee employee = authenticationServiceImpl.findEmployeeByUserName(username);
-			EmployeeCollection.getInstance().addEmployee(username, employee);
-			
+			if(employee != null){
+				session.setAttribute(EmployeeFields.EMPLOYEE_SESSION,employee);		
+				logger.info(employee.toString()+" has been loaded in Current Session.");				
+			}else{
+				throw new PlatformException("Employee Information is null or cannot be retrieved.");
+			}
 			//employeeCollection.addEmployee(username, employee);
-			session.setAttribute(EmployeeFields.EMPLOYEE_SESSION,employee);		
-			logger.info(employee.toString()+" has been loaded in Current Session.");
+
 		}
 		
 	}

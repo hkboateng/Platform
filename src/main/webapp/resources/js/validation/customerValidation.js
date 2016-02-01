@@ -1,4 +1,58 @@
-
+function employeeFormValidation(formId){
+	try{
+	$(formId).validate({
+		onsubmit:false,
+		debug : true,
+		rules :{
+			firstname: {
+				required: true
+			},
+			lastname: {
+				required: true
+			},
+			gender : {
+				required: true
+			},
+			address1: {
+				required: true
+			},
+			address2: {
+				required: false
+			},
+			city: {
+				required: true
+			},
+			state: {
+				required: true
+			},
+			zipcode: {
+				required: true,
+				zipCodeGh:true
+			},
+			phoneNumber: {
+				required: true
+			},
+			emailAddress: {
+				required: true
+			}
+		},
+		messages: {
+			firstname : {
+				required: "Your First Name is a required field."
+			},
+			zipcode : {
+				zipCodeGh : "Enter a valid 5-digit postal code."
+			}
+		}
+	});
+	if(!$(formId).valid())
+		 return false;
+	 return true;
+	 
+	}catch(err){
+		console.log(err)
+	}
+}
 function validation(){
 		$("form").validate({
 			onsubmit:false,

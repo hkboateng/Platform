@@ -22,7 +22,6 @@ public class Customer implements Serializable {
 
 	private String customerNumber;
 
-	private String customerType;
 
 	private String firstname;
 
@@ -43,10 +42,6 @@ public class Customer implements Serializable {
 	@OneToOne
 	@JoinColumn(name="emailId")
 	private Email emailId;
-	
-	@OneToOne
-	@JoinColumn(name="contactPersonId")
-	private ContactPerson contactPersonId;
 	
 	public Customer() {
 	}
@@ -86,13 +81,6 @@ public class Customer implements Serializable {
 		this.companyName = companyName;
 	}
 
-	public ContactPerson getContactPersonId() {
-		return this.contactPersonId;
-	}
-
-	public void setContactPersonId(ContactPerson contactPersonId) {
-		this.contactPersonId = contactPersonId;
-	}
 
 	public String getCustomerNumber() {
 		return this.customerNumber;
@@ -102,13 +90,6 @@ public class Customer implements Serializable {
 		this.customerNumber = customerNumber;
 	}
 
-	public String getCustomerType() {
-		return this.customerType;
-	}
-
-	public void setCustomerType(String customerType) {
-		this.customerType = customerType;
-	}
 
 	public Email getEmailId() {
 		return this.emailId;

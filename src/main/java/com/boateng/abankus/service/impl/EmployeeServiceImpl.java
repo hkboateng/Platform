@@ -1,9 +1,18 @@
 package com.boateng.abankus.service.impl;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import org.apache.log4j.Logger;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
 import org.hibernate.CacheMode;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -15,6 +24,8 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.boateng.abankus.application.ws.svc.AuthenticationEmployeeRequest;
+import com.boateng.abankus.authentication.AuthenticationResponse;
 import com.boateng.abankus.domain.Customer;
 import com.boateng.abankus.domain.CustomerAccount;
 import com.boateng.abankus.domain.Employee;
@@ -28,11 +39,17 @@ import com.boateng.abankus.employees.utils.EmployeeUtils;
 import com.boateng.abankus.exception.PlatformException;
 import com.boateng.abankus.services.AuthenticationService;
 import com.boateng.abankus.services.EmployeeService;
+import com.boateng.abankus.utils.PlatformUtils;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component
 
 public class EmployeeServiceImpl implements EmployeeService{
-	private final Logger log = Logger.getLogger(EmployeeServiceImpl.class);
+	private final Logger log = Logger.getLogger(EmployeeServiceImpl.class.getName());
 
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -50,59 +67,93 @@ public class EmployeeServiceImpl implements EmployeeService{
 		 return sessionFactory;
 		 }
 
-
-
-	@Transactional
 	@Override
-	public Employee saveEmployee(Employee e,User user, String[] role){
+	@Transactional
+	public Employee saveEmployee(Employee e,User user, String[] role) throws PlatformException, IOException{
 		try{
-		if (e == null) {
-			return null;
-		}
-		
-		if (e.getEmployeeId() == null) {
-			e.setEmployeeId(EmployeeUtils.generateEmployeeId());
-		}
-		Session session = getSessionFactory().getCurrentSession();
+			if (e == null) {
+				return null;
+			}
+			
+			AuthenticationEmployeeRequest request = new AuthenticationEmployeeRequest();
+			request.setAddress1(e.getAddress1());
+			request.setAddress2(e.getAddress2());
+			request.setPhoneNumber(e.getPhoneNumber());
+			request.setCity(e.getCity());
+			request.setCompanyNumber(e.getCompanyNumber());
+			request.setFirstname(e.getFirstname());
+			request.setGender(e.getGender());
+			request.setLastname(e.getLastname());
+			request.setMiddlename(e.getMiddlename());
+			request.setState(e.getState());
+			request.setZipcode(e.getZipcode());
+			request.setRoles(role);
+			request.setCompanyId(user.getCompanyId());
+			request.setEmailAddress(e.getEmailAddress());
+			request.setEnabled(true);
+			request.setUsername(user.getUsername());
+			request.setHashpassword(user.getPassword());
+			
+			
+			
+			String result = saveLoginCredentials(request);
+			AuthenticationResponse response = PlatformUtils.convertFromJSON(AuthenticationResponse.class, result);
+			log.info(response.getMessage());
 
-		session.persist(e);
-		user.setEmployeeId(e.getEmployeeId());
-		session.save(user);
-		
-		/** Saving Employee UserRole **/
-		UserRole userRole = null;
-		for(int i=0;i< role.length;i++){
-			userRole = new UserRole(user,role[i]);
-			session.save(userRole);
-
-		}
-		
-		/**
-		 * Add Employee to default teams
-		 */
-		Team team = new Team();
-		team.setTeamNumber(Team.generateTeamId());
-		team.setEmployee(e);
-		team.setTeamname("Default");
-		session.save(team);
-		session.flush();
-		return e;	
+			return e;	
 		
 		}catch(HibernateException ex){
-			ex.getMessage();
+			ex.printStackTrace();
 			return null;
 		}
 	}
 
-
-	
-	@SuppressWarnings("unchecked")
-	@Transactional
 	@Override
-	public List<Employee> getAllEmployee(){
-		Session session = getSessionFactory().getCurrentSession();
-		List<Employee> listEmployee = 	session.createQuery("From Employee")
-						.list();
+	public String saveLoginCredentials(AuthenticationEmployeeRequest request ){
+		Client client = ClientBuilder.newClient();
+		
+		String response = null;
+		String requestString = null;
+		try {
+			requestString = PlatformUtils.convertToJSON(request);
+			response = client.target("http://localhost:8080/authenticationhub/authentication/saveEmployeeInformation")
+									.request()
+									.put(Entity.entity(requestString, MediaType.APPLICATION_JSON), String.class);
+		} catch ( IOException e) {
+			log.log(Level.INFO,e.getMessage());
+			e.printStackTrace();
+		}finally{
+			requestString = null;			
+		}
+		
+		return response;
+	}
+	
+	@Override
+	public List<Employee> getAllEmployee(long companyId){
+		Client client = ClientBuilder.newClient();
+		List<Employee> listEmployee = null;
+		Response response = null;
+		String result = null;		
+		try {
+			 result = "";
+			response = client.target("http://localhost:8080/authenticationhub/authentication/getAllEmployeeByCompanyId")
+								.queryParam("companyId", companyId)
+									.request()
+									.get();
+			if(response.getStatus() == 200){
+				result = response.readEntity(String.class);
+				try {
+					listEmployee = PlatformUtils.convertFromJson(new TypeReference<List<Employee>>(){}, result);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		} finally{
+			response = null;
+			 result = null;			
+		}		
 		
 		return listEmployee;
 	}
@@ -110,7 +161,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 	@Transactional
 	public Employee getEmployeeById(int employeeId){
 		if(employeeId < 1){
-			log.warn("Employee Id is Null.");
+			log.warning("Employee Id is Null.");
 			return null;
 		}
 		Session session = getSessionFactory().getCurrentSession();
@@ -174,10 +225,11 @@ public class EmployeeServiceImpl implements EmployeeService{
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
+	@Transactional	
 	public List<Employee> findAllEmployeeByEmployeeNumber(String employeeNumber) throws PlatformException{
 		Session session = getSessionFactory().getCurrentSession();
-		List<Employee> employeeList = session.createQuery("from Employee e wheren e.employeeNumber =:employeeNumber")
-				.setParameter("employNumber", employeeNumber)
+		List<Employee> employeeList = session.createQuery("from Employee e where e.employeeId =:employeeId")
+				.setParameter("employeeId", employeeNumber)
 				.list();
 		return employeeList;
 	}
@@ -212,6 +264,14 @@ public class EmployeeServiceImpl implements EmployeeService{
 	public List<Employee> findAllEmployeeByEmployeeId(Integer employeeId) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Transactional
+	@Override
+	public Employee addEmployeeInformation(Employee employee) throws PlatformException {
+		Session session = getSessionFactory().getCurrentSession();
+		session.save("employee", employee);
+		return employee;
 	}
 
 }

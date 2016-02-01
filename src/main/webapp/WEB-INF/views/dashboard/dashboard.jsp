@@ -146,7 +146,6 @@
 		
 	});
 	function createGauges()	{
-		//createGauge("customer", "Customer");
 		createGauge("payment", "");
 	}
 	function loadEmployeeCustomers(){
@@ -159,19 +158,7 @@
 		loadMonthAndYearPayments(month,year);
 	}
 
-	function loadTotalCustomerCount(){
-		$.ajax({
-			url: 'countTotalCustomers',
-			method: 'get',
-			dataType: 'json',
-			success: function(result){
-				updateGauges('customer',result);
-			},
-			error : function(err){
-				console.log(err.responseText);
-			}
-		});			
-	}
+
 	function loadYearPayments(year){
 		if(year == null){
 			year = new Date().getFullYear();

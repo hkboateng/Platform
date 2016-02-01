@@ -107,13 +107,14 @@ public class PlatformController  extends PlatformAbstractServlet {
 	@RequestMapping(value = "/platform/index", method = RequestMethod.GET)
 	public String home(HttpServletRequest request, Model model,RedirectAttributes redirectAttributess) {
 		try {
-			loadUserIntoSession(request);
+			//loadUserIntoSession(request);
 			loadEmployeeIntoSessionByUsername(request);
 			loadProductIntoSession(request);
 		} catch (Exception e) {
 			PlatformException ace  = new PlatformException();
 			ace.logger(Level.WARNING,e.getMessage(), e);
-
+			redirectAttributess.addFlashAttribute("errors", "Error occured authenticating you. Try again later.");
+			return "redirect:/login";
 		}
 		return "dashboard/dashboard";
 	}

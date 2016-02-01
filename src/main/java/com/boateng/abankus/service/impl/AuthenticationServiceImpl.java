@@ -22,6 +22,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.boateng.abankus.authentication.AuthenticationEmployeeResponse;
 import com.boateng.abankus.domain.Employee;
 import com.boateng.abankus.domain.Permission;
 import com.boateng.abankus.domain.Role;
@@ -83,15 +84,14 @@ public class AuthenticationServiceImpl  implements AuthenticationService{
 		return SecurityUtils.authenticatePassword(plain, passwd);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Transactional	
 	@Override
 	public User findUserByUserName(String username) {
-		List query = getSessionFactory().getCurrentSession()
+		User query = (User)getSessionFactory().getCurrentSession()
 				.createQuery("from User where username= :username")
 				.setParameter("username", username)
-				.list();
-		return (User) query.get(0);
+				.uniqueResult();
+		return query;
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -137,27 +137,39 @@ public class AuthenticationServiceImpl  implements AuthenticationService{
 		}
 	}
 	
-	@Transactional	
+	
 	@Override
 	public Employee findEmployeeByUserName(String username) {
-		Query userQuery = getSessionFactory().getCurrentSession()
+		Employee employee = null;
+		Client client = ClientBuilder.newClient();
+		WebTarget target = client.target("http://localhost:8080/authenticationhub/authentication");
+		Response response = target.path("/findEmployeeByUsername")
+										.queryParam("username", username)
+										.request(MediaType.APPLICATION_JSON)
+										.get();
+		
+		String results = response.readEntity(String.class);
+		try {
+			AuthenticationEmployeeResponse employeeResponse = PlatformUtils.convertFromJson(new TypeReference<AuthenticationEmployeeResponse>() {}, results);
+			if(employeeResponse.isResult()){
+				employee = employeeResponse.getEmployee();
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		/** Finding Employee using username from User
+		 * Query userQuery = getSessionFactory().getCurrentSession()
 							.createQuery("from User where username= :username")
 							.setParameter("username", username);
 		User user = (User) userQuery.uniqueResult();
-		
-		/** Finding Employee using username from User **/
-		if(user == null){
-			return null;
-		}
-		List employee = getSessionFactory().getCurrentSession()
-								.createQuery("from Employee where employeeId= :employeeId")
-								.setParameter("employeeId", user.getEmployeeId())
-								.list();
-		if(employee == null || employee.size() < 1){
-			return null;
-		}
-		Employee emp = (Employee) employee.get(0);
-		return emp;
+				Employee employee = (Employee) getSessionFactory().getCurrentSession()
+								.createSQLQuery("select e from Employee e JOIN usrtbl u ON u.employeeId = e.employeeId where u.username= :username")
+								.setParameter("username", username)
+								.uniqueResult();
+		 *  **/
+
+		return employee;
 	}
 	/* (non-Javadoc)
 	 * @see com.boateng.abankus.services.AuthenticationService#AuthenticateUser(java.lang.String, java.lang.String)
@@ -181,7 +193,7 @@ public class AuthenticationServiceImpl  implements AuthenticationService{
 		String results= null;
 		if(response.getStatus() == 200){
 			results = response.readEntity(String.class);
-			 permissionList = PlatformUtils.convertFronJson(new TypeReference<List<Permission>>() {}, results);
+			 permissionList = PlatformUtils.convertFromJson(new TypeReference<List<Permission>>() {}, results);
 		}
 		//List<Permission> permissionList = getAllUserPermission(permissions);
 		return permissionList;

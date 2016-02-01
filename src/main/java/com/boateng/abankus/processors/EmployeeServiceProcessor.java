@@ -13,7 +13,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import com.boateng.abankus.application.builders.EmployeeBuilder;
 import com.boateng.abankus.controller.OrderController;
+import com.boateng.abankus.domain.ContactPerson;
 import com.boateng.abankus.domain.Employee;
 import com.boateng.abankus.domain.User;
 import com.boateng.abankus.domain.UserRole;
@@ -49,54 +51,12 @@ public class EmployeeServiceProcessor {
 	
 	private EmployeeServiceProcessor(){}
 
-	
-	public Employee createEmployeeObject(HttpServletRequest request){
-		String firstname = request.getParameter("firstname").trim();
-		String lastname = request.getParameter("lastname").trim();
-		String middlename = request.getParameter("lastname");
-		String address1= request.getParameter("address1").trim();
-		String address2= request.getParameter("address2").trim();
-		String city= request.getParameter("city").trim();
-		String state= request.getParameter("state").trim();
-		String zipcode= request.getParameter("zip").trim();
-		String month= request.getParameter("month").trim();
-		String day= request.getParameter("day").trim();
-		String year= request.getParameter("year").trim();
-		String gender= request.getParameter("gender").trim();
-		String email = request.getParameter("email").trim();
-		String cellPhone = request.getParameter("cellPhone").trim();
-		
-		StringBuffer sbr = new StringBuffer();
-		sbr.append(month).append(day).append(year);
-		
-		Employee employee = new Employee();
-		
-		employee.setFirstname(firstname);
-		employee.setLastname(lastname);
-		if(middlename != null){
-			employee.setMiddlename(middlename);
-		}
-		employee.setEmail(email);
-		employee.setCellphone(cellPhone);
-		employee.setGender(gender);
-			
-		employee.setAddress1(address1);
-		if(address2 != null){
-			employee.setAddress2(address2);
-		}
-		employee.setCity(city);
-		employee.setState(state);
-		employee.setZipcode(zipcode);
-		employee.setDateOfBirth(sbr.toString());
-		sbr = null;
-		return employee;
-	}
 
 
 	public User saveEmployeeLogin(User user,Employee employee){
 		
 		if(user !=null && employee != null){
-			user.setEmailAddress(employee.getEmail());
+			user.setEmailAddress(employee.getEmailAddress());
 			
 		}
 		
@@ -139,7 +99,7 @@ public class EmployeeServiceProcessor {
 	private void updateEmployeeInformation(HttpServletRequest request){
 		Integer Id  = Integer.valueOf(request.getParameter("jumbo"));
 		String employeeId = request.getParameter("employeeId");
-		Employee employee = buildEmployeeInstance(request,employeeId,Id);
+		Employee employee = buildUpdateEmployeeInstance(request,employeeId,Id);
 		
 		employeeSvcImpl.updateEmployeeByIdAndEmployeeId(Id, employee);
 		session = request.getSession(false);
@@ -147,7 +107,7 @@ public class EmployeeServiceProcessor {
 		session.setAttribute(EmployeeFields.EMPLOYEE_SESSION,employee);	
 	}
 	
-	private Employee buildEmployeeInstance(HttpServletRequest request,String employeeId,Integer Id){
+	private Employee buildUpdateEmployeeInstance(HttpServletRequest request,String employeeId,Integer Id){
 		String firstname = request.getParameter("firstname").trim();
 		String lastname = request.getParameter("lastname").trim();
 		String middlename = request.getParameter("lastname");
@@ -163,6 +123,7 @@ public class EmployeeServiceProcessor {
 		String email = request.getParameter("email").trim();
 		String cellPhone = request.getParameter("cellphone").trim();	
 		
+
 		/*******************************
 		 * Building Employee Instance obtain from the search result
 		 */
@@ -177,8 +138,8 @@ public class EmployeeServiceProcessor {
 		if(middlename != null){
 			employee.setMiddlename(middlename);
 		}
-		employee.setEmail(email);
-		employee.setCellphone(cellPhone);
+		employee.setEmailAddress(email);
+		employee.setPhoneNumber(cellPhone);
 		employee.setGender(gender);
 			
 		employee.setAddress1(address1);
@@ -188,7 +149,6 @@ public class EmployeeServiceProcessor {
 		employee.setCity(city);
 		employee.setState(state);
 		employee.setZipcode(zipcode);
-		employee.setDateOfBirth(sbr.toString());
 		return employee;
 		
 	}
@@ -225,4 +185,7 @@ public class EmployeeServiceProcessor {
 		// TODO Auto-generated method stub
 		
 	}
+
 }
+
+

@@ -48,7 +48,8 @@
 										</div>									
 									<div class="col-md-8" id="paymentEntry">
 										<label for="orderNumber">Order Number:</label>
-										<input type="text"	name="orderNumber" id="orderNumber" disabled class="form-state  width-75" value="${billing.getClientOrderId().getOrderNumber() }" /> 
+										<span>${product.getProductName()}</span>
+										<input type="hidden"	name="orderNumber" id="orderNumber"  value="${billing.getClientOrderId().getOrderNumber() }" /> 
 										<label for="paymentMethod">Select Payment	Type:</label> 
 										<select name="paymentMethod" id="paymentMethod" class="form-state"	onchange="javascript:showBankCardInfoDiv(this);">
 											<option value="cash">Cash</option>
@@ -215,6 +216,7 @@ $(document).ready(function(){
 			});
 			$.ajax({
 				url: 'validateCustomerAuthenticate',
+				method: 'get',
 				data : form,
 				dataType: 'json',
 				beforeSend: function(){
@@ -225,7 +227,12 @@ $(document).ready(function(){
 						showMessage("You must enter a valid Pin Number!!!","alert",messageDiv);
 						
 					}else{
-						$('#paymentContainer').html('<h3>Your payment have being submitted.</h3><p>Your confirmation number is: <b>'+result+'</b></p>');
+						$('#paymentContainer').html('<h3>Your payment have being submitted.</h3>'+
+													'<p><span class="label labelLength_20">Your confirmation number is: </span><b>'+result.transactionNumber+'</b></p>'+
+													'<p><span class="label labelLength_20">Payment Date:</span> '+result.paymentDate+' '+result.paymentTime+'</p>'
+													+'<p><span class="label labelLength_20">Amount Paid:</span> '+result.amountPaid+'</p>'
+													+'<p><span class="label labelLength_20">Payment Method:</span><script>javascript:toTitleCase('+result.paymentType+');<script></p>'
+													+'<p><span class="label labelLength_20">Customer Number:</span> '+result.customerNumber+'</p>');
 					}
 					
 				},

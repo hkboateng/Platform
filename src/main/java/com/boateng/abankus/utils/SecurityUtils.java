@@ -269,11 +269,5 @@ public class SecurityUtils {
 				throw ace;
 			}
 	    }    
-	    
-	    public static Integer generateCompanyNumber(){
-	    	StringBuilder sbr = new StringBuilder();
-	    	String pin = RandomStringUtils.randomNumeric(10).toUpperCase();
-	    	sbr.append(pin);
-	    	return Integer.parseInt(sbr.toString());
-	    }
+
 }

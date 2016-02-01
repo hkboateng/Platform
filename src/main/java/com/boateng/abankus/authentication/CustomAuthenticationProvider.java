@@ -130,7 +130,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 		results = response.readEntity(String.class);
 		if(results != null){
 			try {
-				permissionList = PlatformUtils.convertFronJson(new TypeReference<List<String>>() {}, results);
+				permissionList = PlatformUtils.convertFromJson(new TypeReference<List<String>>() {}, results);
 			} catch (JsonParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -1,6 +1,6 @@
 	<footer class="footer">
 		<div class="container">
-			<p>Copyright &copy; 2015</p>
+			<p>Copyright &copy; 2015 - <script>copyright();</script>. Abankus Payments and its affilate companyes.<span>All rights reserved</span></p>
 		</div>		
 	</footer>
 	    <script>

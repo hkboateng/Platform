@@ -42,23 +42,24 @@ public class CompanyServiceImpl implements CompanyService {
 
 	@Override
 	@Transactional
-	public Company saveCompany(Company company, Email email, Phone phone, Address address, ContactPerson person) {
+	public Company saveCompany(Company company) {
 		Session session = null;
 		if(getSessionFactory().isClosed()){
 			session = getSessionFactory().openSession();
 		}else{
 			session = getSessionFactory().getCurrentSession();
 		}
-		session.save(email);
-		session.save(phone);
-		session.save(address);
-		session.save(person);
+		session.save(company.getEmailBean());
+		session.save(company.getPhoneBean());
+		session.save(company.getAddressBean());
+		session.save(company.getContactperson());
 		
+		/**
 		company.setAddressBean(address);
 		company.setContactperson(person);
 		company.setPhoneBean(phone);
 		company.setEmailBean(email);
-		
+		**/
 		session.save(company);
 		session.flush();
 		return company;

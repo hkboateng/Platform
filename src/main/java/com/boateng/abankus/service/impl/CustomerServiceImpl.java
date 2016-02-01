@@ -3,8 +3,8 @@ package com.boateng.abankus.service.impl;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.logging.Logger;
 
-import org.apache.log4j.Logger;
 import org.hibernate.CacheMode;
 import org.hibernate.LockMode;
 import org.hibernate.LockOptions;
@@ -31,7 +31,7 @@ import com.boateng.abankus.utils.SecurityUtils;
 @Component
 public class CustomerServiceImpl implements CustomerService {
 
-	private static final Logger logger = Logger.getLogger(CustomerServiceImpl.class);
+	private static final Logger logger = Logger.getLogger(CustomerServiceImpl.class.getName());
 	
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -59,7 +59,6 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Transactional
 	@Override
-	
 	public Customer addNewCustomer(Customer customers,Email email, Phone phone,Address address){
 		try{
 			Session session = getSessionFactory().getCurrentSession();
@@ -67,14 +66,11 @@ public class CustomerServiceImpl implements CustomerService {
 					customers = saveCustomerContact(session,email,phone,address,customers);
 					session.save(customers);
 					Authenticatecustomer auth = addCustomerAuthentication(customers);
-					session.save(email);
-					session.save(address);
-					session.save(phone);
 					session.save(auth);
 					session.flush();
 					return customers;
 		}catch(Exception e){
-			e.printStackTrace();
+			logger.warning(e.getMessage());
 			return null;
 		}
 	}
@@ -96,7 +92,6 @@ public class CustomerServiceImpl implements CustomerService {
 	 */
 	private Authenticatecustomer addCustomerAuthentication(Customer customers) throws Exception {
 		String pin = SecurityUtils.generateCustomerPIN();
-		logger.info("Pin Number is: "+pin);
 		Authenticatecustomer auth = new Authenticatecustomer();
 		auth.setCustomer(customers);
 		String encryptedPIN = SecurityUtils.generateStorngPasswordHash(pin);
@@ -117,9 +112,6 @@ public class CustomerServiceImpl implements CustomerService {
 		return list;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.boateng.abankus.employee.interfaces.CustomerService#getAllCustomers()
-	 */
 	
 	@Transactional	
 	@Override
@@ -196,18 +188,14 @@ public class CustomerServiceImpl implements CustomerService {
 	 */
 	@Override
 	@Transactional
-	public Email findCustomerByEmailAddress(String email) {
+	public Email findCustomerByEmailAddress(String emailAddress) {
 		Session session = getSessionFactory().getCurrentSession();
 		String query = "From Email e where e.emailAddress=:email";
-		@SuppressWarnings("unchecked")
-		List<Email> emailList = session.createQuery(query)
-						.setParameter("email", email)
-						.list();
-		if(emailList.size() > 0){
-		return emailList.get(0);
-		}else{
-			return null;
-		}
+		Email email = (Email) session.createQuery(query)
+						.setParameter("email", emailAddress)
+						.uniqueResult();
+
+			return email;
 	}
 
 	/* (non-Javadoc)
@@ -357,7 +345,7 @@ public class CustomerServiceImpl implements CustomerService {
 		Session session = getSessionFactory().getCurrentSession();
 		Customer customer = (Customer) session.get(Customer.class, customerId,LockOptions.READ);
 		session.save(person);
-		customer.setContactPersonId(person);
+		
 		session.update(customer);
 	}
 

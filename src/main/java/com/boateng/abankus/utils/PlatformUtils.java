@@ -87,7 +87,7 @@ public class PlatformUtils {
 		return type;
 	}
 	
-	public static <T> T convertFronJson(TypeReference<T> r, String json) throws JsonParseException, JsonMappingException, IOException{
+	public static <T> T convertFromJson(TypeReference<T> r, String json) throws JsonParseException, JsonMappingException, IOException{
 		ObjectMapper mapper = new ObjectMapper();
 		T t = null;
 		if(json != null){

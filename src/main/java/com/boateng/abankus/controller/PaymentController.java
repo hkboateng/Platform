@@ -29,6 +29,7 @@ import com.boateng.abankus.domain.Customer;
 import com.boateng.abankus.domain.CustomerBilling;
 import com.boateng.abankus.domain.CustomerOrder;
 import com.boateng.abankus.domain.Employee;
+import com.boateng.abankus.domain.PaymentTransaction;
 import com.boateng.abankus.domain.Product;
 import com.boateng.abankus.exception.PlatformException;
 import com.boateng.abankus.fields.CustomerFields;
@@ -64,7 +65,7 @@ public class PaymentController extends PlatformAbstractServlet  {
 	private HttpSession session;
 	
 
-	//@Secured("ROLE_ACCEPT_PAYMENT")
+	@Secured("ROLE_ACCEPT_PAYMENT")
 	@RequestMapping(value = "/QuickPayment", method = RequestMethod.GET)
 	public String payment(Model model){
 		logger.info("Viewing Quick Payment");
@@ -142,7 +143,7 @@ public class PaymentController extends PlatformAbstractServlet  {
 		
 		String customerId = String.valueOf(customer.getCustomerId());
 		String status = null;
-		
+		PaymentTransaction transaction = null;
 		try{
 			if(StringUtils.isBlank(customerpin) || !StringUtils.isAlphanumeric(customerpin)){
 				
@@ -158,7 +159,7 @@ public class PaymentController extends PlatformAbstractServlet  {
 				
 				if(note){
 					status = paymentProcessor.processPayment(request);
-					status = PlatformUtils.convertToJSON(status);
+					//status = PlatformUtils.convertToJSON(status);
 				}				
 			}
 		}catch(PlatformException ace){

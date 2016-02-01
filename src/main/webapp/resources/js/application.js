@@ -360,6 +360,14 @@ function validateExternalPayment(){
 		 return false;
 	 return true;				
 }
+function copyright(){
+    var cdate = new Date();
+    var vdate = cdate.getYear();
+    if(vdate < 2000){
+        vdate += 1900;
+    }
+    document.write(vdate);
+}
 function validatePaymentForm(){
 	$("#submitPayment").validate({
 		onsubmit:false,

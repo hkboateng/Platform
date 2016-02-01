@@ -35,6 +35,8 @@ public class ContactPerson  implements Serializable{
 	
 	private String lastname;
 	
+	private String middlename;
+	
 	private String email;
 	
 	private String phoneNumber;
@@ -131,5 +133,13 @@ public class ContactPerson  implements Serializable{
 		StringBuilder sbr = new StringBuilder();
 		sbr.append(getFirstname()).append(" ").append(getLastname());
 		return sbr.toString();
+	}
+
+	public String getMiddlename() {
+		return middlename;
+	}
+
+	public void setMiddlename(String middlename) {
+		this.middlename = middlename;
 	}
 }

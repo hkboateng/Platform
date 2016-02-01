@@ -4,6 +4,7 @@
 package com.boateng.abankus.controller;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,6 +24,7 @@ import com.boateng.abankus.entity.validation.CompanyValidation;
 import com.boateng.abankus.exception.PlatformException;
 import com.boateng.abankus.fields.PlatformFields;
 import com.boateng.abankus.processors.CompanyProcessor;
+import com.boateng.abankus.servlet.PlatformAbstractServlet;
 
 /**
  * Controller for Company (Clients that will be using this application.)
@@ -31,7 +33,7 @@ import com.boateng.abankus.processors.CompanyProcessor;
  */
 
 @Controller
-public class CompanyController {
+public class CompanyController extends PlatformAbstractServlet{
 
 	private static final Logger logger = Logger.getLogger( CompanyController.class.getName());
 	
@@ -39,10 +41,26 @@ public class CompanyController {
 	private CompanyProcessor companyProcessor;
 	
 	@RequestMapping(value ="/Company/signup", method = RequestMethod.GET)
-	public String signup(Model model) {
-		logger.info("Viewing Sign up page. ");
+	public String signup(HttpServletRequest request,Model model) {
+		try {
+			logger.info(logActivity("Viewing Sign up page. ",getEmployeeInSession(request)));
+		} catch (PlatformException e) {
+			logger.warning(e.getMessage());
+			logger.warning("Error occured while logging was getting Employee from session.");
+		}
 
 		return "SignUp";
+	}
+
+	@RequestMapping(value ="/Company/viewCompanyProfile", method = RequestMethod.GET)
+	public String companyProfile(HttpServletRequest request,Model model) {
+		try {
+			logger.info(logActivity("is viewing Company Profile page.",getEmployeeInSession(request)));
+		} catch (PlatformException e) {
+			logger.warning(e.getMessage());
+			logger.warning("Error occured while logging was getting Employee from session.");
+		}
+		return "Company/CompanyProfile";
 	}
 	
 	@RequestMapping(value="/Company/saveCompany", method=RequestMethod.POST)
@@ -60,13 +78,20 @@ public class CompanyController {
 		Company company = null;
 
 			try {
-				AuthenticationResponse authenticationResponse = companyProcessor.submitCompanyCredential(request);
-				if(authenticationResponse.isResult()){
-					company = companyProcessor.buildAndSubmitCompany(request);
+				
+				company = companyProcessor.buildAndSubmitCompany(request);
+				if(company != null){
+					AuthenticationResponse authenticationResponse = companyProcessor.submitCompanyCredential(company.getCompanyId());
+					if(authenticationResponse.isResult()){
+						redirectAttributess.addFlashAttribute(PlatformFields.SUCCESS_MESSAGE,"Your Company has being recieved successfully. You will received an email shortly");			
+					}else{
+						redirectAttributess.addFlashAttribute(PlatformFields.ERROR_MESSAGE,authenticationResponse.getMessage());
+						return "redirect:/Company/signup";					
+					}				
 				}else{
-					redirectAttributess.addFlashAttribute(PlatformFields.ERROR_MESSAGE,authenticationResponse.getMessage());
-					return "redirect:/Company/signup";					
-				}
+					redirectAttributess.addFlashAttribute(PlatformFields.SUCCESS_MESSAGE,"Your Company has being recieved successfully. You will received an email shortly");			
+				}				
+				
 			} catch (PlatformException | IOException e) {
 				logger.log(Level.SEVERE,e.getMessage());
 				e.printStackTrace();
@@ -74,12 +99,7 @@ public class CompanyController {
 				return "redirect:/Company/signup";				
 			}
 		
-		if(company != null){
-			redirectAttributess.addFlashAttribute(PlatformFields.SUCCESS_MESSAGE,"Your Company has being recieved successfully. You will received an email shortly at this address: "+ company.getContactperson().getEmail());
-		}
-			else{
-			redirectAttributess.addFlashAttribute(PlatformFields.SUCCESS_MESSAGE,"Your Company has being recieved successfully. You will received an email shortly");			
-		}
+
 		company = null;
 		return "redirect:/Company/signup";
 	}

@@ -23,7 +23,7 @@
 		        </a>
 	            <ul id="menu1" class="dropdown-menu" aria-labelledby="aEmployeeInfoLink">
 		          <li><a href="/abankus/employee/editEmployee?employeeId=${employee.employeeId}&jumboId=${employee.id}"><i class="fa fa-pencil-square-o fa-lg moveR_10"></i>View Profile</a></li>
-			          <li><a href="<c:url value="/platform/settings" />"><i class="fa fa-cogs fa-lg moveR_10"></i>Company Settings</a></li>
+			          <li><a href="<c:url value="/Company/viewCompanyProfile" />"><i class="fa fa-cogs fa-lg moveR_10"></i>Company Settings</a></li>
 		          <li role="separator" class="divider"></li>
 		          <li><a href="<c:url value="/platform/logout"/>"><i class="glyphicon glyphicon-off fa-lg moveR_10"></i>Logout</a></li>
 		        </ul>

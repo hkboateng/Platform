@@ -40,7 +40,7 @@ public class LoginUser extends User{
 		this.username = auth.getName();
 		this.employee = authenticationServiceImpl.findEmployeeByUserName(username);
 		if(employee != null){
-			this.emailAddress = employee.getEmail();
+			this.emailAddress = employee.getEmailAddress();
 			this.employeeId = employee.getEmployeeId();
 		}
 		

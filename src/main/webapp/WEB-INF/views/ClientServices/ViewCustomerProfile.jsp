@@ -159,9 +159,17 @@
 									    <span class="sr-only">Toggle Dropdown</span>
 									  </button>
 									  <ul class="dropdown-menu">
-									    <li><a href="#" id="makePaymentBtn" onclick="javascript:submitCustomerPayment('${keySec }','${value.getTotalOrderAmount()}');" >Make Payment</a></li>
-									    <li role="separator" class="divider"></li>
-									    <li><a onclick="javascript:submitURLForm(document.viewTransactionDetail,'${keySec }')" href="#">View Order</a></li>
+									  	<c:choose>
+									  		<c:when test="${value.finishPaying()}">
+									   			<li><a onclick="javascript:submitURLForm(document.viewTransactionDetail,'${keySec }')" href="#">View Order</a></li>										  		
+									  		</c:when>
+									  		<c:otherwise>
+									  			<li><a href="#" id="makePaymentBtn" onclick="javascript:submitCustomerPayment('${keySec }','${value.getTotalOrderAmount()}');" >Make Payment</a></li>
+									    			<li role="separator" class="divider"></li>
+									   			<li><a onclick="javascript:submitURLForm(document.viewTransactionDetail,'${keySec }')" href="#">View Order</a></li>								  		
+									  		</c:otherwise>
+									  	</c:choose>
+									    
 									  </ul>
 									</div>						
 								<%--		

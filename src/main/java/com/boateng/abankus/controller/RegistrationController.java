@@ -28,6 +28,7 @@ import com.boateng.abankus.domain.Permission;
 import com.boateng.abankus.domain.Role;
 import com.boateng.abankus.domain.User;
 import com.boateng.abankus.exception.PlatformException;
+import com.boateng.abankus.fields.PlatformFields;
 import com.boateng.abankus.processors.EmployeeServiceProcessor;
 import com.boateng.abankus.services.AuthenticationService;
 import com.boateng.abankus.services.EmployeeService;
@@ -56,29 +57,30 @@ public class RegistrationController  extends PlatformAbstractServlet  {
 	}
 	
 	@RequestMapping(value="addEmployee", method=RequestMethod.POST)
-	public String addEmployee(@Valid Employee employee,BindingResult result,HttpServletRequest request,RedirectAttributes redirectAttributess) throws IOException{
+	public String addEmployee(@Valid Employee employee,BindingResult result,HttpServletRequest request,RedirectAttributes redirectAttributess) throws IOException, PlatformException{
 		HttpSession session = request.getSession();
+		
 		if(result.hasErrors()){
 			redirectAttributess.addFlashAttribute("validationError", result.getAllErrors());
 			return "redirect:/registration/employee";
 		}
-		boolean isEmailUsed =  authenticationServiceImpl.doEmailExist((employee.getEmail()));
+		boolean isEmailUsed =  authenticationServiceImpl.doEmailExist((employee.getEmailAddress()));
 		if(isEmailUsed){
-			redirectAttributess.addFlashAttribute("errors", "Email Address already in use.");
+			redirectAttributess.addFlashAttribute("error_message", "Email Address already in use.");
 			return "redirect:/registration/employee";
 		}	
 		
-		logger.info("Saving New Employee data");
+		logger.info(logActivity("is Saving New Employee: "+employee.toString(),getEmployeeInSession(request)));
 		List<Permission> permissionList = authenticationServiceImpl.getEmployeePermissions();
 		if(permissionList.size() > 0){
 			redirectAttributess.addFlashAttribute("permissionList", permissionList);
 		}
-		redirectAttributess.addFlashAttribute("employee", employee);
+		session.setAttribute("employeeInstance", employee);
 		return "redirect:/registration/security";
 	}
 	
 	@RequestMapping(value="/addEmployeeLogin", method=RequestMethod.POST)
-	public String addEmployeeLogin(@Valid User login, BindingResult result,HttpServletRequest request,RedirectAttributes redirectAttributess){
+	public String addEmployeeLogin(@Valid User login, BindingResult result,HttpServletRequest request,RedirectAttributes redirectAttributess) throws PlatformException, IOException{
 		HttpSession session = request.getSession();
 		String[] roleId = request.getParameterValues("role");
 		if(result.hasErrors()){
@@ -86,16 +88,18 @@ public class RegistrationController  extends PlatformAbstractServlet  {
 			return "redirect:/registration/security";
 		}
 		
-		boolean usernameExist =  authenticationServiceImpl.doEmailExist((login.getUsername()));
+		boolean usernameExist =  authenticationServiceImpl.doUserNameExist((login.getUsername()));
 		if(usernameExist){
-			redirectAttributess.addFlashAttribute("error_message", "Username already exist.");
+			redirectAttributess.addFlashAttribute(PlatformFields.ERROR_MESSAGE, "Username already exist.");
+			redirectAttributess.addFlashAttribute("userInstance",login);
 			return "redirect:/registration/security";
 		}
 		
-		Employee employee = (Employee) session.getAttribute("employee");
-		
+		Employee employee = (Employee) session.getAttribute("employeeInstance");
+		Employee currentUser = getEmployeeInSession(request);
 		if(employee !=null){
 			User user = EmployeeServiceProcessor.getInstance().saveEmployeeLogin(login,employee);
+			user.setCompanyId(currentUser.getCompanyNumber());
 			employee = employeeSvcImpl.saveEmployee(employee,user,roleId);
 				if(employee == null){
 					return "Employee/AddNewEmployee";
@@ -104,8 +108,8 @@ public class RegistrationController  extends PlatformAbstractServlet  {
 		}else{
 			
 		}
-		request.setAttribute("success", "Congratulations on registering. Please Login !!!");
-		return "redirect:/registration/employee";
+		redirectAttributess.addAttribute(PlatformFields.SUCCESS_MESSAGE, "Congratulations on registering. Please Login !!!");
+		return "redirect:/employee/listEmployee";
 	}
 	
 	@RequestMapping(value="/security", method=RequestMethod.GET)

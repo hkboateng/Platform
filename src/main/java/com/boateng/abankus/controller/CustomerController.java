@@ -71,15 +71,14 @@ public class CustomerController extends PlatformAbstractServlet{
 	@Qualifier(value="paymentServiceImpl")
 	private PaymentService paymentServiceImpl;	
 	
-	//@Secured("ROLE_CREATE_CUSTOMER_PROFILE")
-	//@PreAuthorize("isFullyAuthenticated")
+	@Secured("ROLE_CREATE_CUSTOMER_PROFILE")
 	@RequestMapping(value="/customers/create", method=RequestMethod.GET)
 	public String index(HttpServletRequest request){
 		
 		return "ClientServices/NewCustomer";
 	}
 	
-	//@Secured("ROLE_CREATE_CUSTOMER_PROFILE")
+	@Secured("ROLE_CREATE_CUSTOMER_PROFILE")
 	@RequestMapping(value="/customers/create/individual", method=RequestMethod.GET)
 	public ModelAndView addIndividualCustomer(){
 		ModelAndView model = new ModelAndView();
@@ -88,13 +87,13 @@ public class CustomerController extends PlatformAbstractServlet{
 		return model;
 	}
 	
-	//@Secured("ROLE_UPDATE_CUSTOMER_PROFILE")
+	@Secured("ROLE_UPDATE_CUSTOMER_PROFILE")
 	@RequestMapping(value="/customers/addCustomerContactPerson", method=RequestMethod.GET)
 	public String addCustomerContactPerson(HttpServletRequest request) throws PlatformException{
 		return "ClientServices/AddCustomerContactPerson";
 	}	
 	
-	//@Secured("ROLE_UPDATE_CUSTOMER_PROFILE")
+	@Secured("ROLE_UPDATE_CUSTOMER_PROFILE")
 	@RequestMapping(value="/customers/updateContactPerson", method=RequestMethod.POST)
 	public String updateCustomerContactPerson(HttpServletRequest request) throws PlatformException{
 		Customer customer = getCustomerInSession(request);
@@ -112,7 +111,7 @@ public class CustomerController extends PlatformAbstractServlet{
 		return "redirect:/customers/viewProfile";
 	}		
 	
-	//@Secured("ROLE_EMPLOYEE")
+	@Secured("ROLE_EMPLOYEE")
 	@RequestMapping(value="/customers/create/company", method=RequestMethod.GET)
 	public ModelAndView addCompanyCustomer(){
 		ModelAndView model = new ModelAndView();
@@ -120,7 +119,7 @@ public class CustomerController extends PlatformAbstractServlet{
 		return model;
 	}
 	
-	//@Secured("ROLE_EMPLOYEE")
+	@Secured("ROLE_EMPLOYEE")
 	@RequestMapping(value="/customers/addCustomer", method=RequestMethod.POST)
 	public String addCustomer(@Valid Customer customers,BindingResult result,HttpServletRequest request,RedirectAttributes redirectAttributess){
 		if(result.hasErrors()){
@@ -137,7 +136,7 @@ public class CustomerController extends PlatformAbstractServlet{
 		return "redirect:/platform/index";
 	}
 	
-	//@Secured("VIEW_CUSTOMER_PROFILE")
+	@Secured("VIEW_CUSTOMER_PROFILE")
 	@RequestMapping(value="/customers/listCustomer", method=RequestMethod.GET)
 	public String listCustomer(Model model,HttpServletRequest request){
 
@@ -146,7 +145,7 @@ public class CustomerController extends PlatformAbstractServlet{
 		return "ClientServices/listCustomers";
 	}
 	
-	//@Secured("VIEW_CUSTOMER_PROFILE")
+	@Secured("VIEW_CUSTOMER_PROFILE")
 	@RequestMapping(value="/customers/viewProfile", method={RequestMethod.POST,RequestMethod.GET})
 	public String viewCustomerProfile(RedirectAttributes redirectAttributess,Model model,HttpServletRequest request) throws PlatformException{
 		String customerNumber = request.getParameter("customerNumber");
@@ -201,7 +200,7 @@ public class CustomerController extends PlatformAbstractServlet{
 		return isUnique;
 	}
 	
-	//@Secured("UPDATE_CUSTOMER_ACCOUNT")
+	@Secured("UPDATE_CUSTOMER_ACCOUNT")
 	@RequestMapping(value="/customers/updateAccountStatus", method=RequestMethod.POST)
 	public void updateCustomerAccountStatus(HttpServletRequest request){
 		System.out.println("Updating Customer Account Status");

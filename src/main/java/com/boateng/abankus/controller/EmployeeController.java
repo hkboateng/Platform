@@ -42,9 +42,16 @@ public class EmployeeController extends PlatformAbstractServlet{
 	private EmployeeServiceProcessor employeeServiceProcessor;
 	
 	@RequestMapping(value="/listEmployee", method=RequestMethod.GET)
-	public String getAllEmployees(Model model){
-		List<Employee> listEmployee = employeeServiceImpl.getAllEmployee();
-		model.addAttribute("employeeList", listEmployee);
+	public String getAllEmployees(Model model,HttpServletRequest request) throws PlatformException{
+		Employee employee = getEmployeeInSession(request);
+		if(employee != null){
+			long companyId = employee.getCompanyNumber();
+			List<Employee> listEmployee = employeeServiceImpl.getAllEmployee(companyId);
+			model.addAttribute("employeeList", listEmployee);			
+		}else{
+			
+		}
+		
 		return "Employee/EmployeeList";
 	}
 	

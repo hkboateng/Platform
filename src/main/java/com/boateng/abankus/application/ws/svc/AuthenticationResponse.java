@@ -14,6 +14,8 @@ public class AuthenticationResponse {
 
 	private String message;
 	
+	private int userId;
+	
 	public boolean isResult() {
 		return result;
 	}
@@ -42,6 +44,14 @@ public class AuthenticationResponse {
 
 	public void setMessage(String message) {
 		this.message = message;
+	}
+
+	public int getUserId() {
+		return userId;
+	}
+
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
 	
 }

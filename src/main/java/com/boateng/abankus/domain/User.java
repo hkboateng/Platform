@@ -44,6 +44,8 @@ public class User implements Serializable, UserDetails{
     
     private String employeeId;
     
+    private long companyId;
+    
     private boolean accountNonExpired = true;
     
     private boolean accountNonLocked = true;
@@ -159,6 +161,12 @@ public class User implements Serializable, UserDetails{
 	}
 	public void setEmployeeId(String employeeId) {
 		this.employeeId = employeeId;
+	}
+	public long getCompanyId() {
+		return companyId;
+	}
+	public void setCompanyId(long companyId) {
+		this.companyId = companyId;
 	}
 
 

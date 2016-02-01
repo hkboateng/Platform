@@ -232,7 +232,7 @@ public class CustomerBilling implements Billing,Serializable {
 	public boolean finishPaying(){
 		boolean finished = false;
 		float totalAmount = Float.valueOf(getTotalOrderAmount());
-		if(totalAmount == totalAmountPaid()){
+		if( totalAmountPaid() >= totalAmount){
 			finished = true;
 		}
 		return finished;
