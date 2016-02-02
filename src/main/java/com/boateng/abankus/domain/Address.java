@@ -39,7 +39,9 @@ public class Address implements Serializable {
 	 */
 	public Address(String address1, String address2, String city, String region, String zipcode) {
 		this.address1 = address1;
-		this.address2 = address2;
+		if(address2 != null){
+			this.address2 = address2;
+		}
 		this.city = city;
 		this.region = region;
 		this.zipcode = zipcode;

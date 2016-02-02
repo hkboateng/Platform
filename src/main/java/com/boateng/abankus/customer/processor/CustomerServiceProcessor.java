@@ -40,6 +40,11 @@ import com.boateng.abankus.utils.SecurityUtils;
 
 
 public class CustomerServiceProcessor{
+	/**
+	 * 
+	 */
+	private static final String COUNTRY_GHANA = "Ghana";
+
 	private static final Log log = LogFactory.getLog(CustomerServiceProcessor.class);
 
 	/**
@@ -70,13 +75,9 @@ public class CustomerServiceProcessor{
 		return email;
 	}
 	
-	public Phone addCustomerPhone(String countrycode, String phoneNumber, String phoneType){
+	public Phone addCustomerPhone(String phoneNumber, String phoneType){
 		Phone phone = new Phone();
-		phone.setCountrycode(countrycode);
-		if(countrycode == null || countrycode.isEmpty()){
-			phone.setCountrycode(PhoneFields.DEFAULT_COUNTRY_CODE);
-		}
-
+		phone.setCountrycode(PhoneFields.DEFAULT_COUNTRY_CODE);
 		phone.setPhoneNumber(phoneNumber);
 		if(phone.getPhoneType() == null || phone.getPhoneType().isEmpty()){
 			phone.setPhoneType(PhoneFields.HOME_PHONE);
@@ -84,16 +85,14 @@ public class CustomerServiceProcessor{
 		return phone;
 	}
 	
-	public Address addCustomerAddress(String address1,String address2, String city, String state, String zipcode,String country,String addressType){
-		Address address = new Address(address1,addressType,city,state,zipcode);
-		
-		address.setAddress2(address2);
+	public Address addCustomerAddress(String address1,String address2, String city, String state, String zipcode,String country){
+		Address address = new Address(address1,address2,city,state,zipcode);
 		address.setAddressType("primary");
 
 		return address;
 	}
 	
-	public Customer addIndividualCustomer(String firstname,String middlename,String lastname,String companyName, String customerType, String gender){
+	public Customer addIndividualCustomer(String firstname,String middlename,String lastname,String companyName,  String gender){
 		Customer customer = new Customer(firstname,lastname);
 		String customerNo = SecurityUtils.generateCustomerId();
 		if(customerServiceImpl.findCustomerByCustomerNumber(customerNo) == null){
@@ -117,9 +116,8 @@ public class CustomerServiceProcessor{
 	
 	public void processNewCustomer(HttpServletRequest request) throws ParseException{
 		String emailAddress = request.getParameter(EmailFields.EMAIL_ADDRESS_LABEL).trim();
-		String emailType = request.getParameter(EmailFields.EMAIL_TYPE_LABEL).trim();
+		String emailType = request.getParameter(EmailFields.EMAIL_TYPE_LABEL);
 		
-		String countrycode = request.getParameter(PhoneFields.COUNTRY_CODE_LABEL).trim();
 		String phoneNumber = request.getParameter(PhoneFields.PHONE_NUMBER_LABEL).trim();
 		String phoneType = request.getParameter(PhoneFields.PHONE_TYPE_LABEL).trim();
 		
@@ -128,16 +126,15 @@ public class CustomerServiceProcessor{
 		String city = request.getParameter(AddressFields.CITY_LABEL).trim();
 		String state = request.getParameter(AddressFields.STATE_LABEL).trim();
 		String zipcode = request.getParameter(AddressFields.ZIPCODE_LABEL).trim();
-		String country = request.getParameter(AddressFields.ADDRESS_COUNTRY_LABEL).trim();
-		String addressType = request.getParameter(AddressFields.ADDRESS_TYPE_LABEL).trim();
+		//String country = request.getParameter(AddressFields.ADDRESS_COUNTRY_LABEL).trim();
 		
 		String firstname = request.getParameter(CustomerFields.FIRST_NAME_LABEL).trim();
 		String lastname = request.getParameter(CustomerFields.LAST_NAME_LABEL).trim();
 		String middlename = request.getParameter(CustomerFields.MIDDLE_NAME_LABEL).trim();
 		String companyname = request.getParameter(CustomerFields.COMPANY_NAME).trim();
-		String customerType = request.getParameter(CustomerFields.CUSTOMER_TYPE).trim();
+		//String customerType = request.getParameter(CustomerFields.CUSTOMER_TYPE).trim();
 		String gender = request.getParameter(CustomerFields.GENDER_LABEL).trim();
-		String dataOfBirth = request.getParameter(CustomerFields.DATE_OF_BIRTH_LABEL).trim();
+		//String dataOfBirth = request.getParameter(CustomerFields.DATE_OF_BIRTH_LABEL).trim();
 
 
 		//Gender sex = Gender.valueOf(gender);
@@ -146,13 +143,13 @@ public class CustomerServiceProcessor{
 		Email email = addEmail(emailAddress,emailType);
 		
 		/** Creating new Phone Object**/
-		Phone phone = addCustomerPhone(countrycode, phoneNumber,phoneType);
+		Phone phone = addCustomerPhone( phoneNumber,phoneType);
 		
 		/**Creating new Address Object**/
-		Address address = addCustomerAddress(address1,address2,city,state,zipcode,country,addressType);
+		Address address = addCustomerAddress(address1,address2,city,state,zipcode,CustomerServiceProcessor.COUNTRY_GHANA);
 		
 		/** Creating Customer Object**/
-		Customer customers = addIndividualCustomer(firstname,middlename,lastname,companyname,customerType,gender);
+		Customer customers = addIndividualCustomer(firstname,middlename,lastname,companyname,gender);
 		
 		processNewCustomer(customers,email,phone,address,request);
 		
@@ -165,7 +162,7 @@ public class CustomerServiceProcessor{
 		
 
 
-		Customer customer =  customerServiceImpl.addNewCustomer(customers,email,phone,address);
+		Customer customer =  customerServiceImpl.addNewCustomer(customers,email,phone,address,employee);
 
 		String industry = request.getParameter("customerIndustry");
 		String notes = request.getParameter("notes");

@@ -59,11 +59,12 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Transactional
 	@Override
-	public Customer addNewCustomer(Customer customers,Email email, Phone phone,Address address){
+	public Customer addNewCustomer(Customer customers,Email email, Phone phone,Address address,Employee employee){
 		try{
 			Session session = getSessionFactory().getCurrentSession();
 					
 					customers = saveCustomerContact(session,email,phone,address,customers);
+					customers.setCompanyId(employee.getCompanyNumber());
 					session.save(customers);
 					Authenticatecustomer auth = addCustomerAuthentication(customers);
 					session.save(auth);

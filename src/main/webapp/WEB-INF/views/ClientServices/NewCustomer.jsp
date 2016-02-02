@@ -44,14 +44,19 @@
 			<sf:form method="post" modelAttribute="customer" action="/abankus/customers/addCustomer"  name="customerForm" id="customerForm" class="form" >
 			<input type="hidden" name="customerType" id="custIndividual" value="${customerType }"/>
 					<div  class="row">
-						<div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
-						<label>
-						First Name:</label>
-						<input type="text" name="firstname" id="firstname" class="form-state width-100" placeholder="First Name"/>
+						<div class="col-xs-12 col-sm-6 col-md-8 col-lg-8">
+							<label>
+							First Name:</label>
+							<input type="text" name="firstname" id="firstname" class="form-state width-100" placeholder="First Name"/>
 						</div>
+						<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+							<label for="middlename">Middle Name:</label>
+							<input type="text" name="middlename" id="middlename" placeholder="Middle Name" class="form-state width-100"/>	
+						</div>			
+						<div class="clearfix"></div>			
 						<div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
-						<label for="lastname">Last Name:</label>
-						<input type="text" name="lastname" id="lastname" placeholder="Last Name" class="form-state width-100"/>	
+							<label for="lastname">Last Name:</label>
+							<input type="text" name="lastname" id="lastname" placeholder="Last Name" class="form-state width-100"/>	
 						</div>
 						</div>
 					<div class="row">

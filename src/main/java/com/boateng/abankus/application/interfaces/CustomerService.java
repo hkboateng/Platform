@@ -15,7 +15,7 @@ import com.boateng.abankus.domain.Phone;
 
 public interface CustomerService {
 
-	Customer addNewCustomer(Customer customers, Email email, Phone phone, Address address);
+	Customer addNewCustomer(Customer customers, Email email, Phone phone, Address address, Employee employee);
 
 	/**
 	 * Returns an instance of a Customer based on a Customer Number.

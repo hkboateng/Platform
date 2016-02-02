@@ -112,7 +112,7 @@ public class CustomerController extends PlatformAbstractServlet{
 		return "redirect:/customers/viewProfile";
 	}		
 	
-	@Secured("ROLE_EMPLOYEE")
+
 	@RequestMapping(value="/customers/create/company", method=RequestMethod.GET)
 	public ModelAndView addCompanyCustomer(){
 		ModelAndView model = new ModelAndView();
@@ -120,7 +120,7 @@ public class CustomerController extends PlatformAbstractServlet{
 		return model;
 	}
 	
-	@Secured("ROLE_EMPLOYEE")
+
 	@RequestMapping(value="/customers/addCustomer", method=RequestMethod.POST)
 	public String addCustomer(@Valid Customer customers,BindingResult result,HttpServletRequest request,RedirectAttributes redirectAttributess){
 		if(result.hasErrors()){
