@@ -3,12 +3,15 @@ package com.boateng.abankus.domain;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 
 /**
  * The persistent class for the customer database table.
  * 
  */
 @Entity
+@DynamicUpdate(value=true)
 @NamedQuery(name="Customer.findAll", query="SELECT c FROM Customer c")
 public class Customer implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -22,7 +25,8 @@ public class Customer implements Serializable {
 
 	private String customerNumber;
 
-
+	private long companyId;
+	
 	private String firstname;
 
 	private String gender;
@@ -159,5 +163,13 @@ public class Customer implements Serializable {
 			sbr.append(getAddressId().getAddress1()).append("\n").append(getAddressId().getAddress2());
 		}
 		return sbr.toString();
+	}
+
+	public long getCompanyId() {
+		return companyId;
+	}
+
+	public void setCompanyId(long companyId) {
+		this.companyId = companyId;
 	}
 }

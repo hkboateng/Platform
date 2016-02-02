@@ -86,6 +86,7 @@ public class CustomerServiceImpl implements CustomerService {
 		}
 		return customers;
 	}
+	
 	/**
 	 * @param customers
 	 * @throws Exception 
@@ -115,11 +116,12 @@ public class CustomerServiceImpl implements CustomerService {
 	
 	@Transactional	
 	@Override
-	public List<Customer> getAllCustomers() {
+	public List<Customer> getAllCustomers(long companyNumber) {
 		 Session session = getSessionFactory().getCurrentSession();
 		 
 		@SuppressWarnings("unchecked")
-		List<Customer> query = session.createQuery("from Customer")
+		List<Customer> query = session.createQuery("from Customer c where c.companyId =:companyId")
+				.setParameter("companyId", companyNumber)
 				.setCacheable(true)
 				.list();
 		
@@ -305,11 +307,12 @@ public class CustomerServiceImpl implements CustomerService {
 	 */
 	@Override
 	@Transactional
-	public Customer findCustomerByFirstNameAndLastName(String firstname,String lastname) {
+	public Customer findCustomerByFirstNameAndLastName(String firstname,String lastname,long companyId) {
 		Session session = getSessionFactory().getCurrentSession();
-		Customer customer = (Customer) session.createQuery("From Customer c where c.firstname =:firstname and c.lastname =:lastname")
+		Customer customer = (Customer) session.createQuery("From Customer c where c.firstname =:firstname and c.lastname =:lastname and c.companyId =:companyId")
 							.setParameter("firstname", firstname)
 							.setParameter("lastname", lastname)
+							.setParameter("companyId", companyId)
 							.uniqueResult();
 		return customer;
 	}

@@ -3,6 +3,7 @@
  */
 package com.boateng.abankus.service.impl;
 
+import java.util.UUID;
 import java.util.logging.Logger;
 
 import javax.transaction.Transactional;
@@ -49,17 +50,13 @@ public class CompanyServiceImpl implements CompanyService {
 		}else{
 			session = getSessionFactory().getCurrentSession();
 		}
+		String companyNumber = UUID.randomUUID().toString();
+		company.setCompanyNumber(companyNumber);
 		session.save(company.getEmailBean());
 		session.save(company.getPhoneBean());
 		session.save(company.getAddressBean());
 		session.save(company.getContactperson());
-		
-		/**
-		company.setAddressBean(address);
-		company.setContactperson(person);
-		company.setPhoneBean(phone);
-		company.setEmailBean(email);
-		**/
+
 		session.save(company);
 		session.flush();
 		return company;

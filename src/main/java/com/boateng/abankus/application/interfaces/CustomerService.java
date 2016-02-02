@@ -36,11 +36,12 @@ public interface CustomerService {
 	
 	/**
 	 * Returns a list of all Customers
+	 * @param companyNumber 
 	 * @return 
 	 * 
 	 */
 	
-	List<Customer> getAllCustomers();
+	List<Customer> getAllCustomers(long companyNumber);
 
 	/**
 	 * Returns an instance of a Customer by searching for the Customer Id.
@@ -96,7 +97,7 @@ public interface CustomerService {
 	
 	Authenticatecustomer findCustomerById(int id);
 	
-	Customer findCustomerByFirstNameAndLastName(String firstname,String lastname);
+	Customer findCustomerByFirstNameAndLastName(String firstname,String lastname,long companyNumber);
 
 	/**
 	 * @param lastname

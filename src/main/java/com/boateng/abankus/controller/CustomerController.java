@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -136,16 +137,24 @@ public class CustomerController extends PlatformAbstractServlet{
 		return "redirect:/platform/index";
 	}
 	
-	@Secured("VIEW_CUSTOMER_PROFILE")
+	@Secured("ROLE_VIEW_CUSTOMER_PROFILE")
 	@RequestMapping(value="/customers/listCustomer", method=RequestMethod.GET)
-	public String listCustomer(Model model,HttpServletRequest request){
-
-		Set<Customer> customers = customerServiceProcessor.getAllCustomers();
-		model.addAttribute("customers", customers);
-		return "ClientServices/listCustomers";
+	public String listCustomer(Model model,HttpServletRequest request,RedirectAttributes redirectAttributess){
+		String redirect = "ClientServices/listCustomers";
+		try {
+			Employee employee = getEmployeeInSession(request);
+			Set<Customer> customers = customerServiceProcessor.getAllCustomers(employee.getCompanyNumber());
+			model.addAttribute("customers", customers);
+		} catch (PlatformException e) {
+			PlatformException ace  = new PlatformException();
+			ace.logger(Level.WARNING,e.getMessage(), e);
+			redirectAttributess.addFlashAttribute("errors", "Error occured authenticating you. Try again later.");
+			redirect = "redirect:/platform/logout";
+		}
+		return redirect;
 	}
 	
-	@Secured("VIEW_CUSTOMER_PROFILE")
+	@Secured("ROLE_VIEW_CUSTOMER_PROFILE")
 	@RequestMapping(value="/customers/viewProfile", method={RequestMethod.POST,RequestMethod.GET})
 	public String viewCustomerProfile(RedirectAttributes redirectAttributess,Model model,HttpServletRequest request) throws PlatformException{
 		String customerNumber = request.getParameter("customerNumber");

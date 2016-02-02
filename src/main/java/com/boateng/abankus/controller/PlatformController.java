@@ -114,7 +114,7 @@ public class PlatformController  extends PlatformAbstractServlet {
 			PlatformException ace  = new PlatformException();
 			ace.logger(Level.WARNING,e.getMessage(), e);
 			redirectAttributess.addFlashAttribute("errors", "Error occured authenticating you. Try again later.");
-			return "redirect:/login";
+			return "redirect:/platform/logout";
 		}
 		return "dashboard/dashboard";
 	}

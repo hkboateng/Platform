@@ -35,21 +35,18 @@
 <body>
 	<%-- Include page header --%>
 	<jsp:include page="../header.jsp" />
-	<div id="container" class="container-fluid">
-		<div class="row">
-			<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
-				<jsp:include page="../sidebar.jsp"/>
-			</div>		
-			<div class="col-sm-9 col-md-9 col-lg-9">
+	<div id="container" class="container">
+		<div class="row">	
+			<div class="col-sm-12 col-md-12 col-lg-12">
 				<div class="page-header col-sm-12 col-md-12 col-lg-12">
-					<span class="lead">Bill/Order Details </span>
+					<span class="lead">Bill Details </span>
 					<div class="pull-right">
 						<c:set var="cust" value="${billing.getCustomer().getCustomerNumber()}"/>
 						<c:set var="customerId" value="${billing.getCustomer().getCustomerId()}"/>
 						<a href="javascript:document.viewCustomerProfileBckBtn.submit()" class="">Back to Profile Page</a>
 					</div>				
 				</div>
-				<div class="col-sm-12 col-md-10 col-lg-10">
+				<div class="col-sm-12 col-md-9 col-lg-9">
 				<div class="orderDetails">
 					<c:set var="orderNumber" value="${viewTransactionDetailsOrderNumber}"/>
 					<p><label class="labelLength_20">Order Date:</label><span>${billing.getClientOrderId().convertOrderDate() }</span></p>
@@ -58,42 +55,14 @@
 					<p><label class="labelLength_20">Total Amount:</label><fmt:formatNumber value="${billing.getTotalOrderAmount()}" type="currency"/></p>
 					<p><label class="labelLength_20">Amount Remaining:</label><fmt:formatNumber value="${billing.totalAmountRemaining() }" type="currency"/></p>
 					<p><label class="labelLength_20">Payment Status:</label>${billing.getClientOrderId().getPaymentStatus() }</p>
-					<p><label class="labelLength_20">Next Payment Date:</label>${billing.getClientOrderId().getNextPaymentDate()}</p>
 					<input type="hidden" value="${orderNumber}" id="orderNumber"/>
 					<input type="hidden" value="${billing.totalAmountRemaining() }" name="amountRemaining" id="amountRemaining"/>
 				</div>
-				</div>
-				<div class="col-sm-12 col-md-2 col-lg-2">
-					<div class="list-group">
+				<div class="spaceBelow_20">
+					<div  class="page-header">
+						<h3>Payment History</h3>
+					</div>
 					
-					<c:set value="${billing.encryptOrderNumber(orderNumber) }" var="keySec" />
-						<a href="javascript:submitCustomerPayment('${keySec}','${billing.getTotalOrderAmount()}');" class="btn btn-success list-group-item">Make Payment</a>
-					</div>
-					<div class="list-group">
-						<a href="" class="btn btn-primary list-group-item">Print Statement</a>
-					</div>
-						  
-						  <c:if test="${not empty viewTransactionDetailsOrderNumber }">
-						  	<a href="<c:url value="/customer/createOrders"/>" class="list-group-item">New Order<i class="glyphicon glyphicon-chevron-right pull-right"></i></a>
-						  <a class="list-group-item">
-						  	View Invoice<i class="glyphicon glyphicon-chevron-right pull-right"></i>
-						  </a>
-						  <a class="list-group-item spaceBelow_10">
-						  	Print Invoice<i class="glyphicon glyphicon-chevron-right pull-right"></i>
-						  </a>						 
-						 
-						  </c:if>
-						  
-						  <c:if test="${not empty billing }">
-						  	<a href="javascript:makePayment('makePayment',document.makeCustomerPayment);" class="list-group-item">Make A Payment<i class="glyphicon glyphicon-chevron-right pull-right"></i></a>
-						  </c:if>
-						  <a href="<c:url value="/customers/contactCustomer"/>" class="list-group-item">Send Email Message<i class="glyphicon glyphicon-chevron-right pull-right"></i></a>
-						
-				</div>	
-				<div class="clearfix"></div>		
-		<h3 class="page-header">Payment History</h3>
-			<div class="col-sm-12 col-md-7 col-lg-7">
-				
 					<table id="transactionTable" class="table">
 						<thead>
 						<tr>
@@ -124,7 +93,37 @@
 						</tbody>
 					</table>	
 					
+					</div>				
+				</div>
+				<div class="col-sm-12 col-md-3 col-lg-3">
+					<div class="list-group">
+					
+					<c:set value="${billing.encryptOrderNumber(orderNumber) }" var="keySec" />
+						<a href="javascript:submitCustomerPayment('${keySec}','${billing.getTotalOrderAmount()}');" class="btn btn-success list-group-item">Make Payment</a>
 					</div>
+					<div class="list-group">
+						<a href="" class="btn btn-primary list-group-item">Print Statement</a>
+					</div>
+						  
+						  <c:if test="${not empty viewTransactionDetailsOrderNumber }">
+						  	<a href="<c:url value="/customer/createOrders"/>" class="list-group-item">New Order<i class="glyphicon glyphicon-chevron-right pull-right"></i></a>
+						  <a class="list-group-item">
+						  	View Invoice<i class="glyphicon glyphicon-chevron-right pull-right"></i>
+						  </a>
+						  <a class="list-group-item spaceBelow_10">
+						  	Print Invoice<i class="glyphicon glyphicon-chevron-right pull-right"></i>
+						  </a>						 
+						 
+						  </c:if>
+						  
+						  <c:if test="${not empty billing }">
+						  	<a href="javascript:makePayment('makePayment',document.makeCustomerPayment);" class="list-group-item">Make A Payment<i class="glyphicon glyphicon-chevron-right pull-right"></i></a>
+						  </c:if>
+						  <a href="<c:url value="/customers/contactCustomer"/>" class="list-group-item">Send Email Message<i class="glyphicon glyphicon-chevron-right pull-right"></i></a>
+						
+				</div>	
+				<div class="clearfix"></div>		
+				
 				<div class="col-sm-12 col-md-5">
 					<div id="transactionChart">
 					
@@ -308,6 +307,7 @@
 		form.submit();	
 	}
 	</script>
-	
+	<%-- Include page header --%>
+	<jsp:include page="../footer.jsp" />	
 	</body>
 	</html>

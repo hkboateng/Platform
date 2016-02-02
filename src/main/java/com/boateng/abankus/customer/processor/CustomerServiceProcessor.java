@@ -173,9 +173,9 @@ public class CustomerServiceProcessor{
 
 	}
 	
-	public Set<Customer> getAllCustomers(){
+	public Set<Customer> getAllCustomers(long companyNumber){
 		Set<Customer> customers = null;
-		List<Customer> customerList = customerServiceImpl.getAllCustomers();
+		List<Customer> customerList = customerServiceImpl.getAllCustomers(companyNumber);
 		if(customerList == null || customerList.isEmpty() ){
 			return null;
 		}
@@ -291,7 +291,7 @@ public class CustomerServiceProcessor{
 		return customer;
 	}
 	
-	public Customer searchForCustomerByFirstAndLastName(String first, String last){
+	public Customer searchForCustomerByFirstAndLastName(String first, String last,long companyNumber){
 		Customer customer = null;
 		if(first ==null || last == null){
 			return customer;
@@ -300,7 +300,7 @@ public class CustomerServiceProcessor{
 			return customer;
 		}
 		
-		customer = customerServiceImpl.findCustomerByFirstNameAndLastName(first, last);
+		customer = customerServiceImpl.findCustomerByFirstNameAndLastName(first, last,companyNumber);
 		return customer;
 	}
 

@@ -28,7 +28,7 @@ public class Company implements Serializable {
 
 	private String taxId;
 
-	private int companyNumber;
+	private String companyNumber;
 	
 	//bi-directional one-to-one association to Address
 	@OneToOne
@@ -126,11 +126,11 @@ public class Company implements Serializable {
 		this.phoneBean = phoneBean;
 	}
 
-	public int getCompanyNumber() {
+	public String getCompanyNumber() {
 		return companyNumber;
 	}
 
-	public void setCompanyNumber(int companyNumber) {
+	public void setCompanyNumber(String companyNumber) {
 		this.companyNumber = companyNumber;
 	}
 
